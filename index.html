@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en" class="prevent-selection">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>USD - Web Clock</title>
+        <!-- CSS -->
+        <link href="./css/global.css" rel="stylesheet">
+        <link href="./css/fonts.css" rel="stylesheet">
+        <link href="./css/cdn.jsdelivr.net_npm_bootstrap@5.3.0_dist_css_bootstrap.min.css" rel="stylesheet">
+        <!-- JS -->
+        <script src="./js/global.js" defer></script>
+        <script src="./js/background-color.js" defer></script>
+        <script src="./js/clock.js" defer></script>
+        <script src="./js/clock-color.js" defer></script>
+        <script src="./js/cdn.jsdelivr.net_npm_bootstrap@5.3.0_dist_js_bootstrap.bundle.min.js"></script>
+        <script src="./js/code.iconify.design_iconify-icon_1.0.7_iconify-icon.min.js"></script>
+        <!-- Favicon -->
+    </head>
+    <body>
+        <div id="menu-container">
+            <button id="menu-button" class="btn btn-secondary" style="width: 100px;">
+                <iconify-icon icon="mdi:menu" width="15" height="15" style="height: 13px;"></iconify-icon> Menu
+            </button>
+            <button id="close-button" class="btn btn-danger" style="display: none; position: absolute; top: 0px; right: 0px; width: 100px;">
+                <iconify-icon icon="mdi:close" width="19" height="19" style="height: 15px;"></iconify-icon> Close
+            </button>
+            <div id="menu-options" class="menu-options-hide">
+                <div class="section">
+                    <h5>Clock Options</h5>
+                    <h6 class="mb-1">Clock Mode</h6>
+                    <div class="btn-group" role="group" aria-label="Clock mode button group" id="clock-mode-group">
+                        <input type="radio" class="btn-check" name="clock-mode-radio" id="12hour" autocomplete="off" checked>
+                        <label class="btn btn-outline-primary" for="12hour">12-hour</label>
+
+                        <input type="radio" class="btn-check" name="clock-mode-radio" id="24hour" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="24hour">24-hour</label>
+                    </div>
+                </div>
+                <hr>
+                <div class="section mt-2">
+                    <h5>Font Options</h5>
+                    <div class="form-group mt-2">
+                        <h6 class="mb-1">Font Family</h6>
+                        <select class="form-select" id="fontFamilySelect">
+                            <option value="">System default</option>
+                            <option value="Lato">Lato</option>
+                            <option value="Montserrat">Montserrat</option>
+                            <option value="Open Sans">Open Sans</option>
+                            <option value="Oswald">Oswald</option>
+                            <option value="Poppins">Poppins</option>
+                            <option value="Roboto">Roboto</option>
+                            <option value="Ubuntu">Ubuntu</option>
+                            <option value="Ubuntu Mono">Ubuntu Mono</option>
+                        </select>
+                        <h6 class="mb-1 mt-2">Font Style</h6>
+                        <div class="btn-group" role="group" aria-label="Font style button group" id="font-style-group">
+                            <input type="radio" class="btn-check" name="font-style-radio" id="regularStyle" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="regularStyle">Regular</label>
+
+                            <input type="radio" class="btn-check" name="font-style-radio" id="italicStyle" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="italicStyle">Italic</label>
+                        </div>
+                    </div>
+                    <h6 class="mb-1 mt-2">Font Weight</h6>
+                    <div class="btn-group" role="group" aria-label="Font weight button group" id="font-weight-group">
+                        <input type="radio" class="btn-check" name="font-weight-radio" id="lightWeight" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="lightWeight" onClick="setFontWeight('lighter')">Light</label>
+
+                        <input type="radio" class="btn-check" name="font-weight-radio" id="normalWeight" autocomplete="off" checked>
+                        <label class="btn btn-outline-primary" for="normalWeight" onClick="setFontWeight('normal')">Regular</label>
+
+                        <input type="radio" class="btn-check" name="font-weight-radio" id="boldWeight" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="boldWeight" onClick="setFontWeight('bold')">Bold</label>
+                    </div>
+                </div>
+                <hr>
+                <div class="section mt-2">
+                    <h5>Color options</h5>
+                    <div class="form-group">
+                        <h6 class="mb-1">Background color mode:</h6>
+                        <div class="btn-group" role="group" aria-label="Color mode button group" id="mode-selector">
+                            <input type="radio" class="btn-check" name="color-mode-radio" id="fadeModeRadio" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="fadeModeRadio">Color fade</label>
+
+                            <input type="radio" class="btn-check" name="color-mode-radio" id="solidModeRadio" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="solidModeRadio">Solid color</label>
+                        </div>
+                    </div>
+                    <div class="form-group mt-2">
+                        <!-- Basic colors -->
+                        <h6 class="mb-1 mt-2">Basic colors</h6>
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="basicred" autocomplete="off" data-color="#FF0000" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="basicred" data-bs-toggle="tooltip" data-bs-title="Basic red"><div class="color-block" style="background-color: #FF0000;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="basicorange" autocomplete="off" data-color="#FFA500" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="basicorange" data-bs-toggle="tooltip" data-bs-title="Basic orange"><div class="color-block" style="background-color: #FFA500;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="basicyellow" autocomplete="off" data-color="#FFFF00" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="basicyellow" data-bs-toggle="tooltip" data-bs-title="Basic yellow"><div class="color-block" style="background-color: #FFFF00;"></div></label>
+                        </div>
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="basicgreen" autocomplete="off" data-color="#00FF00" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="basicgreen" data-bs-toggle="tooltip" data-bs-title="Basic green"><div class="color-block" style="background-color: #00FF00;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="basicblue" autocomplete="off" data-color="#0000FF" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="basicblue" data-bs-toggle="tooltip" data-bs-title="Basic blue"><div class="color-block" style="background-color: #0000FF;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="basicmagenta" autocomplete="off" data-color="#FF00FF" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="basicmagenta" data-bs-toggle="tooltip" data-bs-title="Basic magenta"><div class="color-block" style="background-color: #FF00FF;"></div></label>
+                        </div>
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="basicwhite" autocomplete="off" data-color="#FFFFFF" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="basicwhite" data-bs-toggle="tooltip" data-bs-title="Basic white"><div class="color-block" style="background-color: #FFFFFF;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="basicgray" autocomplete="off" data-color="#808080" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="basicgray" data-bs-toggle="tooltip" data-bs-title="Basic gray"><div class="color-block" style="background-color: #808080;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="basicblack" autocomplete="off" data-color="#000000" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="basicblack" data-bs-toggle="tooltip" data-bs-title="Basic black"><div class="color-block" style="background-color: #000000;"></div></label>
+                        </div>
+                        <!-- Pale colors -->
+                        <h6 class="mb-1 mt-2">Bright colors</h6>
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="palepink" autocomplete="off" data-color="#F2B5D4" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="palepink" data-bs-toggle="tooltip" data-bs-title="Pale pink"><div class="color-block" style="background-color: #F2B5D4;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="paleblue" autocomplete="off" data-color="#C2E0E9" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="paleblue" data-bs-toggle="tooltip" data-bs-title="Pale blue"><div class="color-block" style="background-color: #C2E0E9;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="lavender" autocomplete="off" data-color="#E1D5E7" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="lavender" data-bs-toggle="tooltip" data-bs-title="Lavender"><div class="color-block" style="background-color: #E1D5E7;"></div></label>
+                        </div>
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="powderblue" autocomplete="off" data-color="#B0E0E6" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="powderblue" data-bs-toggle="tooltip" data-bs-title="Powder blue"><div class="color-block" style="background-color: #B0E0E6;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="palepeach" autocomplete="off" data-color="#F7D5AA" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="palepeach" data-bs-toggle="tooltip" data-bs-title="Pale Peach"><div class="color-block" style="background-color: #F7D5AA;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="mintgreen" autocomplete="off" data-color="#D5E8D4" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="mintgreen" data-bs-toggle="tooltip" data-bs-title="Mint green"><div class="color-block" style="background-color: #D5E8D4;"></div></label>
+                        </div>
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="periwinkleblue" autocomplete="off" data-color="#92A8D1" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="periwinkleblue" data-bs-toggle="tooltip" data-bs-title="Periwinkle blue"><div class="color-block" style="background-color: #92A8D1;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="apricot" autocomplete="off" data-color="#E6AF75" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="apricot" data-bs-toggle="tooltip" data-bs-title="Apricot"><div class="color-block" style="background-color: #E6AF75;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="dustyrose" autocomplete="off" data-color="#D9B5A5" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="dustyrose" data-bs-toggle="tooltip" data-bs-title="Dusty rose"><div class="color-block" style="background-color: #D9B5A5;"></div></label>
+                        </div>
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="seafoamgreen" autocomplete="off" data-color="#9AC1B7" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="seafoamgreen" data-bs-toggle="tooltip" data-bs-title="Seafoam green"><div class="color-block" style="background-color: #9AC1B7;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="mauve" autocomplete="off" data-color="#D0B9C3" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="mauve" data-bs-toggle="tooltip" data-bs-title="Mauve"><div class="color-block" style="background-color: #D0B9C3;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="lilac" autocomplete="off" data-color="#C4B7D9" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="lilac" data-bs-toggle="tooltip" data-bs-title="Lilac"><div class="color-block" style="background-color: #C4B7D9;"></div></label>
+                        </div>
+                        <!-- Deep colors -->
+                        <h6 class="mb-1 mt-2">Deep colors</h6>
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="deeppink" autocomplete="off" data-color="#D72C6F" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="deeppink" data-bs-toggle="tooltip" data-bs-title="Deep pink"><div class="color-block" style="background-color: #D72C6F;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="deepblue" autocomplete="off" data-color="#227FBF" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="deepblue" data-bs-toggle="tooltip" data-bs-title="Deep blue"><div class="color-block" style="background-color: #227FBF;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="deeplavender" autocomplete="off" data-color="#7E3F9D" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="deeplavender" data-bs-toggle="tooltip" data-bs-title="Deep lavender"><div class="color-block" style="background-color: #7E3F9D;"></div></label>
+                        </div>
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="deeppowderblue" autocomplete="off" data-color="#367F89" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="deeppowderblue" data-bs-toggle="tooltip" data-bs-title="Deep powder blue"><div class="color-block" style="background-color: #367F89;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="deeppeach" autocomplete="off" data-color="#FF713F" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="deeppeach" data-bs-toggle="tooltip" data-bs-title="Deep peach"><div class="color-block" style="background-color: #FF713F;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="darkmintgreen" autocomplete="off" data-color="#549F55" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="darkmintgreen" data-bs-toggle="tooltip" data-bs-title="Dark mint green"><div class="color-block" style="background-color: #549F55;"></div></label>
+                        </div>
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="deepperiwinkleblue" autocomplete="off" data-color="#2B4771" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="deepperiwinkleblue" data-bs-toggle="tooltip" data-bs-title="Deep periwinkle blue"><div class="color-block" style="background-color: #2B4771;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="deepapricot" autocomplete="off" data-color="#C55324" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="deepapricot" data-bs-toggle="tooltip" data-bs-title="Deep apricot"><div class="color-block" style="background-color: #C55324;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="deepdustyrose" autocomplete="off" data-color="#954A3E" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="deepdustyrose" data-bs-toggle="tooltip" data-bs-title="Deep dusty rose"><div class="color-block" style="background-color: #954A3E;"></div></label>
+                        </div>
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="deepseafoamgreen" autocomplete="off" data-color="#457E70" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="deepseafoamgreen" data-bs-toggle="tooltip" data-bs-title="Deep seafoam green"><div class="color-block" style="background-color: #457E70;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="deepmauve" autocomplete="off" data-color="#8B2C5A" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="deepmauve" data-bs-toggle="tooltip" data-bs-title="Deep mauve"><div class="color-block" style="background-color: #8B2C5A;"></div></label>
+                            <input type="radio" class="btn-check preset-color" name="solid-color-radio" id="darklilac" autocomplete="off" data-color="#7C5793" onClick="setTextColor(this)" disabled>
+                            <label class="btn btn-outline-primary" for="darklilac" data-bs-toggle="tooltip" data-bs-title="Dark lilac"><div class="color-block" style="background-color: #7C5793;"></div></label>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="section mt-2">
+                    <h5>Menu Visibility</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="menuButtonVisible" checked>
+                        <label class="form-check-label" for="menuButtonVisible">Show menu button</label>
+                    </div>
+                    <p class="mb-1" style="font-weight: lighter;">Double click the screen to make menu button visible again</p>
+                </div>
+                <hr>
+                <p class="mb-1">You've been here for:</p>
+                <p class="mb-0" id="time-duration"></p>
+            </div>
+        </div>
+        <div id="clock-container">
+        <center>
+            <span class="clock-part" id="hour-slot">00</span><span class="colon">:</span><span class="clock-part" id="minute-slot">00</span><span class="colon">:</span><span class="clock-part" id="second-slot">00</span><span id="indicator"></span>
+        </center>
+        </div>
+    </body>
+</html>
+
+<!-- Hey, what are you doing in here? -->
+<!-- Didn't I tell you? There are no secrets here! Now, scram! -->

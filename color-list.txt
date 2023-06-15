@@ -1,0 +1,46 @@
+ - Color fade mode (in order)
+#FFC0CB - Pink
+#FFD700 - Gold
+#7FFFD4 - Aquamarine
+#FFA500 - Orange
+#9370DB - Medium Purple
+#00FFFF - Cyan
+
+ - Basic colors
+#FF0000 - Basic red
+#FFA500 - Basic orange
+#FFFF00 - Basic yellow
+#00FF00 - Basic green
+#0000FF - Basic blue
+#FF00FF - Basic magenta
+#FFFFFF - Basic white
+#000000 - Basic black
+#808080 - Basic gray
+
+ - Pale colors
+#F2B5D4 - Pale Pink
+#C2E0E9 - Pale Blue
+#E1D5E7 - Lavender
+#B0E0E6 - Powder Blue
+#F7D5AA - Pale Peach
+#D5E8D4 - Mint Green
+#92A8D1 - Periwinkle Blue
+#E6AF75 - Apricot
+#D9B5A5 - Dusty Rose
+#9AC1B7 - Seafoam Green
+#D0B9C3 - Mauve
+#C4B7D9 - Lilac
+
+ - Deep colors
+#D72C6F - Deep Pink
+#227FBF - Deep Blue
+#7E3F9D - Deep Lavender
+#367F89 - Deep Powder Blue
+#FF713F - Deep Peach
+#549F55 - Dark Mint Green
+#2B4771 - Deep Periwinkle Blue
+#C55324 - Deep Apricot
+#954A3E - Deep Dusty Rose
+#457E70 - Deep Seafoam Green
+#8B2C5A - Deep Mauve
+#7C5793 - Dark Lilac

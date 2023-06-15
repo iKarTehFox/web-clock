@@ -1,0 +1,72 @@
+.prevent-selection {
+  user-select: none;
+}
+
+/* Clock CSS */
+#clock-container {
+    font-size: 10vw;
+    font-weight: normal;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    float: left;
+    display: inline-block;
+}
+
+#indicator {
+    font-size: 25px;
+}
+
+/* Menu CSS */
+#menu-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+}
+
+.menu-options-hide {
+    display: none;
+}
+
+.menu-options-show {
+    &::-webkit-scrollbar {
+    width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    }
+    
+    border-radius: 10px;
+    display: block;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-height: 75vh;
+    overflow: auto;
+    width: 250px;
+    box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
+}
+
+.color-block {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#time-duration {
+    font-weight: bold;
+}
