@@ -17,9 +17,6 @@ function setTextColor(element) {
 }
 
 function getLuminance(color) {
-  // Calculate the luminance of the color
-  // You can use different algorithms to calculate luminance, such as the relative luminance formula
-
   // Assuming color is in RGB format, convert it to relative luminance
   var r = parseInt(color.substr(1, 2), 16) / 255;
   var g = parseInt(color.substr(3, 2), 16) / 255;

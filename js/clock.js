@@ -26,10 +26,10 @@ let cMode = 0;
 // Listen for 12/24-hour radio change
 clockModeGroup.addEventListener('change', function() {
   // Get the selected radio button
-  const selectedButton = document.querySelector('input[name="btnradio"]:checked');
+  const clockMode = document.querySelector('input[name="clock-mode-radio"]:checked');
 
   // Update the clock mode based on the selected button
-  if (selectedButton.id === '24hour') {
+  if (clockMode.id == '24hour') {
     cMode = 1; // 24-hour mode
   } else {
     cMode = 0; // 12-hour mode
@@ -39,14 +39,14 @@ clockModeGroup.addEventListener('change', function() {
 
 function getTime() {
     var clock = new Date();
-    var indicator = (clock.getHours()) < 12 ? "AM" : "PM";
+    var ind = (clock.getHours()) < 12 ? "AM" : "PM";
     var hrs = (!cMode) ? (clock.getHours() % 12 == 0 ? 12 : clock.getHours()) : String(clock.getHours()).padStart(2, '0');
     var min = String(clock.getMinutes()).padStart(2, '0');
     var sec = String(clock.getSeconds()).padStart(2, '0');
     
     // Return the values as an object
     return {
-    indicator: indicator,
+    indicator: ind,
     hours: hrs,
     minutes: min,
     seconds: sec
@@ -71,6 +71,9 @@ function updateTime() {
     // Update AM/PM indicator
     var indicatorSlot = document.getElementById('indicator');
     indicatorSlot.textContent = !cMode ? time.indicator : "";
+    
+    // Update the document title because why not
+    document.title = `Time: ${time.hours}:${time.minutes}:${time.seconds} ${!cMode ? time.indicator : ""}`
 }
 
 // Run immediately, then start the interval

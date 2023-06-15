@@ -1,6 +1,7 @@
 # web-clock
  Online digital clock web app built on Bootstrap 5.3 with customizability in mind!  
- Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri
+ Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri  
+ This project is part of my Useful Sites Dashboard page ([Link](https://github.com/iKarTehFox/usdsites-portal))
 
 # Features
 ### Clock mode

@@ -6,7 +6,6 @@ const solidModeRadio = document.getElementById('solidModeRadio');
 let colorFadeInterval;
 
 // Function to start color fade
-// Function to start color fade
 function startColorFade() {
   const colors = ['#FFC0CB', '#FFD700', '#7FFFD4', '#FFA500', '#9370DB', '#00FFFF'];
   let currentIndex = 0;
