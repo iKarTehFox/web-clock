@@ -37,6 +37,12 @@ clockModeGroup.addEventListener('change', function() {
   updateTime();
 });
 
+// Change tab favicon function
+function updateFavicon(hour) {
+  var faviconLink = document.getElementById('favicon');
+  faviconLink.href = `./icons/clock-time-${hour}.svg`;
+}
+
 function getTime() {
     var clock = new Date();
     var ind = (clock.getHours()) < 12 ? "AM" : "PM";
@@ -74,6 +80,9 @@ function updateTime() {
     
     // Update the document title because why not
     document.title = `Time: ${time.hours}:${time.minutes}:${time.seconds} ${cMode === 0 ? time.indicator : ""}`
+
+    // Update icon for favicon by hour
+    updateFavicon(time.hours % 12 == 0 ? 12 : time.hours % 12);
 }
 
 // Run immediately, then start the interval

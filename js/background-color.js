@@ -1,6 +1,12 @@
 // Get the mode radio buttons
 const fadeModeRadio = document.getElementById('fadeModeRadio');
 const solidModeRadio = document.getElementById('solidModeRadio');
+const currentColorBadge = document.getElementById('current-color-badge');
+
+var isOverride = false;
+overrideTextColor.addEventListener('change', function() {
+  isOverride = overrideTextColor.checked;
+});
 
 // Get the color fade interval ID
 let colorFadeInterval;
@@ -22,6 +28,7 @@ function startColorFade() {
     // Transition to the next color
     currentIndex = (currentIndex + 1) % colors.length;
     bodyElement.style.backgroundColor = colors[currentIndex];
+    currentColorBadge.textContent = colors[currentIndex];
   }, 3000);
 }
 
@@ -33,7 +40,9 @@ function stopColorFade() {
 // Event listener for fade mode selection
 fadeModeRadio.addEventListener('change', () => {
   var clockContainer = document.getElementById("clock-container");
-  clockContainer.style.color = "#212529";
+  if (!isOverride) {
+      clockContainer.style.color = "#212529";
+  }
   if (fadeModeRadio.checked) {
     startColorFade();
     // Disable the solid color buttons
@@ -58,8 +67,8 @@ solidModeRadio.addEventListener('change', () => {
 document.querySelectorAll('.preset-color').forEach((btn) => {
   btn.addEventListener('click', () => {
     const selectedColor = btn.getAttribute('data-color');
-    stopColorFade();
     document.body.style.backgroundColor = selectedColor;
+    currentColorBadge.textContent = selectedColor;
   });
 });
 

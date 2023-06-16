@@ -1,6 +1,15 @@
+const overrideCheckbox = document.getElementById('override-text-color');
+// Check for text override
+var isOverride = false;
+overrideCheckbox.addEventListener('change', function() {
+  isOverride = overrideCheckbox.checked;
+});
+
 function setTextColor(element) {
-  // Get the text element
-  var clockContainer = document.getElementById("clock-container");
+  // Check for override
+  if (isOverride) {
+      return;
+  }
 
   // Get the data-color attribute value from the clicked element
   var color = element.getAttribute("data-color");

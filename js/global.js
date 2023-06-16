@@ -1,6 +1,6 @@
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-const checkmarkCheckbox = document.getElementById('menuButtonVisible');
+const menuVisCheckbox = document.getElementById('menuButtonVisible');
 const fontSelector = document.getElementById('fontFamilySelect');
 const regularTypeRadio = document.getElementById('regularStyle');
 const italicTypeRadio = document.getElementById('italicStyle');
@@ -8,6 +8,8 @@ const menuOptions = document.getElementById("menu-options");
 const menuButton = document.getElementById('menu-button');
 const closeButton = document.getElementById('close-button');
 const clockContainer = document.getElementById('clock-container');
+const overrideTextColor = document.getElementById('override-text-color');
+const colorInput = document.getElementById('textColorInput');
 
 // Font selector listener
 regularTypeRadio.addEventListener('change', function() {
@@ -24,6 +26,18 @@ fontSelector.addEventListener('change', function() {
   clockContainer.style.fontFamily = selectedFont;
 });
 
+// Color override listener
+overrideTextColor.addEventListener('change', function() {
+  var isOverride = overrideTextColor.checked;
+  colorInput.disabled = !isOverride;
+});
+
+// Color input listener
+textColorInput.addEventListener("input", function() {
+  const color = textColorInput.value;
+  clockContainer.style.color = color;
+});
+
 // Menu button listener
 document.getElementById("menu-button").addEventListener("click", function() {
     menuOptions.classList.add("menu-options-show");
@@ -38,7 +52,7 @@ document.getElementById("close-button").addEventListener("click", function() {
     menuOptions.scrollTop = 0;
     menuOptions.classList.remove("menu-options-show");
     closeButton.style.display = "none";
-    var isChecked = checkmarkCheckbox.checked;
+    var isChecked = menuVisCheckbox.checked;
     if (isChecked)
         menuButton.style.display = "block";
 });
@@ -53,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             menuOptions.scrollTop = 0;
             menuOptions.classList.remove('menu-options-show');
             closeButton.style.display = "none";
-            var isChecked = checkmarkCheckbox.checked;
+            var isChecked = menuVisCheckbox.checked;
             if (isChecked)
                 menuButton.style.display = "block";
         }
@@ -72,12 +86,39 @@ document.addEventListener('dblclick', function() {
         menuButton.style.display = 'block'; // Show the menu button
 
         // Set the checkmark checkbox as checked
-        checkmarkCheckbox.checked = true;
+        menuVisCheckbox.checked = true;
     }
 });
 
-checkmarkCheckbox.addEventListener('change', function() {
-    var isChecked = checkmarkCheckbox.checked;
+// Fullscreen function
+function toggleFullscreen() {
+  if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+    // Enter fullscreen mode
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    } else if (document.documentElement.mozRequestFullScreen) {
+      document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+    } else if (document.documentElement.msRequestFullscreen) {
+      document.documentElement.msRequestFullscreen();
+    }
+  } else {
+    // Exit fullscreen mode
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  }
+}
+
+menuVisCheckbox.addEventListener('change', function() {
+    var isChecked = menuVisCheckbox.checked;
     if (isChecked) {
         // Show the menu button
         if (!menuOptions.contains(event.target) && !menuButton.contains(event.target) && !closeButton.contains(event.target)) {
