@@ -40,7 +40,7 @@ clockModeGroup.addEventListener('change', function() {
 function getTime() {
     var clock = new Date();
     var ind = (clock.getHours()) < 12 ? "AM" : "PM";
-    var hrs = (!cMode) ? (clock.getHours() % 12 == 0 ? 12 : clock.getHours()) : String(clock.getHours()).padStart(2, '0');
+    var hrs = (cMode === 0) ? (clock.getHours() % 12 == 0 ? 12 : clock.getHours()) % 12 : String(clock.getHours()).padStart(2, '0');
     var min = String(clock.getMinutes()).padStart(2, '0');
     var sec = String(clock.getSeconds()).padStart(2, '0');
     
@@ -70,10 +70,10 @@ function updateTime() {
     
     // Update AM/PM indicator
     var indicatorSlot = document.getElementById('indicator');
-    indicatorSlot.textContent = !cMode ? time.indicator : "";
+    indicatorSlot.textContent = cMode === 0 ? time.indicator : "";
     
     // Update the document title because why not
-    document.title = `Time: ${time.hours}:${time.minutes}:${time.seconds} ${!cMode ? time.indicator : ""}`
+    document.title = `Time: ${time.hours}:${time.minutes}:${time.seconds} ${cMode === 0 ? time.indicator : ""}`
 }
 
 // Run immediately, then start the interval
