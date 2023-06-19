@@ -1,99 +1,96 @@
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-const menuVisCheckbox = document.getElementById('menuButtonVisible');
-const fontSelector = document.getElementById('fontFamilySelect');
-const regularTypeRadio = document.getElementById('regularStyle');
-const italicTypeRadio = document.getElementById('italicStyle');
-const menuOptions = document.getElementById("menu-options");
-const menuButton = document.getElementById('menu-button');
-const closeButton = document.getElementById('close-button');
-const clockContainer = document.getElementById('clock-container');
-const overrideTextColor = document.getElementById('override-text-color');
-const colorInput = document.getElementById('textColorInput');
-const dateVisibilitySelect = document.getElementById("dateVisibilitySelect");
-const dateParagraph = document.getElementById("date");
+
+const menu = {
+    visCheckbox: document.getElementById('menuButtonVisible'),
+    options: document.getElementById("menu-options"),
+    obutton: document.getElementById('open-button'),
+    cbutton: document.getElementById('close-button'),
+    dateformselect: document.getElementById("dateFormatSelect"),
+    faderad: document.getElementById('fademode'),
+    solidrad: document.getElementById('solidmode'),
+    colorbadge: document.getElementById('current-color-badge'),
+    presetcolors: document.querySelectorAll('.preset-color')
+};
+
+const font = {
+    selector: document.getElementById('fontFamilySelect'),
+    regularrad: document.getElementById('regularStyle'),
+    italicrad: document.getElementById('italicStyle')
+};
+
+const dtdisplay = {
+    clock: document.getElementById('clock-container'),
+    date: document.getElementById("date")
+}
 
 // Font selector listener
-regularTypeRadio.addEventListener('change', function() {
-  clockContainer.style.fontStyle = 'normal'; // Set to regular (non-italic) style
+font.regularrad.addEventListener('change', function() {
+  dtdisplay.clock.style.fontStyle = 'normal'; // Set to regular (non-italic) style
 });
 
-italicTypeRadio.addEventListener('change', function() {
-  clockContainer.style.fontStyle = 'italic'; // Set to italic style
+font.italicrad.addEventListener('change', function() {
+  dtdisplay.clock.style.fontStyle = 'italic'; // Set to italic style
 });
 
 // Font type listener
-fontSelector.addEventListener('change', function() {
-  var selectedFont = fontSelector.value;
-  clockContainer.style.fontFamily = selectedFont;
-});
-
-// Color override listener
-overrideTextColor.addEventListener('change', function() {
-  var isOverride = overrideTextColor.checked;
-  colorInput.disabled = !isOverride;
-});
-
-// Color input listener
-textColorInput.addEventListener("input", function() {
-  const color = textColorInput.value;
-  clockContainer.style.color = color;
+font.selector.addEventListener('change', function() {
+  dtdisplay.clock.style.fontFamily = font.selector.value;
 });
 
 // Menu button listener
-document.getElementById("menu-button").addEventListener("click", function() {
-    menuOptions.classList.add("menu-options-show");
+document.getElementById("open-button").addEventListener("click", function() {
+    menu.options.classList.add("menu-options-show");
 
     // Make close button visible
-    closeButton.style.display = "block";
-    menuButton.style.display = "none";
+    menu.cbutton.style.display = "block";
+    menu.obutton.style.display = "none";
 });
 
 // Close button listener
 document.getElementById("close-button").addEventListener("click", function() {
-    menuOptions.scrollTop = 0;
-    menuOptions.classList.remove("menu-options-show");
-    closeButton.style.display = "none";
-    var isChecked = menuVisCheckbox.checked;
+    menu.options.scrollTop = 0;
+    menu.options.classList.remove("menu-options-show");
+    menu.cbutton.style.display = "none";
+    var isChecked = menu.visCheckbox.checked;
     if (isChecked)
-        menuButton.style.display = "block";
+        menu.obutton.style.display = "block";
 });
 
 // Click outside to close menu
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(event) {
-
         // Check if the clicked element is outside the menu-options container and not the menu button or its child elements
-        if (!menuOptions.contains(event.target) && !menuButton.contains(event.target) && !closeButton.contains(event.target)) {
+        if (!menu.options.contains(event.target) && !menu.obutton.contains(event.target) && !menu.cbutton.contains(event.target)) {
             // Toggle the menu-options container visibility by adding/removing the CSS class
-            menuOptions.scrollTop = 0;
-            menuOptions.classList.remove('menu-options-show');
-            closeButton.style.display = "none";
-            var isChecked = menuVisCheckbox.checked;
+            menu.options.scrollTop = 0;
+            menu.options.classList.remove('menu-options-show');
+            menu.cbutton.style.display = "none";
+            var isChecked = menu.visCheckbox.checked;
             if (isChecked)
-                menuButton.style.display = "block";
+                menu.obutton.style.display = "block";
         }
     });
 });
 
 // Date position selector function
 function setDateAlign(alignDir) {
-    dateParagraph.style.textAlign = alignDir;
+    dtdisplay.date.style.textAlign = alignDir;
 }
 
 // Font weight menu function
 function setFontWeight(fontWeight) {
-    clockContainer.style.fontWeight = fontWeight;
+    dtdisplay.clock.style.fontWeight = fontWeight;
 }
 
 // Menu button visibility
 document.addEventListener('dblclick', function() {
-    if (!menuOptions.contains(event.target) && !menuButton.contains(event.target) && !closeButton.contains(event.target)) {
+    if (!menu.options.contains(event.target) && !menu.obutton.contains(event.target) && !menu.cbutton.contains(event.target)) {
         // Toggle the visibility of the menu button
-        menuButton.style.display = 'block'; // Show the menu button
+        menu.obutton.style.display = 'block'; // Show the menu button
 
         // Set the checkmark checkbox as checked
-        menuVisCheckbox.checked = true;
+        menu.visCheckbox.checked = true;
     }
 });
 
@@ -124,15 +121,15 @@ function toggleFullscreen() {
   }
 }
 
-menuVisCheckbox.addEventListener('change', function() {
-    var isChecked = menuVisCheckbox.checked;
+menu.visCheckbox.addEventListener('change', function() {
+    var isChecked = menu.visCheckbox.checked;
     if (isChecked) {
         // Show the menu button
-        if (!menuOptions.contains(event.target) && !menuButton.contains(event.target) && !closeButton.contains(event.target)) {
-            menuButton.style.display = 'block';
+        if (!menu.options.contains(event.target) && !menu.obutton.contains(event.target) && !menu.cbutton.contains(event.target)) {
+            menu.obutton.style.display = 'block';
         }
     } else {
         // Hide the menu button
-        menuButton.style.display = 'none';
+        menu.obutton.style.display = 'none';
     }
 });

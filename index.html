@@ -21,7 +21,7 @@
     </head>
     <body>
         <div id="menu-container">
-            <button id="menu-button" class="btn btn-secondary" style="width: 100px;">
+            <button id="open-button" class="btn btn-secondary" style="width: 100px;">
                 <iconify-icon icon="mdi:menu" width="15" height="15" style="height: 13px;"></iconify-icon> Menu
             </button>
             <button id="close-button" class="btn btn-danger" style="display: none; position: absolute; top: 0px; right: 0px; width: 100px;">
@@ -38,8 +38,15 @@
                         <input type="radio" class="btn-check" name="clock-mode-radio" id="24hour" autocomplete="off">
                         <label class="btn btn-outline-primary" for="24hour">24-hour</label>
                     </div>
-                    <h6 class="mb-1 mt-2">Date display</h6>
-                    <select class="form-select" id="dateVisibilitySelect">
+                    <h6 class="mb-1 mt-2">Seconds Visibility</h6>
+                    <div class="btn-group" role="group" aria-label="Seconds visibility button group">
+                        <input type="radio" class="btn-check" name="seconds-vis-radio" id="secOn" autocomplete="off" onClick="setSecondsVis(1)" checked>
+                        <label class="btn btn-outline-primary" for="secOn">Show</label>
+                        <input type="radio" class="btn-check" name="seconds-vis-radio" id="secOff" autocomplete="off" onClick="setSecondsVis(0)">
+                        <label class="btn btn-outline-primary" for="secOff">Hide</label>
+                    </div>
+                    <h6 class="mb-1 mt-2">Date Display</h6>
+                    <select class="form-select" id="dateFormatSelect">
                         <option value="D" id="dateVisOp1"></option>
                         <option value="DD" id="dateVisOp2"></option>
                         <option value="DDD" id="dateVisOp3"></option>
@@ -48,7 +55,7 @@
                         <option value="x" id="dateVisOp5">Unix timestamp in millis</option>
                         <option value="" id="dateVisOp5">Off</option>
                     </select>
-                    <h6 class="mb-1 mt-2">Date alignment</h6>
+                    <h6 class="mb-1 mt-2">Date Alignment</h6>
                     <div class="btn-group" role="group" aria-label="Date position button group">
                         <input type="radio" class="btn-check" name="date-position-radio" id="dateleft" autocomplete="off" onClick="setDateAlign('left')" checked>
                         <label class="btn btn-outline-primary" for="dateleft">Left</label>
@@ -94,10 +101,6 @@
                         <input type="radio" class="btn-check" name="font-weight-radio" id="boldWeight" autocomplete="off">
                         <label class="btn btn-outline-primary" for="boldWeight" onClick="setFontWeight('bold')">Bold</label>
                     </div>
-                    <h6 class="mb-1 mt-2">Text Color</h6>
-                    <input type="checkbox" class="btn-check" id="override-text-color" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="override-text-color">Toggle color override</label>
-                    <input type="color" class="form-control mt-1" id="textColorInput" disabled>
                 </div>
                 <hr>
                 <div class="section mt-2">
@@ -105,11 +108,11 @@
                     <div class="form-group">
                         <h6 class="mb-1">Background color mode:</h6>
                         <div class="btn-group" role="group" aria-label="Color mode button group" id="mode-selector">
-                            <input type="radio" class="btn-check" name="color-mode-radio" id="fadeModeRadio" autocomplete="off" checked>
-                            <label class="btn btn-outline-primary" for="fadeModeRadio">Color fade</label>
+                            <input type="radio" class="btn-check" name="color-mode-radio" id="fademode" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="fademode">Color fade</label>
 
-                            <input type="radio" class="btn-check" name="color-mode-radio" id="solidModeRadio" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="solidModeRadio">Solid color</label>
+                            <input type="radio" class="btn-check" name="color-mode-radio" id="solidmode" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="solidmode">Solid color</label>
                         </div>
                         <p class="mt-2 mb-0">Current color: <span class="badge text-bg-secondary" id="current-color-badge">#000000</span></p>
                     </div>
@@ -227,7 +230,7 @@
         </div>
         <div id="clock-container">
             <center>
-                <span class="clock-part" id="hour-slot">00</span><span class="colon">:</span><span class="clock-part" id="minute-slot">00</span><span class="colon">:</span><span class="clock-part" id="second-slot">00</span><span id="indicator"></span>
+                <span class="clock-part" id="hour-slot">00</span><span class="colon" id="colon1">:</span><span class="clock-part" id="minute-slot">00</span><span class="colon" id="colon2">:</span><span class="clock-part" id="second-slot">00</span><span id="indicator"></span>
             </center>
             <p id="date"><noscript>JavaScript is disabled!</noscript></p>
         </div>

@@ -1,6 +1,7 @@
 // Define time slots
 const hourSlot = document.getElementById('hour-slot');
 const minuteSlot = document.getElementById('minute-slot');
+const scolon = document.getElementById('colon2');
 const secondSlot = document.getElementById('second-slot');
 const indicatorSlot = document.getElementById('indicator');
 var dateFormat = 'D';
@@ -26,6 +27,16 @@ function updatePageDuration() {
   durationElement.textContent = hours + "h, " + minutes + "m, and " + seconds + "s";
 }
 
+function setSecondsVis(vis) {
+    if (vis === 0) {
+        scolon.style.display = 'none';
+        secondSlot.style.display = 'none';
+    } else {
+        scolon.style.display = '';
+        secondSlot.style.display = '';
+    }
+}
+
 // Clock functions
 const clockModeGroup = document.getElementById('clock-mode-group');
 let cMode = 0;
@@ -45,8 +56,9 @@ clockModeGroup.addEventListener('change', function() {
 });
 
 // Date format selector listener
-dateVisibilitySelect.addEventListener("change", function() {
-  dateFormat = dateVisibilitySelect.value;
+menu.dateformselect.addEventListener("change", function() {
+  dateFormat = menu.dateformselect.value;
+  updateDate();
 });
 
 // Get and set time with luxon
@@ -69,7 +81,12 @@ function updateTime() {
     updateFavicon(time.toFormat('h'));
     
     // Update current Date and selector setup
-    dateParagraph.innerHTML = time.toFormat(dateFormat);
+    
+}
+
+function updateDate() {
+    var time = luxon.DateTime.now();
+    dtdisplay.date.innerHTML = time.toFormat(dateFormat);
     document.getElementById('dateVisOp1').textContent = time.toFormat(document.getElementById('dateVisOp1').value);
     document.getElementById('dateVisOp2').textContent = time.toFormat(document.getElementById('dateVisOp2').value);
     document.getElementById('dateVisOp3').textContent = time.toFormat(document.getElementById('dateVisOp3').value);
@@ -82,10 +99,15 @@ function updateFavicon(hour) {
   faviconLink.href = `./icons/clock-time-${hour}.svg`;
 }
 
-// Update time on load, then start interval
+// Update on load, then start interval
 updateTime();
+updateDate();
 
 setInterval(function() {
     updateTime();
     updatePageDuration();
 }, 250);
+
+setInterval(function() {
+    updateDate();
+}, 60000);

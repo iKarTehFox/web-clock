@@ -1,16 +1,4 @@
-const overrideCheckbox = document.getElementById('override-text-color');
-// Check for text override
-var isOverride = false;
-overrideCheckbox.addEventListener('change', function() {
-  isOverride = overrideCheckbox.checked;
-});
-
 function setTextColor(element) {
-  // Check for override
-  if (isOverride) {
-      return;
-  }
-
   // Get the data-color attribute value from the clicked element
   var color = element.getAttribute("data-color");
 
@@ -19,9 +7,9 @@ function setTextColor(element) {
 
   // Set the text color based on the background luminance
   if (luminance > 0.62) {
-    clockContainer.style.color = "#212529"; // Set black text color
+    dtdisplay.clock.style.color = "#212529"; // Set black text color
   } else {
-    clockContainer.style.color = "#FFFFFF"; // Set white text color
+    dtdisplay.clock.style.color = "#FFFFFF"; // Set white text color
   }
 }
 
