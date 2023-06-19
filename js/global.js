@@ -10,6 +10,8 @@ const closeButton = document.getElementById('close-button');
 const clockContainer = document.getElementById('clock-container');
 const overrideTextColor = document.getElementById('override-text-color');
 const colorInput = document.getElementById('textColorInput');
+const dateVisibilitySelect = document.getElementById("dateVisibilitySelect");
+const dateParagraph = document.getElementById("date");
 
 // Font selector listener
 regularTypeRadio.addEventListener('change', function() {
@@ -73,6 +75,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Date position selector function
+function setDateAlign(alignDir) {
+    dateParagraph.style.textAlign = alignDir;
+}
 
 // Font weight menu function
 function setFontWeight(fontWeight) {

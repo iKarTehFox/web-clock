@@ -11,8 +11,9 @@
         <!-- JS -->
         <script src="./js/global.js" defer></script>
         <script src="./js/background-color.js" defer></script>
-        <script src="./js/clock.js" defer></script>
+        <script src="./js/clock-new.js" defer></script>
         <script src="./js/clock-color.js" defer></script>
+        <script src="./js/luxon.min.js"></script>
         <script src="./js/cdn.jsdelivr.net_npm_bootstrap@5.3.0_dist_js_bootstrap.bundle.min.js"></script>
         <script src="./js/code.iconify.design_iconify-icon_1.0.7_iconify-icon.min.js"></script>
         <!-- Favicon -->
@@ -36,6 +37,25 @@
 
                         <input type="radio" class="btn-check" name="clock-mode-radio" id="24hour" autocomplete="off">
                         <label class="btn btn-outline-primary" for="24hour">24-hour</label>
+                    </div>
+                    <h6 class="mb-1 mt-2">Date display</h6>
+                    <select class="form-select" id="dateVisibilitySelect">
+                        <option value="D" id="dateVisOp1"></option>
+                        <option value="DD" id="dateVisOp2"></option>
+                        <option value="DDD" id="dateVisOp3"></option>
+                        <option value="DDDD" id="dateVisOp4"></option>
+                        <option value="X" id="dateVisOp5">Unix timestamp in sec</option>
+                        <option value="x" id="dateVisOp5">Unix timestamp in millis</option>
+                        <option value="" id="dateVisOp5">Off</option>
+                    </select>
+                    <h6 class="mb-1 mt-2">Date alignment</h6>
+                    <div class="btn-group" role="group" aria-label="Date position button group">
+                        <input type="radio" class="btn-check" name="date-position-radio" id="dateleft" autocomplete="off" onClick="setDateAlign('left')" checked>
+                        <label class="btn btn-outline-primary" for="dateleft">Left</label>
+                        <input type="radio" class="btn-check" name="date-position-radio" id="datecenter" autocomplete="off" onClick="setDateAlign('center')">
+                        <label class="btn btn-outline-primary" for="datecenter">Center</label>
+                        <input type="radio" class="btn-check" name="date-position-radio" id="dateright" autocomplete="off" onClick="setDateAlign('right')">
+                        <label class="btn btn-outline-primary" for="dateright">Right</label>
                     </div>
                 </div>
                 <hr>
@@ -206,9 +226,10 @@
             </div>
         </div>
         <div id="clock-container">
-        <center>
-            <span class="clock-part" id="hour-slot">00</span><span class="colon">:</span><span class="clock-part" id="minute-slot">00</span><span class="colon">:</span><span class="clock-part" id="second-slot">00</span><span id="indicator"></span>
-        </center>
+            <center>
+                <span class="clock-part" id="hour-slot">00</span><span class="colon">:</span><span class="clock-part" id="minute-slot">00</span><span class="colon">:</span><span class="clock-part" id="second-slot">00</span><span id="indicator"></span>
+            </center>
+            <p id="date"><noscript>JavaScript is disabled!</noscript></p>
         </div>
     </body>
 </html>
