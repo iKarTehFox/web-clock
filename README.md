@@ -6,6 +6,9 @@
 # Features
 ### Clock mode
  Pick between 12 and 24-hour modes
+### Date display options
+ Set different date formats (including Unix timestamp)  
+ Align date position (left, center, and right)
 ### Font options
  8 predefined font families, or system default  
  Regular and _Italic_ font styles  
