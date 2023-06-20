@@ -1,3 +1,5 @@
+luxon.Settings.defaultZoneName = 'system';
+
 // Define time slots
 const hourSlot = document.getElementById('hour-slot');
 const minuteSlot = document.getElementById('minute-slot');
@@ -65,6 +67,7 @@ menu.dateformselect.addEventListener("change", function() {
 function updateTime() {
     // Retrieve now time
     var time = luxon.DateTime.now();
+    time = time.setZone(luxon.Settings.defaultZoneName);
     var hrs = cMode == 0 ? time.toFormat('h') : time.toFormat('HH');
     var min = time.toFormat('mm');
     var sec = time.toFormat('ss');
