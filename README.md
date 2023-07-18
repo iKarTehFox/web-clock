@@ -29,7 +29,7 @@
 ### Menu options pane
  ![A screenshot of the menu options panel when open. The "Clock Settings" section is expanded.](/assets/images/menu.png)  
 ### Custom preset font and background color
- ![A screenshot of the main web clock page with the Montserrat Bold font and weight, a different date format, and centered date alignment chosen.](/assets/images/customization.png)
+ ![A screenshot of the main web clock page with the Montserrat Bold font and weight, a different date format, and centered date alignment chosen.](/assets/images/customizable.png)
  
 
 # How to run
