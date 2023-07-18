@@ -34,7 +34,7 @@
 
 # How to run
  Step 1: Start your favorite web server software and host index.html at the root directory  
- - Note: All required CSS and JS files are included locally. This page can run offline!
+ - Info: This page can run offline since all CSS and JS is included locally. Please note that Google Analytics and OpenGraph meta info is included in index.html!
 
  Step 2: Congratuations! You're done! :)
  
