@@ -22,10 +22,19 @@
  Option to show and hide menu button
 ### Page duration time
  Text at the bottom of the menu shows you how much time you've wasted staring at and customizing the clock...
+ 
+# Gallery
+### Preview of the page  
+ ![A screenshot of the main web clock page. The time 6:19 PM and date of 7/18/2023 is shown against a white background.](/assets/images/main.png)  
+### Menu options pane
+ ![A screenshot of the menu options panel when open. The "Clock Settings" section is expanded.](/assets/images/menu.png)  
+### Custom preset font and background color
+ ![A screenshot of the main web clock page with the Montserrat Bold font and weight, a different date format, and centered date alignment chosen.](/assets/images/customizable.png)
+ 
 
 # How to run
- Step 1: Use your favorite web server software and host index.html at root directory  
- - Note: All required CSS and JS files are included locally. This page can run offline!
+ Step 1: Start your favorite web server software and host index.html at the root directory  
+ - Info: This page can run offline since all CSS and JS is included locally. Please note that Google Analytics and OpenGraph meta info is included in index.html!
 
  Step 2: Congratuations! You're done! :)
  
