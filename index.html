@@ -33,14 +33,15 @@
         <link href="./css/cdn.jsdelivr.net_npm_bootstrap@5.3.0_dist_css_bootstrap.min.css" rel="stylesheet">
         <link href="./css/bootstrap-social.css" rel="stylesheet">
         <!-- JS -->
+        <script src="./js/luxon.min.js"></script>
+        <script src="./js/cdn.jsdelivr.net_npm_bootstrap@5.3.0_dist_js_bootstrap.bundle.min.js"></script>
+        <script src="./js/code.iconify.design_iconify-icon_1.0.7_iconify-icon.min.js"></script>
+        <script src="./js/numberToWords.min.js"></script>
         <script src="./js/global.js" defer></script>
         <script src="./js/background-color.js" defer></script>
         <script src="./js/clock-new.js" defer></script>
         <script src="./js/clock-color.js" defer></script>
         <script src="./js/clock-tz.js" defer></script>
-        <script src="./js/luxon.min.js"></script>
-        <script src="./js/cdn.jsdelivr.net_npm_bootstrap@5.3.0_dist_js_bootstrap.bundle.min.js"></script>
-        <script src="./js/code.iconify.design_iconify-icon_1.0.7_iconify-icon.min.js"></script>
         <!-- Favicon -->
         <link rel="icon" type="image/svg+xml" id="favicon" href="./icons/clock-time-12.svg">
     </head>
@@ -72,6 +73,20 @@
                                 <h6 class="mb-1 mt-2">Time Zone</h6>
                                 <select class="form-select" id="timeZoneSelect">
                                     <option value="system" selected>System Default</option>
+                                </select>
+                                <h6 class="mb-1 mt-2">Time Display Method</h6>
+                                <select class="form-select" id="timeMethodSelect">
+                                    <optgroup label="Radix Systems">
+                                        <option value="binary">Binary (Base 2)</option>
+                                        <option value="octal">Octal (Base 8)</option>
+                                        <option value="decimal" selected>Decimal (Base 10)</option>
+                                        <option value="hexa">Hexadecimal (Base 16)</option>
+                                    </optgroup>
+                                    <optgroup label="Conversions">
+                                        <option value="emoji">Emoji (1️⃣2️⃣:0️⃣0️⃣)</option>
+                                        <option value="roman">Roman Numeral (XII:00)</option>
+                                        <option value="words">Words (twelve:zero)</option>
+                                    </optgroup>
                                 </select>
                                 <h6 class="mb-1 mt-2">Seconds Visibility</h6>
                                 <div class="btn-group" role="group" aria-label="Seconds visibility button group">
@@ -138,6 +153,14 @@
                                     <input type="radio" class="btn-check" name="font-weight-radio" id="boldWeight" autocomplete="off">
                                     <label class="btn btn-outline-primary" for="boldWeight" onClick="setFontWeight('bold')">Bold</label>
                                 </div>
+                                <h6 class="mb-1 mt-2">Font Size</h6>
+                                <select class="form-select" id="sizeSelect">
+                                    <option value="smaller">Smaller</option>
+                                    <option value="small">Small</option>
+                                    <option value="default" selected>Default</option>
+                                    <option value="large">Large</option>
+                                    <option value="larger">Larger</option>
+                                </select>
                             </div>
                         </div>
                     </div>

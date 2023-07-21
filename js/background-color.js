@@ -20,7 +20,7 @@ function stopColorFade() {
 }
 
 function handleModeSelection() {
-  dtdisplay.clock.style.color = "#212529";
+  dtdisplay.ccontainer.style.color = "#212529";
 
   if (menu.faderad.checked) {
     startColorFade();

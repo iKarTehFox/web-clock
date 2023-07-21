@@ -1,20 +1,23 @@
 # web-clock
  Online digital clock web app built on Bootstrap 5.3 with customizability in mind!  
  Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri  
- This project is part of my Useful Sites Dashboard page ([Link](https://github.com/iKarTehFox/usdsites-portal))
+ 
+ Check it out in action! ([Website](https://online-clock.pages.dev))
 
 # Features
 ### Clock mode
  Pick between 12 and 24-hour modes
-### Time Zone
- Choose a different time zone (Intl library zones)
+### Time customization
+ Choose a different time zone (Intl library zones)  
+ Display the time in 7 different methods (Radix/Conversions)
 ### Date display options
  Set 4 different date formats (or disable!)  
  Date position alignment (left, center, and right)
 ### Font options
  8 predefined font families, or system default  
  Regular and _Italic_ font styles  
- Light, regular, and **bold** font weights
+ Light, regular, and **bold** font weights  
+ 5 different font sizes
 ### Background color modes
  Color fade - Automatically transitions between 6 colors  
  Solid color - Choose from 33 different colors
@@ -39,6 +42,17 @@
  Step 2: Congratuations! You're done! :)
  
 # Credits
+ This project uses libraries from third-parties  
+ The following libraries are used under their respective licenses:
+ 
+ - Bootstrap ([Link](https://getbootstrap.com/)) MIT License
+ - Iconify ([Link](https://iconify.design)) MIT License
+ - Material Design Icons by Pictogrammers ([GitHub](https://github.com/Templarian/MaterialDesign)) Apache License 2.0
+ - Luxon ([GitHub](https://github.com/moment/luxon)) MIT License
+ - number-to-words ([Link](https://www.jsdelivr.com/package/npm/number-to-words)) MIT License
+ 
+ Each license can be found in the code's respective files or website.
+ 
  This project uses fonts from Google Fonts  
  The following *fonts* are used under their respective licenses:
  

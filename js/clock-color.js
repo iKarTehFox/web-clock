@@ -7,9 +7,9 @@ function setTextColor(element) {
 
   // Set the text color based on the background luminance
   if (luminance > 0.62) {
-    dtdisplay.clock.style.color = "#212529"; // Set black text color
+    dtdisplay.ccontainer.style.color = "#212529"; // Set black text color
   } else {
-    dtdisplay.clock.style.color = "#FFFFFF"; // Set white text color
+    dtdisplay.ccontainer.style.color = "#FFFFFF"; // Set white text color
   }
 }
 
