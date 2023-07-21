@@ -42,29 +42,39 @@
  Step 2: Congratuations! You're done! :)
  
 # Credits (Open Source)
- This project uses code from other open-source projects  
- The following open-source projects are under their respective licenses:
  
- - Bootstrap ([Link](https://getbootstrap.com/)) MIT License
- - Iconify ([Link](https://iconify.design)) MIT License
- - Material Design Icons by Pictogrammers ([GitHub](https://github.com/Templarian/MaterialDesign)) Apache License 2.0
- - Luxon ([GitHub](https://github.com/moment/luxon)) MIT License
- - number-to-words ([GitHub](https://github.com/marlun78/number-to-words)) MIT License
- - Social Buttons for Bootstrap ([GitHub](https://github.com/lipis/bootstrap-social)) MIT License
+ Bootstrap ([Link](https://getbootstrap.com/))
+ - Licensed under MIT License
+ Iconify ([Link](https://iconify.design))
+ - Licensed under MIT License
+ Material Design Icons by Pictogrammers ([GitHub](https://github.com/Templarian/MaterialDesign))
+ - Licensed under Apache License 2.0
+ Luxon ([GitHub](https://github.com/moment/luxon))
+ - Licensed under MIT License
+ number-to-words ([GitHub](https://github.com/marlun78/number-to-words))
+ - Licensed under MIT License
+ Social Buttons for Bootstrap ([GitHub](https://github.com/lipis/bootstrap-social))
+ - Licensed under MIT License
  
  Each license can be found in the code's respective files or website.
  
 # Credits (Fonts)
- This project uses fonts from Google Fonts  
- The following *fonts* are used under their respective licenses:
  
- - Lato ([Link](https://fonts.google.com/specimen/Lato)) SIL Open Font License
- - Montserrat ([Link](https://fonts.google.com/specimen/Montserrat)) SIL Open Font License
- - Open Sans ([Link](https://fonts.google.com/specimen/Open+Sans)) SIL Open Font License
- - Oswald ([Link](https://fonts.google.com/specimen/Oswald)) SIL Open Font License
- - Poppins ([Link](https://fonts.google.com/specimen/Poppins)) SIL Open Font License
- - Roboto ([Link](https://fonts.google.com/specimen/Roboto)) Apache License 2.0
- - Ubuntu ([Link](https://fonts.google.com/specimen/Ubuntu)) Ubuntu Font License 1.0
- - Ubuntu Mono ([Link](https://fonts.google.com/specimen/Ubuntu+Mono)) Ubuntu Font License 1.0
+ Lato ([Link](https://fonts.google.com/specimen/Lato))
+ - Licensed under SIL Open Font License
+ Montserrat ([Link](https://fonts.google.com/specimen/Montserrat))
+ - Licensed under SIL Open Font License
+ Open Sans ([Link](https://fonts.google.com/specimen/Open+Sans))
+ - Licensed under SIL Open Font License
+ Oswald ([Link](https://fonts.google.com/specimen/Oswald))
+ - Licensed under SIL Open Font License
+ Poppins ([Link](https://fonts.google.com/specimen/Poppins))
+ - Licensed under SIL Open Font License
+ Roboto ([Link](https://fonts.google.com/specimen/Roboto))
+ - Licensed under Apache License 2.0
+ Ubuntu ([Link](https://fonts.google.com/specimen/Ubuntu))
+ - Licensed under Ubuntu Font License 1.0
+ Ubuntu Mono ([Link](https://fonts.google.com/specimen/Ubuntu+Mono))
+ - Licensed under Ubuntu Font License 1.0
  
  Each license can be found in their respective folders in /fonts
