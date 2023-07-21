@@ -42,10 +42,11 @@
  Step 2: Congratuations! You're done! :)
  
 # Credits
- This project uses libraries from third-parties  
- The following libraries are used under their respective licenses:
+ This project uses code from other open-source projects 
+ The following open-source projects are under their respective licenses:
  
  - Bootstrap ([Link](https://getbootstrap.com/)) MIT License
+ - Social Buttons for Bootstrap ([GitHub](https://github.com/lipis/bootstrap-social)) MIT License
  - Iconify ([Link](https://iconify.design)) MIT License
  - Material Design Icons by Pictogrammers ([GitHub](https://github.com/Templarian/MaterialDesign)) Apache License 2.0
  - Luxon ([GitHub](https://github.com/moment/luxon)) MIT License
