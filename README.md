@@ -41,19 +41,20 @@
 
  Step 2: Congratuations! You're done! :)
  
-# Credits
- This project uses code from other open-source projects 
+# Credits (Open Source)
+ This project uses code from other open-source projects  
  The following open-source projects are under their respective licenses:
  
  - Bootstrap ([Link](https://getbootstrap.com/)) MIT License
- - Social Buttons for Bootstrap ([GitHub](https://github.com/lipis/bootstrap-social)) MIT License
  - Iconify ([Link](https://iconify.design)) MIT License
  - Material Design Icons by Pictogrammers ([GitHub](https://github.com/Templarian/MaterialDesign)) Apache License 2.0
  - Luxon ([GitHub](https://github.com/moment/luxon)) MIT License
- - number-to-words ([Link](https://www.jsdelivr.com/package/npm/number-to-words)) MIT License
+ - number-to-words ([GitHub](https://github.com/marlun78/number-to-words)) MIT License
+ - Social Buttons for Bootstrap ([GitHub](https://github.com/lipis/bootstrap-social)) MIT License
  
  Each license can be found in the code's respective files or website.
  
+# Credits (Fonts)
  This project uses fonts from Google Fonts  
  The following *fonts* are used under their respective licenses:
  
