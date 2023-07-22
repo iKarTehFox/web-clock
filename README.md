@@ -36,7 +36,7 @@
  ![A screenshot of the main web clock page. The time 6:19 PM and date of 7/18/2023 is shown against a white background.](/assets/images/main.png)  
 ### Menu options pane
  ![A screenshot of the menu options panel when open. The "Clock Settings" section is expanded.](/assets/images/menu.png)  
-### Custom preset font and background color
+### Custom preset font, background color, bottom border, and clock display method
  ![A screenshot of the main web clock page with the Montserrat Bold font and weight, a different date format, and centered date alignment chosen.](/assets/images/customizable.png)
  
 
