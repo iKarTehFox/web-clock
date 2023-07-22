@@ -5,25 +5,29 @@
  Check it out in action! ([Website](https://online-clock.pages.dev))
 
 # Features
-### Clock mode
+
+### Clock Mode
  Pick between 12 and 24-hour modes
-### Time customization
- Choose a different time zone (Intl library zones)  
+### Clock Display
  Display the time in 7 different methods (Radix/Conversions)
-### Date display options
+### Date Format and Alignment
  Set 4 different date formats (or disable!)  
  Date position alignment (left, center, and right)
-### Font options
- 8 predefined font families, or system default  
+### Font Customization
+ 13 predefined font families, or system default  
+ Set custom font from installed system fonts  
  Regular and _Italic_ font styles  
  Light, regular, and **bold** font weights  
  5 different font sizes
-### Background color modes
+### Background Color Modes
  Color fade - Automatically transitions between 6 colors  
  Solid color - Choose from 33 different colors
-### Menu visibility
- Option to show and hide menu button
-### Page duration time
+### Menu Visibility
+ Toggle displaying of the menu button
+### Importing/Exporting Settings
+ Download and upload generated JSON files containing all of your settings  
+ - On import, JSON files and settings are verified before applying
+### Page Duration
  Text at the bottom of the menu shows you how much time you've wasted staring at and customizing the clock...
  
 # Gallery
