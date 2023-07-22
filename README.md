@@ -9,7 +9,8 @@
 ### Clock Mode
  Pick between 12 and 24-hour modes
 ### Clock Display
- Display the time in 7 different methods (Radix/Conversions)
+ Display the time in 7 different methods (Radix/Conversions)  
+ Add a box/bottom border to the clock container (solid, dashed, dotted, double)
 ### Date Format and Alignment
  Set 4 different date formats (or disable!)  
  Date position alignment (left, center, and right)
