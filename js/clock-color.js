@@ -1,17 +1,17 @@
-function setTextColor(element) {
-  // Get the data-color attribute value from the clicked element
-  var color = element.getAttribute("data-color");
+menu.presetcolors.forEach((radio) => {
+  radio.addEventListener('change', () => {
+    const color = radio.dataset.color;
+    // Determine the luminance of the background color
+    var luminance = getLuminance(color);
 
-  // Determine the luminance of the background color
-  var luminance = getLuminance(color);
-
-  // Set the text color based on the background luminance
-  if (luminance > 0.62) {
-    dtdisplay.ccontainer.style.color = "#212529"; // Set black text color
-  } else {
-    dtdisplay.ccontainer.style.color = "#FFFFFF"; // Set white text color
-  }
-}
+    // Set the text color based on the background luminance
+    if (luminance > 0.62) {
+        dtdisplay.ccontainer.style.color = "#212529"; // Set black text color
+    } else {
+        dtdisplay.ccontainer.style.color = "#FFFFFF"; // Set white text color
+    }
+    });
+});
 
 function getLuminance(color) {
   // Assuming color is in RGB format, convert it to relative luminance

@@ -60,7 +60,8 @@
     padding: 10px;
     max-height: 75vh;
     overflow: auto;
-    width: 250px;
+    max-width: 15vw;
+    min-width: 250px;
     box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
 }
 

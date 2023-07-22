@@ -35,16 +35,6 @@ function updatePageDuration() {
   durationElement.textContent = hours + "h, " + minutes + "m, and " + seconds + "s";
 }
 
-function setSecondsVis(vis) {
-    if (vis === 0) {
-        dtdisplay.colon2.style.display = 'none';
-        dtdisplay.secondSlot.style.display = 'none';
-    } else {
-        dtdisplay.colon2.style.display = '';
-        dtdisplay.secondSlot.style.display = '';
-    }
-}
-
 // Clock functions
 const clockModeGroup = document.getElementById('clock-mode-group');
 let cMode = 0;
@@ -165,4 +155,4 @@ setInterval(function() {
 
 setInterval(function() {
     updateDate();
-}, 60000);
+}, 5000);

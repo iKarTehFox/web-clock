@@ -1,3 +1,16 @@
+/* Dancing Script */
+@font-face {
+  font-family: 'Dancing Script';
+  src: url('../fonts/Dancing_Script/DancingScript-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Dancing Script';
+  src: url('../fonts/Dancing_Script/DancingScript-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
 /* Lato */
 @font-face {
   font-family: 'Lato';
@@ -34,6 +47,46 @@
 @font-face {
   font-family: 'Lato';
   src: url('../fonts/Lato/Lato-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* Merriweather */
+@font-face {
+  font-family: 'Merriweather';
+  src: url('../fonts/Merriweather/Merriweather-Light.ttf') format('truetype');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Merriweather';
+  src: url('../fonts/Merriweather/Merriweather-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Merriweather';
+  src: url('../fonts/Merriweather/Merriweather-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Merriweather';
+  src: url('../fonts/Merriweather/Merriweather-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+font-face {
+  font-family: 'Merriweather';
+  src: url('../fonts/Merriweather/Merriweather-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Merriweather';
+  src: url('../fonts/Merriweather/Merriweather-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
 }
@@ -76,6 +129,13 @@ font-face {
   src: url('../fonts/Montserrat/Montserrat-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
+}
+
+/* Nanum Brush Script */
+@font-face {
+  font-family: 'Nanum Brush Script';
+  src: url('../fonts/Nanum_Brush_Script/NanumBrushScript-Regular.ttf') format('truetype');
+  font-weight: 400;
 }
 
 /* Open Sans */
@@ -135,6 +195,13 @@ font-face {
   font-family: 'Oswald';
   src: url('../fonts/Oswald/Oswald-Bold.ttf') format('truetype');
   font-weight: 700;
+}
+
+/* Pangolin */
+@font-face {
+  font-family: 'Pangolin';
+  src: url('../fonts/Pangolin/Pangolin-Regular.ttf') format('truetype');
+  font-weight: 400;
 }
 
 /* Poppins */
@@ -215,6 +282,19 @@ font-face {
   src: url('../fonts/Roboto/Roboto-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
+}
+
+/* Tektur */
+@font-face {
+  font-family: 'Tektur';
+  src: url('../fonts/Tektur/Tektur-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Tektur';
+  src: url('../fonts/Tektur/Tektur-Bold.ttf') format('truetype');
+  font-weight: 700;
 }
 
 /* Ubuntu */

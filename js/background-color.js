@@ -40,7 +40,7 @@ menu.faderad.addEventListener('change', handleModeSelection);
 menu.solidrad.addEventListener('change', handleModeSelection);
 
 menu.presetcolors.forEach((btn) => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('change', () => {
     const selectedColor = btn.getAttribute('data-color');
     document.body.style.backgroundColor = selectedColor;
     menu.colorbadge.textContent = selectedColor;
