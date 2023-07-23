@@ -1,5 +1,5 @@
 function getSolidColorValue() {
-  const checkedColorInput = document.querySelector('input[name="solid-color-radio"]:checked');
+  const checkedColorInput = document.querySelector('input[name="preset-color-radio"]:checked');
   if (checkedColorInput) {
     const colorValue = checkedColorInput.dataset.color;
     return colorValue;
@@ -25,17 +25,21 @@ function exportSettingsToJSON() {
             borderStyle: menu.borderstyleselect.value
         },
         fontConfig: {
-            fontFamily: font.selector.value,
+            fontFamily: font.familysel.value,
             fontStyle: document.querySelector('input[name="font-style-radio"]:checked').id,
             fontWeight: document.querySelector('input[name="font-weight-radio"]:checked').id,
             fontSize: font.sizesel.value,
             dropShadow: font.shadowrange.value
         },
+        displaySettings: {
+            menuVisibility: menu.visCheckbox.checked
+        },
         colorTheme: {
             colorMode: document.querySelector('input[name="color-mode-radio"]:checked').id,
             solidColor: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : ''
         },
-        exportTimestamp: timeExported
+        exportTimestamp: timeExported,
+        version: 1
     }
     
     const settingsJSON = JSON.stringify(usersettings);
@@ -100,7 +104,7 @@ function updateClockSettings(importedSettings) {
 
   // Update fontConfig settings
   const fontConfig = importedSettings.fontConfig;
-  font.selector.value = fontConfig.fontFamily;
+  font.familysel.value = fontConfig.fontFamily;
   document.querySelector(`input[name="font-style-radio"][id="${fontConfig.fontStyle}"]`).checked = true;
   document.querySelector(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).checked = true;
   font.sizesel.value = fontConfig.fontSize;
@@ -110,8 +114,12 @@ function updateClockSettings(importedSettings) {
   const colorTheme = importedSettings.colorTheme;
   document.querySelector(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).checked = true;
   if (colorTheme.colorMode === 'solidmode') {
-    document.querySelector(`input[name="solid-color-radio"][data-color="${colorTheme.solidColor}"]`).checked = true;
+    document.querySelector(`input[name="preset-color-radio"][data-color="${colorTheme.solidColor}"]`).checked = true;
   }
+  
+  // Update displaySettings settings
+  const displaySettings = importedSettings.displaySettings;
+  menu.visCheckbox.checked = displaySettings.menuVisibility;
   
   // Trigger change events for updated elements
   menu.timeMethodSelect.dispatchEvent(new Event('change'));
@@ -121,7 +129,7 @@ function updateClockSettings(importedSettings) {
   document.querySelector(`input[name="border-type-radio"][id="${clockConfig.borderMode}"]`).dispatchEvent(new Event('change'));
   menu.borderstyleselect.dispatchEvent(new Event('change'));
 
-  font.selector.dispatchEvent(new Event('change'));
+  font.familysel.dispatchEvent(new Event('change'));
   document.querySelector(`input[name="font-style-radio"][id="${fontConfig.fontStyle}"]`).dispatchEvent(new Event('change'));
   document.querySelector(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).dispatchEvent(new Event('change'));
   font.sizesel.dispatchEvent(new Event('change'));
@@ -129,32 +137,34 @@ function updateClockSettings(importedSettings) {
 
   document.querySelector(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).dispatchEvent(new Event('change'));
   if (colorTheme.colorMode === 'solidmode') {
-    document.querySelector('input[name="solid-color-radio"]:checked').dispatchEvent(new Event('change'));
+    document.querySelector('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
   }
 }
 
 // Value constraints
-const validCM = [0, 1];
+const validCM = ['0','1'];
 const validCD = ['binary','octal','decimal','hexa','emoji','roman','words'];
-const validSV = ['secOn','secOff'];
+const validSV = ['sviD','sviN'];
 const validDF = ['D','DD','DDD','DDDD',''];
-const validDA = ['dateleft','datecenter','dateright'];
-const validBM = ['bordertypedisabled','bordertyperegular','bordertypebottom'];
+const validDA = ['dpoL','dpoC','dpoR'];
+const validBM = ['btyD','btyR','btyB'];
 const validBS = ['solid','dashed','dotted','double'];
 const validFF = ['','Lato','Montserrat','Open Sans','Oswald','Poppins','Roboto','Tektur','Ubuntu','Ubuntu Mono','Dancing Script','Merriweather','Nanum Brush Script','Pangolin'];
-const validFS = ['regularStyle','italicStyle'];
-const validFW = ['lightWeight','normalWeight','boldWeight'];
-const validFZ = ['smaller','small','default','large','larger'];
+const validFS = ['fstR','fstI'];
+const validFW = ['fweL','fweN','fweB'];
+const validFZ = ['6vw','8vw','10vw','12vw','14vw','18vw'];
 const validDS = ['0', '1', '2', '3', '4'];
 const validCMo = ['fademode','solidmode'];
 const validSC = ['','#FF0000','#FFA500','#FFFF00','#00FF00','#0000FF','#FF00FF','#FF00FF','#000000','#808080','#F2B5D4','#C2E0E9','#E1D5E7','#B0E0E6','#F7D5AA','#D5E8D4','#92A8D1','#E6AF75','#D9B5A5','#9AC1B7','#D0B9C3','#C4B7D9','#D72C6F','#227FBF','#7E3F9D','#367F89','#FF713F','#549F55','#2B4771','#C55324','#954A3E','#457E70','#8B2C5A','#7C5793'];
+const validMV = ['true','false'];
+const validVer = [1];
 
 function containsValue(array, value) {
   return array.includes(value);
 }
 
 function verifySettingsJSON(jsonData) {
-  const requiredKeys = ["clockConfig", "fontConfig", "colorTheme"];
+  const requiredKeys = ["clockConfig", "fontConfig", "colorTheme", "version"];
   
   // Check if all required keys are present in the JSON object
   const missingKeys = requiredKeys.filter(key => !(key in jsonData));
@@ -239,6 +249,14 @@ function verifySettingsJSON(jsonData) {
 
   if (colorTheme.colorMode === 'solidmode' && !containsValue(validSC, colorTheme.solidColor)) {
     console.error(`Invalid solidColor value: ${colorTheme.solidColor}`);
+    return false;
+  }
+  
+  // Perform validation for the "version" key
+  const version = jsonData.version;
+  
+  if (!containsValue(validVer, version)) {
+    console.error(`Invalid version value: ${version}`);
     return false;
   }
 

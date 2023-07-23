@@ -1,50 +1,54 @@
-let colorFadeInterval;
+let fadeIntervalID;
 
 function startColorFade() {
-  const colors = ['#FFC0CB', '#FFD700', '#7FFFD4', '#FFA500', '#9370DB', '#00FFFF'];
-  let currentIndex = 0;
-  const bodyElement = document.body;
+    const colors = ['#FFC0CB', '#FFD700', '#7FFFD4', '#FFA500', '#9370DB', '#00FFFF'];
+    let currentIndex = 0;
+    const bodyElement = document.body;
 
-  bodyElement.style.backgroundColor = colors[currentIndex];
-  bodyElement.style.transition = 'background-color 2.8s ease-in-out';
-
-  colorFadeInterval = setInterval(() => {
-    currentIndex = (currentIndex + 1) % colors.length;
     bodyElement.style.backgroundColor = colors[currentIndex];
-    menu.colorbadge.textContent = colors[currentIndex];
-  }, 3000);
+    bodyElement.style.transition = 'background-color 2.8s ease-in-out';
+
+    fadeIntervalID = setInterval(() => {
+        currentIndex = (currentIndex + 1) % colors.length;
+        bodyElement.style.backgroundColor = colors[currentIndex];
+        menu.colorbadge.textContent = colors[currentIndex];
+    }, 3000);
 }
 
 function stopColorFade() {
-  clearInterval(colorFadeInterval);
+    clearInterval(fadeIntervalID);
 }
 
-function handleModeSelection() {
-  dtdisplay.ccontainer.style.color = "#212529";
-
-  if (menu.faderad.checked) {
-    startColorFade();
-    menu.presetcolors.forEach((btn) => {
-      btn.disabled = true;
-      btn.checked = false;
+// Color mode listener
+menu.colormoderadio.forEach(radio => {
+    radio.addEventListener('change', () => {
+        // Reset color to "black" first
+        dtdisplay.ccontainer.style.color = "#212529";
+        const colorMode = radio.id;
+        
+        if (colorMode === 'fademode') {
+            startColorFade();
+            menu.presetcolors.forEach((radio) => {
+                radio.disabled = true;
+                radio.checked = false;
+            });
+        } else if (colorMode === 'solidmode') {
+            stopColorFade();
+            menu.presetcolors.forEach((radio) => {
+                radio.disabled = false;
+            });
+        }
     });
-  } else if (menu.solidrad.checked) {
-    stopColorFade();
-    menu.presetcolors.forEach((btn) => {
-      btn.disabled = false;
-    });
-  }
-}
-
-menu.faderad.addEventListener('change', handleModeSelection);
-menu.solidrad.addEventListener('change', handleModeSelection);
-
-menu.presetcolors.forEach((btn) => {
-  btn.addEventListener('change', () => {
-    const selectedColor = btn.getAttribute('data-color');
-    document.body.style.backgroundColor = selectedColor;
-    menu.colorbadge.textContent = selectedColor;
-  });
 });
 
+// Add listeners to all preset color buttons
+menu.presetcolors.forEach((radio) => {
+    radio.addEventListener('change', () => {
+        const selectedColor = radio.getAttribute('data-color');
+        document.body.style.backgroundColor = selectedColor;
+        menu.colorbadge.textContent = selectedColor;
+    });
+});
+
+// Start color fade on page load
 startColorFade();
