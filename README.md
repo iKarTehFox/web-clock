@@ -28,6 +28,11 @@
 ### Importing/Exporting Settings
  Download and upload generated JSON files containing all of your settings  
  - On import, JSON files and settings are verified before applying
+
+ Here's my personal config!  
+```json
+{"clockConfig":{"clockMode":"cmo12","clockDisplay":"words","secondsVis":"sviN","dateFormat":"DDDD","dateAlign":"dpoL","borderMode":"btyB","borderStyle":"solid"},"fontConfig":{"fontFamily":"Montserrat","fontStyle":"fstR","fontWeight":"fweB","fontSize":"10vw","dropShadow":"2"},"displaySettings":{"menuVisibility":false},"colorTheme":{"colorMode":"solidmode","solidColor":"#2B4771"},"exportTimestamp":"Thanks for downloading my personal config! -iKarTehFox","version":1}
+```
 ### Page Duration
  Text at the bottom of the menu shows you how much time you've wasted staring at and customizing the clock...
  
