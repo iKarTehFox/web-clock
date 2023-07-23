@@ -16,7 +16,7 @@ function exportSettingsToJSON() {
     // Get all settings
     const usersettings = {
         clockConfig: {
-            clockMode: cMode,
+            clockMode: document.querySelector('input[name="clock-mode-radio"]:checked').id,
             clockDisplay: menu.timeMethodSelect.value,
             secondsVis: document.querySelector('input[name="seconds-vis-radio"]:checked').id,
             dateFormat: menu.dateformselect.value,
@@ -94,7 +94,7 @@ function importSettingsFromJSON() {
 function updateClockSettings(importedSettings) {
   // Update clockConfig settings
   const clockConfig = importedSettings.clockConfig;
-  cMode = clockConfig.clockMode;
+  document.querySelector(`input[name="clock-mode-radio"][id="${clockConfig.clockMode}"]`).checked = true;
   menu.timeMethodSelect.value = clockConfig.clockDisplay;
   document.querySelector(`input[name="seconds-vis-radio"][id="${clockConfig.secondsVis}"]`).checked = true;
   menu.dateformselect.value = clockConfig.dateFormat;
@@ -122,6 +122,7 @@ function updateClockSettings(importedSettings) {
   menu.visCheckbox.checked = displaySettings.menuVisibility;
   
   // Trigger change events for updated elements
+  document.querySelector(`input[name="clock-mode-radio"][id="${clockConfig.clockMode}"]`).dispatchEvent(new Event('change'));
   menu.timeMethodSelect.dispatchEvent(new Event('change'));
   document.querySelector(`input[name="seconds-vis-radio"][id="${clockConfig.secondsVis}"]`).dispatchEvent(new Event('change'));
   menu.dateformselect.dispatchEvent(new Event('change'));
@@ -142,7 +143,7 @@ function updateClockSettings(importedSettings) {
 }
 
 // Value constraints
-const validCM = ['0','1'];
+const validCM = ['cmo12','cmo24'];
 const validCD = ['binary','octal','decimal','hexa','emoji','roman','words'];
 const validSV = ['sviD','sviN'];
 const validDF = ['D','DD','DDD','DDDD',''];
