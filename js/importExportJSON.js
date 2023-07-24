@@ -22,7 +22,8 @@ function exportSettingsToJSON() {
             dateFormat: menu.dateformselect.value,
             dateAlign: document.querySelector('input[name="date-position-radio"]:checked').id,
             borderMode: document.querySelector('input[name="border-type-radio"]:checked').id,
-            borderStyle: menu.borderstyleselect.value
+            borderStyle: menu.borderstyleselect.value,
+            secondsBarVis: document.querySelector('input[name="seconds-bar-radio"]:checked').id
         },
         fontConfig: {
             fontFamily: font.familysel.value,
@@ -39,7 +40,7 @@ function exportSettingsToJSON() {
             solidColor: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : ''
         },
         exportTimestamp: timeExported,
-        version: 1
+        version: 2
     }
     
     const settingsJSON = JSON.stringify(usersettings);
@@ -99,8 +100,13 @@ function updateClockSettings(importedSettings) {
   document.querySelector(`input[name="seconds-vis-radio"][id="${clockConfig.secondsVis}"]`).checked = true;
   menu.dateformselect.value = clockConfig.dateFormat;
   document.querySelector(`input[name="date-position-radio"][id="${clockConfig.dateAlign}"]`).checked = true;
-  document.querySelector(`input[name="border-type-radio"][id="${clockConfig.borderMode}"]`).checked = true;
+  if (clockConfig.secondsBarVis === 'sbaN') {
+    document.querySelector(`input[name="border-type-radio"][id="${clockConfig.borderMode}"]`).checked = true;
+  }
   menu.borderstyleselect.value = clockConfig.borderStyle;
+  if (clockConfig.borderMode === 'btyD') {
+    document.querySelector(`input[name="seconds-bar-radio"][id="${clockConfig.secondsBarVis}"]`).checked = true;
+  }
 
   // Update fontConfig settings
   const fontConfig = importedSettings.fontConfig;
@@ -129,6 +135,7 @@ function updateClockSettings(importedSettings) {
   document.querySelector(`input[name="date-position-radio"][id="${clockConfig.dateAlign}"]`).dispatchEvent(new Event('change'));
   document.querySelector(`input[name="border-type-radio"][id="${clockConfig.borderMode}"]`).dispatchEvent(new Event('change'));
   menu.borderstyleselect.dispatchEvent(new Event('change'));
+  document.querySelector(`input[name="seconds-bar-radio"][id="${clockConfig.secondsBarVis}"]`).dispatchEvent(new Event('change'));
 
   font.familysel.dispatchEvent(new Event('change'));
   document.querySelector(`input[name="font-style-radio"][id="${fontConfig.fontStyle}"]`).dispatchEvent(new Event('change'));
@@ -150,6 +157,7 @@ const validDF = ['D','DD','DDD','DDDD',''];
 const validDA = ['dpoL','dpoC','dpoR'];
 const validBM = ['btyD','btyR','btyB'];
 const validBS = ['solid','dashed','dotted','double'];
+const validSB = ['','sbaB','sbaN']
 const validFF = ['','Lato','Montserrat','Open Sans','Oswald','Poppins','Roboto','Tektur','Ubuntu','Ubuntu Mono','Dancing Script','Merriweather','Nanum Brush Script','Pangolin'];
 const validFS = ['fstR','fstI'];
 const validFW = ['fweL','fweN','fweB'];
@@ -158,7 +166,7 @@ const validDS = ['0', '1', '2', '3', '4'];
 const validCMo = ['fademode','solidmode'];
 const validSC = ['','#FF0000','#FFA500','#FFFF00','#00FF00','#0000FF','#FF00FF','#FF00FF','#000000','#808080','#F2B5D4','#C2E0E9','#E1D5E7','#B0E0E6','#F7D5AA','#D5E8D4','#92A8D1','#E6AF75','#D9B5A5','#9AC1B7','#D0B9C3','#C4B7D9','#D72C6F','#227FBF','#7E3F9D','#367F89','#FF713F','#549F55','#2B4771','#C55324','#954A3E','#457E70','#8B2C5A','#7C5793'];
 const validMV = ['true','false'];
-const validVer = [1];
+const validVer = [2];
 
 function containsValue(array, value) {
   return array.includes(value);
@@ -211,7 +219,17 @@ function verifySettingsJSON(jsonData) {
     console.error(`Invalid borderStyle value: ${clockConfig.borderStyle}`);
     return false;
   }
-
+  
+  if (!containsValue(validSB, clockConfig.secondsBarVis)) {
+    console.error(`Invalid secondsBarVis value: ${clockConfig.secondsBarVis}`);
+    return false;
+  }
+  
+  if ((clockConfig.borderMode === 'btyB' || clockConfig.borderMode === 'btyR') && clockConfig.secondsBarVis === 'sbaB') {
+      console.error(`Incompatible borderMode and secondsBarVis values: ${clockConfig.borderMode}, ${clockConfig.secondsBarVis}`);
+      return false;
+  }
+  
   // Perform validation for the "fontConfig" subkeys
   const fontConfig = jsonData.fontConfig;
 

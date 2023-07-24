@@ -85,12 +85,12 @@
                                         <option value="words">Words (twelve:o'clock)</option>
                                     </optgroup>
                                 </select>
-                                <h6 class="mb-1 mt-2">Seconds Visibility</h6>
+                                <h6 class="mb-1 mt-2">Clock Seconds Display</h6>
                                 <div class="btn-group" role="group" aria-label="Seconds visibility button group">
                                     <input type="radio" class="btn-check" name="seconds-vis-radio" data-value="" id="sviD" autocomplete="off" checked>
-                                    <label class="btn btn-outline-primary" for="sviD">Show</label>
+                                    <label class="btn btn-outline-primary" for="sviD">Visible</label>
                                     <input type="radio" class="btn-check" name="seconds-vis-radio" data-value="none" id="sviN" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="sviN">Hide</label>
+                                    <label class="btn btn-outline-primary" for="sviN">Hidden</label>
                                 </div>
                                 <h6 class="mb-1 mt-2">Date Display</h6>
                                 <select class="form-select" id="dateFormatSelect">
@@ -127,6 +127,13 @@
                                     <option value="dotted">Dotted</option>
                                     <option value="double">Double</option>
                                 </select>
+                                <h6 class="mb-1 mt-2">Seconds Bar Visibility</h6>
+                                <div class="btn-group" role="group" aria-label="Seconds bar visibility button group">
+                                    <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="block" id="sbaB" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="sbaB">Show</label>
+                                    <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="none" id="sbaN" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="sbaN">Hide</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -362,6 +369,7 @@
         <div id="clock-container">
             <center id="time-container">
                 <span class="clock-part" id="hour-slot">00</span><span class="colon" id="colon1">:</span><span class="clock-part" id="minute-slot">00</span><span class="colon" id="colon2">:</span><span class="clock-part" id="second-slot">00</span><span id="indicator"></span>
+                <div id="seconds-progress-bar"></div>
             </center>
             <p id="date"><noscript>JavaScript is disabled!</noscript></p>
         </div>

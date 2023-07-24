@@ -75,3 +75,14 @@
 #time-duration {
     font-weight: bold;
 }
+
+/* Seconds progress bar */
+#seconds-progress-bar {
+  position: absolute;
+  bottom: 1;
+  height: 5px;
+  border-radius: 5px;
+  background-color: #212529;
+  display: none; /* Disable display by default */
+  transition: width 1.0s;
+}

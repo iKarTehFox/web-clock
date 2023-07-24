@@ -7,8 +7,10 @@ menu.presetcolors.forEach((radio) => {
     // Set the text color based on the background luminance
     if (luminance > 0.62) {
         dtdisplay.ccontainer.style.color = "#212529"; // Set black text color
+        dtdisplay.secondsBar.style.backgroundColor = "#212529";
     } else {
-        dtdisplay.ccontainer.style.color = "#FFFFFF"; // Set white text color
+        dtdisplay.ccontainer.style.color = "#FFF"; // Set white text color
+        dtdisplay.secondsBar.style.backgroundColor = "#FFF";
     }
     });
 });

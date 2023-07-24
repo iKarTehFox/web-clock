@@ -60,7 +60,12 @@ function updateTime() {
 
     document.title = `Time: ${hrs}:${min}:${sec} ${ind}`;
     updateFavicon(time.toFormat('h'));
-
+    
+    // Seconds progress bar
+    const secBarWidth = (sec / 59) * 100;
+    
+    dtdisplay.secondsBar.style.width = `${secBarWidth}%`;
+    
     // Time display methods
     const timeDisplayFunctions = {
         binary: toBinary,

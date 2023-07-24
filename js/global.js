@@ -5,6 +5,7 @@ const menu = {
     clockmoderadio: document.querySelectorAll('input[name="clock-mode-radio"]'),
     timeMethodSelect: document.getElementById('timeMethodSelect'),
     secondsvisradio: document.querySelectorAll('input[name="seconds-vis-radio"]'),
+    secondsbarradio: document.querySelectorAll('input[name="seconds-bar-radio"]'),
     datealignradio: document.querySelectorAll('input[name="date-position-radio"]'),
     visCheckbox: document.getElementById('menuButtonVisible'),
     options: document.getElementById("menu-options"),
@@ -39,7 +40,8 @@ const dtdisplay = {
     colon2: document.getElementById('colon2'),
     secondSlot: document.getElementById('second-slot'),
     indicatorSlot: document.getElementById("indicator"),
-    date: document.getElementById("date")
+    date: document.getElementById("date"),
+    secondsBar: document.getElementById("seconds-progress-bar")
 }
 
 // Define font sizes
@@ -82,6 +84,27 @@ menu.secondsvisradio.forEach((radio) => {
         const value = radio.dataset.value;
         dtdisplay.colon2.style.display = value;
         dtdisplay.secondSlot.style.display = value;
+    });
+});
+
+// Seconds bar visibility listener
+menu.secondsbarradio.forEach((radio) => {
+    radio.addEventListener('change', () => {
+        const value = radio.dataset.value;
+        if (value === 'block') {
+            menu.bordertyperadio.forEach((btn) => {
+                btn.disabled = true;
+                if (btn.id === 'btyD') {
+                    btn.checked = true;
+                    btn.dispatchEvent(new Event('change'));
+                }
+            });
+        } else {
+            menu.bordertyperadio.forEach((btn) => {
+                btn.disabled = false;
+            });
+        }
+        dtdisplay.secondsBar.style.display = value;
     });
 });
 
@@ -170,14 +193,31 @@ menu.bordertyperadio.forEach((radio) => {
 
     switch (value) {
       case 'none':
+        menu.secondsbarradio.forEach((btn) => {
+            btn.disabled = false;
+        });
         dtdisplay.tcontainer.style.borderStyle = value;
         dtdisplay.tcontainer.style.borderBottomStyle = value;
         break;
       case 'regular':
+        menu.secondsbarradio.forEach((btn) => {
+            btn.disabled = true;
+            if (btn.id === 'sbaN') {
+                btn.checked = true;
+                btn.dispatchEvent(new Event('change'));
+            }
+        });
         dtdisplay.tcontainer.style.borderBottomStyle = 'none';
         dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
         break;
       case 'bottom':
+        menu.secondsbarradio.forEach((btn) => {
+            btn.disabled = true;
+            if (btn.id === 'sbaN') {
+                btn.checked = true;
+                btn.dispatchEvent(new Event('change'));
+            }
+        });
         dtdisplay.tcontainer.style.borderStyle = 'none';
         dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
         break;
