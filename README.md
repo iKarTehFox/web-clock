@@ -10,7 +10,8 @@
  Pick between 12 and 24-hour modes
 ### Clock Display
  Display the time in 7 different methods (Radix/Conversions)  
- Add a box/bottom border to the clock container (solid, dashed, dotted, double)
+ Add a box/bottom border to the clock container (solid, dashed, dotted, double)  
+ Toggle seconds progress bar below clock
 ### Date Format and Alignment
  Set 4 different date formats (or disable!)  
  Date position alignment (left, center, and right)
@@ -29,9 +30,9 @@
  Download and upload generated JSON files containing all of your settings  
  - On import, JSON files and settings are verified before applying
 
- Here's my personal config!  
+ Try out my personal config!  
 ```json
-{"clockConfig":{"clockMode":"cmo12","clockDisplay":"words","secondsVis":"sviN","dateFormat":"DDDD","dateAlign":"dpoL","borderMode":"btyB","borderStyle":"solid"},"fontConfig":{"fontFamily":"Montserrat","fontStyle":"fstR","fontWeight":"fweB","fontSize":"10vw","dropShadow":"2"},"displaySettings":{"menuVisibility":false},"colorTheme":{"colorMode":"solidmode","solidColor":"#2B4771"},"exportTimestamp":"Thanks for downloading my personal config! -iKarTehFox","version":1}
+{"clockConfig":{"clockMode":"cmo12","clockDisplay":"words","secondsVis":"sviN","dateFormat":"DDDD","dateAlign":"dpoL","borderMode":"btyD","borderStyle":"solid","secondsBarVis":"sbaB"},"fontConfig":{"fontFamily":"Montserrat","fontStyle":"fstR","fontWeight":"fweB","fontSize":"10vw","dropShadow":"0"},"displaySettings":{"menuVisibility":false},"colorTheme":{"colorMode":"solidmode","solidColor":"#000000"},"exportTimestamp":"Thanks for trying out my personal config! -iKarTehFox","version":2}
 ```
 ### Page Duration
  Text at the bottom of the menu shows you how much time you've wasted staring at and customizing the clock...
