@@ -47,7 +47,7 @@
         <link rel="icon" type="image/svg+xml" id="favicon" href="./icons/clock-time-12.svg">
     </head>
     <body>
-        <div id="menu-container">
+        <div id="menu-container" data-bs-theme="dark">
             <button id="open-button" class="btn btn-secondary" style="width: 100px;">
                 <iconify-icon icon="mdi:menu" width="15" height="15" style="height: 13px;"></iconify-icon> Menu
             </button>
@@ -129,10 +129,10 @@
                                 </select>
                                 <h6 class="mb-1 mt-2">Seconds Bar Visibility</h6>
                                 <div class="btn-group" role="group" aria-label="Seconds bar visibility button group">
-                                    <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="block" id="sbaB" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="sbaB">Show</label>
                                     <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="none" id="sbaN" autocomplete="off" checked>
                                     <label class="btn btn-outline-primary" for="sbaN">Hide</label>
+                                    <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="block" id="sbaB" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="sbaB">Show</label>
                                 </div>
                             </div>
                         </div>
@@ -199,9 +199,11 @@
                                     <option value="18vw">Huge (18vw)</option>
                                 </select>
                                 <hr>
-                                <h6 class="mb-1 mt-2">Text Effects</h6>
-                                <label for="dropShadowRange" class="form-label" id="dropShadowRangeLabel">Drop shadow: 0</label>
+                                <h6 class="mb-1">Text Effects</h6>
+                                <label for="dropShadowRange" class="form-label" id="dropShadowRangeLabel">Drop shadow: 0px</label>
                                 <input type="range" class="form-range" id="dropShadowRange" min="0" max="4" value="0" step="1">
+                                <label for="textBlurRange" class="form-label" id="textBlurRangeLabel">Text blur: 0px</label>
+                                <input type="range" class="form-range" id="textBlurRange" min="0" max="3" value="0" step="0.5">
                             </div>
                         </div>
                     </div>
@@ -213,11 +215,11 @@
                         </h2>
                         <div id="collapseCoO" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body">
-                                <h6 class="mb-1">Background color mode</h6>
+                                <h6 class="mb-1">Background Color Mode</h6>
                                 <div class="form-group">
                                     <div class="btn-group" role="group" aria-label="Color mode button group" id="mode-selector">
                                         <input type="radio" class="btn-check" name="color-mode-radio" id="fademode" autocomplete="off" checked>
-                                        <label class="btn btn-outline-primary" for="fademode">Fade mode</label>
+                                        <label class="btn btn-outline-primary" for="fademode">Color Fade</label>
                                         <input type="radio" class="btn-check" name="color-mode-radio" id="solidmode" autocomplete="off">
                                         <label class="btn btn-outline-primary" for="solidmode">Solid</label>
                                     </div>
@@ -227,19 +229,19 @@
                                     <!-- Basic colors -->
                                     <h6 class="mb-1 mt-2">Basic colors</h6>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicred" autocomplete="off" data-color="#FF0000"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicred" autocomplete="off" data-color="#FF0000" disabled>
                                         <label class="btn btn-outline-primary" for="basicred" data-bs-toggle="tooltip" data-bs-title="Basic red"><div class="color-block" style="background-color: #FF0000;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicorange" autocomplete="off" data-color="#FFA500"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicorange" autocomplete="off" data-color="#FFA500" disabled>
                                         <label class="btn btn-outline-primary" for="basicorange" data-bs-toggle="tooltip" data-bs-title="Basic orange"><div class="color-block" style="background-color: #FFA500;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicyellow" autocomplete="off" data-color="#FFFF00"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicyellow" autocomplete="off" data-color="#FFFF00" disabled>
                                         <label class="btn btn-outline-primary" for="basicyellow" data-bs-toggle="tooltip" data-bs-title="Basic yellow"><div class="color-block" style="background-color: #FFFF00;"></div></label>
                                     </div>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicgreen" autocomplete="off" data-color="#00FF00"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicgreen" autocomplete="off" data-color="#00FF00" disabled>
                                         <label class="btn btn-outline-primary" for="basicgreen" data-bs-toggle="tooltip" data-bs-title="Basic green"><div class="color-block" style="background-color: #00FF00;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicblue" autocomplete="off" data-color="#0000FF"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicblue" autocomplete="off" data-color="#0000FF" disabled>
                                         <label class="btn btn-outline-primary" for="basicblue" data-bs-toggle="tooltip" data-bs-title="Basic blue"><div class="color-block" style="background-color: #0000FF;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicmagenta" autocomplete="off" data-color="#FF00FF"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="basicmagenta" autocomplete="off" data-color="#FF00FF" disabled>
                                         <label class="btn btn-outline-primary" for="basicmagenta" data-bs-toggle="tooltip" data-bs-title="Basic magenta"><div class="color-block" style="background-color: #FF00FF;"></div></label>
                                     </div>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
@@ -253,70 +255,84 @@
                                     <!-- Pale colors -->
                                     <h6 class="mb-1 mt-2">Bright colors</h6>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="palepink" autocomplete="off" data-color="#F2B5D4"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="palepink" autocomplete="off" data-color="#F2B5D4" disabled>
                                         <label class="btn btn-outline-primary" for="palepink" data-bs-toggle="tooltip" data-bs-title="Pale pink"><div class="color-block" style="background-color: #F2B5D4;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="paleblue" autocomplete="off" data-color="#C2E0E9"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="paleblue" autocomplete="off" data-color="#C2E0E9" disabled>
                                         <label class="btn btn-outline-primary" for="paleblue" data-bs-toggle="tooltip" data-bs-title="Pale blue"><div class="color-block" style="background-color: #C2E0E9;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="lavender" autocomplete="off" data-color="#E1D5E7"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="lavender" autocomplete="off" data-color="#E1D5E7" disabled>
                                         <label class="btn btn-outline-primary" for="lavender" data-bs-toggle="tooltip" data-bs-title="Lavender"><div class="color-block" style="background-color: #E1D5E7;"></div></label>
                                     </div>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="powderblue" autocomplete="off" data-color="#B0E0E6"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="powderblue" autocomplete="off" data-color="#B0E0E6" disabled>
                                         <label class="btn btn-outline-primary" for="powderblue" data-bs-toggle="tooltip" data-bs-title="Powder blue"><div class="color-block" style="background-color: #B0E0E6;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="palepeach" autocomplete="off" data-color="#F7D5AA"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="palepeach" autocomplete="off" data-color="#F7D5AA" disabled>
                                         <label class="btn btn-outline-primary" for="palepeach" data-bs-toggle="tooltip" data-bs-title="Pale Peach"><div class="color-block" style="background-color: #F7D5AA;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="mintgreen" autocomplete="off" data-color="#D5E8D4"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="mintgreen" autocomplete="off" data-color="#D5E8D4" disabled>
                                         <label class="btn btn-outline-primary" for="mintgreen" data-bs-toggle="tooltip" data-bs-title="Mint green"><div class="color-block" style="background-color: #D5E8D4;"></div></label>
                                     </div>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="periwinkleblue" autocomplete="off" data-color="#92A8D1"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="periwinkleblue" autocomplete="off" data-color="#92A8D1" disabled>
                                         <label class="btn btn-outline-primary" for="periwinkleblue" data-bs-toggle="tooltip" data-bs-title="Periwinkle blue"><div class="color-block" style="background-color: #92A8D1;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="apricot" autocomplete="off" data-color="#E6AF75"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="apricot" autocomplete="off" data-color="#E6AF75" disabled>
                                         <label class="btn btn-outline-primary" for="apricot" data-bs-toggle="tooltip" data-bs-title="Apricot"><div class="color-block" style="background-color: #E6AF75;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="dustyrose" autocomplete="off" data-color="#D9B5A5"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="dustyrose" autocomplete="off" data-color="#D9B5A5" disabled>
                                         <label class="btn btn-outline-primary" for="dustyrose" data-bs-toggle="tooltip" data-bs-title="Dusty rose"><div class="color-block" style="background-color: #D9B5A5;"></div></label>
                                     </div>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="seafoamgreen" autocomplete="off" data-color="#9AC1B7"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="seafoamgreen" autocomplete="off" data-color="#9AC1B7" disabled>
                                         <label class="btn btn-outline-primary" for="seafoamgreen" data-bs-toggle="tooltip" data-bs-title="Seafoam green"><div class="color-block" style="background-color: #9AC1B7;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="mauve" autocomplete="off" data-color="#D0B9C3"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="mauve" autocomplete="off" data-color="#D0B9C3" disabled>
                                         <label class="btn btn-outline-primary" for="mauve" data-bs-toggle="tooltip" data-bs-title="Mauve"><div class="color-block" style="background-color: #D0B9C3;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="lilac" autocomplete="off" data-color="#C4B7D9"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="lilac" autocomplete="off" data-color="#C4B7D9" disabled>
                                         <label class="btn btn-outline-primary" for="lilac" data-bs-toggle="tooltip" data-bs-title="Lilac"><div class="color-block" style="background-color: #C4B7D9;"></div></label>
                                     </div>
                                     <!-- Deep colors -->
                                     <h6 class="mb-1 mt-2">Deep colors</h6>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deeppink" autocomplete="off" data-color="#D72C6F"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deeppink" autocomplete="off" data-color="#D72C6F" disabled>
                                         <label class="btn btn-outline-primary" for="deeppink" data-bs-toggle="tooltip" data-bs-title="Deep pink"><div class="color-block" style="background-color: #D72C6F;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepblue" autocomplete="off" data-color="#227FBF"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepblue" autocomplete="off" data-color="#227FBF" disabled>
                                         <label class="btn btn-outline-primary" for="deepblue" data-bs-toggle="tooltip" data-bs-title="Deep blue"><div class="color-block" style="background-color: #227FBF;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deeplavender" autocomplete="off" data-color="#7E3F9D"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deeplavender" autocomplete="off" data-color="#7E3F9D" disabled>
                                         <label class="btn btn-outline-primary" for="deeplavender" data-bs-toggle="tooltip" data-bs-title="Deep lavender"><div class="color-block" style="background-color: #7E3F9D;"></div></label>
                                     </div>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deeppowderblue" autocomplete="off" data-color="#367F89"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deeppowderblue" autocomplete="off" data-color="#367F89" disabled>
                                         <label class="btn btn-outline-primary" for="deeppowderblue" data-bs-toggle="tooltip" data-bs-title="Deep powder blue"><div class="color-block" style="background-color: #367F89;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deeppeach" autocomplete="off" data-color="#FF713F"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deeppeach" autocomplete="off" data-color="#FF713F" disabled>
                                         <label class="btn btn-outline-primary" for="deeppeach" data-bs-toggle="tooltip" data-bs-title="Deep peach"><div class="color-block" style="background-color: #FF713F;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="darkmintgreen" autocomplete="off" data-color="#549F55"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="darkmintgreen" autocomplete="off" data-color="#549F55" disabled>
                                         <label class="btn btn-outline-primary" for="darkmintgreen" data-bs-toggle="tooltip" data-bs-title="Dark mint green"><div class="color-block" style="background-color: #549F55;"></div></label>
                                     </div>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepperiwinkleblue" autocomplete="off" data-color="#2B4771"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepperiwinkleblue" autocomplete="off" data-color="#2B4771" disabled>
                                         <label class="btn btn-outline-primary" for="deepperiwinkleblue" data-bs-toggle="tooltip" data-bs-title="Deep periwinkle blue"><div class="color-block" style="background-color: #2B4771;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepapricot" autocomplete="off" data-color="#C55324"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepapricot" autocomplete="off" data-color="#C55324" disabled>
                                         <label class="btn btn-outline-primary" for="deepapricot" data-bs-toggle="tooltip" data-bs-title="Deep apricot"><div class="color-block" style="background-color: #C55324;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepdustyrose" autocomplete="off" data-color="#954A3E"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepdustyrose" autocomplete="off" data-color="#954A3E" disabled>
                                         <label class="btn btn-outline-primary" for="deepdustyrose" data-bs-toggle="tooltip" data-bs-title="Deep dusty rose"><div class="color-block" style="background-color: #954A3E;"></div></label>
                                     </div>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepseafoamgreen" autocomplete="off" data-color="#457E70"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepseafoamgreen" autocomplete="off" data-color="#457E70" disabled>
                                         <label class="btn btn-outline-primary" for="deepseafoamgreen" data-bs-toggle="tooltip" data-bs-title="Deep seafoam green"><div class="color-block" style="background-color: #457E70;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepmauve" autocomplete="off" data-color="#8B2C5A"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="deepmauve" autocomplete="off" data-color="#8B2C5A" disabled>
                                         <label class="btn btn-outline-primary" for="deepmauve" data-bs-toggle="tooltip" data-bs-title="Deep mauve"><div class="color-block" style="background-color: #8B2C5A;"></div></label>
-                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="darklilac" autocomplete="off" data-color="#7C5793"disabled>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="darklilac" autocomplete="off" data-color="#7C5793" disabled>
                                         <label class="btn btn-outline-primary" for="darklilac" data-bs-toggle="tooltip" data-bs-title="Dark lilac"><div class="color-block" style="background-color: #7C5793;"></div></label>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <h6 class="mb-1 mt-2">Text Color Override</h6>
+                                    <div class="btn-group" role="group" aria-label="Text color override button group">
+                                        <input type="radio" class="btn-check" name="text-color-override-radio" id="tcovD" autocomplete="off" checked disabled>
+                                        <label class="btn btn-outline-primary" for="tcovD">Disabled</label>
+
+                                        <input type="radio" class="btn-check" name="text-color-override-radio" id="tcovO" autocomplete="off" disabled>
+                                        <label class="btn btn-outline-primary" for="tcovO">Enable</label>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="textColorInput">Color: </label>
+                                        <input type="color" id="textColorInput" value="#000000" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -330,7 +346,7 @@
                         </h2>
                         <div id="collapseMV" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body">
-                                <h6 class="mb-1">Menu Visibility</h6>
+                                <h6 class="mb-1 mt-2">Menu Visibility</h6>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="menuButtonVisible" checked>
                                     <label class="form-check-label" for="menuButtonVisible">Show menu button</label>

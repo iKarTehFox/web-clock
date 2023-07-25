@@ -1,3 +1,33 @@
+// Text color override listener
+let tcoO = 0;
+menu.textcoloroverrideradio.forEach((radio) => {
+    radio.addEventListener('change', () => {
+        if (radio.id === 'tcovD') {
+            tcoO = 0;
+            menu.textcolorinput.disabled = true;
+            if (document.querySelector('input[name="color-mode-radio"]:checked').id === 'solidmode') {
+                try {
+                    document.querySelector('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
+                } catch (error) {
+                    console.log('Tried to reset text color but no preset color selected. Setting to white.')
+                    dtdisplay.ccontainer.style.color = '#fff';
+                    dtdisplay.secondsBar.style.backgroundColor = '#fff';
+                }
+            }
+        } else {
+            tcoO = 1;
+            menu.textcolorinput.disabled = false;
+            menu.textcolorinput.dispatchEvent(new Event('input'));
+        }
+    });
+});
+
+menu.textcolorinput.addEventListener('input', function() {
+    dtdisplay.ccontainer.style.color = this.value;
+    dtdisplay.secondsBar.style.backgroundColor = this.value;
+});
+
+// Preset color buttons listener
 menu.presetcolors.forEach((radio) => {
   radio.addEventListener('change', () => {
     const color = radio.dataset.color;
@@ -5,10 +35,10 @@ menu.presetcolors.forEach((radio) => {
     var luminance = getLuminance(color);
 
     // Set the text color based on the background luminance
-    if (luminance > 0.62) {
+    if (luminance > 0.62 && tcoO === 0) {
         dtdisplay.ccontainer.style.color = "#212529"; // Set black text color
         dtdisplay.secondsBar.style.backgroundColor = "#212529";
-    } else {
+    } else if (tcoO === 0) {
         dtdisplay.ccontainer.style.color = "#FFF"; // Set white text color
         dtdisplay.secondsBar.style.backgroundColor = "#FFF";
     }

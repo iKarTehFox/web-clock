@@ -20,10 +20,13 @@
  Set custom font from installed system fonts  
  Regular and _Italic_ font styles  
  Light, regular, and **bold** font weights  
- 5 different font sizes
+ 5 different font sizes  
+ Text shadow customization  
+ Text blur/softening filter
 ### Background Color Modes
  Color fade - Automatically transitions between 6 colors  
- Solid color - Choose from 33 different colors
+ Solid color - Choose from 33 different colors  
+ Text color override - Set a custom clock text color
 ### Menu Visibility
  Toggle displaying of the menu button
 ### Importing/Exporting Settings
@@ -32,7 +35,7 @@
 
  Try out my personal config!  
 ```json
-{"clockConfig":{"clockMode":"cmo12","clockDisplay":"words","secondsVis":"sviN","dateFormat":"DDDD","dateAlign":"dpoL","borderMode":"btyD","borderStyle":"solid","secondsBarVis":"sbaB"},"fontConfig":{"fontFamily":"Montserrat","fontStyle":"fstR","fontWeight":"fweB","fontSize":"10vw","dropShadow":"0"},"displaySettings":{"menuVisibility":false},"colorTheme":{"colorMode":"solidmode","solidColor":"#000000"},"exportTimestamp":"Thanks for trying out my personal config! -iKarTehFox","version":2}
+{"clockConfig":{"clockMode":"cmo12","clockDisplay":"words","secondsVis":"sviN","dateFormat":"DDDD","dateAlign":"dpoL","borderMode":"btyD","borderStyle":"solid","secondsBarVis":"sbaB"},"fontConfig":{"fontFamily":"Montserrat","fontStyle":"fstR","fontWeight":"fweB","fontSize":"10vw","dropShadow":"2","blurAmount":"0"},"displaySettings":{"menuVisibility":false},"colorTheme":{"colorMode":"solidmode","solidColor":"#2B4771","textColorMode":"tcovO","textColorValue":"#85a3ff"},"exportTimestamp":"Thanks for trying my personal config! -iKarTehFox","version":3}
 ```
 ### Page Duration
  Text at the bottom of the menu shows you how much time you've wasted staring at and customizing the clock...
@@ -41,11 +44,11 @@
 ### Preview of the page  
  ![A screenshot of the main web clock page. The time 6:19 PM and date of 7/18/2023 is shown against a white background.](/assets/images/main.png)  
 ### Menu options pane
- ![A screenshot of the menu options panel when open. The "Clock Settings" section is expanded.](/assets/images/menu.png)  
-### Custom preset font, background color, bottom border, and clock display method
- ![A screenshot of the main web clock page with the Montserrat Bold font and weight, a different date format, and centered date alignment chosen.](/assets/images/customizable.png)
+ ![A screenshot of the menu options panel. The "Clock Settings" section is opened.](/assets/images/menu.png)  
+### Customization example
+ ![A screenshot of the main web clock page with many customizations applied, such as custom font, background color, and date format.](/assets/images/customizable.png)  
+ Like this look? See [Importing/Exporting Settings](https://github.com/iKarTehFox/web-clock#importingexporting-settings) for the config!
  
-
 # How to run
  Step 1: Start your favorite web server software and host index.html at the root directory  
  - Info: This page can run offline since all CSS and JS is included locally. Please note that Google Analytics and OpenGraph meta info is included in index.html!

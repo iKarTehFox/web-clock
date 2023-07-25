@@ -4,7 +4,7 @@ function getSolidColorValue() {
     const colorValue = checkedColorInput.dataset.color;
     return colorValue;
   } else {
-      return '';
+      return '#FFFFFF';
   }
 }
 
@@ -30,17 +30,20 @@ function exportSettingsToJSON() {
             fontStyle: document.querySelector('input[name="font-style-radio"]:checked').id,
             fontWeight: document.querySelector('input[name="font-weight-radio"]:checked').id,
             fontSize: font.sizesel.value,
-            dropShadow: font.shadowrange.value
+            dropShadow: font.shadowrange.value,
+            blurAmount: font.textblurrange.value
         },
         displaySettings: {
             menuVisibility: menu.visCheckbox.checked
         },
         colorTheme: {
             colorMode: document.querySelector('input[name="color-mode-radio"]:checked').id,
-            solidColor: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : ''
+            solidColor: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
+            textColorMode: document.querySelector('input[name="text-color-override-radio"]:checked').id,
+            textColorValue: (document.querySelector('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : ''
         },
         exportTimestamp: timeExported,
-        version: 2
+        version: 3
     }
     
     const settingsJSON = JSON.stringify(usersettings);
@@ -115,12 +118,17 @@ function updateClockSettings(importedSettings) {
   document.querySelector(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).checked = true;
   font.sizesel.value = fontConfig.fontSize;
   font.shadowrange.value = fontConfig.dropShadow;
+  font.textblurrange.value = fontConfig.blurAmount;
 
   // Update colorTheme settings
   const colorTheme = importedSettings.colorTheme;
   document.querySelector(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).checked = true;
   if (colorTheme.colorMode === 'solidmode') {
     document.querySelector(`input[name="preset-color-radio"][data-color="${colorTheme.solidColor}"]`).checked = true;
+    document.querySelector(`input[name="text-color-override-radio"][id="${colorTheme.textColorMode}"]`).checked = true;
+    if (colorTheme.textColorMode === 'tcovO') {
+        menu.textcolorinput.value = colorTheme.textColorValue;
+    }
   }
   
   // Update displaySettings settings
@@ -142,10 +150,15 @@ function updateClockSettings(importedSettings) {
   document.querySelector(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).dispatchEvent(new Event('change'));
   font.sizesel.dispatchEvent(new Event('change'));
   font.shadowrange.dispatchEvent(new Event('input'));
+  font.textblurrange.dispatchEvent(new Event('input'));
 
   document.querySelector(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).dispatchEvent(new Event('change'));
   if (colorTheme.colorMode === 'solidmode') {
     document.querySelector('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
+    document.querySelector('input[name="text-color-override-radio"]:checked').dispatchEvent(new Event('change'));
+    if (colorTheme.textColorMode === 'tcovO') {
+        menu.textcolorinput.dispatchEvent(new Event('input'));
+    }
   }
 }
 
@@ -163,10 +176,12 @@ const validFS = ['fstR','fstI'];
 const validFW = ['fweL','fweN','fweB'];
 const validFZ = ['6vw','8vw','10vw','12vw','14vw','18vw'];
 const validDS = ['0', '1', '2', '3', '4'];
+const validTB = ['0','0.5','1','1.5','2','2.5','3'];
 const validCMo = ['fademode','solidmode'];
-const validSC = ['','#FF0000','#FFA500','#FFFF00','#00FF00','#0000FF','#FF00FF','#FF00FF','#000000','#808080','#F2B5D4','#C2E0E9','#E1D5E7','#B0E0E6','#F7D5AA','#D5E8D4','#92A8D1','#E6AF75','#D9B5A5','#9AC1B7','#D0B9C3','#C4B7D9','#D72C6F','#227FBF','#7E3F9D','#367F89','#FF713F','#549F55','#2B4771','#C55324','#954A3E','#457E70','#8B2C5A','#7C5793'];
+const validSC = ['#FF0000','#FFA500','#FFFF00','#00FF00','#0000FF','#FF00FF','#FFFFFF','#808080','#000000','#F2B5D4','#C2E0E9','#E1D5E7','#B0E0E6','#F7D5AA','#D5E8D4','#92A8D1','#E6AF75','#D9B5A5','#9AC1B7','#D0B9C3','#C4B7D9','#D72C6F','#227FBF','#7E3F9D','#367F89','#FF713F','#549F55','#2B4771','#C55324','#954A3E','#457E70','#8B2C5A','#7C5793'];
+const validTCM = ['tcovD','tcovO']
 const validMV = ['true','false'];
-const validVer = [2];
+const validVer = [3];
 
 function containsValue(array, value) {
   return array.includes(value);
@@ -257,6 +272,11 @@ function verifySettingsJSON(jsonData) {
     console.error(`Invalid dropShadow value: ${fontConfig.dropShadow}`);
     return false;
   }
+  
+  if (!containsValue(validTB, fontConfig.blurAmount)) {
+    console.error(`Invalid blurAmount value: ${fontConfig.blurAmount}`);
+    return false;
+  }
 
   // Perform validation for the "colorTheme" subkeys
   const colorTheme = jsonData.colorTheme;
@@ -268,6 +288,16 @@ function verifySettingsJSON(jsonData) {
 
   if (colorTheme.colorMode === 'solidmode' && !containsValue(validSC, colorTheme.solidColor)) {
     console.error(`Invalid solidColor value: ${colorTheme.solidColor}`);
+    return false;
+  }
+  
+  if (!containsValue(validTCM, colorTheme.textColorMode)) {
+    console.error(`Invalid textColorMode value: ${colorTheme.textColorMode}`);
+    return false;
+  }
+  
+  if (colorTheme.colorMode === 'fademode' && colorTheme.textColorMode === 'tcovO') {
+    console.error(`Incompatible colorMode and textColorMode values: ${colorTheme.colorMode}, ${colorTheme.textColorMode}`);
     return false;
   }
   

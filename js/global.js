@@ -12,11 +12,11 @@ const menu = {
     obutton: document.getElementById('open-button'),
     cbutton: document.getElementById('close-button'),
     dateformselect: document.getElementById("dateFormatSelect"),
-    faderad: document.getElementById('fademode'),
-    solidrad: document.getElementById('solidmode'),
     colorbadge: document.getElementById('current-color-badge'),
     colormoderadio: document.querySelectorAll('input[name="color-mode-radio"]'),
     presetcolors: document.querySelectorAll('input[name="preset-color-radio"]'),
+    textcoloroverrideradio: document.querySelectorAll('input[name="text-color-override-radio"]'),
+    textcolorinput: document.getElementById('textColorInput'),
     bordertyperadio: document.querySelectorAll('input[name="border-type-radio"]'),
     borderstyleselect: document.getElementById('borderStyleSelect')
 };
@@ -28,7 +28,8 @@ const font = {
     styleradio: document.querySelectorAll('input[name="font-style-radio"]'),
     weightradio: document.querySelectorAll('input[name="font-weight-radio"]'),
     sizesel: document.getElementById('sizeSelect'),
-    shadowrange: document.getElementById('dropShadowRange')
+    shadowrange: document.getElementById('dropShadowRange'),
+    textblurrange: document.getElementById('textBlurRange'),
 };
 
 const dtdisplay = {
@@ -176,13 +177,20 @@ font.sizesel.addEventListener('change', () => {
 
 // Font text shadow listener
 font.shadowrange.addEventListener('input', function() {
-    var currentValue = this.value;
-    var opacity = currentValue / 5;
-    var strength = currentValue * 3;
+    var value = this.value;
+    var opacity = value / 5;
+    var strength = value * 3;
     var dropShadowValue = `5px 5px ${strength}px rgba(0, 0, 0, ${opacity})`;
-    document.getElementById("dropShadowRangeLabel").textContent = `Drop shadow: ${currentValue}`;
+    document.getElementById("dropShadowRangeLabel").textContent = `Drop shadow: ${strength}px`;
 
-    dtdisplay.ccontainer.style.textShadow = currentValue > 0 ? dropShadowValue : 'none';
+    dtdisplay.ccontainer.style.textShadow = value > 0 ? dropShadowValue : '';
+});
+
+// Text blur listener
+font.textblurrange.addEventListener('input', function() {
+    const value = this.value;
+    document.getElementById("textBlurRangeLabel").textContent = `Text blur: ${value}px`;
+    dtdisplay.ccontainer.style.filter = value > 0 ? `blur(${value}px)` : '';
 });
 
 // Border type listener

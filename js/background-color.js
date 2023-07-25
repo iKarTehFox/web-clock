@@ -24,6 +24,7 @@ menu.colormoderadio.forEach(radio => {
     radio.addEventListener('change', () => {
         // Reset color to "black" first
         dtdisplay.ccontainer.style.color = "#212529";
+        dtdisplay.secondsBar.style.backgroundColor = "#212529";
         const colorMode = radio.id;
         
         if (colorMode === 'fademode') {
@@ -32,9 +33,19 @@ menu.colormoderadio.forEach(radio => {
                 radio.disabled = true;
                 radio.checked = false;
             });
+            menu.textcoloroverrideradio.forEach((radio) => {
+                radio.disabled = true;
+                if (radio.id === 'tcovD') {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change'));
+                }
+            });
         } else if (colorMode === 'solidmode') {
             stopColorFade();
             menu.presetcolors.forEach((radio) => {
+                radio.disabled = false;
+            });
+            menu.textcoloroverrideradio.forEach((radio) => {
                 radio.disabled = false;
             });
         }

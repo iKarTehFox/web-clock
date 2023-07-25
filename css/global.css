@@ -46,7 +46,7 @@
     }
 
     &::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
+    background-color: #212529;
     border-radius: 10px;
     }
     
@@ -55,8 +55,8 @@
     position: absolute;
     top: 40px;
     right: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
+    background-color: #313539;
+    color: #fff;
     padding: 10px;
     max-height: 75vh;
     overflow: auto;
