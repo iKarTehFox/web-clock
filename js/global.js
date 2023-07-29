@@ -16,6 +16,8 @@ const menu = {
     colormoderadio: document.querySelectorAll('input[name="color-mode-radio"]'),
     presetcolors: document.querySelectorAll('input[name="preset-color-radio"]'),
     textcoloroverrideradio: document.querySelectorAll('input[name="text-color-override-radio"]'),
+    imageuploadbutton: document.getElementById('bgImageUploadBtn'),
+    imagesizeselect: document.getElementById('bgImageSizeSelect'),
     textcolorinput: document.getElementById('textColorInput'),
     bordertyperadio: document.querySelectorAll('input[name="border-type-radio"]'),
     borderstyleselect: document.getElementById('borderStyleSelect')

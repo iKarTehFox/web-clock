@@ -23,9 +23,10 @@
  5 different font sizes  
  Text shadow customization  
  Text blur/softening filter
-### Background Color Modes
- Color fade - Automatically transitions between 6 colors  
- Solid color - Choose from 33 different colors  
+### Background Theme
+ Color fade mode - Automatically transitions between 6 colors  
+ Solid color mode - Choose from 33 different colors  
+ Background image mode - Upload and set a custom image from your device  
  Text color override - Set a custom clock text color
 ### Menu Visibility
  Toggle displaying of the menu button
@@ -35,7 +36,7 @@
 
  Try out my personal config!  
 ```json
-{"clockConfig":{"clockMode":"cmo12","clockDisplay":"words","secondsVis":"sviN","dateFormat":"DDDD","dateAlign":"dpoL","borderMode":"btyD","borderStyle":"solid","secondsBarVis":"sbaB"},"fontConfig":{"fontFamily":"Montserrat","fontStyle":"fstR","fontWeight":"fweB","fontSize":"10vw","dropShadow":"2","blurAmount":"0"},"displaySettings":{"menuVisibility":false},"colorTheme":{"colorMode":"solidmode","solidColor":"#2B4771","textColorMode":"tcovO","textColorValue":"#85a3ff"},"exportTimestamp":"Thanks for trying my personal config! -iKarTehFox","version":3}
+{"clockConfig":{"clockMode":"cmo12","clockDisplay":"words","secondsVis":"sviN","dateFormat":"DDDD","dateAlign":"dpoL","borderMode":"btyD","borderStyle":"solid","secondsBarVis":"sbaB"},"fontConfig":{"fontFamily":"Montserrat","fontStyle":"fstR","fontWeight":"fweB","fontSize":"10vw","dropShadow":"2","blurAmount":"0"},"displaySettings":{"menuVisibility":false},"colorTheme":{"colorMode":"solidmode","solidColor":"#2B4771","textColorMode":"tcovO","textColorValue":"#85a3ff","bgImage":"","bgImageSize":""},"exportTimestamp":"Thanks for trying my personal config! -iKarTehFox","version":4}
 ```
 ### Page Duration
  Text at the bottom of the menu shows you how much time you've wasted staring at and customizing the clock...

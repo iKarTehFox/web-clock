@@ -26,6 +26,7 @@ menu.colormoderadio.forEach(radio => {
         dtdisplay.ccontainer.style.color = "#212529";
         dtdisplay.secondsBar.style.backgroundColor = "#212529";
         const colorMode = radio.id;
+        const bodyElement = document.body;
         
         if (colorMode === 'fademode') {
             startColorFade();
@@ -40,6 +41,9 @@ menu.colormoderadio.forEach(radio => {
                     radio.dispatchEvent(new Event('change'));
                 }
             });
+            menu.imageuploadbutton.disabled = true;
+            menu.imagesizeselect.disabled = true;
+            bodyElement.style.backgroundImage = '';
         } else if (colorMode === 'solidmode') {
             stopColorFade();
             menu.presetcolors.forEach((radio) => {
@@ -48,6 +52,28 @@ menu.colormoderadio.forEach(radio => {
             menu.textcoloroverrideradio.forEach((radio) => {
                 radio.disabled = false;
             });
+            menu.imageuploadbutton.disabled = true;
+            menu.imagesizeselect.disabled = true;
+            bodyElement.style.backgroundImage = '';
+        } else if (colorMode === 'imgmode') {
+            stopColorFade();
+            menu.presetcolors.forEach((radio) => {
+                radio.disabled = true;
+                radio.checked = false;
+            });
+            // Reset background color to black
+            document.body.style.backgroundColor = '#000000';
+            menu.textcoloroverrideradio.forEach((radio) => {
+                if (radio.id === 'tcovO') {
+                    radio.disabled = false;
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change'));
+                } else {
+                    radio.disabled = true;
+                }
+            });
+            menu.imageuploadbutton.disabled = false;
+            menu.imagesizeselect.disabled = false;
         }
     });
 });

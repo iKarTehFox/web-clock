@@ -9,9 +9,8 @@ menu.textcoloroverrideradio.forEach((radio) => {
                 try {
                     document.querySelector('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
                 } catch (error) {
-                    console.log('Tried to reset text color but no preset color selected. Setting to white.')
-                    dtdisplay.ccontainer.style.color = '#fff';
-                    dtdisplay.secondsBar.style.backgroundColor = '#fff';
+                    dtdisplay.ccontainer.style.color = '#212529';
+                    dtdisplay.secondsBar.style.backgroundColor = '#212529';
                 }
             }
         } else {

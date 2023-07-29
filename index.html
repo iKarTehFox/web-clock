@@ -40,6 +40,7 @@
         <script src="./js/fontCheck.js"></script>
         <script src="./js/global.js" defer></script>
         <script src="./js/background-color.js" defer></script>
+        <script src="./js/background-image.js" defer></script>
         <script src="./js/clock-new.js" defer></script>
         <script src="./js/clock-color.js" defer></script>
         <script src="./js/importExportJSON.js" defer></script>
@@ -210,18 +211,22 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCoO" aria-expanded="false" aria-controls="collapseCoO">
-                            Color Theme
+                            Background Theme
                             </button>
                         </h2>
                         <div id="collapseCoO" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body">
                                 <h6 class="mb-1">Background Color Mode</h6>
                                 <div class="form-group">
-                                    <div class="btn-group" role="group" aria-label="Color mode button group" id="mode-selector">
+                                    <div class="btn-group" role="group" aria-label="Color mode button group">
                                         <input type="radio" class="btn-check" name="color-mode-radio" id="fademode" autocomplete="off" checked>
                                         <label class="btn btn-outline-primary" for="fademode">Color Fade</label>
                                         <input type="radio" class="btn-check" name="color-mode-radio" id="solidmode" autocomplete="off">
                                         <label class="btn btn-outline-primary" for="solidmode">Solid</label>
+                                    </div>
+                                    <div class="btn-group" role="group" aria-label="Color mode button group">
+                                        <input type="radio" class="btn-check" name="color-mode-radio" id="imgmode" autocomplete="off">
+                                        <label class="btn btn-outline-primary" for="imgmode">Background Image</label>
                                     </div>
                                     <p class="mt-2 mb-0">Current color: <span class="badge text-bg-secondary" id="current-color-badge">#000000</span></p>
                                 </div>
@@ -321,6 +326,7 @@
                                         <label class="btn btn-outline-primary" for="darklilac" data-bs-toggle="tooltip" data-bs-title="Dark lilac"><div class="color-block" style="background-color: #7C5793;"></div></label>
                                     </div>
                                 </div>
+                                <hr>
                                 <div class="form-group mt-2">
                                     <h6 class="mb-1 mt-2">Text Color Override</h6>
                                     <div class="btn-group" role="group" aria-label="Text color override button group">
@@ -332,8 +338,18 @@
                                     </div>
                                     <div class="form-group mt-2">
                                         <label for="textColorInput">Color: </label>
-                                        <input type="color" id="textColorInput" value="#000000" disabled>
+                                        <input type="color" id="textColorInput" value="#ffffff" disabled>
                                     </div>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <h6 class="mb-1 mt-2">Background Image</h6>
+                                    <button type="button" class="btn btn-outline-primary" onClick="uploadBGImg()" id="bgImageUploadBtn" disabled>Upload image</button>
+                                    <h6 class="mb-1 mt-2">Image Sizing</h6>
+                                    <select class="form-select mt-2" id="bgImageSizeSelect" disabled>
+                                        <option value="auto">Automatic</option>
+                                        <option value="cover">Cover</option>
+                                        <option value="stretch">Stretch</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
