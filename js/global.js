@@ -18,6 +18,7 @@ const menu = {
     textcoloroverrideradio: document.querySelectorAll('input[name="text-color-override-radio"]'),
     imageuploadbutton: document.getElementById('bgImageUploadBtn'),
     imagesizeselect: document.getElementById('bgImageSizeSelect'),
+    imageblurrange: document.getElementById('bgImgBlurRange'),
     textcolorinput: document.getElementById('textColorInput'),
     bordertyperadio: document.querySelectorAll('input[name="border-type-radio"]'),
     borderstyleselect: document.getElementById('borderStyleSelect')
@@ -30,8 +31,7 @@ const font = {
     styleradio: document.querySelectorAll('input[name="font-style-radio"]'),
     weightradio: document.querySelectorAll('input[name="font-weight-radio"]'),
     sizesel: document.getElementById('sizeSelect'),
-    shadowrange: document.getElementById('dropShadowRange'),
-    textblurrange: document.getElementById('textBlurRange'),
+    shadowrange: document.getElementById('dropShadowRange')
 };
 
 const dtdisplay = {
@@ -186,13 +186,6 @@ font.shadowrange.addEventListener('input', function() {
     document.getElementById("dropShadowRangeLabel").textContent = `Drop shadow: ${strength}px`;
 
     dtdisplay.ccontainer.style.textShadow = value > 0 ? dropShadowValue : '';
-});
-
-// Text blur listener
-font.textblurrange.addEventListener('input', function() {
-    const value = this.value;
-    document.getElementById("textBlurRangeLabel").textContent = `Text blur: ${value}px`;
-    dtdisplay.ccontainer.style.filter = value > 0 ? `blur(${value}px)` : '';
 });
 
 // Border type listener

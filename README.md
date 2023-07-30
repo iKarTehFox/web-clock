@@ -26,7 +26,7 @@
 ### Background Theme
  Color fade mode - Automatically transitions between 6 colors  
  Solid color mode - Choose from 33 different colors  
- Background image mode - Upload and set a custom image from your device  
+ Background image mode - Upload and set a custom image from your device + change sizing and blurring  
  Text color override - Set a custom clock text color
 ### Menu Visibility
  Toggle displaying of the menu button

@@ -6,6 +6,11 @@ body {
     background-repeat: no-repeat;
 }
 
+#blur-panel {
+    width: 100vw;
+    height: 100vh;
+}
+
 /* Clock CSS */
 #clock-container {
     font-size: 10vw;

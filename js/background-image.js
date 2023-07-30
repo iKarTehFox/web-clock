@@ -37,3 +37,11 @@ menu.imagesizeselect.addEventListener('change', () => {
             break;
     }
 });
+
+menu.imageblurrange.addEventListener('input', () => {
+    const value = menu.imageblurrange.value;
+    const blurPanel = document.getElementById('blur-panel');
+    
+    blurPanel.style.backdropFilter = (`blur(${value}px)`);
+    document.getElementById('bgImgBlurRangeLabel').textContent = `Image Blur: ${value}px`;
+});

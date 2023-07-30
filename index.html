@@ -13,6 +13,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="An open source and customizable web clock application by iKarTehFox on GitHub.">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' www.googletagmanager.com;">
         <!-- Facebook Meta Tags -->
         <meta property="og:url" content="https://online-clock.pages.dev/">
         <meta property="og:type" content="website">
@@ -48,6 +49,7 @@
         <link rel="icon" type="image/svg+xml" id="favicon" href="./icons/clock-time-12.svg">
     </head>
     <body>
+        <div id="blur-panel"></div>
         <div id="menu-container" data-bs-theme="dark">
             <button id="open-button" class="btn btn-secondary" style="width: 100px;">
                 <iconify-icon icon="mdi:menu" width="15" height="15" style="height: 13px;"></iconify-icon> Menu
@@ -203,8 +205,6 @@
                                 <h6 class="mb-1">Text Effects</h6>
                                 <label for="dropShadowRange" class="form-label" id="dropShadowRangeLabel">Drop shadow: 0px</label>
                                 <input type="range" class="form-range" id="dropShadowRange" min="0" max="4" value="0" step="1">
-                                <label for="textBlurRange" class="form-label" id="textBlurRangeLabel">Text blur: 0px</label>
-                                <input type="range" class="form-range" id="textBlurRange" min="0" max="3" value="0" step="0.5">
                             </div>
                         </div>
                     </div>
@@ -326,7 +326,6 @@
                                         <label class="btn btn-outline-primary" for="darklilac" data-bs-toggle="tooltip" data-bs-title="Dark lilac"><div class="color-block" style="background-color: #7C5793;"></div></label>
                                     </div>
                                 </div>
-                                <hr>
                                 <div class="form-group mt-2">
                                     <h6 class="mb-1 mt-2">Text Color Override</h6>
                                     <div class="btn-group" role="group" aria-label="Text color override button group">
@@ -341,15 +340,20 @@
                                         <input type="color" id="textColorInput" value="#ffffff" disabled>
                                     </div>
                                 </div>
+                                <hr>
                                 <div class="form-group mt-2">
                                     <h6 class="mb-1 mt-2">Background Image</h6>
                                     <button type="button" class="btn btn-outline-primary" onClick="uploadBGImg()" id="bgImageUploadBtn" disabled>Upload image</button>
-                                    <h6 class="mb-1 mt-2">Image Sizing</h6>
-                                    <select class="form-select mt-2" id="bgImageSizeSelect" disabled>
+                                    <h6 class="mb-1 mt-2">Image Effects</h6>
+                                    <label for="bgImageSizeSelect" class="form-label">Sizing:</label>
+                                    <select class="form-select" id="bgImageSizeSelect" disabled>
                                         <option value="auto">Automatic</option>
                                         <option value="cover">Cover</option>
                                         <option value="stretch">Stretch</option>
                                     </select>
+                                    <label for="bgImgBlurRange" class="form-label mt-2" id="bgImgBlurRangeLabel">Image Blur: 0px</label>
+                                    <input type="range" id="bgImgBlurRange" min="0" max="10" step="1" value="0">
+                                    <p style="font-weight: bold;">Note: May use more power when active</p>
                                 </div>
                             </div>
                         </div>

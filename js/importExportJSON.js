@@ -30,8 +30,7 @@ function exportSettingsToJSON() {
             fontStyle: document.querySelector('input[name="font-style-radio"]:checked').id,
             fontWeight: document.querySelector('input[name="font-weight-radio"]:checked').id,
             fontSize: font.sizesel.value,
-            dropShadow: font.shadowrange.value,
-            blurAmount: font.textblurrange.value
+            dropShadow: font.shadowrange.value
         },
         displaySettings: {
             menuVisibility: menu.visCheckbox.checked
@@ -42,10 +41,11 @@ function exportSettingsToJSON() {
             textColorMode: document.querySelector('input[name="text-color-override-radio"]:checked').id,
             textColorValue: (document.querySelector('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : '',
             bgImage: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? document.body.style.backgroundImage : '',
-            bgImageSize: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : ''
+            bgImageSize: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : '',
+            bgImageBlur: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
         },
         exportTimestamp: timeExported,
-        version: 4
+        version: 5
     }
 
     const settingsJSON = JSON.stringify(usersettings);
@@ -79,10 +79,12 @@ function importSettingsFromJSON() {
                 const importedSettings = JSON.parse(e.target.result);
 
                 // File validation
-                if (!verifySettingsJSON(importedSettings)) {
-                    alert('File validation failed: Your config file contains invalid or missing values. If on desktop, please check the console for more info.');
+                const validation = verifySettingsJSON(importedSettings);
+                if (validation !== true) {
+                    handleValidationFailure(validation);
                     return;
                 }
+                
                 updateClockSettings(importedSettings);
                 console.log('Settings successfully loaded!')
                 alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);
@@ -121,7 +123,6 @@ function updateClockSettings(importedSettings) {
     document.querySelector(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).checked = true;
     font.sizesel.value = fontConfig.fontSize;
     font.shadowrange.value = fontConfig.dropShadow;
-    font.textblurrange.value = fontConfig.blurAmount;
 
     // Update colorTheme settings
     const colorTheme = importedSettings.colorTheme;
@@ -137,6 +138,7 @@ function updateClockSettings(importedSettings) {
         document.body.style.backgroundImage = colorTheme.bgImage;
         menu.textcolorinput.value = colorTheme.textColorValue; // Assuming textColorMode was already set to 'tcovO'
         menu.imagesizeselect.value = colorTheme.bgImageSize;
+        menu.imageblurrange.value = colorTheme.bgImageBlur;
     }
 
     // Update displaySettings settings
@@ -158,7 +160,6 @@ function updateClockSettings(importedSettings) {
     document.querySelector(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).dispatchEvent(new Event('change'));
     font.sizesel.dispatchEvent(new Event('change'));
     font.shadowrange.dispatchEvent(new Event('input'));
-    font.textblurrange.dispatchEvent(new Event('input'));
 
     document.querySelector(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).dispatchEvent(new Event('change'));
     if (colorTheme.colorMode === 'solidmode') {
@@ -171,7 +172,20 @@ function updateClockSettings(importedSettings) {
     if (colorTheme.colorMode === 'imgmode') {
         menu.textcolorinput.dispatchEvent(new Event('input'));
         menu.imagesizeselect.dispatchEvent(new Event('change'));
+        menu.imageblurrange.dispatchEvent(new Event('input'));
     }
+}
+
+function handleValidationFailure(errorDetails) {
+    const errorMsg = {
+        "missing": `Missing subkeys: ${errorDetails.subkey}`,
+        "invalid": `Invalid value of ${errorDetails.subkey}: ${errorDetails.value}`,
+        "incomp": `Incompatible values of ${errorDetails.subkey}: ${errorDetails.value}`
+    }
+    
+    const errorMessage = errorMsg[`${errorDetails.type}`] || "Unknown validation failure";
+    console.error(errorMessage)
+    alert(`Error loading settings from imported file.\n\n${errorMessage}\n\nIf this is a version error, please export a new settings file as settings may have been updated! If you need help, please contact me on Twitter @iKarTehFox`);
 }
 
 // Value constraints
@@ -188,13 +202,13 @@ const validFS = ['fstR', 'fstI'];
 const validFW = ['fweL', 'fweN', 'fweB'];
 const validFZ = ['6vw', '8vw', '10vw', '12vw', '14vw', '18vw'];
 const validDS = ['0', '1', '2', '3', '4'];
-const validTB = ['0', '0.5', '1', '1.5', '2', '2.5', '3'];
 const validCMo = ['fademode', 'solidmode', 'imgmode'];
 const validSC = ['#FF0000', '#FFA500', '#FFFF00', '#00FF00', '#0000FF', '#FF00FF', '#FFFFFF', '#808080', '#000000', '#F2B5D4', '#C2E0E9', '#E1D5E7', '#B0E0E6', '#F7D5AA', '#D5E8D4', '#92A8D1', '#E6AF75', '#D9B5A5', '#9AC1B7', '#D0B9C3', '#C4B7D9', '#D72C6F', '#227FBF', '#7E3F9D', '#367F89', '#FF713F', '#549F55', '#2B4771', '#C55324', '#954A3E', '#457E70', '#8B2C5A', '#7C5793'];
 const validTCM = ['tcovD', 'tcovO']
-const validBIS = ['','auto','cover','stretch'];
+const validBIS = ['', 'auto', 'cover', 'stretch'];
+const validBIB = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 const validMV = ['true', 'false'];
-const validVer = [4];
+const validVer = [5];
 
 function containsValue(array, value) {
     return array.includes(value);
@@ -206,125 +220,199 @@ function verifySettingsJSON(jsonData) {
     // Check if all required keys are present in the JSON object
     const missingKeys = requiredKeys.filter(key => !(key in jsonData));
     if (missingKeys.length > 0) {
-        console.error(`Missing required keys: ${missingKeys.join(", ")}`);
-        return false;
+        return {
+            type: 'missing',
+            subkey: missingKeys.join(", "),
+            value: ''
+        };
     }
     
     // Perform validation for the "version" key
     const version = jsonData.version;
 
     if (!containsValue(validVer, version)) {
-        console.error(`Invalid version value: ${version}. Please export a new config file as settings have changed.`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'version',
+            value: version
+        };
     }
 
     // Perform validation for the "clockConfig" subkeys
     const clockConfig = jsonData.clockConfig;
 
     if (!containsValue(validCM, clockConfig.clockMode)) {
-        console.error(`Invalid clockMode value: ${clockConfig.clockMode}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'clockMode',
+            value: clockConfig.clockMode
+        };
     }
 
     if (!containsValue(validCD, clockConfig.clockDisplay)) {
-        console.error(`Invalid clockDisplay value: ${clockConfig.clockDisplay}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'clockDisplay',
+            value: clockConfig.clockDisplay
+        };
     }
 
     if (!containsValue(validSV, clockConfig.secondsVis)) {
-        console.error(`Invalid secondsVis value: ${clockConfig.secondsVis}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'secondsVis',
+            value: clockConfig.secondsVis
+        };
     }
 
     if (!containsValue(validDF, clockConfig.dateFormat)) {
-        console.error(`Invalid dateFormat value: ${clockConfig.dateFormat}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'dateFormat',
+            value: clockConfig.dateFormat
+        };
     }
 
     if (!containsValue(validDA, clockConfig.dateAlign)) {
-        console.error(`Invalid dateAlign value: ${clockConfig.dateAlign}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'dateAlign',
+            value: clockConfig.dateAlign
+        };
     }
 
     if (!containsValue(validBM, clockConfig.borderMode)) {
-        console.error(`Invalid borderMode value: ${clockConfig.borderMode}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'borderMode',
+            value: clockConfig.borderMode
+        };
     }
 
     if (!containsValue(validBS, clockConfig.borderStyle)) {
-        console.error(`Invalid borderStyle value: ${clockConfig.borderStyle}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'borderStyle',
+            value: clockConfig.borderStyle
+        };
     }
 
     if (!containsValue(validSB, clockConfig.secondsBarVis)) {
-        console.error(`Invalid secondsBarVis value: ${clockConfig.secondsBarVis}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'secondsBarVis',
+            value: clockConfig.secondsBarVis
+        };
     }
 
     if ((clockConfig.borderMode === 'btyB' || clockConfig.borderMode === 'btyR') && clockConfig.secondsBarVis === 'sbaB') {
-        console.error(`Incompatible borderMode and secondsBarVis values: ${clockConfig.borderMode}, ${clockConfig.secondsBarVis}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'borderMode, secondsBarVis',
+            value: `${clockConfig.borderMode}, ${clockConfig.secondsBarVis}`
+        };
     }
 
     // Perform validation for the "fontConfig" subkeys
     const fontConfig = jsonData.fontConfig;
 
     if (!containsValue(validFF, fontConfig.fontFamily)) {
-        console.error(`Invalid fontFamily value: ${fontConfig.fontFamily}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'fontFamily',
+            value: fontConfig.fontFamily
+        };
     }
 
     if (!containsValue(validFS, fontConfig.fontStyle)) {
-        console.error(`Invalid fontStyle value: ${fontConfig.fontStyle}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'fontStyle',
+            value: fontConfig.fontStyle
+        };
     }
 
     if (!containsValue(validFW, fontConfig.fontWeight)) {
-        console.error(`Invalid fontWeight value: ${fontConfig.fontWeight}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'fontWeight',
+            value: fontConfig.fontWeight
+        };
     }
 
     if (!containsValue(validFZ, fontConfig.fontSize)) {
-        console.error(`Invalid fontSize value: ${fontConfig.fontSize}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'fontSize',
+            value: fontConfig.fontSize
+        };
     }
 
     if (!containsValue(validDS, fontConfig.dropShadow)) {
-        console.error(`Invalid dropShadow value: ${fontConfig.dropShadow}`);
-        return false;
-    }
-
-    if (!containsValue(validTB, fontConfig.blurAmount)) {
-        console.error(`Invalid blurAmount value: ${fontConfig.blurAmount}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'dropShadow',
+            value: fontConfig.dropShadow
+        };
     }
 
     // Perform validation for the "colorTheme" subkeys
     const colorTheme = jsonData.colorTheme;
 
     if (!containsValue(validCMo, colorTheme.colorMode)) {
-        console.error(`Invalid colorMode value: ${colorTheme.colorMode}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'colorMode',
+            value: colorTheme.colorMode
+        };
     }
 
     if (colorTheme.colorMode === 'solidmode' && !containsValue(validSC, colorTheme.solidColor)) {
-        console.error(`Invalid solidColor value: ${colorTheme.solidColor}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'solidColor',
+            value: colorTheme.solidColor
+        };
     }
 
     if (!containsValue(validTCM, colorTheme.textColorMode)) {
-        console.error(`Invalid textColorMode value: ${colorTheme.textColorMode}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'textColorMode',
+            value: colorTheme.textColorMode
+        };
     }
 
     if ((colorTheme.colorMode === 'fademode' && colorTheme.textColorMode === 'tcovO') || (colorTheme.colorMode === 'imgmode' && colorTheme.textColorMode === 'tcovD')) {
-        console.error(`Incompatible colorMode and textColorMode values: ${colorTheme.colorMode}, ${colorTheme.textColorMode}`);
-        return false;
+        return {
+            type: 'incomp',
+            subkey: 'colorMode, textColorMode',
+            value: `${colorTheme.colorMode}, ${colorTheme.textColorMode}`
+        };
     }
     
     if (!containsValue(validBIS, colorTheme.bgImageSize)) {
-        console.error(`Invalid bgImageSize value: ${colorTheme.bgImageSize}`);
-        return false;
+        return {
+            type: 'invalid',
+            subkey: 'bgImageSize',
+            value: colorTheme.bgImageSize
+        };
+    }
+    
+    if (!containsValue(validBIB, colorTheme.bgImageBlur)) {
+        return {
+            type: 'invalid',
+            subkey: 'bgImageBlur',
+            value: colorTheme.bgImageBlur
+        };
+    }
+    
+    if (colorTheme.bgImage && !colorTheme.bgImage.startsWith('url(\"data:image')) {
+    return {
+            type: 'invalid',
+            subkey: 'bgImage',
+            value: 'Value must be type "data:image/*"'
+        };
     }
 
     return true;
