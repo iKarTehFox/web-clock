@@ -34,10 +34,7 @@
  Download and upload generated JSON files containing all of your settings  
  - On import, JSON files and settings are verified before applying
 
- Try out my personal config!  
-```json
-{"clockConfig":{"clockMode":"cmo12","clockDisplay":"words","secondsVis":"sviN","dateFormat":"DDDD","dateAlign":"dpoL","borderMode":"btyD","borderStyle":"solid","secondsBarVis":"sbaB"},"fontConfig":{"fontFamily":"Montserrat","fontStyle":"fstR","fontWeight":"fweB","fontSize":"10vw","dropShadow":"2","blurAmount":"0"},"displaySettings":{"menuVisibility":false},"colorTheme":{"colorMode":"solidmode","solidColor":"#2B4771","textColorMode":"tcovO","textColorValue":"#85a3ff","bgImage":"","bgImageSize":""},"exportTimestamp":"Thanks for trying my personal config! -iKarTehFox","version":4}
-```
+ Try out my [personal config](assets/usdonlineclock-preset.json)!  
 ### Page Duration
  Text at the bottom of the menu shows you how much time you've wasted staring at and customizing the clock...
  
