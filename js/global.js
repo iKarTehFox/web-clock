@@ -2,11 +2,13 @@ const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 const menu = {
+    container: document.getElementById('menu-container'),
     clockmoderadio: document.querySelectorAll('input[name="clock-mode-radio"]'),
     timeMethodSelect: document.getElementById('timeMethodSelect'),
     secondsvisradio: document.querySelectorAll('input[name="seconds-vis-radio"]'),
     secondsbarradio: document.querySelectorAll('input[name="seconds-bar-radio"]'),
     datealignradio: document.querySelectorAll('input[name="date-position-radio"]'),
+    themeradio: document.querySelectorAll('input[name="menu-theme-radio"]'),
     visCheckbox: document.getElementById('menuButtonVisible'),
     options: document.getElementById("menu-options"),
     obutton: document.getElementById('open-button'),
@@ -14,8 +16,11 @@ const menu = {
     dateformselect: document.getElementById("dateFormatSelect"),
     colorbadge: document.getElementById('current-color-badge'),
     colormoderadio: document.querySelectorAll('input[name="color-mode-radio"]'),
+    presetgroup: document.getElementById('presetColorGroup'),
     presetcolors: document.querySelectorAll('input[name="preset-color-radio"]'),
+    textcolorgroup: document.getElementById('textColorGroup'),
     textcoloroverrideradio: document.querySelectorAll('input[name="text-color-override-radio"]'),
+    imagegroup: document.getElementById('bgImgGroup'),
     imageuploadbutton: document.getElementById('bgImageUploadBtn'),
     imagesizeselect: document.getElementById('bgImageSizeSelect'),
     imageblurrange: document.getElementById('bgImgBlurRange'),
@@ -272,6 +277,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Border type listener
+menu.themeradio.forEach((radio) => {
+    radio.addEventListener('change', () => {
+        if (radio.id === 'lightthememode') {
+            menu.container.dataset.bsTheme = 'light';
+            menu.options.style.backgroundColor = '#ffffff';
+            menu.options.style.color = '#212529';
+        } else if (radio.id === 'darkthememode') {
+            menu.container.dataset.bsTheme = 'dark';
+            menu.options.style.backgroundColor = '#313539';
+            menu.options.style.color = '#fff';
+        }
+    });
+  });
 
 // Menu button visibility
 document.addEventListener('dblclick', function() {

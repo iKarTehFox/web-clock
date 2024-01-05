@@ -20,7 +20,6 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     white-space: nowrap;
-    float: left;
     display: inline-block;
 }
 
@@ -65,8 +64,7 @@ body {
     position: absolute;
     top: 40px;
     right: 0;
-    background-color: #313539;
-    color: #fff;
+    background-color: #ffffff;
     padding: 10px;
     max-height: 75vh;
     overflow: auto;

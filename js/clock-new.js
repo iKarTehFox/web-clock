@@ -72,6 +72,7 @@ function updateTime() {
         emoji: convertToEmojiBlock,
         roman: convertToRomanNumerals,
         hexa: toHexadecimal,
+        hexatri: toHexatrigesimal,
         octal: toOctal,
         words: toWords,
     };
@@ -115,12 +116,16 @@ function toBinary(value) {
     return parseInt(value, 10).toString(2);
 }
 
+function toOctal(value) {
+    return parseInt(value, 10).toString(8);
+}
+
 function toHexadecimal(value) {
     return parseInt(value, 10).toString(16);
 }
 
-function toOctal(value) {
-    return parseInt(value, 10).toString(8);
+function toHexatrigesimal(value) {
+    return parseInt(value, 10).toString(36);
 }
 
 function toWords(value) {

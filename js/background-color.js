@@ -44,6 +44,10 @@ menu.colormoderadio.forEach(radio => {
             menu.imageuploadbutton.disabled = true;
             menu.imagesizeselect.disabled = true;
             bodyElement.style.backgroundImage = '';
+            // Set groups display
+            menu.presetgroup.style.display = 'none';
+            menu.textcolorgroup.style.display = 'none';
+            menu.imagegroup.style.display = 'none';
         } else if (colorMode === 'solidmode') {
             stopColorFade();
             menu.presetcolors.forEach((radio) => {
@@ -55,6 +59,10 @@ menu.colormoderadio.forEach(radio => {
             menu.imageuploadbutton.disabled = true;
             menu.imagesizeselect.disabled = true;
             bodyElement.style.backgroundImage = '';
+            // Set groups display
+            menu.presetgroup.style.display = '';
+            menu.textcolorgroup.style.display = '';
+            menu.imagegroup.style.display = 'none';
         } else if (colorMode === 'imgmode') {
             stopColorFade();
             menu.presetcolors.forEach((radio) => {
@@ -74,6 +82,10 @@ menu.colormoderadio.forEach(radio => {
             });
             menu.imageuploadbutton.disabled = false;
             menu.imagesizeselect.disabled = false;
+            // Set groups display
+            menu.presetgroup.style.display = 'none';
+            menu.textcolorgroup.style.display = '';
+            menu.imagegroup.style.display = '';
         }
     });
 });
