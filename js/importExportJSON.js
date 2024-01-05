@@ -32,9 +32,6 @@ function exportSettingsToJSON() {
             fontSize: font.sizesel.value,
             dropShadow: font.shadowrange.value
         },
-        displaySettings: {
-            menuVisibility: menu.visCheckbox.checked
-        },
         colorTheme: {
             colorMode: document.querySelector('input[name="color-mode-radio"]:checked').id,
             solidColor: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
@@ -45,7 +42,7 @@ function exportSettingsToJSON() {
             bgImageBlur: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
         },
         exportTimestamp: timeExported,
-        version: 5
+        version: 6
     }
 
     const settingsJSON = JSON.stringify(usersettings);
@@ -141,10 +138,6 @@ function updateClockSettings(importedSettings) {
         menu.imageblurrange.value = colorTheme.bgImageBlur;
     }
 
-    // Update displaySettings settings
-    const displaySettings = importedSettings.displaySettings;
-    menu.visCheckbox.checked = displaySettings.menuVisibility;
-
     // Trigger change events for updated elements
     document.querySelector(`input[name="clock-mode-radio"][id="${clockConfig.clockMode}"]`).dispatchEvent(new Event('change'));
     menu.timeMethodSelect.dispatchEvent(new Event('change'));
@@ -207,8 +200,7 @@ const validSC = ['#FF0000', '#FFA500', '#FFFF00', '#00FF00', '#0000FF', '#FF00FF
 const validTCM = ['tcovD', 'tcovO']
 const validBIS = ['', 'auto', 'cover', 'stretch'];
 const validBIB = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-const validMV = ['true', 'false'];
-const validVer = [5];
+const validVer = [5, 6];
 
 function containsValue(array, value) {
     return array.includes(value);
