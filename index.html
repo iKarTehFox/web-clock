@@ -31,11 +31,11 @@
         <!-- CSS -->
         <link href="./css/global.css" rel="stylesheet">
         <link href="./css/fonts.css" rel="stylesheet">
-        <link href="./css/cdn.jsdelivr.net_npm_bootstrap@5.3.0_dist_css_bootstrap.min.css" rel="stylesheet">
+        <link href="./css/cdn.jsdelivr.net_npm_bootstrap@5.3.2_dist_css_bootstrap.min.css" rel="stylesheet">
         <link href="./css/bootstrap-social.css" rel="stylesheet">
         <!-- JS -->
         <script src="./js/luxon.min.js"></script>
-        <script src="./js/cdn.jsdelivr.net_npm_bootstrap@5.3.0_dist_js_bootstrap.bundle.min.js"></script>
+        <script src="./js/cdn.jsdelivr.net_npm_bootstrap@5.3.2_dist_js_bootstrap.bundle.min.js"></script>
         <script src="./js/code.iconify.design_iconify-icon_1.0.7_iconify-icon.min.js"></script>
         <script src="./js/numberToWords.min.js"></script>
         <script src="./js/fontCheck.js"></script>
@@ -329,21 +329,6 @@
                                         <label class="btn btn-outline-primary" for="darklilac" data-bs-toggle="tooltip" data-bs-title="Dark lilac"><div class="color-block" style="background-color: #7C5793;"></div></label>
                                     </div>
                                 </div>
-                                <div class="form-group mt-2" id="textColorGroup" style="display: none;">
-                                    <hr>
-                                    <h6 class="mb-1 mt-2">Text Color Override</h6>
-                                    <div class="btn-group" role="group" aria-label="Text color override button group">
-                                        <input type="radio" class="btn-check" name="text-color-override-radio" id="tcovD" autocomplete="off" checked>
-                                        <label class="btn btn-outline-primary" for="tcovD">Disabled</label>
-
-                                        <input type="radio" class="btn-check" name="text-color-override-radio" id="tcovO" autocomplete="off">
-                                        <label class="btn btn-outline-primary" for="tcovO">Enable</label>
-                                    </div>
-                                    <div class="form-group mt-2">
-                                        <label for="textColorInput">Color: </label>
-                                        <input type="color" id="textColorInput" value="#ffffff" disabled>
-                                    </div>
-                                </div>
                                 <div class="form-group mt-2" id="bgImgGroup" style="display: none;">
                                     <hr>
                                     <h6 class="mb-1 mt-2">Background Image</h6>
@@ -358,6 +343,21 @@
                                     <label for="bgImgBlurRange" class="form-label mt-2" id="bgImgBlurRangeLabel">Image Blur: 0px</label>
                                     <input type="range" id="bgImgBlurRange" min="0" max="10" step="1" value="0">
                                     <p style="font-weight: bold;">Note: May use more power when active</p>
+                                </div>
+                                <div class="form-group mt-2" id="textColorGroup" style="display: none;">
+                                    <hr>
+                                    <h6 class="mb-1 mt-2">Text Color Override</h6>
+                                    <div class="btn-group" role="group" aria-label="Text color override button group">
+                                        <input type="radio" class="btn-check" name="text-color-override-radio" id="tcovD" autocomplete="off" checked>
+                                        <label class="btn btn-outline-primary" for="tcovD">Disabled</label>
+
+                                        <input type="radio" class="btn-check" name="text-color-override-radio" id="tcovO" autocomplete="off">
+                                        <label class="btn btn-outline-primary" for="tcovO">Enable</label>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="textColorInput">Color: </label>
+                                        <input type="color" id="textColorInput" value="#ffffff" disabled>
+                                    </div>
                                 </div>
                             </div>
                         </div>
