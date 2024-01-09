@@ -4,6 +4,10 @@
  
  Check it out in action! ([Website](https://online-clock.pages.dev))
 
+# How to run
+ Serve index.html at root directory with your favorite web server
+ - Note: DON'T FORGET TO CHANGE GOOGLE ANALYTICS AND OPENGRAPH META INFORMATION IN INDEX.HTML (AS NEEDED) BEFORE SERVING OR SELF HOSTING!
+
 # Features
 
 ### Clock Mode
@@ -46,12 +50,6 @@
 ### Customization example
  ![A screenshot of the main web clock page with many customizations applied, such as custom font, background color, and date format.](/assets/images/customizable.png)  
  Like this look? See [Importing/Exporting Settings](https://github.com/iKarTehFox/web-clock#importingexporting-settings) for the config!
- 
-# How to run
- Step 1: Start your favorite web server software and host index.html at the root directory  
- - Info: This page can run offline since all CSS and JS is included locally. Please note that Google Analytics and OpenGraph meta info is included in index.html!
-
- Step 2: Congratuations! You're done! :)
  
 # Credits (Open Source)
  
