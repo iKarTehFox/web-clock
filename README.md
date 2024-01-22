@@ -1,3 +1,8 @@
+[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/uses-html.svg)](https://forthebadge.com)
+
+[![forthebadge](https://forthebadge.com/images/badges/gluten-free.svg)](https://forthebadge.com)
+
 # web-clock
  Online digital clock web app built on Bootstrap 5.3 with customizability in mind!  
  Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri  
