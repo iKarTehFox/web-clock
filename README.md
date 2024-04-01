@@ -1,13 +1,13 @@
 # web-clock
- Online digital clock web app built on Bootstrap 5.3 with customizability in mind!  
- Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri  
+ An online digital clock web app built with Bootstrap 5.3.3, focused on customizability.  
+ Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri
  
  Check it out in action! ([Website](https://online-clock.pages.dev))
 
 # Features
 
 ### Clock Mode
- Pick between 12 and 24-hour modes
+ Pick between 12 or 24-hour clock modes
 ### Clock Display
  Display the time in 7 different methods (Radix/Conversions)  
  Add a box/bottom border to the clock container (solid, dashed, dotted, double)  
@@ -18,7 +18,7 @@
 ### Font Customization
  13 predefined font families, or system default  
  Set custom font from installed system fonts  
- Regular and _Italic_ font styles  
+ Regular and _Italicized_ font styles  
  Light, regular, and **bold** font weights  
  5 different font sizes  
  Text shadow customization  
@@ -32,11 +32,11 @@
  Toggle displaying of the menu button
 ### Importing/Exporting Settings
  Download and upload generated JSON files containing all of your settings  
- - On import, JSON files and settings are verified before applying
+ - Imported JSON files and settings are verified before applying.
 
  Try out my [personal config](assets/usdonlineclock-preset.json)!  
 ### Page Duration
- Text at the bottom of the menu shows you how much time you've wasted staring at and customizing the clock...
+ Page duration indicator on the menu shows time spent staring at and customizing the clock...
  
 # Gallery
 ### Preview of the page  
@@ -49,7 +49,7 @@
  
 # How to run
  Step 1: Start your favorite web server software and host index.html at the root directory  
- - Info: This page can run offline since all CSS and JS is included locally. Please note that Google Analytics and OpenGraph meta info is included in index.html!
+ - Info: This page can run offline since all CSS and JS is included locally.
 
  Step 2: Congratuations! You're done! :)
  
