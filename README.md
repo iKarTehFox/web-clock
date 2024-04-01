@@ -53,7 +53,7 @@
  ![A screenshot of the menu options panel. The "Clock Settings" section is opened.](/assets/images/menu.png)  
 ### Customization example
  ![A screenshot of the main web clock page with many customizations applied, such as custom font, background color, and date format.](/assets/images/customizable.png)  
- Like this look? See [Importing/Exporting Settings](https://github.com/iKarTehFox/web-clock#importingexporting-settings) for the config!
+ Like this look? See [Importing/Exporting Settings](https://github.com/iKarTehFox/web-clock?tab=readme-ov-file#importingexporting-settings) for the config!
  
 # Credits (Open Source)
  
