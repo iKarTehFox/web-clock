@@ -6,6 +6,8 @@
 # web-clock
  An online digital clock web app built with Bootstrap 5.3.3, focused on customizability.  
  Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri
+
+ Need compatibility with older browsers? [Check out the compatiblity branch](https://github.com/iKarTehFox/web-clock/tree/compatibility)!
  
  Check it out in action! ([Website](https://online-clock.pages.dev))
 
@@ -30,7 +32,6 @@
  Light, regular, and **bold** font weights  
  5 different font sizes  
  Text shadow customization  
- Text blur/softening filter
 ### Background Theme
  Color fade mode - Automatically transitions between 6 colors  
  Solid color mode - Choose from 33 different colors  

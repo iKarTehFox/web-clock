@@ -59,7 +59,6 @@ function updateTime() {
     const ind = cMode === '0' ? time.toFormat('a') : '';
 
     document.title = `Time: ${hrs}:${min}:${sec} ${ind}`;
-    updateFavicon(time.toFormat('h'));
     
     // Seconds progress bar
     const secBarWidth = (sec / 59) * 100;
@@ -179,6 +178,13 @@ function convertToRomanNumerals(number) {
 // Update on load, then start interval
 updateTime();
 updateDate();
+var time = luxon.DateTime.now();
+updateFavicon(time.toFormat('h'));
+
+setInterval(function() {
+    var time = luxon.DateTime.now();
+    updateFavicon(time.toFormat('h'));
+}, 25000)
 
 setInterval(function() {
     updateTime();
