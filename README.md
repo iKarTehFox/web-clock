@@ -1,8 +1,17 @@
+[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/uses-html.svg)](https://forthebadge.com)
+
+[![forthebadge](https://forthebadge.com/images/badges/gluten-free.svg)](https://forthebadge.com)
+
 # web-clock
  An online digital clock web app built with Bootstrap 5.3.3, focused on customizability.  
  Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri
  
  Check it out in action! ([Website](https://online-clock.pages.dev))
+
+# How to run
+ Serve index.html at root directory with your favorite web server
+ - Note: DON'T FORGET TO CHANGE GOOGLE ANALYTICS AND OPENGRAPH META INFORMATION IN INDEX.HTML (AS NEEDED) BEFORE SERVING OR SELF HOSTING!
 
 # Features
 
