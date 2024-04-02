@@ -43,7 +43,9 @@
  Download and upload generated JSON files containing all of your settings  
  - Imported JSON files and settings are verified before applying.
 
- Try out my [personal config](assets/usdonlineclock-preset.json)!  
+ Try out my [personal config](/assets/usdonlineclock-preset.json)!  
+
+ Using an AMOLED screen? Use [this AMOLED preset](/assets/usdonlineclock-amoled-preset.json) to prevent burn-in!  
 ### Page Duration
  Page duration indicator on the menu shows time spent staring at and customizing the clock...
  

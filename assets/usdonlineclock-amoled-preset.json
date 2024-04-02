@@ -1,0 +1,30 @@
+{
+	"clockConfig": {
+		"clockMode": "cmo12",
+		"clockDisplay": "words",
+		"secondsVis": "sviN",
+		"dateFormat": "DDD",
+		"dateAlign": "dpoL",
+		"borderMode": "btyD",
+		"borderStyle": "solid",
+		"secondsBarVis": "sbaN"
+	},
+	"fontConfig": {
+		"fontFamily": "Montserrat",
+		"fontStyle": "fstR",
+		"fontWeight": "fweL",
+		"fontSize": "10vw",
+		"dropShadow": "0"
+	},
+	"colorTheme": {
+		"colorMode": "solidmode",
+		"solidColor": "#000000",
+		"textColorMode": "tcovO",
+		"textColorValue": "#404040",
+		"bgImage": "",
+		"bgImageSize": "",
+		"bgImageBlur": ""
+	},
+	"exportTimestamp": "Enjoy keeping your AMOLED screens safe with this preset! -iKarTehFox",
+	"version": 5
+}

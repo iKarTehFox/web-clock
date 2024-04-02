@@ -26,7 +26,8 @@ const menu = {
     imageblurrange: document.getElementById('bgImgBlurRange'),
     textcolorinput: document.getElementById('textColorInput'),
     bordertyperadio: document.querySelectorAll('input[name="border-type-radio"]'),
-    borderstyleselect: document.getElementById('borderStyleSelect')
+    borderstyleselect: document.getElementById('borderStyleSelect'),
+    manualjsontextinput: document.getElementById('jsonImportTextarea')
 };
 
 const font = {

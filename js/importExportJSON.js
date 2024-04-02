@@ -97,6 +97,33 @@ function importSettingsFromJSON() {
     input.click();
 }
 
+// Alternative function for text input
+function manualJSONImport() {
+    const jsontext = menu.manualjsontextinput.value;
+
+    if (jsontext) {
+        try {
+            const importedSettings = JSON.parse(jsontext);
+
+            const validation = verifySettingsJSON(importedSettings);
+            if (validation !== true) {
+                handleValidationFailure(validation);
+                return;
+            }
+            
+            updateClockSettings(importedSettings);
+            console.log('Settings successfully loaded!')
+            alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);
+
+            // Clear text field after completion
+            menu.manualjsontextinput.value = '';
+        } catch (error) {
+            console.error('Error importing settings:', error);
+            alert('Invalid settings file. Please make sure the file contains valid JSON.');
+        }
+    }
+}
+
 function updateClockSettings(importedSettings) {
     // Update clockConfig settings
     const clockConfig = importedSettings.clockConfig;
@@ -199,7 +226,7 @@ const validCMo = ['fademode', 'solidmode', 'imgmode'];
 const validSC = ['#FF0000', '#FFA500', '#FFFF00', '#00FF00', '#0000FF', '#FF00FF', '#FFFFFF', '#808080', '#000000', '#F2B5D4', '#C2E0E9', '#E1D5E7', '#B0E0E6', '#F7D5AA', '#D5E8D4', '#92A8D1', '#E6AF75', '#D9B5A5', '#9AC1B7', '#D0B9C3', '#C4B7D9', '#D72C6F', '#227FBF', '#7E3F9D', '#367F89', '#FF713F', '#549F55', '#2B4771', '#C55324', '#954A3E', '#457E70', '#8B2C5A', '#7C5793'];
 const validTCM = ['tcovD', 'tcovO']
 const validBIS = ['', 'auto', 'cover', 'stretch'];
-const validBIB = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+const validBIB = ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 const validVer = [5, 6];
 
 function containsValue(array, value) {

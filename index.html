@@ -378,10 +378,17 @@
                         <div id="collapseIE" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body">
                                 <h6 class="mb-1">Import settings</h6>
-                                <button type="button" class="btn btn-outline-primary" onClick="importSettingsFromJSON()">Import from JSON</button>
+                                <button type="button" class="btn btn-outline-primary" onClick="importSettingsFromJSON()">Upload from JSON</button>
+                                <p class="mb-1 mt-2">Or manually paste JSON settings instead:</p>
+                                <input class="form-control" type="text" placeholder="Paste in JSON here" data-bs-toggle="tooltip" aria-label="Manual JSON settings entry form" id="jsonImportTextarea">
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-outline-warning" id="jsonImportTextBtn" onClick="manualJSONImport()">Load settings</button>
+
+                                </div>
+                                <hr>
                                 <h6 class="mb-1 mt-2">Export settings</h6>
                                 <button type="button" class="btn btn-outline-secondary" onClick="exportSettingsToJSON()">Download JSON file</button>
-                                <p class="mb-1 mt-2">Note: Custom font settings are not saved.</p>
+                                <p class="mb-1 mt-2">Note: Custom font settings and Display Options are not saved.</p>
                             </div>
                         </div>
                     </div>
