@@ -10,7 +10,7 @@ function getSolidColorValue() {
 
 function exportSettingsToJSON() {
     // Get time and set export timestamp
-    var time = luxon.DateTime.now();
+    const time = luxon.DateTime.now();
     const timeExported = time.toFormat('FFFF');
 
     // Get all settings
@@ -43,7 +43,7 @@ function exportSettingsToJSON() {
         },
         exportTimestamp: timeExported,
         version: 6
-    }
+    };
 
     const settingsJSON = JSON.stringify(usersettings);
     const blob = new Blob([settingsJSON], {
@@ -67,8 +67,8 @@ function importSettingsFromJSON() {
     input.accept = 'application/json';
 
     // Listen for changes in the input file selection
-    input.addEventListener('change', (event) => {
-        const file = event.target.files[0];
+    input.addEventListener('change', (e) => {
+        const file = e.target.files[0];
         const reader = new FileReader();
 
         reader.onload = (e) => {
@@ -83,7 +83,7 @@ function importSettingsFromJSON() {
                 }
                 
                 updateClockSettings(importedSettings);
-                console.log('Settings successfully loaded!')
+                console.log('Settings successfully loaded!');
                 alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);
             } catch (error) {
                 console.error('Error importing settings:', error);
@@ -112,7 +112,7 @@ function manualJSONImport() {
             }
             
             updateClockSettings(importedSettings);
-            console.log('Settings successfully loaded!')
+            console.log('Settings successfully loaded!');
             alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);
 
             // Clear text field after completion
@@ -198,50 +198,52 @@ function updateClockSettings(importedSettings) {
 
 function handleValidationFailure(errorDetails) {
     const errorMsg = {
-        "missing": `Missing subkeys: ${errorDetails.subkey}`,
-        "invalid": `Invalid value of ${errorDetails.subkey}: ${errorDetails.value}`,
-        "incomp": `Incompatible values of ${errorDetails.subkey}: ${errorDetails.value}`
-    }
+        'missing': `Missing subkeys: ${errorDetails.subkey}`,
+        'invalid': `Invalid value of ${errorDetails.subkey}: ${errorDetails.value}`,
+        'incomp': `Incompatible values of ${errorDetails.subkey}: ${errorDetails.value}`
+    };
     
-    const errorMessage = errorMsg[`${errorDetails.type}`] || "Unknown validation failure";
-    console.error(errorMessage)
+    const errorMessage = errorMsg[`${errorDetails.type}`] || 'Unknown validation failure';
+    console.error(errorMessage);
     alert(`Error loading settings from imported file.\n\n${errorMessage}\n\nIf this is a version error, please export a new settings file as settings may have been updated! If you need help, please contact me on Twitter @iKarTehFox`);
 }
 
 // Value constraints
-const validCM = ['cmo12', 'cmo24'];
-const validCD = ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words'];
-const validSV = ['sviD', 'sviN'];
-const validDF = ['D', 'DD', 'DDD', 'DDDD', ''];
-const validDA = ['dpoL', 'dpoC', 'dpoR'];
-const validBM = ['btyD', 'btyR', 'btyB'];
-const validBS = ['solid', 'dashed', 'dotted', 'double'];
-const validSB = ['', 'sbaB', 'sbaN']
-const validFF = ['', 'Lato', 'Montserrat', 'Open Sans', 'Oswald', 'Poppins', 'Roboto', 'Tektur', 'Ubuntu', 'Ubuntu Mono', 'Dancing Script', 'Merriweather', 'Nanum Brush Script', 'Pangolin'];
-const validFS = ['fstR', 'fstI'];
-const validFW = ['fweL', 'fweN', 'fweB'];
-const validFZ = ['6vw', '8vw', '10vw', '12vw', '14vw', '18vw'];
-const validDS = ['0', '1', '2', '3', '4'];
-const validCMo = ['fademode', 'solidmode', 'imgmode'];
-const validSC = ['#FF0000', '#FFA500', '#FFFF00', '#00FF00', '#0000FF', '#FF00FF', '#FFFFFF', '#808080', '#000000', '#F2B5D4', '#C2E0E9', '#E1D5E7', '#B0E0E6', '#F7D5AA', '#D5E8D4', '#92A8D1', '#E6AF75', '#D9B5A5', '#9AC1B7', '#D0B9C3', '#C4B7D9', '#D72C6F', '#227FBF', '#7E3F9D', '#367F89', '#FF713F', '#549F55', '#2B4771', '#C55324', '#954A3E', '#457E70', '#8B2C5A', '#7C5793'];
-const validTCM = ['tcovD', 'tcovO']
-const validBIS = ['', 'auto', 'cover', 'stretch'];
-const validBIB = ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-const validVer = [5, 6];
+const valid = {
+    CM: ['cmo12', 'cmo24'],
+    CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words'],
+    SV: ['sviD', 'sviN'],
+    DF: ['D', 'DD', 'DDD', 'DDDD', ''],
+    DA: ['dpoL', 'dpoC', 'dpoR'],
+    BM: ['btyD', 'btyR', 'btyB'],
+    BS: ['solid', 'dashed', 'dotted', 'double'],
+    SB: ['', 'sbaB', 'sbaN'],
+    FF: ['', 'Lato', 'Montserrat', 'Open Sans', 'Oswald', 'Poppins', 'Roboto', 'Tektur', 'Ubuntu', 'Ubuntu Mono', 'Dancing Script', 'Merriweather', 'Nanum Brush Script', 'Pangolin'],
+    FS: ['fstR', 'fstI'],
+    FW: ['fweL', 'fweN', 'fweB'],
+    FZ: ['6vw', '8vw', '10vw', '12vw', '14vw', '18vw'],
+    DS: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+    CMo: ['fademode', 'solidmode', 'imgmode'],
+    SC: ['#FF0000', '#FFA500', '#FFFF00', '#00FF00', '#0000FF', '#FF00FF', '#FFFFFF', '#808080', '#000000', '#F2B5D4', '#C2E0E9', '#E1D5E7', '#B0E0E6', '#F7D5AA', '#D5E8D4', '#92A8D1', '#E6AF75', '#D9B5A5', '#9AC1B7', '#D0B9C3', '#C4B7D9', '#D72C6F', '#227FBF', '#7E3F9D', '#367F89', '#FF713F', '#549F55', '#2B4771', '#C55324', '#954A3E', '#457E70', '#8B2C5A', '#7C5793'],
+    TCM: ['tcovD', 'tcovO'],
+    BIS: ['', 'auto', 'cover', 'stretch'],
+    BIB: ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+    Ver: [5, 6]
+};
 
 function containsValue(array, value) {
     return array.includes(value);
 }
 
 function verifySettingsJSON(jsonData) {
-    const requiredKeys = ["clockConfig", "fontConfig", "colorTheme", "version"];
+    const requiredKeys = ['clockConfig', 'fontConfig', 'colorTheme', 'version'];
 
     // Check if all required keys are present in the JSON object
     const missingKeys = requiredKeys.filter(key => !(key in jsonData));
     if (missingKeys.length > 0) {
         return {
             type: 'missing',
-            subkey: missingKeys.join(", "),
+            subkey: missingKeys.join(', '),
             value: ''
         };
     }
@@ -249,7 +251,7 @@ function verifySettingsJSON(jsonData) {
     // Perform validation for the "version" key
     const version = jsonData.version;
 
-    if (!containsValue(validVer, version)) {
+    if (!containsValue(valid.Ver, version)) {
         return {
             type: 'invalid',
             subkey: 'version',
@@ -260,7 +262,7 @@ function verifySettingsJSON(jsonData) {
     // Perform validation for the "clockConfig" subkeys
     const clockConfig = jsonData.clockConfig;
 
-    if (!containsValue(validCM, clockConfig.clockMode)) {
+    if (!containsValue(valid.CM, clockConfig.clockMode)) {
         return {
             type: 'invalid',
             subkey: 'clockMode',
@@ -268,7 +270,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validCD, clockConfig.clockDisplay)) {
+    if (!containsValue(valid.CD, clockConfig.clockDisplay)) {
         return {
             type: 'invalid',
             subkey: 'clockDisplay',
@@ -276,7 +278,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validSV, clockConfig.secondsVis)) {
+    if (!containsValue(valid.SV, clockConfig.secondsVis)) {
         return {
             type: 'invalid',
             subkey: 'secondsVis',
@@ -284,7 +286,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validDF, clockConfig.dateFormat)) {
+    if (!containsValue(valid.DF, clockConfig.dateFormat)) {
         return {
             type: 'invalid',
             subkey: 'dateFormat',
@@ -292,7 +294,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validDA, clockConfig.dateAlign)) {
+    if (!containsValue(valid.DA, clockConfig.dateAlign)) {
         return {
             type: 'invalid',
             subkey: 'dateAlign',
@@ -300,7 +302,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validBM, clockConfig.borderMode)) {
+    if (!containsValue(valid.BM, clockConfig.borderMode)) {
         return {
             type: 'invalid',
             subkey: 'borderMode',
@@ -308,7 +310,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validBS, clockConfig.borderStyle)) {
+    if (!containsValue(valid.BS, clockConfig.borderStyle)) {
         return {
             type: 'invalid',
             subkey: 'borderStyle',
@@ -316,7 +318,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validSB, clockConfig.secondsBarVis)) {
+    if (!containsValue(valid.SB, clockConfig.secondsBarVis)) {
         return {
             type: 'invalid',
             subkey: 'secondsBarVis',
@@ -335,7 +337,7 @@ function verifySettingsJSON(jsonData) {
     // Perform validation for the "fontConfig" subkeys
     const fontConfig = jsonData.fontConfig;
 
-    if (!containsValue(validFF, fontConfig.fontFamily)) {
+    if (!containsValue(valid.FF, fontConfig.fontFamily)) {
         return {
             type: 'invalid',
             subkey: 'fontFamily',
@@ -343,7 +345,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validFS, fontConfig.fontStyle)) {
+    if (!containsValue(valid.FS, fontConfig.fontStyle)) {
         return {
             type: 'invalid',
             subkey: 'fontStyle',
@@ -351,7 +353,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validFW, fontConfig.fontWeight)) {
+    if (!containsValue(valid.FW, fontConfig.fontWeight)) {
         return {
             type: 'invalid',
             subkey: 'fontWeight',
@@ -359,7 +361,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validFZ, fontConfig.fontSize)) {
+    if (!containsValue(valid.FZ, fontConfig.fontSize)) {
         return {
             type: 'invalid',
             subkey: 'fontSize',
@@ -367,7 +369,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validDS, fontConfig.dropShadow)) {
+    if (!containsValue(valid.DS, fontConfig.dropShadow)) {
         return {
             type: 'invalid',
             subkey: 'dropShadow',
@@ -378,7 +380,7 @@ function verifySettingsJSON(jsonData) {
     // Perform validation for the "colorTheme" subkeys
     const colorTheme = jsonData.colorTheme;
 
-    if (!containsValue(validCMo, colorTheme.colorMode)) {
+    if (!containsValue(valid.CMo, colorTheme.colorMode)) {
         return {
             type: 'invalid',
             subkey: 'colorMode',
@@ -386,7 +388,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (colorTheme.colorMode === 'solidmode' && !containsValue(validSC, colorTheme.solidColor)) {
+    if (colorTheme.colorMode === 'solidmode' && !containsValue(valid.SC, colorTheme.solidColor)) {
         return {
             type: 'invalid',
             subkey: 'solidColor',
@@ -394,7 +396,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
 
-    if (!containsValue(validTCM, colorTheme.textColorMode)) {
+    if (!containsValue(valid.TCM, colorTheme.textColorMode)) {
         return {
             type: 'invalid',
             subkey: 'textColorMode',
@@ -410,7 +412,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
     
-    if (!containsValue(validBIS, colorTheme.bgImageSize)) {
+    if (!containsValue(valid.BIS, colorTheme.bgImageSize)) {
         return {
             type: 'invalid',
             subkey: 'bgImageSize',
@@ -418,7 +420,7 @@ function verifySettingsJSON(jsonData) {
         };
     }
     
-    if (!containsValue(validBIB, colorTheme.bgImageBlur)) {
+    if (!containsValue(valid.BIB, colorTheme.bgImageBlur)) {
         return {
             type: 'invalid',
             subkey: 'bgImageBlur',
@@ -426,8 +428,8 @@ function verifySettingsJSON(jsonData) {
         };
     }
     
-    if (colorTheme.bgImage && !colorTheme.bgImage.startsWith('url(\"data:image')) {
-    return {
+    if (colorTheme.bgImage && !colorTheme.bgImage.startsWith('url("data:image')) {
+        return {
             type: 'invalid',
             subkey: 'bgImage',
             value: 'Value must be type "data:image/*"'

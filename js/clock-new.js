@@ -1,10 +1,6 @@
 let cMode = '0';
-var dateFormat = 'D';
-var timeDisplayMethod = 0;
-
-// Page duration elements
-var durationElement = document.getElementById("time-duration");
-var pageLoadTime = new Date();
+let dateFormat = 'D';
+let timeDisplayMethod = 0;
 
 menu.timeMethodSelect.addEventListener('change', () => {
     // Get the selected value from the select element
@@ -17,25 +13,21 @@ menu.timeMethodSelect.addEventListener('change', () => {
     updateTime();
 });
 
-function updatePageDuration() {
-    // Get the current time
-    var currentTime = new Date();
+// Page duration elements
+const pageLoadTime = Date.now();
 
-    // Calculate the time difference in milliseconds
-    var timeDiff = currentTime - pageLoadTime;
+function updatePageDuration() {
+    const currentTime = Date.now();
+
+    const timeDiff = currentTime - pageLoadTime;
 
     // Convert the time difference to seconds, minutes, and hours
-    var seconds = Math.floor(timeDiff / 1000) % 60;
-    var minutes = Math.floor(timeDiff / (1000 * 60)) % 60;
-    var hours = Math.floor(timeDiff / (1000 * 60 * 60));
+    const seconds = Math.floor(timeDiff / 1000) % 60;
+    const minutes = Math.floor(timeDiff / (1000 * 60)) % 60;
+    const hours = Math.floor(timeDiff / (1000 * 60 * 60));
 
-    // Update the element with the duration
-    var durationElement = document.getElementById("time-duration");
-    durationElement.textContent = hours + "h, " + minutes + "m, and " + seconds + "s";
+    menu.durationdisplay.textContent = `${hours}h, ${minutes}m, and ${seconds}s`;
 }
-
-// Clock functions
-const clockModeGroup = document.getElementById('clock-mode-group');
 
 // Clock mode radio
 menu.clockmoderadio.forEach((radio) => {
@@ -46,7 +38,7 @@ menu.clockmoderadio.forEach((radio) => {
 });
 
 // Date format selector listener
-menu.dateformselect.addEventListener("change", function() {
+menu.dateformselect.addEventListener('change', function() {
     dateFormat = menu.dateformselect.value;
     updateDate();
 });
@@ -74,11 +66,32 @@ function updateTime() {
         hexatri: toHexatrigesimal,
         octal: toOctal,
         words: toWords,
+        unixmillis: toUnixMillis,
+        unixsec: toUnixSec,
+        unixcountdown: toUnixMillis
     };
 
-    if (timeDisplayFunctions.hasOwnProperty(timeDisplayMethod)) {
+    if (Object.prototype.hasOwnProperty.call(timeDisplayFunctions, timeDisplayMethod)) {
         const displayFunction = timeDisplayFunctions[timeDisplayMethod];
         dtdisplay.hourSlot.textContent = displayFunction(hrs);
+
+        // Hacky implementation... Will fix logic instead in future release.
+        if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
+            dtdisplay.hourSlot.textContent = '';
+            dtdisplay.minuteSlot.textContent = displayFunction();
+            dtdisplay.secondSlot.textContent = '';
+
+            dtdisplay.indicatorSlot.textContent = '';
+            return;
+        } else if (timeDisplayMethod === 'unixcountdown') {
+            const secondsUntilY2K38 = 2147483647 - Math.floor(Date.now() / 1000);
+            dtdisplay.hourSlot.textContent = `${Math.floor(secondsUntilY2K38 / 3600)}h`;
+            dtdisplay.minuteSlot.textContent = `${Math.floor((secondsUntilY2K38 % 3600) / 60)}m`;
+            dtdisplay.secondSlot.textContent = `${secondsUntilY2K38 % 60}s`;
+
+            dtdisplay.indicatorSlot.textContent = '';
+            return;
+        }
 
         if (timeDisplayMethod === 'words') {
             dtdisplay.minuteSlot.textContent = formatMinutesForWordsDisplay(min);
@@ -131,22 +144,30 @@ function toWords(value) {
     return numberToWords.toWords(value);
 }
 
+// Unix timestamp functions
+function toUnixMillis() {
+    return Date.now();
+}
+
+function toUnixSec() {
+    return Math.floor(Date.now()/1000);
+}
+
 function updateDate() {
     const time = luxon.DateTime.now();
-    dtdisplay.date.innerHTML = time.toFormat(dateFormat);
+    dtdisplay.date.textContent = time.toFormat(dateFormat);
 
-    const dateVisOptions = ['dateVisOp1', 'dateVisOp2', 'dateVisOp3', 'dateVisOp4'];
-
-    dateVisOptions.forEach((optionId) => {
-        const optionElement = document.getElementById(optionId);
-        optionElement.textContent = time.toFormat(optionElement.value);
+    Array.from(menu.dateformselect.children).forEach((child) => {
+        if (child.value !== '') {
+            child.textContent = time.toFormat(child.value);
+        }
     });
 }
 
+
 // Change tab favicon function
 function updateFavicon(hour) {
-    var faviconLink = document.getElementById('favicon');
-    faviconLink.href = `./icons/clock-time-${hour}.svg`;
+    doc.favicon.href = `./icons/clock-time-${hour}.svg`;
 }
 
 // Emoji block function
@@ -163,28 +184,28 @@ function convertToRomanNumerals(number) {
         return NaN;
     if (number === 0 || number === '00')
         return number;
-    var digits = String(+number).split(""),
-        key = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
-            "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
-            "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"
+    let digits = String(+number).split(''),
+        key = ['', 'C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM',
+            '', 'X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC',
+            '', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'
         ],
-        roman = "",
+        roman = '',
         i = 3;
     while (i--)
-        roman = (key[+digits.pop() + (i * 10)] || "") + roman;
-    return Array(+digits.join("") + 1).join("M") + roman;
+        roman = (key[+digits.pop() + (i * 10)] || '') + roman;
+    return Array(+digits.join('') + 1).join('M') + roman;
 }
 
-// Update on load, then start interval
+// Update on load, then start intervals
+const time = luxon.DateTime.now();
 updateTime();
 updateDate();
-var time = luxon.DateTime.now();
 updateFavicon(time.toFormat('h'));
 
 setInterval(function() {
-    var time = luxon.DateTime.now();
+    const time = luxon.DateTime.now();
     updateFavicon(time.toFormat('h'));
-}, 25000)
+}, 25000);
 
 setInterval(function() {
     updateTime();

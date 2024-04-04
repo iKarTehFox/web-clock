@@ -4,14 +4,14 @@ function uploadBGImg() {
     input.type = 'file';
     input.accept = 'image/*';
     
-    input.addEventListener('change', (event) => {
-        const file = event.target.files[0];
+    input.addEventListener('change', (e) => {
+        const file = e.target.files[0];
         const reader = new FileReader();
         reader.readAsDataURL(file);
         
         reader.onload = function() {
-          const imageUrl = reader.result;
-          bodyElement.style.backgroundImage = `url('${imageUrl}')`;
+            const imageUrl = reader.result;
+            bodyElement.style.backgroundImage = `url('${imageUrl}')`;
         };
     });
     
@@ -23,25 +23,22 @@ menu.imagesizeselect.addEventListener('change', () => {
     const bodyElement = document.body;
     
     switch (value) {
-        case 'auto':
-            bodyElement.style.backgroundSize = value;
-            break;
-        case 'cover':
-            bodyElement.style.backgroundSize = value;
-            break;
-        case 'stretch':
-            bodyElement.style.backgroundSize = '100vw 100vh';
-            break;
-        default:
-            console.error(`Unsupported background size value: ${value}`)
-            break;
+    case 'auto':
+        bodyElement.style.backgroundSize = value;
+        break;
+    case 'cover':
+        bodyElement.style.backgroundSize = value;
+        break;
+    case 'stretch':
+        bodyElement.style.backgroundSize = '100vw 100vh';
+        break;
+    default:
+        console.error(`Unsupported background size value: ${value}`);
+        break;
     }
 });
 
 menu.imageblurrange.addEventListener('input', () => {
-    const value = menu.imageblurrange.value;
-    const blurPanel = document.getElementById('blur-panel');
-    
-    blurPanel.style.backdropFilter = (`blur(${value}px)`);
-    document.getElementById('bgImgBlurRangeLabel').textContent = `Image Blur: ${value}px`;
+    doc.blurpanel.style.backdropFilter = (`blur(${menu.imageblurrange.value}px)`);
+    menu.imageblurlabel.textContent = `Image Blur: ${menu.imageblurrange.value}px`;
 });

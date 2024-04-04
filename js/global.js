@@ -1,5 +1,10 @@
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+const doc = {
+    blurpanel: document.getElementById('blur-panel'),
+    favicon: document.getElementById('favicon')
+};
 
 const menu = {
     container: document.getElementById('menu-container'),
@@ -10,10 +15,10 @@ const menu = {
     datealignradio: document.querySelectorAll('input[name="date-position-radio"]'),
     themeradio: document.querySelectorAll('input[name="menu-theme-radio"]'),
     visCheckbox: document.getElementById('menuButtonVisible'),
-    options: document.getElementById("menu-options"),
+    options: document.getElementById('menu-options'),
     obutton: document.getElementById('open-button'),
     cbutton: document.getElementById('close-button'),
-    dateformselect: document.getElementById("dateFormatSelect"),
+    dateformselect: document.getElementById('dateFormatSelect'),
     colorbadge: document.getElementById('current-color-badge'),
     colormoderadio: document.querySelectorAll('input[name="color-mode-radio"]'),
     presetgroup: document.getElementById('presetColorGroup'),
@@ -24,10 +29,12 @@ const menu = {
     imageuploadbutton: document.getElementById('bgImageUploadBtn'),
     imagesizeselect: document.getElementById('bgImageSizeSelect'),
     imageblurrange: document.getElementById('bgImgBlurRange'),
+    imageblurlabel: document.getElementById('bgImgBlurRangeLabel'),
     textcolorinput: document.getElementById('textColorInput'),
     bordertyperadio: document.querySelectorAll('input[name="border-type-radio"]'),
     borderstyleselect: document.getElementById('borderStyleSelect'),
-    manualjsontextinput: document.getElementById('jsonImportTextarea')
+    manualjsontextinput: document.getElementById('jsonImportTextarea'),
+    durationdisplay: document.getElementById('time-duration')
 };
 
 const font = {
@@ -37,7 +44,8 @@ const font = {
     styleradio: document.querySelectorAll('input[name="font-style-radio"]'),
     weightradio: document.querySelectorAll('input[name="font-weight-radio"]'),
     sizesel: document.getElementById('sizeSelect'),
-    shadowrange: document.getElementById('dropShadowRange')
+    shadowrange: document.getElementById('dropShadowRange'),
+    shadowlabel: document.getElementById('dropShadowRangeLabel')
 };
 
 const dtdisplay = {
@@ -48,10 +56,10 @@ const dtdisplay = {
     minuteSlot: document.getElementById('minute-slot'),
     colon2: document.getElementById('colon2'),
     secondSlot: document.getElementById('second-slot'),
-    indicatorSlot: document.getElementById("indicator"),
-    date: document.getElementById("date"),
-    secondsBar: document.getElementById("seconds-progress-bar")
-}
+    indicatorSlot: document.getElementById('indicator'),
+    date: document.getElementById('date'),
+    secondsBar: document.getElementById('seconds-progress-bar')
+};
 
 // Define font sizes
 const fontSizeOptions = {
@@ -67,23 +75,23 @@ const fontSizeOptions = {
 // Font style handler function
 function modifyFontStyle(type, value) {
     switch (type) {
-        case 'style':
-            dtdisplay.ccontainer.style.fontStyle = value;
-            break;
-        case 'weight':
-            dtdisplay.ccontainer.style.fontWeight = value;
-            break;
-        case 'size':
-            dtdisplay.ccontainer.style.fontSize = value;
-            dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[value];
-            dtdisplay.date.style.fontSize = fontSizeOptions[value];
-            break;
-        case 'family':
-            dtdisplay.ccontainer.style.fontFamily = value;
-            break;
-        default:
-            console.error(`Invalid font modification type: ${type}`);
-            break;
+    case 'style':
+        dtdisplay.ccontainer.style.fontStyle = value;
+        break;
+    case 'weight':
+        dtdisplay.ccontainer.style.fontWeight = value;
+        break;
+    case 'size':
+        dtdisplay.ccontainer.style.fontSize = value;
+        dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[value];
+        dtdisplay.date.style.fontSize = fontSizeOptions[value];
+        break;
+    case 'family':
+        dtdisplay.ccontainer.style.fontFamily = value;
+        break;
+    default:
+        console.error(`Invalid font modification type: ${type}`);
+        break;
     }
 }
 
@@ -135,30 +143,25 @@ font.familysel.addEventListener('change', function() {
 // Custom font input listeners and button status function
 let fontButtonStatusID;
 
-font.applyfontinput.addEventListener("click", function() {
-  const customFont = font.customfontinput.value;
+font.applyfontinput.addEventListener('click', function() {
+    const customFont = font.customfontinput.value;
 
-  if (customFont.length > 0) {
-    clearTimeout(fontButtonStatusID);
-    if (isFontAvailable(customFont)) {
-      font.familysel.value = '';
-      modifyFontStyle('family', customFont);
-      applyFontStatus('success', 'Applied!');
-    } else {
-      applyFontStatus('danger', 'Invalid font!');
-      font.customfontinput.value = '';
+    if (customFont.length > 0) {
+        clearTimeout(fontButtonStatusID);
+        font.familysel.value = '';
+        modifyFontStyle('family', customFont);
+        applyFontStatus('success', 'Applied!');
     }
-  }
 });
 
 function applyFontStatus(status, text) {
-  font.applyfontinput.className = `btn btn-outline-${status}`;
-  font.applyfontinput.textContent = text;
+    font.applyfontinput.className = `btn btn-outline-${status}`;
+    font.applyfontinput.textContent = text;
 
-  fontButtonStatusID = setTimeout(function() {
-    font.applyfontinput.className = ('btn btn-outline-primary');
-    font.applyfontinput.textContent = 'Submit';
-  }, 2500);
+    fontButtonStatusID = setTimeout(function() {
+        font.applyfontinput.className = ('btn btn-outline-primary');
+        font.applyfontinput.textContent = 'Submit';
+    }, 2500);
 }
 
 // Font style listener
@@ -185,96 +188,94 @@ font.sizesel.addEventListener('change', () => {
 
 // Font text shadow listener
 font.shadowrange.addEventListener('input', function() {
-    var value = this.value;
-    var opacity = value / 5;
-    var strength = value * 3;
-    var dropShadowValue = `5px 5px ${strength}px rgba(0, 0, 0, ${opacity})`;
-    document.getElementById("dropShadowRangeLabel").textContent = `Drop shadow: ${strength}px`;
+    const value = this.value;
+    const opacity = value / 5;
+    const strength = value * 3;
+    const dropShadowValue = `5px 5px ${strength}px rgba(0, 0, 0, ${opacity})`;
+    font.shadowlabel.textContent = `Drop shadow: ${strength}px`;
 
     dtdisplay.ccontainer.style.textShadow = value > 0 ? dropShadowValue : '';
 });
 
 // Border type listener
 menu.bordertyperadio.forEach((radio) => {
-  radio.addEventListener('change', () => {
-    const value = radio.dataset.value;
-    menu.borderstyleselect.disabled = value === 'none';
+    radio.addEventListener('change', () => {
+        const value = radio.dataset.value;
+        menu.borderstyleselect.disabled = value === 'none';
 
-    switch (value) {
-      case 'none':
-        menu.secondsbarradio.forEach((btn) => {
-            btn.disabled = false;
-        });
-        dtdisplay.tcontainer.style.borderStyle = value;
-        dtdisplay.tcontainer.style.borderBottomStyle = value;
-        break;
-      case 'regular':
-        menu.secondsbarradio.forEach((btn) => {
-            btn.disabled = true;
-            if (btn.id === 'sbaN') {
-                btn.checked = true;
-                btn.dispatchEvent(new Event('change'));
-            }
-        });
-        dtdisplay.tcontainer.style.borderBottomStyle = 'none';
-        dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
-        break;
-      case 'bottom':
-        menu.secondsbarradio.forEach((btn) => {
-            btn.disabled = true;
-            if (btn.id === 'sbaN') {
-                btn.checked = true;
-                btn.dispatchEvent(new Event('change'));
-            }
-        });
-        dtdisplay.tcontainer.style.borderStyle = 'none';
-        dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
-        break;
-      default:
-        console.error(`Invalid border type: ${value}`);
-        break;
-    }
-  });
+        switch (value) {
+        case 'none':
+            menu.secondsbarradio.forEach((btn) => {
+                btn.disabled = false;
+            });
+            dtdisplay.tcontainer.style.borderStyle = value;
+            dtdisplay.tcontainer.style.borderBottomStyle = value;
+            break;
+        case 'regular':
+            menu.secondsbarradio.forEach((btn) => {
+                btn.disabled = true;
+                if (btn.id === 'sbaN') {
+                    btn.checked = true;
+                    btn.dispatchEvent(new Event('change'));
+                }
+            });
+            dtdisplay.tcontainer.style.borderBottomStyle = 'none';
+            dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
+            break;
+        case 'bottom':
+            menu.secondsbarradio.forEach((btn) => {
+                btn.disabled = true;
+                if (btn.id === 'sbaN') {
+                    btn.checked = true;
+                    btn.dispatchEvent(new Event('change'));
+                }
+            });
+            dtdisplay.tcontainer.style.borderStyle = 'none';
+            dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
+            break;
+        default:
+            console.error(`Invalid border type: ${value}`);
+            break;
+        }
+    });
 });
 
-// Add a change event listener to the select dropdown
+// Border style listener
 menu.borderstyleselect.addEventListener('change', () => {
-    if (document.getElementById('btyR').checked) {
+    if (menu.bordertyperadio[1].checked) {
         dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
-    } else if (document.getElementById('btyB').checked) {
+    } else if (menu.bordertyperadio[2].checked) {
         dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
     }
 });
 
 // Menu button listener
-menu.obutton.addEventListener("click", function() {
-    menu.options.classList.add("menu-options-show");
+menu.obutton.addEventListener('click', function() {
+    menu.options.classList.add('menu-options-show');
 
     // Make close button visible
-    menu.cbutton.style.display = "block";
-    menu.obutton.style.display = "none";
+    menu.cbutton.style.display = 'block';
+    menu.obutton.style.display = 'none';
 });
 
 // Close button listener
-menu.cbutton.addEventListener("click", function() {
-    menu.options.classList.remove("menu-options-show");
-    menu.cbutton.style.display = "none";
-    var isChecked = menu.visCheckbox.checked;
-    if (isChecked)
-        menu.obutton.style.display = "block";
+menu.cbutton.addEventListener('click', function() {
+    menu.options.classList.remove('menu-options-show');
+    menu.cbutton.style.display = 'none';
+    if (menu.visCheckbox.checked)
+        menu.obutton.style.display = 'block';
 });
 
 // Click outside to close menu
 document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function(e) {
         // Check if the clicked element is outside the menu-options container and not the menu button or its child elements
-        if (!menu.options.contains(event.target) && !menu.obutton.contains(event.target) && !menu.cbutton.contains(event.target)) {
+        if (!menu.options.contains(e.target) && !menu.obutton.contains(e.target) && !menu.cbutton.contains(e.target)) {
             // Toggle the menu-options container visibility by adding/removing the CSS class
             menu.options.classList.remove('menu-options-show');
-            menu.cbutton.style.display = "none";
-            var isChecked = menu.visCheckbox.checked;
-            if (isChecked)
-                menu.obutton.style.display = "block";
+            menu.cbutton.style.display = 'none';
+            if (menu.visCheckbox.checked)
+                menu.obutton.style.display = 'block';
         }
     });
 });
@@ -292,11 +293,11 @@ menu.themeradio.forEach((radio) => {
             menu.options.style.color = '#fff';
         }
     });
-  });
+});
 
 // Menu button visibility
-document.addEventListener('dblclick', function() {
-    if (!menu.options.contains(event.target) && !menu.obutton.contains(event.target) && !menu.cbutton.contains(event.target)) {
+document.addEventListener('dblclick', function(e) {
+    if (!menu.options.contains(e.target) && !menu.obutton.contains(e.target) && !menu.cbutton.contains(e.target)) {
         menu.obutton.style.display = 'block';
         menu.visCheckbox.checked = true;
     }
@@ -330,11 +331,10 @@ function toggleFullscreen() {
     }
 }
 
-menu.visCheckbox.addEventListener('change', function() {
-    var isChecked = menu.visCheckbox.checked;
-    if (isChecked) {
+menu.visCheckbox.addEventListener('change', function(e) {
+    if (menu.visCheckbox.checked) {
         // Show the menu button
-        if (!menu.options.contains(event.target) && !menu.obutton.contains(event.target) && !menu.cbutton.contains(event.target)) {
+        if (!menu.options.contains(e.target) && !menu.obutton.contains(e.target) && !menu.cbutton.contains(e.target)) {
             menu.obutton.style.display = 'block';
         }
     } else {

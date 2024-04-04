@@ -15,7 +15,6 @@
         <script src="./js/cdn.jsdelivr.net_npm_bootstrap@5.3.3_dist_js_bootstrap.bundle.min.js"></script>
         <script src="./js/code.iconify.design_iconify-icon_1.0.7_iconify-icon.min.js"></script>
         <script src="./js/numberToWords.min.js"></script>
-        <script src="./js/fontCheck.js"></script>
         <script src="./js/global.js" defer></script>
         <script src="./js/background-color.js" defer></script>
         <script src="./js/background-image.js" defer></script>
@@ -64,6 +63,11 @@
                                         <option value="emoji">Emoji (1️⃣2️⃣:0️⃣0️⃣)</option>
                                         <option value="roman">Roman Numeral (XII:00)</option>
                                         <option value="words">Words (twelve:o'clock)</option>
+                                    </optgroup>
+                                    <optgroup label="Experimental...">
+                                        <option value="unixmillis">Unix timestamp (Milliseconds)</option>
+                                        <option value="unixsec">Unix timestamp (Seconds)</option>
+                                        <option value="unixcountdown">Time until Y2K38 problem</option>
                                     </optgroup>
                                 </select>
                                 <h6 class="mb-1 mt-2">Seconds Display</h6>
@@ -183,7 +187,7 @@
                                 <hr>
                                 <h6 class="mb-1">Text Effects</h6>
                                 <label for="dropShadowRange" class="form-label" id="dropShadowRangeLabel">Drop shadow: 0px</label>
-                                <input type="range" class="form-range" id="dropShadowRange" min="0" max="4" value="0" step="1">
+                                <input type="range" class="form-range" id="dropShadowRange" min="0" max="10" value="0" step="1">
                             </div>
                         </div>
                     </div>
@@ -395,7 +399,6 @@
                     <p class="mb-1 mt-2">You've been here for:</p>
                     <p class="mb-0" id="time-duration"></p>
                     <hr>
-                    <!-- CHANGE BEFORE SERVING -->
                     <span id="credit">By iKarTehFox, made possible with open-source projects <3</span>
                     <a type="button" class="btn btn-primary btn-social-icon btn-github" data-bs-toggle="tooltip" data-bs-custom-class="secondary-tooltip" data-bs-title="View on GitHub" href="https://github.com/ikartehfox/web-clock" target="_blank">
                         <p style="margin-top: -1.5px;"><iconify-icon inline icon="mdi:github"></iconify-icon></p>
