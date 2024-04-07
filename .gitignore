@@ -1,4 +1,5 @@
 node_modules/
 .eslintrc.json
+.eslintignore
 package-lock.json
 package.json
