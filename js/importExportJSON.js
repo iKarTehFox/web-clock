@@ -181,6 +181,7 @@ function updateClockSettings(importedSettings) {
     font.sizesel.dispatchEvent(new Event('change'));
     font.shadowrange.dispatchEvent(new Event('input'));
 
+    stopColorFade(); // Stop fade interval to avoid running interval twice if already running!!!
     document.querySelector(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).dispatchEvent(new Event('change'));
     if (colorTheme.colorMode === 'solidmode') {
         document.querySelector('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
