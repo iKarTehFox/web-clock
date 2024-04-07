@@ -23,8 +23,8 @@ function stopColorFade() {
 menu.colormoderadio.forEach(radio => {
     radio.addEventListener('change', () => {
         // Reset color to "black" first
-        dtdisplay.ccontainer.style.color = "#212529";
-        dtdisplay.secondsBar.style.backgroundColor = "#212529";
+        dtdisplay.ccontainer.style.color = '#212529';
+        dtdisplay.secondsBar.style.backgroundColor = '#212529';
         const colorMode = radio.id;
         const bodyElement = document.body;
         
