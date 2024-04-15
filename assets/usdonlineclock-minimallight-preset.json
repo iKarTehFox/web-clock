@@ -1,0 +1,30 @@
+{
+	"clockConfig": {
+		"clockMode": "cmo12",
+		"clockDisplay": "decimal",
+		"secondsVis": "sviN",
+		"dateFormat": "DD",
+		"dateAlign": "dpoC",
+		"borderMode": "btyB",
+		"borderStyle": "solid",
+		"secondsBarVis": "sbaN"
+	},
+	"fontConfig": {
+		"fontFamily": "Oswald",
+		"fontStyle": "fstR",
+		"fontWeight": "fweL",
+		"fontSize": "14vw",
+		"dropShadow": "0"
+	},
+	"colorTheme": {
+		"colorMode": "solidmode",
+		"solidColor": "#FFFFFF",
+		"textColorMode": "tcovD",
+		"textColorValue": "",
+		"bgImage": "",
+		"bgImageSize": "",
+		"bgImageBlur": ""
+	},
+	"exportTimestamp": "Minimalism or maximalism? I choose optimism!",
+	"version": 6
+}

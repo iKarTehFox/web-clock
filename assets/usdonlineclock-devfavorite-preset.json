@@ -3,28 +3,28 @@
 		"clockMode": "cmo12",
 		"clockDisplay": "words",
 		"secondsVis": "sviN",
-		"dateFormat": "DDD",
+		"dateFormat": "DDDD",
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",
-		"secondsBarVis": "sbaN"
+		"secondsBarVis": "sbaB"
 	},
 	"fontConfig": {
 		"fontFamily": "Montserrat",
 		"fontStyle": "fstR",
 		"fontWeight": "fweB",
 		"fontSize": "10vw",
-		"dropShadow": "0"
+		"dropShadow": "2"
 	},
 	"colorTheme": {
 		"colorMode": "solidmode",
-		"solidColor": "#000000",
-		"textColorMode": "tcovO",
-		"textColorValue": "#404040",
+		"solidColor": "#2B4771",
+		"textColorMode": "tcovD",
+		"textColorValue": "",
 		"bgImage": "",
 		"bgImageSize": "",
 		"bgImageBlur": ""
 	},
-	"exportTimestamp": "Enjoy keeping your AMOLED screens safe with this preset!",
+	"exportTimestamp": "This is my favorite way to theme the clock, especially when testing and debugging! It's become a habit. -iKarTehFox",
 	"version": 6
 }

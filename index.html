@@ -38,7 +38,7 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCO" aria-expanded="true" aria-controls="collapseCO">
-                            Time Settings
+                            Date and Time
                             </button>
                         </h2>
                         <div id="collapseCO" class="accordion-collapse collapse show" data-bs-parent="#menuAccordion">
@@ -387,12 +387,18 @@
                                 <input class="form-control" type="text" placeholder="Paste in JSON here" data-bs-toggle="tooltip" aria-label="Manual JSON settings entry form" id="jsonImportTextarea">
                                 <div class="d-flex justify-content-end">
                                     <button type="button" class="btn btn-outline-warning" id="jsonImportTextBtn" onClick="manualJSONImport()">Load settings</button>
-
                                 </div>
+                                <hr>
+                                <h6 class="mb-1">Built-in presets</h6>
+                                <p class="mb-1 mt-2">Import from preset settings:</p>
+                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Save yourself from burn-in with this preset!" onClick="presetLocalJSON('usdonlineclock-amoled-preset')">AMOLED theme</button>
+                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Become a hacker with this green, digital binary clock! kinda..." onclick="presetLocalJSON('usdonlineclock-digitsbinary-preset')">Hacker Green</button>
+                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Go minimal with this black on white, simple theme!" onclick="presetLocalJSON('usdonlineclock-minimallight-preset')">Minimalist Light</button>
+                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="A personal favorite from iKarTehFox... me! :)" onClick="presetLocalJSON('usdonlineclock-devfavorite-preset')">Simple blue</button>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Export settings</h6>
                                 <button type="button" class="btn btn-outline-secondary" onClick="exportSettingsToJSON()">Download JSON file</button>
-                                <p class="mb-1 mt-2">Note: Custom font settings and Display Options are not saved.</p>
+                                <p class="mb-1 mt-2">Note: Display Options and custom font settings will not be exported.</p>
                             </div>
                         </div>
                     </div>

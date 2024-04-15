@@ -60,69 +60,72 @@ function exportSettingsToJSON() {
     document.body.removeChild(downloadLink);
 }
 
-// Function to handle the import process
+// Helper function to process JSON settings
+function processJSONSettings(jsonText) {
+    try {
+        const importedSettings = JSON.parse(jsonText);
+
+        const validation = verifySettingsJSON(importedSettings);
+        if (validation !== true) {
+            handleValidationFailure(validation);
+            return;
+        }
+
+        updateClockSettings(importedSettings);
+        console.log('Settings successfully loaded!');
+        alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);
+    } catch (error) {
+        console.error('Error processing settings:', error);
+        alert('Invalid settings file. Please make sure the file contains valid JSON.');
+    }
+}
+
+// Function to handle file import
 function importSettingsFromJSON() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'application/json';
 
-    // Listen for changes in the input file selection
     input.addEventListener('change', (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
 
-        reader.onload = (e) => {
-            try {
-                const importedSettings = JSON.parse(e.target.result);
-
-                // File validation
-                const validation = verifySettingsJSON(importedSettings);
-                if (validation !== true) {
-                    handleValidationFailure(validation);
-                    return;
-                }
-                
-                updateClockSettings(importedSettings);
-                console.log('Settings successfully loaded!');
-                alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);
-            } catch (error) {
-                console.error('Error importing settings:', error);
-                alert('Invalid settings file. Please make sure the file contains valid JSON.');
-            }
-        };
-
+        reader.onload = (e) => processJSONSettings(e.target.result);
         reader.readAsText(file);
     });
 
     input.click();
 }
 
-// Alternative function for text input
+// Function for manual JSON text input
 function manualJSONImport() {
     const jsontext = menu.manualjsontextinput.value;
 
     if (jsontext) {
-        try {
-            const importedSettings = JSON.parse(jsontext);
-
-            const validation = verifySettingsJSON(importedSettings);
-            if (validation !== true) {
-                handleValidationFailure(validation);
-                return;
-            }
-            
-            updateClockSettings(importedSettings);
-            console.log('Settings successfully loaded!');
-            alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);
-
-            // Clear text field after completion
-            menu.manualjsontextinput.value = '';
-        } catch (error) {
-            console.error('Error importing settings:', error);
-            alert('Invalid settings file. Please make sure the file contains valid JSON.');
-        }
+        processJSONSettings(jsontext);
+        // Clear text field after completion
+        menu.manualjsontextinput.value = '';
+    } else {
+        console.log('No settings were provided or the JSON data could not be read.');
     }
 }
+
+// Import settings from a local JSON file
+function presetLocalJSON(filename) {
+    const url = `/assets/${filename}.json`;
+
+    fetch(url)
+        .then(response => response.text())
+        .then(json => {
+            console.log(`Attempting to load settings from preset '${filename}'...`);
+            processJSONSettings(json); 
+        })
+        .catch(error => {
+            console.error('Error fetching local settings file:', error);
+            alert('Could not fetch local settings file. Please check the filename and ensure the file exists.');
+        });
+  
+}  
 
 function updateClockSettings(importedSettings) {
     // Update clockConfig settings
@@ -206,7 +209,7 @@ function handleValidationFailure(errorDetails) {
     
     const errorMessage = errorMsg[`${errorDetails.type}`] || 'Unknown validation failure';
     console.error(errorMessage);
-    alert(`Error loading settings from imported file.\n\n${errorMessage}\n\nIf this is a version error, please export a new settings file as settings may have been updated! If you need help, please contact me on Twitter @iKarTehFox`);
+    alert(`Error loading settings from imported file.\n\n${errorMessage}\n\nIf this is a version error, please export a new settings file as settings may have been updated! If you need further assistance, please post an issue on GitHub.`);
 }
 
 // Value constraints
