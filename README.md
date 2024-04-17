@@ -12,7 +12,7 @@ Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri**
 **Need compatibility with older browsers?** [Check out the compatibility branch](https://github.com/iKarTehFox/web-clock/tree/compatibility)!
 
 ## Table of Contents
-- [How to Run](#how-to-run)
+- [Run/build Instructions](#instructions-to-run)
 - [Features](#features)
 - [Gallery](#gallery)
 - [Credits (Open Source)](#credits-open-source)
