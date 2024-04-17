@@ -18,8 +18,28 @@ Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri**
 - [Credits (Open Source)](#credits-open-source)
 - [Credits (Fonts)](#credits-fonts)
 
-## How to Run
+## Instructions to Run
+### Run in browser
 1. Serve `index.html` at the root directory with your favorite web server.
+   - You can also open `index.html` directly.
+
+### Build for Electron
+Electron files are temporary, and will change/evolve in the future.
+
+#### Prerequisites
+ - [Node.js](https://nodejs.org/)
+
+#### Instructions
+1. Clone this repository.
+```bash
+git clone https://github.com/iKarTehFox/web-clock.git
+cd web-clock
+```
+2. Install dependencies: `npm install`
+
+3. Run `npm run make` to build the app.
+   - Artifacts will be located in `./out/make` directory.
+   - You can instead run `npm start` to build and run the app for development.
 
 ## Features
 

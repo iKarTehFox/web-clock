@@ -1,0 +1,37 @@
+{
+  "name": "web-clock",
+  "version": "1.0.0",
+  "description": "Online digital clock web app with customizability in mind!",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "author": "iKarTehFox",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
+    "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron/fuses": "^1.8.0",
+    "electron": "^30.0.0",
+    "eslint": "^8.57.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iKarTehFox/web-clock.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iKarTehFox/web-clock/issues"
+  },
+  "homepage": "https://github.com/iKarTehFox/web-clock#readme",
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  }
+}

@@ -1,0 +1,10 @@
+# Main branch
+cdn.jsdelivr.net_npm_bootstrap@5.3.3_dist_js_bootstrap.bundle.min.js
+code.iconify.design_iconify-icon_1.0.7_iconify-icon.min.js
+numberToWords.min.js
+luxon.min.js
+
+# Compatibility branch
+bootstrap.4.6.2.bundle.min.js
+jquery.3.5.1.min.js
+corejs.minified.min.js
