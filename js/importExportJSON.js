@@ -112,7 +112,7 @@ function manualJSONImport() {
 
 // Import settings from a local JSON file
 function presetLocalJSON(filename) {
-    const url = `/assets/${filename}.json`;
+    const url = `./assets/${filename}.json`;
 
     fetch(url)
         .then(response => response.text())
