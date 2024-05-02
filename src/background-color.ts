@@ -1,4 +1,6 @@
-let fadeIntervalID;
+import { menu, dtdisplay } from './global';
+
+let fadeIntervalID: NodeJS.Timeout;
 
 function startColorFade() {
     const colors = ['#FFC0CB', '#FFD700', '#7FFFD4', '#FFA500', '#9370DB', '#00FFFF'];
@@ -15,7 +17,7 @@ function startColorFade() {
     }, 3000);
 }
 
-function stopColorFade() {
+export function stopColorFade() {
     clearInterval(fadeIntervalID);
 }
 
@@ -93,7 +95,7 @@ menu.colormoderadio.forEach(radio => {
 // Add listeners to all preset color buttons
 menu.presetcolors.forEach((radio) => {
     radio.addEventListener('change', () => {
-        const selectedColor = radio.getAttribute('data-color');
+        const selectedColor = String(radio.getAttribute('data-color'));
         document.body.style.backgroundColor = selectedColor;
         menu.colorbadge.textContent = selectedColor;
     });

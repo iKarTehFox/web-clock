@@ -80,3 +80,7 @@ body {
   display: none; /* Disable display by default */
   transition: width 0.75s;
 }
+
+#credit {
+    font-size: 15px;
+}

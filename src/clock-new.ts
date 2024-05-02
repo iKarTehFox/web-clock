@@ -1,13 +1,17 @@
+import { doc, menu, dtdisplay } from './global';
+import { numberToWords } from './numberToWords.min';
+import * as luxon from 'ts-luxon';
+
 let cMode = '0';
 let dateFormat = 'D';
-let timeDisplayMethod = 0;
+let timeDisplayMethod: string;
 
 menu.timeMethodSelect.addEventListener('change', () => {
     // Get the selected value from the select element
-    const selectedValue = menu.timeMethodSelect.value;
+    const selectedValue = menu.timeMethodSelect.value as unknown as number;
 
     // Update the timeDisplayMethod variable with the selected value
-    timeDisplayMethod = selectedValue;
+    timeDisplayMethod = String(selectedValue);
 
     // Update the time display using updateTime()
     updateTime();
@@ -32,7 +36,7 @@ function updatePageDuration() {
 // Clock mode radio
 menu.clockmoderadio.forEach((radio) => {
     radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
+        const value = String(radio.dataset.value);
         cMode = value;
     });
 });
@@ -40,7 +44,7 @@ menu.clockmoderadio.forEach((radio) => {
 // Date format selector listener
 menu.dateformselect.addEventListener('change', function() {
     dateFormat = menu.dateformselect.value;
-    updateDate();
+    updateTime();
 });
 
 function updateTime() {
@@ -51,14 +55,31 @@ function updateTime() {
     const ind = cMode === '0' ? time.toFormat('a') : '';
 
     document.title = `Time: ${hrs}:${min}:${sec} ${ind}`;
-    
+
     // Seconds progress bar
-    const secBarWidth = (sec / 59) * 100;
-    
+    const secBarWidth = (Number(sec) / 59) * 100;
+
     dtdisplay.secondsBar.style.width = `${secBarWidth}%`;
-    
+
     // Time display methods
-    const timeDisplayFunctions = {
+    type TimeFunction = (value: string) => string;
+    type UnixTimeFunction = () => number;
+
+    interface TimeDisplayFunctions {
+        binary: TimeFunction;
+        emoji: TimeFunction;
+        roman: TimeFunction;
+        hexa: TimeFunction;
+        hexatri: TimeFunction;
+        octal: TimeFunction;
+        words: TimeFunction;
+        unixmillis: UnixTimeFunction;
+        unixsec: UnixTimeFunction;
+        unixcountdown: UnixTimeFunction;
+        [key: string]: TimeFunction | UnixTimeFunction;
+    }
+
+    const timeDisplayFunctions: TimeDisplayFunctions = {
         binary: toBinary,
         emoji: convertToEmojiBlock,
         roman: convertToRomanNumerals,
@@ -68,80 +89,77 @@ function updateTime() {
         words: toWords,
         unixmillis: toUnixMillis,
         unixsec: toUnixSec,
-        unixcountdown: toUnixMillis
+        unixcountdown: toUnixMillis,
     };
 
-    if (Object.prototype.hasOwnProperty.call(timeDisplayFunctions, timeDisplayMethod)) {
-        const displayFunction = timeDisplayFunctions[timeDisplayMethod];
-        dtdisplay.hourSlot.textContent = displayFunction(hrs);
-
-        // Hacky implementation... Will fix logic instead in future release.
-        if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
-            dtdisplay.hourSlot.textContent = '';
-            dtdisplay.minuteSlot.textContent = displayFunction();
+    if (timeDisplayMethod in timeDisplayFunctions) {
+        if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec' || timeDisplayMethod === 'unixcountdown') {
+            // Handle Unix time functions separately as they do not take parameters
+            const unixFunction = timeDisplayFunctions[timeDisplayMethod] as UnixTimeFunction;
+            const unixTime = unixFunction(); // call the function without parameters
+            dtdisplay.hourSlot.textContent = String(unixTime);
+            dtdisplay.minuteSlot.textContent = '';
             dtdisplay.secondSlot.textContent = '';
-
-            dtdisplay.indicatorSlot.textContent = '';
-            return;
-        } else if (timeDisplayMethod === 'unixcountdown') {
-            const secondsUntilY2K38 = 2147483647 - Math.floor(Date.now() / 1000);
-            dtdisplay.hourSlot.textContent = `${Math.floor(secondsUntilY2K38 / 3600)}h`;
-            dtdisplay.minuteSlot.textContent = `${Math.floor((secondsUntilY2K38 % 3600) / 60)}m`;
-            dtdisplay.secondSlot.textContent = `${secondsUntilY2K38 % 60}s`;
-
-            dtdisplay.indicatorSlot.textContent = '';
-            return;
+        } else {
+            // Handle regular time functions which expect a number parameter
+            const displayFunction = timeDisplayFunctions[timeDisplayMethod] as TimeFunction;
+            dtdisplay.hourSlot.textContent = displayFunction(hrs);
+            dtdisplay.minuteSlot.textContent = displayFunction(min);
+            dtdisplay.secondSlot.textContent = displayFunction(sec);
         }
 
         if (timeDisplayMethod === 'words') {
             dtdisplay.minuteSlot.textContent = formatMinutesForWordsDisplay(min);
-        } else {
-            dtdisplay.minuteSlot.textContent = displayFunction(min);
         }
 
-        dtdisplay.secondSlot.textContent = displayFunction(sec);
     } else {
-        dtdisplay.hourSlot.textContent = hrs;
-        dtdisplay.minuteSlot.textContent = min;
-        dtdisplay.secondSlot.textContent = sec;
+        dtdisplay.hourSlot.textContent = String(hrs);
+        dtdisplay.minuteSlot.textContent = String(min);
+        dtdisplay.secondSlot.textContent = String(sec);
     }
 
     dtdisplay.indicatorSlot.textContent = ind;
-}
 
-// Helper function for time display method 'words'
-function formatMinutesForWordsDisplay(min) {
-    const parsedMinutes = parseInt(min, 10);
 
-    if (parsedMinutes === 0) {
-        return 'o\'clock';
-    } else if (parsedMinutes < 10) {
-        return `oh ${numberToWords.toWords(parsedMinutes)}`;
-    } else {
-        return numberToWords.toWords(parsedMinutes);
+    // Helper function for time display method 'words'
+    function formatMinutesForWordsDisplay(min: string) {
+        const parsedMinutes = parseInt(min, 10);
+
+        if (parsedMinutes === 0) {
+            return 'o\'clock';
+        } else if (parsedMinutes < 10) {
+            return `oh ${numberToWords.toWords(parsedMinutes)}`;
+        } else {
+            return numberToWords.toWords(parsedMinutes);
+        }
     }
 }
 
 
 // Helper functions for time display methods
-function toBinary(value) {
+function toBinary(value: string) {
     return parseInt(value, 10).toString(2);
 }
 
-function toOctal(value) {
+function toOctal(value: string) {
     return parseInt(value, 10).toString(8);
 }
 
-function toHexadecimal(value) {
+function toHexadecimal(value: string) {
     return parseInt(value, 10).toString(16);
 }
 
-function toHexatrigesimal(value) {
-    return parseInt(value, 10).toString(36);
+function toHexatrigesimal(value: string) {
+    return parseInt(value, 10).toString(32);
 }
 
-function toWords(value) {
-    return numberToWords.toWords(value);
+function toWords(value: string): string {
+    const num = parseFloat(value);
+    if (!isNaN(num) && isFinite(num)) {
+        return numberToWords.toWords(num);
+    } else {
+        return 'Invalid number';
+    }
 }
 
 // Unix timestamp functions
@@ -157,8 +175,8 @@ function updateDate() {
     const time = luxon.DateTime.now();
     dtdisplay.date.textContent = time.toFormat(dateFormat);
 
-    Array.from(menu.dateformselect.children).forEach((child) => {
-        if (child.value !== '') {
+    Array.from(menu.dateformselect.children).forEach((child: Element) => {
+        if (child instanceof HTMLOptionElement && child.value !== '') {
             child.textContent = time.toFormat(child.value);
         }
     });
@@ -166,24 +184,24 @@ function updateDate() {
 
 
 // Change tab favicon function
-function updateFavicon(hour) {
+function updateFavicon(hour: string) {
     doc.favicon.href = `./icons/clock-time-${hour}.svg`;
 }
 
 // Emoji block function
-function convertToEmojiBlock(number) {
+function convertToEmojiBlock(number: { toString: () => string; }) {
     const emojiBlocks = ['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
     const digits = number.toString().split('');
-    const emojiDigits = digits.map((digit) => emojiBlocks[parseInt(digit, 10)]);
+    const emojiDigits = digits.map((digit: string) => emojiBlocks[parseInt(digit, 10)]);
     return emojiDigits.join('');
 }
 
 // Roman numeral converter function
-function convertToRomanNumerals(number) {
-    if (isNaN(number))
-        return NaN;
+function convertToRomanNumerals(number: string | number): string {
+    if (isNaN(Number(number)))
+        return 'NaN';
     if (number === 0 || number === '00')
-        return number;
+        return String(number);
     let digits = String(+number).split(''),
         key = ['', 'C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM',
             '', 'X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC',
@@ -192,7 +210,7 @@ function convertToRomanNumerals(number) {
         roman = '',
         i = 3;
     while (i--)
-        roman = (key[+digits.pop() + (i * 10)] || '') + roman;
+        roman = (key[+digits.pop()! + (i * 10)] || '') + roman;
     return Array(+digits.join('') + 1).join('M') + roman;
 }
 

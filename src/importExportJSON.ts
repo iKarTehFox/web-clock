@@ -1,5 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getFirstElement } from './utils/dom-utils';
+import * as luxon from 'ts-luxon';
+import { menu, font } from './global';
+import { stopColorFade } from './background-color';
+
 function getSolidColorValue() {
-    const checkedColorInput = document.querySelector('input[name="preset-color-radio"]:checked');
+    const checkedColorInput = getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked');
     if (checkedColorInput) {
         const colorValue = checkedColorInput.dataset.color;
         return colorValue;
@@ -8,7 +14,7 @@ function getSolidColorValue() {
     }
 }
 
-function exportSettingsToJSON() {
+export function exportSettingsToJSON() {
     // Get time and set export timestamp
     const time = luxon.DateTime.now();
     const timeExported = time.toFormat('FFFF');
@@ -16,30 +22,30 @@ function exportSettingsToJSON() {
     // Get all settings
     const usersettings = {
         clockConfig: {
-            clockMode: document.querySelector('input[name="clock-mode-radio"]:checked').id,
+            clockMode: getFirstElement<HTMLInputElement>('input[name="clock-mode-radio"]:checked').id,
             clockDisplay: menu.timeMethodSelect.value,
-            secondsVis: document.querySelector('input[name="seconds-vis-radio"]:checked').id,
+            secondsVis: getFirstElement<HTMLInputElement>('input[name="seconds-vis-radio"]:checked').id,
             dateFormat: menu.dateformselect.value,
-            dateAlign: document.querySelector('input[name="date-position-radio"]:checked').id,
-            borderMode: document.querySelector('input[name="border-type-radio"]:checked').id,
+            dateAlign: getFirstElement<HTMLInputElement>('input[name="date-position-radio"]:checked').id,
+            borderMode: getFirstElement<HTMLInputElement>('input[name="border-type-radio"]:checked').id,
             borderStyle: menu.borderstyleselect.value,
-            secondsBarVis: document.querySelector('input[name="seconds-bar-radio"]:checked').id
+            secondsBarVis: getFirstElement<HTMLInputElement>('input[name="seconds-bar-radio"]:checked').id
         },
         fontConfig: {
             fontFamily: font.familysel.value,
-            fontStyle: document.querySelector('input[name="font-style-radio"]:checked').id,
-            fontWeight: document.querySelector('input[name="font-weight-radio"]:checked').id,
+            fontStyle: getFirstElement<HTMLInputElement>('input[name="font-style-radio"]:checked').id,
+            fontWeight: getFirstElement<HTMLInputElement>('input[name="font-weight-radio"]:checked').id,
             fontSize: font.sizesel.value,
             dropShadow: font.shadowrange.value
         },
         colorTheme: {
-            colorMode: document.querySelector('input[name="color-mode-radio"]:checked').id,
-            solidColor: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
-            textColorMode: document.querySelector('input[name="text-color-override-radio"]:checked').id,
-            textColorValue: (document.querySelector('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : '',
-            bgImage: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? document.body.style.backgroundImage : '',
-            bgImageSize: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : '',
-            bgImageBlur: (document.querySelector('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
+            colorMode: getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id,
+            solidColor: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
+            textColorMode: getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id,
+            textColorValue: (getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : '',
+            bgImage: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? document.body.style.backgroundImage : '',
+            bgImageSize: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : '',
+            bgImageBlur: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
         },
         exportTimestamp: timeExported,
         version: 6
@@ -61,13 +67,13 @@ function exportSettingsToJSON() {
 }
 
 // Helper function to process JSON settings
-function processJSONSettings(jsonText) {
+function processJSONSettings(jsonText: string) {
     try {
         const importedSettings = JSON.parse(jsonText);
 
         const validation = verifySettingsJSON(importedSettings);
         if (validation !== true) {
-            handleValidationFailure(validation);
+            handleValidationFailure(validation as ErrorDetails);
             return;
         }
 
@@ -81,24 +87,33 @@ function processJSONSettings(jsonText) {
 }
 
 // Function to handle file import
-function importSettingsFromJSON() {
+export function importSettingsFromJSON() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'application/json';
 
     input.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-
-        reader.onload = (e) => processJSONSettings(e.target.result);
-        reader.readAsText(file);
+        const target = e.target as HTMLInputElement; // Cast to HTMLInputElement
+        if (target.files && target.files.length > 0) {
+            const file = target.files[0];
+            const reader = new FileReader();
+    
+            reader.onload = (e) => {
+                const readerTarget = e.target as FileReader; // Cast to FileReader
+                if (typeof readerTarget.result === 'string') {
+                    processJSONSettings(readerTarget.result);
+                }
+            };
+            reader.readAsText(file);
+        }
     });
+    
 
     input.click();
 }
 
 // Function for manual JSON text input
-function manualJSONImport() {
+export function manualJSONImport() {
     const jsontext = menu.manualjsontextinput.value;
 
     if (jsontext) {
@@ -111,7 +126,7 @@ function manualJSONImport() {
 }
 
 // Import settings from a local JSON file
-function presetLocalJSON(filename) {
+export function presetLocalJSON(filename: string) {
     const url = `./assets/${filename}.json`;
 
     fetch(url)
@@ -127,36 +142,36 @@ function presetLocalJSON(filename) {
   
 }  
 
-function updateClockSettings(importedSettings) {
+function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: any; colorTheme: any; }) {
     // Update clockConfig settings
     const clockConfig = importedSettings.clockConfig;
-    document.querySelector(`input[name="clock-mode-radio"][id="${clockConfig.clockMode}"]`).checked = true;
+    getFirstElement<HTMLInputElement>(`input[name="clock-mode-radio"][id="${clockConfig.clockMode}"]`).checked = true;
     menu.timeMethodSelect.value = clockConfig.clockDisplay;
-    document.querySelector(`input[name="seconds-vis-radio"][id="${clockConfig.secondsVis}"]`).checked = true;
+    getFirstElement<HTMLInputElement>(`input[name="seconds-vis-radio"][id="${clockConfig.secondsVis}"]`).checked = true;
     menu.dateformselect.value = clockConfig.dateFormat;
-    document.querySelector(`input[name="date-position-radio"][id="${clockConfig.dateAlign}"]`).checked = true;
+    getFirstElement<HTMLInputElement>(`input[name="date-position-radio"][id="${clockConfig.dateAlign}"]`).checked = true;
     if (clockConfig.secondsBarVis === 'sbaN') {
-        document.querySelector(`input[name="border-type-radio"][id="${clockConfig.borderMode}"]`).checked = true;
+        getFirstElement<HTMLInputElement>(`input[name="border-type-radio"][id="${clockConfig.borderMode}"]`).checked = true;
     }
     menu.borderstyleselect.value = clockConfig.borderStyle;
     if (clockConfig.borderMode === 'btyD') {
-        document.querySelector(`input[name="seconds-bar-radio"][id="${clockConfig.secondsBarVis}"]`).checked = true;
+        getFirstElement<HTMLInputElement>(`input[name="seconds-bar-radio"][id="${clockConfig.secondsBarVis}"]`).checked = true;
     }
 
     // Update fontConfig settings
     const fontConfig = importedSettings.fontConfig;
     font.familysel.value = fontConfig.fontFamily;
-    document.querySelector(`input[name="font-style-radio"][id="${fontConfig.fontStyle}"]`).checked = true;
-    document.querySelector(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).checked = true;
+    getFirstElement<HTMLInputElement>(`input[name="font-style-radio"][id="${fontConfig.fontStyle}"]`).checked = true;
+    getFirstElement<HTMLInputElement>(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).checked = true;
     font.sizesel.value = fontConfig.fontSize;
     font.shadowrange.value = fontConfig.dropShadow;
 
     // Update colorTheme settings
     const colorTheme = importedSettings.colorTheme;
-    document.querySelector(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).checked = true;
+    getFirstElement<HTMLInputElement>(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).checked = true;
     if (colorTheme.colorMode === 'solidmode') {
-        document.querySelector(`input[name="preset-color-radio"][data-color="${colorTheme.solidColor}"]`).checked = true;
-        document.querySelector(`input[name="text-color-override-radio"][id="${colorTheme.textColorMode}"]`).checked = true;
+        getFirstElement<HTMLInputElement>(`input[name="preset-color-radio"][data-color="${colorTheme.solidColor}"]`).checked = true;
+        getFirstElement<HTMLInputElement>(`input[name="text-color-override-radio"][id="${colorTheme.textColorMode}"]`).checked = true;
         if (colorTheme.textColorMode === 'tcovO') {
             menu.textcolorinput.value = colorTheme.textColorValue;
         }
@@ -169,26 +184,26 @@ function updateClockSettings(importedSettings) {
     }
 
     // Trigger change events for updated elements
-    document.querySelector(`input[name="clock-mode-radio"][id="${clockConfig.clockMode}"]`).dispatchEvent(new Event('change'));
+    getFirstElement<HTMLInputElement>(`input[name="clock-mode-radio"][id="${clockConfig.clockMode}"]`).dispatchEvent(new Event('change'));
     menu.timeMethodSelect.dispatchEvent(new Event('change'));
-    document.querySelector(`input[name="seconds-vis-radio"][id="${clockConfig.secondsVis}"]`).dispatchEvent(new Event('change'));
+    getFirstElement<HTMLInputElement>(`input[name="seconds-vis-radio"][id="${clockConfig.secondsVis}"]`).dispatchEvent(new Event('change'));
     menu.dateformselect.dispatchEvent(new Event('change'));
-    document.querySelector(`input[name="date-position-radio"][id="${clockConfig.dateAlign}"]`).dispatchEvent(new Event('change'));
-    document.querySelector(`input[name="border-type-radio"][id="${clockConfig.borderMode}"]`).dispatchEvent(new Event('change'));
+    getFirstElement<HTMLInputElement>(`input[name="date-position-radio"][id="${clockConfig.dateAlign}"]`).dispatchEvent(new Event('change'));
+    getFirstElement<HTMLInputElement>(`input[name="border-type-radio"][id="${clockConfig.borderMode}"]`).dispatchEvent(new Event('change'));
     menu.borderstyleselect.dispatchEvent(new Event('change'));
-    document.querySelector(`input[name="seconds-bar-radio"][id="${clockConfig.secondsBarVis}"]`).dispatchEvent(new Event('change'));
+    getFirstElement<HTMLInputElement>(`input[name="seconds-bar-radio"][id="${clockConfig.secondsBarVis}"]`).dispatchEvent(new Event('change'));
 
     font.familysel.dispatchEvent(new Event('change'));
-    document.querySelector(`input[name="font-style-radio"][id="${fontConfig.fontStyle}"]`).dispatchEvent(new Event('change'));
-    document.querySelector(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).dispatchEvent(new Event('change'));
+    getFirstElement<HTMLInputElement>(`input[name="font-style-radio"][id="${fontConfig.fontStyle}"]`).dispatchEvent(new Event('change'));
+    getFirstElement<HTMLInputElement>(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).dispatchEvent(new Event('change'));
     font.sizesel.dispatchEvent(new Event('change'));
     font.shadowrange.dispatchEvent(new Event('input'));
 
     stopColorFade(); // Stop fade interval to avoid running interval twice if already running!!!
-    document.querySelector(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).dispatchEvent(new Event('change'));
+    getFirstElement<HTMLInputElement>(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).dispatchEvent(new Event('change'));
     if (colorTheme.colorMode === 'solidmode') {
-        document.querySelector('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
-        document.querySelector('input[name="text-color-override-radio"]:checked').dispatchEvent(new Event('change'));
+        getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
+        getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').dispatchEvent(new Event('change'));
         if (colorTheme.textColorMode === 'tcovO') {
             menu.textcolorinput.dispatchEvent(new Event('input'));
         }
@@ -200,7 +215,15 @@ function updateClockSettings(importedSettings) {
     }
 }
 
-function handleValidationFailure(errorDetails) {
+type ErrorType = 'missing' | 'invalid' | 'incomp';
+
+interface ErrorDetails {
+    type: ErrorType;
+    subkey: string;
+    value: string;
+}
+
+function handleValidationFailure(errorDetails: ErrorDetails) {
     const errorMsg = {
         'missing': `Missing subkeys: ${errorDetails.subkey}`,
         'invalid': `Invalid value of ${errorDetails.subkey}: ${errorDetails.value}`,
@@ -235,11 +258,11 @@ const valid = {
     Ver: [5, 6]
 };
 
-function containsValue(array, value) {
+function containsValue(array: string | any[], value: any) {
     return array.includes(value);
 }
 
-function verifySettingsJSON(jsonData) {
+function verifySettingsJSON(jsonData: { version: any; clockConfig: any; fontConfig: any; colorTheme: any; }) {
     const requiredKeys = ['clockConfig', 'fontConfig', 'colorTheme', 'version'];
 
     // Check if all required keys are present in the JSON object

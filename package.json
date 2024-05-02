@@ -1,27 +1,37 @@
 {
   "name": "web-clock",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Online digital clock web app with customizability in mind!",
-  "main": "main.js",
+  "main": "./src/index.ts",
   "scripts": {
-    "start": "electron-forge start",
+    "build": "webpack --mode=production --node-env=production",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "serve": "webpack serve"
   },
   "author": "iKarTehFox",
   "license": "MPL-2.0",
   "devDependencies": {
-    "@electron-forge/cli": "^7.4.0",
-    "@electron-forge/maker-deb": "^7.4.0",
-    "@electron-forge/maker-rpm": "^7.4.0",
-    "@electron-forge/maker-squirrel": "^7.4.0",
-    "@electron-forge/maker-zip": "^7.4.0",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
-    "@electron-forge/plugin-fuses": "^7.4.0",
-    "@electron/fuses": "^1.8.0",
-    "electron": "^30.0.0",
-    "eslint": "^8.57.0"
+    "@types/bootstrap": "^5.2.10",
+    "@types/luxon": "^3.4.2",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "@webpack-cli/generators": "^3.0.7",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^7.1.1",
+    "eslint": "^8.57.0",
+    "html-webpack-plugin": "^5.6.0",
+    "mini-css-extract-plugin": "^2.9.0",
+    "prettier": "^3.2.5",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.5",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4",
+    "workbox-webpack-plugin": "^7.1.0"
   },
   "repository": {
     "type": "git",
@@ -32,6 +42,8 @@
   },
   "homepage": "https://github.com/iKarTehFox/web-clock#readme",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "@types/body-parser": "^1.19.5",
+    "bootstrap": "^5.3.3",
+    "ts-luxon": "^4.5.2"
   }
 }

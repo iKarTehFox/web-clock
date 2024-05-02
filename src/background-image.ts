@@ -1,18 +1,28 @@
-function uploadBGImg() {
+import { doc, menu } from './global';
+
+export function uploadBGImg() {
     const input = document.createElement('input');
     const bodyElement = document.body;
     input.type = 'file';
     input.accept = 'image/*';
     
     input.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
+        // Asserting e.target as HTMLInputElement
+        const target = e.target as HTMLInputElement;
         
-        reader.onload = function() {
-            const imageUrl = reader.result;
-            bodyElement.style.backgroundImage = `url('${imageUrl}')`;
-        };
+        if (target && target.files && target.files.length > 0) {
+            const file = target.files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            
+            reader.onload = function() {
+                // Ensure the result is treated as a string
+                const imageUrl = reader.result as string;
+                bodyElement.style.backgroundImage = `url('${imageUrl}')`;
+            };
+        } else {
+            console.error('No file selected or input element is missing.');
+        }
     });
     
     input.click();

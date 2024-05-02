@@ -3,24 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.iconify.design https://api.unisvg.com https://api.simplesvg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline';">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
         <title>Online Web Clock</title>
-        <!-- CSS -->
-        <link href="./css/global.css" rel="stylesheet">
-        <link href="./css/fonts.css" rel="stylesheet">
-        <link href="./css/cdn.jsdelivr.net_npm_bootstrap@5.3.3_dist_css_bootstrap.min.css" rel="stylesheet">
-        <link href="./css/bootstrap-social.css" rel="stylesheet">
-        <!-- JS -->
-        <script src="./js/luxon.min.js"></script>
-        <script src="./js/cdn.jsdelivr.net_npm_bootstrap@5.3.3_dist_js_bootstrap.bundle.min.js"></script>
-        <script src="./js/code.iconify.design_iconify-icon_1.0.7_iconify-icon.min.js"></script>
-        <script src="./js/numberToWords.min.js"></script>
-        <script src="./js/global.js" defer></script>
-        <script src="./js/background-color.js" defer></script>
-        <script src="./js/background-image.js" defer></script>
-        <script src="./js/clock-new.js" defer></script>
-        <script src="./js/clock-color.js" defer></script>
-        <script src="./js/importExportJSON.js" defer></script>
         <!-- Favicon -->
         <link rel="icon" type="image/svg+xml" id="favicon" href="./icons/clock-time-12.svg">
     </head>
@@ -313,7 +297,7 @@
                                 <div class="form-group mt-2" id="bgImgGroup" style="display: none;">
                                     <hr>
                                     <h6 class="mb-1 mt-2">Background Image</h6>
-                                    <button type="button" class="btn btn-outline-primary" onClick="uploadBGImg()" id="bgImageUploadBtn">Upload image</button>
+                                    <button type="button" class="btn btn-outline-primary" onClick="bgImg.uploadBGImg()" id="bgImageUploadBtn">Upload image</button>
                                     <h6 class="mb-1 mt-2">Image Effects</h6>
                                     <label for="bgImageSizeSelect" class="form-label">Sizing:</label>
                                     <select class="form-select" id="bgImageSizeSelect">
@@ -367,7 +351,7 @@
                                 <p class="mb-2" style="font-weight: lighter;">Double click the screen to make menu button visible again</p>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Fullscreen mode</h6>
-                                <button id="close-button" class="btn btn-primary mb-2" onclick="toggleFullscreen()">
+                                <button id="close-button" class="btn btn-primary mb-2" onclick="wcGlobal.toggleFullscreen()">
                                     <iconify-icon icon="mdi:fullscreen" width="19" height="19" style="height: 15px;"></iconify-icon> Toggle View
                                 </button>
                             </div>
@@ -382,22 +366,22 @@
                         <div id="collapseIE" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body">
                                 <h6 class="mb-1">Import settings</h6>
-                                <button type="button" class="btn btn-outline-primary" onClick="importSettingsFromJSON()">Upload from JSON</button>
+                                <button type="button" class="btn btn-outline-primary" onClick="ieJSON.importSettingsFromJSON()">Upload from JSON</button>
                                 <p class="mb-1 mt-2">Or manually paste JSON settings instead:</p>
                                 <input class="form-control" type="text" placeholder="Paste in JSON here" data-bs-toggle="tooltip" aria-label="Manual JSON settings entry form" id="jsonImportTextarea">
                                 <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-outline-warning" id="jsonImportTextBtn" onClick="manualJSONImport()">Load settings</button>
+                                    <button type="button" class="btn btn-outline-warning" id="jsonImportTextBtn" onClick="ieJSON.manualJSONImport()">Load settings</button>
                                 </div>
                                 <hr>
                                 <h6 class="mb-1">Built-in presets</h6>
                                 <p class="mb-1 mt-2">Import from preset settings:</p>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Save yourself from burn-in with this preset!" onClick="presetLocalJSON('usdonlineclock-amoled-preset')">AMOLED theme</button>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Become a hacker with this green, digital binary clock! kinda..." onclick="presetLocalJSON('usdonlineclock-digitsbinary-preset')">Hacker Green</button>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Go minimal with this black on white, simple theme!" onclick="presetLocalJSON('usdonlineclock-minimallight-preset')">Minimalist Light</button>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="A personal favorite from iKarTehFox... me! :)" onClick="presetLocalJSON('usdonlineclock-devfavorite-preset')">Simple blue</button>
+                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Save yourself from burn-in with this preset!" onClick="ieJSON.presetLocalJSON('usdonlineclock-amoled-preset')">AMOLED theme</button>
+                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Become a hacker with this green, digital binary clock! kinda..." onclick="ieJSON.presetLocalJSON('usdonlineclock-digitsbinary-preset')">Hacker Green</button>
+                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Go minimal with this black on white, simple theme!" onclick="ieJSON.presetLocalJSON('usdonlineclock-minimallight-preset')">Minimalist Light</button>
+                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="A personal favorite from iKarTehFox... me! :)" onClick="ieJSON.presetLocalJSON('usdonlineclock-devfavorite-preset')">Simple blue</button>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Export settings</h6>
-                                <button type="button" class="btn btn-outline-secondary" onClick="exportSettingsToJSON()">Download JSON file</button>
+                                <button type="button" class="btn btn-outline-secondary" onClick="ieJSON.exportSettingsToJSON()">Download JSON file</button>
                                 <p class="mb-1 mt-2">Note: Display Options and custom font settings will not be exported.</p>
                             </div>
                         </div>
@@ -405,7 +389,10 @@
                     <p class="mb-1 mt-2">You've been here for:</p>
                     <p class="mb-0" id="time-duration"></p>
                     <hr>
-                    <span id="credit">By iKarTehFox, made possible with open-source projects <3</span>
+                    <span id="credit">
+                        Developed by iKarTehFox. Made possible with other open-source projects.<br>This app is licenced under the <a href="https://github.com/iKarTehFox/web-clock/blob/main/LICENSE" target="_blank">Mozilla Public License 2.0 (MPL-2.0)</a>.
+                    </span>
+                    <br>
                     <a type="button" class="btn btn-primary btn-social-icon btn-github" data-bs-toggle="tooltip" data-bs-custom-class="secondary-tooltip" data-bs-title="View on GitHub" href="https://github.com/ikartehfox/web-clock" target="_blank">
                         <p style="margin-top: -1.5px;"><iconify-icon inline icon="mdi:github"></iconify-icon></p>
                     </a>
@@ -413,12 +400,24 @@
             </div>
         </div>
         <div id="clock-container">
-            <center id="time-container">
+            <div id="time-container">
                 <span class="clock-part" id="hour-slot">00</span><span class="colon" id="colon1">:</span><span class="clock-part" id="minute-slot">00</span><span class="colon" id="colon2">:</span><span class="clock-part" id="second-slot">00</span><span id="indicator"></span>
                 <div id="seconds-progress-bar"></div>
-            </center>
+            </div>
             <p id="date"><noscript>JavaScript is disabled!</noscript></p>
         </div>
+        <!-- SW -->
+        <script>
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js').then(registration => {
+                  console.log('SW registered: ', registration);
+                }).catch(registrationError => {
+                  console.log('SW registration failed: ', registrationError);
+                });
+              });
+            }
+          </script>
     </body>
 </html>
 
