@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.iconify.design https://api.unisvg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval';">
         <title>Online Web Clock</title>
         <!-- Favicon -->
         <link rel="icon" type="image/svg+xml" id="favicon" href="./icons/clock-time-12.svg">
@@ -99,10 +99,10 @@
                                 </select>
                                 <h6 class="mb-1 mt-2">Seconds Bar Visibility</h6>
                                 <div class="btn-group" role="group" aria-label="Seconds bar visibility button group">
-                                    <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="none" id="sbaN" autocomplete="off" checked>
-                                    <label class="btn btn-outline-primary" for="sbaN">Hide</label>
                                     <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="block" id="sbaB" autocomplete="off">
                                     <label class="btn btn-outline-primary" for="sbaB">Show</label>
+                                    <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="none" id="sbaN" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="sbaN">Hide</label>
                                 </div>
                             </div>
                         </div>

@@ -3,6 +3,7 @@ import * as bootstrap from 'bootstrap';
 
 const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 const tooltipTriggerElArray = Array.from(tooltipTriggerList);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const tooltipList = tooltipTriggerElArray.map(tooltipTriggerEl => {
     return new bootstrap.Tooltip(tooltipTriggerEl); 
 });
@@ -81,6 +82,7 @@ const fontSizeOptions: Record<FontSizeKey, string> = {
 
 // Font style handler function
 function modifyFontStyle(type: string, value: string) {
+    const fontSize = value as FontSizeKey;
     switch (type) {
     case 'style':
         dtdisplay.ccontainer.style.fontStyle = value;
@@ -89,7 +91,6 @@ function modifyFontStyle(type: string, value: string) {
         dtdisplay.ccontainer.style.fontWeight = value;
         break;
     case 'size':
-        const fontSize = value as FontSizeKey;
         if (fontSize in fontSizeOptions) { // Check if the casted value is a valid key
             dtdisplay.ccontainer.style.fontSize = value;
             dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[fontSize];
@@ -368,5 +369,3 @@ menu.visCheckbox.addEventListener('change', function(e) {
         menu.obutton.style.display = 'none';
     }
 });
-
-
