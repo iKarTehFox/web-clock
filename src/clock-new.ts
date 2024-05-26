@@ -93,24 +93,35 @@ function updateTime() {
     };
 
     if (timeDisplayMethod in timeDisplayFunctions) {
-        if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec' || timeDisplayMethod === 'unixcountdown') {
+        if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
             // Handle Unix time functions separately as they do not take parameters
             const unixFunction = timeDisplayFunctions[timeDisplayMethod] as UnixTimeFunction;
             const unixTime = unixFunction(); // call the function without parameters
             dtdisplay.hourSlot.textContent = String(unixTime);
             dtdisplay.minuteSlot.textContent = '';
             dtdisplay.secondSlot.textContent = '';
-        } else {
-            // Handle regular time functions which expect a number parameter
-            const displayFunction = timeDisplayFunctions[timeDisplayMethod] as TimeFunction;
-            dtdisplay.hourSlot.textContent = displayFunction(hrs);
-            dtdisplay.minuteSlot.textContent = displayFunction(min);
-            dtdisplay.secondSlot.textContent = displayFunction(sec);
+
+            dtdisplay.indicatorSlot.textContent = '';
+            return;
+        } else if (timeDisplayMethod === 'unixcountdown') {
+            const secondsUntilY2K38 = 2147483647 - Math.floor(Date.now() / 1000);
+            dtdisplay.hourSlot.textContent = `${Math.floor(secondsUntilY2K38 / 3600)}h`;
+            dtdisplay.minuteSlot.textContent = `${Math.floor((secondsUntilY2K38 % 3600) / 60)}m`;
+            dtdisplay.secondSlot.textContent = `${secondsUntilY2K38 % 60}s`;
+
+            dtdisplay.indicatorSlot.textContent = '';
+            return;
         }
+        
+        dtdisplay.hourSlot.textContent = String(timeDisplayFunctions[timeDisplayMethod](hrs));
 
         if (timeDisplayMethod === 'words') {
             dtdisplay.minuteSlot.textContent = formatMinutesForWordsDisplay(min);
+        } else {
+            dtdisplay.minuteSlot.textContent = String(timeDisplayFunctions[timeDisplayMethod](min));
         }
+
+        dtdisplay.secondSlot.textContent = String(timeDisplayFunctions[timeDisplayMethod](sec));
 
     } else {
         dtdisplay.hourSlot.textContent = String(hrs);
@@ -202,12 +213,12 @@ function convertToRomanNumerals(number: string | number): string {
         return 'NaN';
     if (number === 0 || number === '00')
         return String(number);
-    let digits = String(+number).split(''),
-        key = ['', 'C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM',
-            '', 'X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC',
-            '', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'
-        ],
-        roman = '',
+    const digits = String(+number).split('');
+    const key = ['', 'C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM',
+        '', 'X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC',
+        '', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'
+    ];
+    let roman = '',
         i = 3;
     while (i--)
         roman = (key[+digits.pop()! + (i * 10)] || '') + roman;
