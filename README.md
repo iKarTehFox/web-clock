@@ -2,23 +2,22 @@
 [![forthebadge](https://forthebadge.com/images/badges/works-on-my-machine-1.svg)](https://forthebadge.com)
 
 # Online Web Clock
-> **An online digital clock web app built with Bootstrap 5.3.3, focused on customizability.  
+> **An online, digital clock web app built with Bootstrap 5.3.3, focused on customizability.  
 Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri**
 
-**Live Demo:** [View in your browser!](https://online-clock.pages.dev)
+**Website:** [View in your browser!](https://online-clock.pages.dev)
 
 **Need compatibility with older browsers?** [Check out the compatibility branch](https://github.com/iKarTehFox/web-clock/tree/compatibility)!
 
 ## Table of Contents
-- [Run/build Instructions](#instructions-to-run)
+- [Run/build Instructions](#build-instructions)
 - [Features](#features)
 - [Gallery](#gallery)
-- [Credits (Open Source)](#credits-open-source)
-- [Credits (Fonts)](#credits-fonts)
+- [Acknowledgements (OSS)](#acknowledgements-oss)
+- [Acknowledgements (Fonts)](#acknowledgements-fonts)
 
-## Instructions to Run
-### Run in browser
-This project is now bundled with Webpack. Electron support has been removed, but may return in the future.
+## Build Instructions
+Online Web Clock is bundled with Webpack. You can follow the steps below to build the project.
 
 #### Prerequisites
  - [Node.js](https://nodejs.org/)
@@ -77,7 +76,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
  ![A screenshot of the main web clock page with many customizations applied, such as custom font, background color, and date format.](/src/assets/images/customizable.png)  
  > Like this look? See [Importing/Exporting Settings](#importingexporting-settings) for the config!
  
-# Credits (Open Source)
+# Acknowledgements (OSS)
 - **Bootstrap** ([Link](https://getbootstrap.com/)): Licensed under MIT License
  
 - **Iconify** ([Link](https://iconify.design)): Licensed under MIT License
@@ -96,7 +95,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
 
 Each license can be found in the code's respective files or website.
  
-# Credits (Fonts)
+# Acknowledgements (Fonts)
  
 - **Dancing Script** ([Link](https://fonts.google.com/specimen/Dancing+Script)): Licensed under SIL Open Font License 1.1
 
