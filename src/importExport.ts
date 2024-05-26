@@ -3,6 +3,13 @@ import { getFirstElement } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, font } from './global';
 import { stopColorFade } from './background-color';
+import {
+    validateRequiredKeys,
+    validateVersion,
+    validateClockConfig,
+    validateFontConfig,
+    validateColorTheme
+} from './importValidation';
 
 function getSolidColorValue() {
     const checkedColorInput = getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked');
@@ -221,13 +228,16 @@ interface ErrorDetails {
     type: ErrorType;
     subkey: string;
     value: string;
+    expected: string;
+    unexpected: string;
 }
 
 function handleValidationFailure(errorDetails: ErrorDetails) {
     const errorMsg = {
         'missing': `Missing subkeys: ${errorDetails.subkey}`,
-        'invalid': `Invalid value of ${errorDetails.subkey}: ${errorDetails.value}`,
-        'incomp': `Incompatible values of ${errorDetails.subkey}: ${errorDetails.value}`
+        'invalid': `Invalid value of ${errorDetails.subkey}: ${errorDetails.value}\nExpected: ${errorDetails.expected}`,
+        'incomp': `Incompatible values of ${errorDetails.subkey}: ${errorDetails.value}`,
+        'unexpected': `Unexpected keys: ${errorDetails.subkey}`
     };
     
     const errorMessage = errorMsg[`${errorDetails.type}`] || 'Unknown validation failure';
@@ -258,209 +268,32 @@ const valid = {
     Ver: [5, 6]
 };
 
-function containsValue(array: string | any[], value: any) {
-    return array.includes(value);
-}
-
 function verifySettingsJSON(jsonData: { version: any; clockConfig: any; fontConfig: any; colorTheme: any; }) {
     const requiredKeys = ['clockConfig', 'fontConfig', 'colorTheme', 'version'];
 
-    // Check if all required keys are present in the JSON object
-    const missingKeys = requiredKeys.filter(key => !(key in jsonData));
-    if (missingKeys.length > 0) {
-        return {
-            type: 'missing',
-            subkey: missingKeys.join(', '),
-            value: ''
-        };
-    }
-    
-    // Perform validation for the "version" key
-    const version = jsonData.version;
-
-    if (!containsValue(valid.Ver, version)) {
-        return {
-            type: 'invalid',
-            subkey: 'version',
-            value: version
-        };
+    const requiredKeysValidation = validateRequiredKeys(jsonData, requiredKeys);
+    if (requiredKeysValidation) {
+        return requiredKeysValidation;
     }
 
-    // Perform validation for the "clockConfig" subkeys
-    const clockConfig = jsonData.clockConfig;
-
-    if (!containsValue(valid.CM, clockConfig.clockMode)) {
-        return {
-            type: 'invalid',
-            subkey: 'clockMode',
-            value: clockConfig.clockMode
-        };
+    const versionValidation = validateVersion(jsonData.version, valid.Ver);
+    if (versionValidation) {
+        return versionValidation;
     }
 
-    if (!containsValue(valid.CD, clockConfig.clockDisplay)) {
-        return {
-            type: 'invalid',
-            subkey: 'clockDisplay',
-            value: clockConfig.clockDisplay
-        };
+    const clockConfigValidation = validateClockConfig(jsonData.clockConfig, valid);
+    if (clockConfigValidation) {
+        return clockConfigValidation;
     }
 
-    if (!containsValue(valid.SV, clockConfig.secondsVis)) {
-        return {
-            type: 'invalid',
-            subkey: 'secondsVis',
-            value: clockConfig.secondsVis
-        };
+    const fontConfigValidation = validateFontConfig(jsonData.fontConfig, valid);
+    if (fontConfigValidation) {
+        return fontConfigValidation;
     }
 
-    if (!containsValue(valid.DF, clockConfig.dateFormat)) {
-        return {
-            type: 'invalid',
-            subkey: 'dateFormat',
-            value: clockConfig.dateFormat
-        };
-    }
-
-    if (!containsValue(valid.DA, clockConfig.dateAlign)) {
-        return {
-            type: 'invalid',
-            subkey: 'dateAlign',
-            value: clockConfig.dateAlign
-        };
-    }
-
-    if (!containsValue(valid.BM, clockConfig.borderMode)) {
-        return {
-            type: 'invalid',
-            subkey: 'borderMode',
-            value: clockConfig.borderMode
-        };
-    }
-
-    if (!containsValue(valid.BS, clockConfig.borderStyle)) {
-        return {
-            type: 'invalid',
-            subkey: 'borderStyle',
-            value: clockConfig.borderStyle
-        };
-    }
-
-    if (!containsValue(valid.SB, clockConfig.secondsBarVis)) {
-        return {
-            type: 'invalid',
-            subkey: 'secondsBarVis',
-            value: clockConfig.secondsBarVis
-        };
-    }
-
-    if ((clockConfig.borderMode === 'btyB' || clockConfig.borderMode === 'btyR') && clockConfig.secondsBarVis === 'sbaB') {
-        return {
-            type: 'invalid',
-            subkey: 'borderMode, secondsBarVis',
-            value: `${clockConfig.borderMode}, ${clockConfig.secondsBarVis}`
-        };
-    }
-
-    // Perform validation for the "fontConfig" subkeys
-    const fontConfig = jsonData.fontConfig;
-
-    if (!containsValue(valid.FF, fontConfig.fontFamily)) {
-        return {
-            type: 'invalid',
-            subkey: 'fontFamily',
-            value: fontConfig.fontFamily
-        };
-    }
-
-    if (!containsValue(valid.FS, fontConfig.fontStyle)) {
-        return {
-            type: 'invalid',
-            subkey: 'fontStyle',
-            value: fontConfig.fontStyle
-        };
-    }
-
-    if (!containsValue(valid.FW, fontConfig.fontWeight)) {
-        return {
-            type: 'invalid',
-            subkey: 'fontWeight',
-            value: fontConfig.fontWeight
-        };
-    }
-
-    if (!containsValue(valid.FZ, fontConfig.fontSize)) {
-        return {
-            type: 'invalid',
-            subkey: 'fontSize',
-            value: fontConfig.fontSize
-        };
-    }
-
-    if (!containsValue(valid.DS, fontConfig.dropShadow)) {
-        return {
-            type: 'invalid',
-            subkey: 'dropShadow',
-            value: fontConfig.dropShadow
-        };
-    }
-
-    // Perform validation for the "colorTheme" subkeys
-    const colorTheme = jsonData.colorTheme;
-
-    if (!containsValue(valid.CMo, colorTheme.colorMode)) {
-        return {
-            type: 'invalid',
-            subkey: 'colorMode',
-            value: colorTheme.colorMode
-        };
-    }
-
-    if (colorTheme.colorMode === 'solidmode' && !containsValue(valid.SC, colorTheme.solidColor)) {
-        return {
-            type: 'invalid',
-            subkey: 'solidColor',
-            value: colorTheme.solidColor
-        };
-    }
-
-    if (!containsValue(valid.TCM, colorTheme.textColorMode)) {
-        return {
-            type: 'invalid',
-            subkey: 'textColorMode',
-            value: colorTheme.textColorMode
-        };
-    }
-
-    if ((colorTheme.colorMode === 'fademode' && colorTheme.textColorMode === 'tcovO') || (colorTheme.colorMode === 'imgmode' && colorTheme.textColorMode === 'tcovD')) {
-        return {
-            type: 'incomp',
-            subkey: 'colorMode, textColorMode',
-            value: `${colorTheme.colorMode}, ${colorTheme.textColorMode}`
-        };
-    }
-    
-    if (!containsValue(valid.BIS, colorTheme.bgImageSize)) {
-        return {
-            type: 'invalid',
-            subkey: 'bgImageSize',
-            value: colorTheme.bgImageSize
-        };
-    }
-    
-    if (!containsValue(valid.BIB, colorTheme.bgImageBlur)) {
-        return {
-            type: 'invalid',
-            subkey: 'bgImageBlur',
-            value: colorTheme.bgImageBlur
-        };
-    }
-    
-    if (colorTheme.bgImage && !colorTheme.bgImage.startsWith('url("data:image')) {
-        return {
-            type: 'invalid',
-            subkey: 'bgImage',
-            value: 'Value must be type "data:image/*"'
-        };
+    const colorThemeValidation = validateColorTheme(jsonData.colorTheme, valid);
+    if (colorThemeValidation) {
+        return colorThemeValidation;
     }
 
     return true;

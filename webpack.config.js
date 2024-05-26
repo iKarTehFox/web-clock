@@ -1,5 +1,4 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
-
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -7,17 +6,18 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV == 'production';
-
-
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
 
-
-
 const config = {
-    entry: './src/index.ts',
+    entry: {
+        main: './src/index.ts',
+        styles: './src/css/styles.ts',
+        presets: './src/assets/presets.ts',
+        icons: './src/icons/icons.ts',
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         assetModuleFilename: 'assets/[hash][ext][query]'
     },
     plugins: [
@@ -43,7 +43,7 @@ const config = {
             },
             {
                 test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, 'css-loader'], // Processes CSS files
+                use: [stylesHandler, 'css-loader'], // Processes CSS files
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
@@ -66,9 +66,6 @@ const config = {
                     filename: 'assets/[name][ext][query]' // This places JSON presets files in an `assets` folder
                 }
             }
-
-            // Add your rules for custom modules here
-            // Learn more about loaders from https://webpack.js.org/loaders/
         ],
     },
     resolve: {
@@ -79,17 +76,13 @@ const config = {
 module.exports = () => {
     if (isProduction) {
         config.mode = 'production';
-        
         config.plugins.push(new MiniCssExtractPlugin());
-        
-        
         config.plugins.push(new WorkboxWebpackPlugin.GenerateSW({
             // these options encourage the ServiceWorkers to get in there fast
             // and not allow any straggling "old" SWs to hang around
             clientsClaim: true,
             skipWaiting: true,
         }));
-        
     } else {
         config.mode = 'development';
     }
