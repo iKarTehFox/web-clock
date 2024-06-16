@@ -55,9 +55,12 @@ function updateTime() {
     const ind = cMode === '0' ? time.toFormat('a') : '';
 
     if (menu.titlevischeckbox.checked) {
+        updateFavicon(time.toFormat('h'));
         document.title = `Time: ${hrs}:${min}:${sec} ${ind}`;
-    } else if (document.title !== 'Online Web Clock') {
+    } else if (document.title !== 'Online Web Clock' || !doc.favicon.href.endsWith('/icons/clock-time-3.svg')) {
+        updateFavicon('3');
         document.title = 'Online Web Clock';
+        if (menu.debugcheckbox.checked) {console.log('DEBUG - Title and favicon reset...');}
     }
 
     // Seconds progress bar
@@ -267,11 +270,6 @@ function startClock() {
     }, timeToNextSecond);
 }
 startClock();
-
-setInterval(function() {
-    const time = luxon.DateTime.now(); // and again...
-    updateFavicon(time.toFormat('h'));
-}, 25000);
 
 setInterval(function() {
     updateDate();
