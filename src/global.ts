@@ -21,7 +21,9 @@ export const menu = {
     secondsbarradio: getElements<HTMLInputElement>('input[name="seconds-bar-radio"]'),
     datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
     themeradio: getElements<HTMLInputElement>('input[name="menu-theme-radio"]'),
-    visCheckbox: getElement<HTMLInputElement>('menuButtonVisible'),
+    menubuttonvischeckbox: getElement<HTMLInputElement>('menuButtonVisible'),
+    titlevischeckbox: getElement<HTMLInputElement>('menuTabTitleVisible'),
+    debugcheckbox: getElement<HTMLInputElement>('debugMode'),
     options: getElement<HTMLDivElement>('menu-options'),
     obutton: getElement<HTMLButtonElement>('open-button'),
     cbutton: getElement<HTMLButtonElement>('close-button'),
@@ -96,14 +98,14 @@ function modifyFontStyle(type: string, value: string) {
             dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[fontSize];
             dtdisplay.date.style.fontSize = fontSizeOptions[fontSize];
         } else {
-            console.error(`Invalid font size: ${value}`);
+            console.error(`ERROR - Invalid font size: ${value}`);
         }
         break;
     case 'family':
         dtdisplay.ccontainer.style.fontFamily = value;
         break;
     default:
-        console.error(`Invalid font modification type: ${type}`);
+        console.error(`ERROR - Invalid font modification type: ${type}`);
         break;
     }
 }
@@ -247,7 +249,7 @@ menu.bordertyperadio.forEach((radio) => {
             dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
             break;
         default:
-            console.error(`Invalid border type: ${value}`);
+            console.error(`ERROR - Invalid border type: ${value}`);
             break;
         }
     });
@@ -290,7 +292,7 @@ function toggleMenuVisibility(show: boolean) {
     } else {
         menu.options.classList.remove('menu-options-show');
         elementDisplay(menu.cbutton, false);
-        if (menu.visCheckbox.checked) {
+        if (menu.menubuttonvischeckbox.checked) {
             elementDisplay(menu.obutton, true);
         } else {
             elementDisplay(menu.obutton, false);
@@ -321,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('dblclick', function(e) {
     if (!menu.options.contains(e.target as Node) && !menu.obutton.contains(e.target as Node) && !menu.cbutton.contains(e.target as Node)) {
         elementDisplay(menu.obutton, true);
-        menu.visCheckbox.checked = true;
+        menu.menubuttonvischeckbox.checked = true;
     }
 });
 
@@ -358,8 +360,8 @@ export function toggleFullscreen() {
     }
 }
 
-menu.visCheckbox.addEventListener('change', function(e) {
-    if (menu.visCheckbox.checked) {
+menu.menubuttonvischeckbox.addEventListener('change', function(e) {
+    if (menu.menubuttonvischeckbox.checked) {
         // Show the menu button
         if (!menu.options.contains(e.target as Node) && !menu.obutton.contains(e.target as Node) && !menu.cbutton.contains(e.target as Node)) {
             menu.obutton.style.display = 'block';

@@ -1,4 +1,7 @@
+import { menu } from './global';
+
 function containsValue(array: string | any[], value: any) {
+    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Checking if array ${array} contains value: ${value}`);}
     return array.includes(value);
 }
 

@@ -21,7 +21,7 @@ export function uploadBGImg() {
                 bodyElement.style.backgroundImage = `url('${imageUrl}')`;
             };
         } else {
-            console.error('No file selected or input element is missing.');
+            console.error('ERROR - No file selected or input element is missing.');
         }
     });
     
@@ -43,7 +43,7 @@ menu.imagesizeselect.addEventListener('change', () => {
         bodyElement.style.backgroundSize = '100vw 100vh';
         break;
     default:
-        console.error(`Unsupported background size value: ${value}`);
+        console.error(`ERROR - Unsupported background size value: ${value}`);
         break;
     }
 });

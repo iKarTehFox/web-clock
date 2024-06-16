@@ -54,7 +54,11 @@ function updateTime() {
     const sec = time.toFormat('ss');
     const ind = cMode === '0' ? time.toFormat('a') : '';
 
-    document.title = `Time: ${hrs}:${min}:${sec} ${ind}`;
+    if (menu.titlevischeckbox.checked) {
+        document.title = `Time: ${hrs}:${min}:${sec} ${ind}`;
+    } else if (document.title !== 'Online Web Clock') {
+        document.title = 'Online Web Clock';
+    }
 
     // Seconds progress bar
     const secBarWidth = (Number(sec) / 59) * 100;
@@ -225,22 +229,51 @@ function convertToRomanNumerals(number: string | number): string {
     return Array(+digits.join('') + 1).join('M') + roman;
 }
 
-// Update on load, then start intervals
+// Initial update, then start intervals
 const time = luxon.DateTime.now();
 updateTime();
 updateDate();
 updateFavicon(time.toFormat('h'));
 
+// Sync clock to system time function
+function startClock() {
+    const now = luxon.DateTime.now();
+    const timeToNextSecond = 1000 - now.toMillis() % 1000;
+
+    setTimeout(() => {
+        updateTime();
+        updatePageDuration();
+
+        // Start the regular interval updates
+        let lastUpdateTime = Date.now();
+
+        const interval = setInterval(() => {
+            updateTime();
+            updatePageDuration();
+            if (menu.debugcheckbox.checked) {console.log('DEBUG - Time and page duration updated...');}
+
+            // Correct the interval drift
+            const now = Date.now();
+            const elapsed = now - lastUpdateTime;
+            lastUpdateTime = now;
+
+            const drift = elapsed - 1000;
+            if (Math.abs(drift) > 50) {
+                if (menu.debugcheckbox.checked) {console.log(`DEBUG - Time drift detected: ${drift}ms.`);}
+                clearInterval(interval);
+                setTimeout(startClock, 1000 - drift);
+            }
+        }, 1000);
+    }, timeToNextSecond);
+}
+startClock();
+
 setInterval(function() {
-    const time = luxon.DateTime.now();
+    const time = luxon.DateTime.now(); // and again...
     updateFavicon(time.toFormat('h'));
 }, 25000);
 
 setInterval(function() {
-    updateTime();
-    updatePageDuration();
-}, 250);
-
-setInterval(function() {
     updateDate();
-}, 5000);
+    if (menu.debugcheckbox.checked) {console.log('DEBUG - Date updated...');}
+}, 15000);

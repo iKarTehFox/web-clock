@@ -85,10 +85,10 @@ function processJSONSettings(jsonText: string) {
         }
 
         updateClockSettings(importedSettings);
-        console.log('Settings successfully loaded!');
+        if (menu.debugcheckbox.checked) {console.log('DEBUG - Settings successfully loaded!');}
         alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);
     } catch (error) {
-        console.error('Error processing settings:', error);
+        console.error('ERROR - Error processing settings:', error);
         alert('Invalid settings file. Please make sure the file contains valid JSON.');
     }
 }
@@ -128,7 +128,7 @@ export function manualJSONImport() {
         // Clear text field after completion
         menu.manualjsontextinput.value = '';
     } else {
-        console.log('No settings were provided or the JSON data could not be read.');
+        if (menu.debugcheckbox.checked) {console.log('DEBUG - No settings were provided or the JSON data could not be read.');}
     }
 }
 
@@ -139,11 +139,11 @@ export function presetLocalJSON(filename: string) {
     fetch(url)
         .then(response => response.text())
         .then(json => {
-            console.log(`Attempting to load settings from preset '${filename}'...`);
+            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Attempting to load settings from preset '${filename}'...`);}
             processJSONSettings(json); 
         })
         .catch(error => {
-            console.error('Error fetching local settings file:', error);
+            console.error('ERROR - Error fetching local settings file:', error);
             alert('Could not fetch local settings file. Please check the filename and ensure the file exists.');
         });
   
@@ -241,7 +241,7 @@ function handleValidationFailure(errorDetails: ErrorDetails) {
     };
     
     const errorMessage = errorMsg[`${errorDetails.type}`] || 'Unknown validation failure';
-    console.error(errorMessage);
+    console.error('ERROR - ' + errorMessage);
     alert(`Error loading settings from imported file.\n\n${errorMessage}\n\nIf this is a version error, please export a new settings file as settings may have been updated! If you need further assistance, please post an issue on GitHub.`);
 }
 

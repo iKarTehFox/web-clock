@@ -55,6 +55,7 @@ function getLuminance(color: string): number {
 
     // Calculate the relative luminance using the sRGB color space formula
     const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    
+    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Luminance for ${color}: ${luminance}`);}
+
     return luminance;
 }
