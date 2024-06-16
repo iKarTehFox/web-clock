@@ -44,7 +44,7 @@ menu.clockmoderadio.forEach((radio) => {
 // Date format selector listener
 menu.dateformselect.addEventListener('change', function() {
     dateFormat = menu.dateformselect.value;
-    updateTime();
+    updateDate();
 });
 
 function updateTime() {
