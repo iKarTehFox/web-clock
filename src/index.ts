@@ -7,6 +7,7 @@ import './background-color';
 import './numberToWords.min';
 import './clock-new';
 import './clock-color';
+import { applyURLParams } from './utils/url-params';
 
 // Export some functions globally for HTML
 declare global {
@@ -20,3 +21,8 @@ declare global {
 window.ieJSON = ieJSON;
 window.bgImg = bgImg;
 window.wcGlobal = wcGlobal;
+
+// Functions to run when DOM has loaded
+window.addEventListener('DOMContentLoaded', () => {
+    applyURLParams();
+});

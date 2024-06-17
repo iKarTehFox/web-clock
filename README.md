@@ -12,6 +12,7 @@ Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri**
 ## Table of Contents
 - [Run/build Instructions](#build-instructions)
 - [Features](#features)
+  - [URL Parameters](#url-parameters)
 - [Gallery](#gallery)
 - [Acknowledgements (OSS)](#acknowledgements-oss)
 - [Acknowledgements (Fonts)](#acknowledgements-fonts)
@@ -64,8 +65,17 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
    - Imported JSON files and settings are verified before applying.
 
  Try out my [personal config](/src/assets/usdonlineclock-preset.json)!
-### Page Duration
- Page duration indicator on the menu shows time spent staring at and customizing the clock...
+### URL Parameters
+In the URL bar, you can pass the following parameters:  
+ 1. **debug=true**: Enables debug logging after the page has loaded
+ 2. **darkMode=true**: Sets the menu theme to Dark
+ 3. **menuVis=false**: Hides the menu button
+ 4. **tabTitle=false**: Disables showing the current time in the tab title
+ 5. **preset=\<filename\>**: Loads a JSON preset with the filename \<filename\> from the `/src/assets` directory.
+
+ For instance, you can [visit](https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=usdonlineclock-amoled-preset) the following URL, `https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=usdonlineclock-amoled-preset` to load with the dark mode menu theme **enabled**, the menu button **hidden**, the tab title **disabled**, and the preset `usdonlineclock-amoled-preset` applied.
+
+ With this in mind, you can bookmark the URL with the parameters you want, and it will load the page with those settings every time!
  
 # Gallery
 ### Preview of the page  

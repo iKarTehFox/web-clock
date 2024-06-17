@@ -74,7 +74,7 @@ export function exportSettingsToJSON() {
 }
 
 // Helper function to process JSON settings
-function processJSONSettings(jsonText: string) {
+function processJSONSettings(jsonText: string, alertConfirmation: boolean = true) {
     try {
         const importedSettings = JSON.parse(jsonText);
 
@@ -86,7 +86,7 @@ function processJSONSettings(jsonText: string) {
 
         updateClockSettings(importedSettings);
         if (menu.debugcheckbox.checked) {console.log('DEBUG - Settings successfully loaded!');}
-        alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);
+        if (alertConfirmation === true) {alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);}
     } catch (error) {
         console.error('ERROR - Error processing settings:', error);
         alert('Invalid settings file. Please make sure the file contains valid JSON.');
@@ -133,14 +133,14 @@ export function manualJSONImport() {
 }
 
 // Import settings from a local JSON file
-export function presetLocalJSON(filename: string) {
+export function presetLocalJSON(filename: string, alertConfirmation: boolean = true) {
     const url = `./assets/${filename}.json`;
 
     fetch(url)
         .then(response => response.text())
         .then(json => {
             if (menu.debugcheckbox.checked) {console.log(`DEBUG - Attempting to load settings from preset '${filename}'...`);}
-            processJSONSettings(json); 
+            processJSONSettings(json, alertConfirmation);
         })
         .catch(error => {
             console.error('ERROR - Error fetching local settings file:', error);
