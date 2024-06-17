@@ -19,6 +19,7 @@ export function uploadBGImg() {
                 // Ensure the result is treated as a string
                 const imageUrl = reader.result as string;
                 bodyElement.style.backgroundImage = `url('${imageUrl}')`;
+                if (menu.debugcheckbox.checked) {console.log('DEBUG - Background image set.');}
             };
         } else {
             console.error('ERROR - No file selected or input element is missing.');
@@ -35,12 +36,15 @@ menu.imagesizeselect.addEventListener('change', () => {
     switch (value) {
     case 'auto':
         bodyElement.style.backgroundSize = value;
+        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Image sizing set to ${value}`);}
         break;
     case 'cover':
         bodyElement.style.backgroundSize = value;
+        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Image sizing set to ${value}`);}
         break;
     case 'stretch':
         bodyElement.style.backgroundSize = '100vw 100vh';
+        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Image sizing set to ${value}`);}
         break;
     default:
         console.error(`ERROR - Unsupported background size value: ${value}`);
@@ -49,6 +53,8 @@ menu.imagesizeselect.addEventListener('change', () => {
 });
 
 menu.imageblurrange.addEventListener('input', () => {
-    doc.blurpanel.style.backdropFilter = (`blur(${menu.imageblurrange.value}px)`);
-    menu.imageblurlabel.textContent = `Image Blur: ${menu.imageblurrange.value}px`;
+    const blurValue = menu.imageblurrange.value;
+    doc.blurpanel.style.backdropFilter = (`blur(${blurValue}px)`);
+    menu.imageblurlabel.textContent = `Image Blur: ${blurValue}px`;
+    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Image blur set to: ${blurValue}px`);}
 });

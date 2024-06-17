@@ -38,6 +38,7 @@ menu.clockmoderadio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = String(radio.dataset.value);
         cMode = value;
+        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Clock mode set to: ${value}`);}
     });
 });
 
@@ -45,6 +46,7 @@ menu.clockmoderadio.forEach((radio) => {
 menu.dateformselect.addEventListener('change', function() {
     dateFormat = menu.dateformselect.value;
     updateDate();
+    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Date format set to: ${menu.dateformselect.value}`);}
 });
 
 function updateTime() {
@@ -239,7 +241,24 @@ updateDate();
 updateFavicon(time.toFormat('h'));
 
 // Sync clock to system time function
+let clockInterval: NodeJS.Timeout | null = null; // Variable to store the interval ID
+
+// Function to start the clock based on the selected method
 function startClock() {
+    // Clear any existing interval
+    if (clockInterval) {
+        clearInterval(clockInterval);
+    }
+
+    if (menu.legacyrefreshcheckbox.checked) {
+        startOldClock();
+    } else {
+        startNewClock();
+    }
+}
+
+// Function to start the new clock method
+function startNewClock() {
     const now = luxon.DateTime.now();
     const timeToNextSecond = 1000 - now.toMillis() % 1000;
 
@@ -250,10 +269,12 @@ function startClock() {
         // Start the regular interval updates
         let lastUpdateTime = Date.now();
 
-        const interval = setInterval(() => {
+        clockInterval = setInterval(() => {
             updateTime();
             updatePageDuration();
-            if (menu.debugcheckbox.checked) {console.log('DEBUG - Time and page duration updated...');}
+            if (menu.debugcheckbox.checked) {
+                console.log('DEBUG - Time and page duration updated...');
+            }
 
             // Correct the interval drift
             const now = Date.now();
@@ -262,13 +283,30 @@ function startClock() {
 
             const drift = elapsed - 1000;
             if (Math.abs(drift) > 50) {
-                if (menu.debugcheckbox.checked) {console.log(`DEBUG - Time drift detected: ${drift}ms.`);}
-                clearInterval(interval);
-                setTimeout(startClock, 1000 - drift);
+                if (menu.debugcheckbox.checked) {
+                    console.log(`DEBUG - Time drift detected: ${drift}ms.`);
+                }
+                clearInterval(clockInterval!);
+                setTimeout(startNewClock, 1000 - drift);
             }
         }, 1000);
     }, timeToNextSecond);
 }
+
+// Function to start the old clock method
+function startOldClock() {
+    clockInterval = setInterval(() => {
+        updateTime();
+        updatePageDuration();
+        if (menu.debugcheckbox.checked) {
+            console.log('DEBUG - Time and page duration updated (Legacy method)...');
+        }
+    }, 250) as unknown as NodeJS.Timeout;
+}
+
+// Add an event listener to the select element to detect changes
+menu.legacyrefreshcheckbox.addEventListener('change', startClock);
+
 startClock();
 
 setInterval(function() {

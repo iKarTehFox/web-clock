@@ -3,6 +3,7 @@ import { menu, dtdisplay } from './global';
 let fadeIntervalID: NodeJS.Timeout;
 
 function startColorFade() {
+    if (menu.debugcheckbox.checked) {console.log('DEBUG - Color fade started');}
     const colors = ['#FFC0CB', '#FFD700', '#7FFFD4', '#FFA500', '#9370DB', '#00FFFF'];
     let currentIndex = 0;
     const bodyElement = document.body;
@@ -14,11 +15,13 @@ function startColorFade() {
         currentIndex = (currentIndex + 1) % colors.length;
         bodyElement.style.backgroundColor = colors[currentIndex];
         menu.colorbadge.textContent = colors[currentIndex];
+        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Set background color to ${colors[currentIndex]}`);}
     }, 3000);
 }
 
 export function stopColorFade() {
     clearInterval(fadeIntervalID);
+    if (menu.debugcheckbox.checked) {console.log('DEBUG - Color fade stopped');}
 }
 
 // Color mode listener
@@ -32,6 +35,7 @@ menu.colormoderadio.forEach(radio => {
         
         if (colorMode === 'fademode') {
             startColorFade();
+            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Color mode set to ${colorMode}`);}
             menu.presetcolors.forEach((radio) => {
                 radio.disabled = true;
                 radio.checked = false;
@@ -52,6 +56,7 @@ menu.colormoderadio.forEach(radio => {
             menu.imagegroup.style.display = 'none';
         } else if (colorMode === 'solidmode') {
             stopColorFade();
+            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Color mode set to ${colorMode}`);}
             menu.presetcolors.forEach((radio) => {
                 radio.disabled = false;
             });
@@ -67,6 +72,7 @@ menu.colormoderadio.forEach(radio => {
             menu.imagegroup.style.display = 'none';
         } else if (colorMode === 'imgmode') {
             stopColorFade();
+            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Color mode set to ${colorMode}`);}
             menu.presetcolors.forEach((radio) => {
                 radio.disabled = true;
                 radio.checked = false;
@@ -98,6 +104,7 @@ menu.presetcolors.forEach((radio) => {
         const selectedColor = String(radio.getAttribute('data-color'));
         document.body.style.backgroundColor = selectedColor;
         menu.colorbadge.textContent = selectedColor;
+        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Preset color changed to ${selectedColor}`);}
     });
 });
 

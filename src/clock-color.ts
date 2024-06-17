@@ -16,17 +16,21 @@ menu.textcoloroverrideradio.forEach((radio) => {
                     dtdisplay.secondsBar.style.backgroundColor = '#212529';
                 }
             }
+            if (menu.debugcheckbox.checked) {console.log('DEBUG - Text color override disabled');}
         } else {
             tcoO = 1;
             menu.textcolorinput.disabled = false;
             menu.textcolorinput.dispatchEvent(new Event('input'));
+            if (menu.debugcheckbox.checked) {console.log('DEBUG - Text color override enabled');}
         }
     });
 });
 
 menu.textcolorinput.addEventListener('input', function() {
-    dtdisplay.ccontainer.style.color = this.value;
-    dtdisplay.secondsBar.style.backgroundColor = this.value;
+    const color = menu.textcolorinput.value;
+    dtdisplay.ccontainer.style.color = color;
+    dtdisplay.secondsBar.style.backgroundColor = color;
+    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Text color override: ${color}`);}
 });
 
 // Preset color buttons listener
