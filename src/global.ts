@@ -303,12 +303,12 @@ export function elementDisplay(htmlobj: HTMLElement, isVisible: boolean) {
 
 function toggleMenuVisibility(show: boolean) {
     if (show) {
-        menu.options.classList.add('menu-options-show');
+        menu.options.className = 'menu-options-show';
         elementDisplay(menu.cbutton, true);
         elementDisplay(menu.obutton, false);
         if (menu.debugcheckbox.checked) {console.log('DEBUG - Menu panel opened');}
     } else {
-        menu.options.classList.remove('menu-options-show');
+        menu.options.className = 'menu-options-fade';
         elementDisplay(menu.cbutton, false);
         if (menu.menubuttonvischeckbox.checked) {
             elementDisplay(menu.obutton, true);
@@ -332,10 +332,17 @@ menu.cbutton.addEventListener('click', function() {
 // Click outside to close menu
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
-        if (!menu.options.contains((e.target as Node)) && !menu.obutton.contains((e.target as Node)) && !menu.cbutton.contains((e.target as Node))) {
+        if (!menu.options.contains((e.target as Node)) && !menu.obutton.contains((e.target as Node)) && !menu.cbutton.contains((e.target as Node)) && !menu.options.classList.contains('menu-options-fade') && !menu.options.classList.contains('menu-options-initial')) {
             toggleMenuVisibility(false);
         }
     });
+});
+
+// Esc down to close menu
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && !menu.options.classList.contains('menu-options-fade') && !menu.options.classList.contains('menu-options-initial')) {
+        toggleMenuVisibility(false);
+    }
 });
 
 // Menu button visibility on double click

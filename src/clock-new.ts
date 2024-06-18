@@ -7,13 +7,9 @@ let dateFormat = 'D';
 let timeDisplayMethod: string;
 
 menu.timeMethodSelect.addEventListener('change', () => {
-    // Get the selected value from the select element
     const selectedValue = menu.timeMethodSelect.value as unknown as number;
-
-    // Update the timeDisplayMethod variable with the selected value
     timeDisplayMethod = String(selectedValue);
-
-    // Update the time display using updateTime()
+    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Time display method set to: ${selectedValue}`);}
     updateTime();
 });
 
@@ -39,14 +35,15 @@ menu.clockmoderadio.forEach((radio) => {
         const value = String(radio.dataset.value);
         cMode = value;
         if (menu.debugcheckbox.checked) {console.log(`DEBUG - Clock mode set to: ${value}`);}
+        updateTime();
     });
 });
 
 // Date format selector listener
 menu.dateformselect.addEventListener('change', function() {
     dateFormat = menu.dateformselect.value;
-    updateDate();
     if (menu.debugcheckbox.checked) {console.log(`DEBUG - Date format set to: ${menu.dateformselect.value}`);}
+    updateDate();
 });
 
 function updateTime() {
@@ -67,7 +64,6 @@ function updateTime() {
 
     // Seconds progress bar
     const secBarWidth = (Number(sec) / 59) * 100;
-
     dtdisplay.secondsBar.style.width = `${secBarWidth}%`;
 
     // Time display methods

@@ -36,15 +36,15 @@ menu.imagesizeselect.addEventListener('change', () => {
     switch (value) {
     case 'auto':
         bodyElement.style.backgroundSize = value;
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Image sizing set to ${value}`);}
+        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Image sizing set to: ${value}`);}
         break;
     case 'cover':
         bodyElement.style.backgroundSize = value;
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Image sizing set to ${value}`);}
+        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Image sizing set to: ${value}`);}
         break;
     case 'stretch':
         bodyElement.style.backgroundSize = '100vw 100vh';
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Image sizing set to ${value}`);}
+        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Image sizing set to: ${value}`);}
         break;
     default:
         console.error(`ERROR - Unsupported background size value: ${value}`);

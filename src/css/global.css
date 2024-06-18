@@ -38,15 +38,11 @@ body {
     top: 10px;
     right: 10px;
     z-index: 1;
-}
-
-.menu-options-hide {
-    display: none;
-}
-
-.menu-options-show {
-    border-radius: 10px;
     display: block;
+}
+
+.menu-options-initial {
+    border-radius: 10px;
     position: absolute;
     top: 40px;
     right: 0;
@@ -57,6 +53,42 @@ body {
     max-width: 15vw;
     min-width: 260px;
     box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.menu-options-fade {
+    border-radius: 10px;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #ffffff;
+    padding: 10px;
+    max-height: 75vh;
+    overflow: auto;
+    max-width: 15vw;
+    min-width: 260px;
+    box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.menu-options-show {
+    border-radius: 10px;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #ffffff;
+    padding: 10px;
+    max-height: 75vh;
+    overflow: auto;
+    max-width: 15vw;
+    min-width: 260px;
+    box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .color-block {

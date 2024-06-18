@@ -144,7 +144,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
             return response.text();
         })
         .then(json => {
-            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Attempting to load settings from preset '${filename}'...`);}
+            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Attempting to load settings from preset: '${filename}'...`);}
             processJSONSettings(json, alertConfirmation);
         })
         .catch(error => {
