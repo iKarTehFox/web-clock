@@ -32,23 +32,6 @@ export function applyURLParams() {
     // Presets
     if (urlParams.get('preset') !== null) {
         const preset = urlParams.get('preset') as string;
-        switch (preset) {
-        case 'usdonlineclock-amoled-preset':
-            presetLocalJSON(preset, false);
-            break;
-        case 'usdonlineclock-digitsbinary-preset':
-            presetLocalJSON(preset, false);
-            break;
-        case 'usdonlineclock-minimallight-preset':
-            presetLocalJSON(preset, false);
-            break;
-        case 'usdonlineclock-devfavorite-preset':
-            presetLocalJSON(preset, false);
-            break;
-        default:
-            console.error(`ERROR - Invalid preset in URL parameters: ${preset}`);
-            alert('Invalid preset in URL parameters. Please check the URL parameters and try again.');
-            break;
-        }
+        presetLocalJSON(preset);
     }
 }

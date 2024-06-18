@@ -67,7 +67,7 @@ export function exportSettingsToJSON() {
     // Initiate download
     const downloadLink = document.createElement('a');
     downloadLink.href = url;
-    downloadLink.download = `usdonlineclock-settings_${time.toFormat('X')}.json`;
+    downloadLink.download = `onlinewebclock-settings_${time.toFormat('X')}.json`;
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
@@ -137,7 +137,12 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
     const url = `./assets/${filename}.json`;
 
     fetch(url)
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP status ${response.status}`);
+            }
+            return response.text();
+        })
         .then(json => {
             if (menu.debugcheckbox.checked) {console.log(`DEBUG - Attempting to load settings from preset '${filename}'...`);}
             processJSONSettings(json, alertConfirmation);

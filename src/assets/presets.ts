@@ -1,6 +1,6 @@
 // Presets (JSON) Imports
-import './usdonlineclock-amoled-preset.json';
-import './usdonlineclock-devfavorite-preset.json';
-import './usdonlineclock-digitsbinary-preset.json';
-import './usdonlineclock-minimallight-preset.json';
-import './usdonlineclock-preset.json';
+import './onlinewebclock-amoled-preset.json';
+import './onlinewebclock-devfavorite-preset.json';
+import './onlinewebclock-digitsbinary-preset.json';
+import './onlinewebclock-minimallight-preset.json';
+import './onlinewebclock-preset.json';
