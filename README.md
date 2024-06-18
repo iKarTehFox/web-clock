@@ -7,10 +7,10 @@ Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri**
 
 **Website:** [View in your browser!](https://online-clock.pages.dev)
 
-**Need compatibility with older browsers?** [Check out the compatibility branch](https://github.com/iKarTehFox/web-clock/tree/compatibility)!
+**Need compatibility with older browsers?** [Check out the compatibility repository](https://github.com/iKarTehFox/web-clock-compatibility)!
 
 ## Table of Contents
-- [Run/build Instructions](#build-instructions)
+- [Build Instructions](#build-instructions)
 - [Features](#features)
   - [URL Parameters](#url-parameters)
 - [Gallery](#gallery)
