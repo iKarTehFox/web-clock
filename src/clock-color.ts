@@ -1,5 +1,5 @@
 import { menu, dtdisplay } from './global';
-import { getFirstElement } from './utils/dom-utils';
+import { getFirstElement, logDebug } from './utils/dom-utils';
 
 // Text color override listener
 let tcoO = 0;
@@ -16,12 +16,12 @@ menu.textcoloroverrideradio.forEach((radio) => {
                     dtdisplay.secondsBar.style.backgroundColor = '#212529';
                 }
             }
-            if (menu.debugcheckbox.checked) {console.log('DEBUG - Text color override disabled');}
+            logDebug('Text color override disabled');
         } else {
             tcoO = 1;
             menu.textcolorinput.disabled = false;
             menu.textcolorinput.dispatchEvent(new Event('input'));
-            if (menu.debugcheckbox.checked) {console.log('DEBUG - Text color override enabled');}
+            logDebug('Text color override enabled');
         }
     });
 });
@@ -30,7 +30,7 @@ menu.textcolorinput.addEventListener('input', function() {
     const color = menu.textcolorinput.value;
     dtdisplay.ccontainer.style.color = color;
     dtdisplay.secondsBar.style.backgroundColor = color;
-    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Text color override: ${color}`);}
+    logDebug(`Text color override: ${color}`);
 });
 
 // Preset color buttons listener
@@ -59,7 +59,7 @@ function getLuminance(color: string): number {
 
     // Calculate the relative luminance using the sRGB color space formula
     const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Luminance for ${color}: ${luminance}`);}
+    logDebug(`Luminance for ${color}: ${luminance}`);
 
     return luminance;
 }

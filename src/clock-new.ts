@@ -1,6 +1,7 @@
 import { doc, menu, dtdisplay } from './global';
 import { numberToWords } from './numberToWords.min';
 import * as luxon from 'ts-luxon';
+import { logDebug } from './utils/dom-utils';
 
 let cMode = '0';
 let dateFormat = 'D';
@@ -9,7 +10,7 @@ let timeDisplayMethod: string;
 menu.timeMethodSelect.addEventListener('change', () => {
     const selectedValue = menu.timeMethodSelect.value as unknown as number;
     timeDisplayMethod = String(selectedValue);
-    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Time display method set to: ${selectedValue}`);}
+    logDebug(`Time display method set to: ${selectedValue}`);
     updateTime();
 });
 
@@ -34,7 +35,7 @@ menu.clockmoderadio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = String(radio.dataset.value);
         cMode = value;
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Clock mode set to: ${value}`);}
+        logDebug(`Clock mode set to: ${value}`);
         updateTime();
     });
 });
@@ -42,7 +43,7 @@ menu.clockmoderadio.forEach((radio) => {
 // Date format selector listener
 menu.dateformselect.addEventListener('change', function() {
     dateFormat = menu.dateformselect.value;
-    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Date format set to: ${menu.dateformselect.value}`);}
+    logDebug(`Date format set to: ${menu.dateformselect.value}`);
     updateDate();
 });
 
@@ -59,7 +60,7 @@ function updateTime() {
     } else if (document.title !== 'Online Web Clock' || !doc.favicon.href.endsWith('/icons/clock-time-3.svg')) {
         updateFavicon('3');
         document.title = 'Online Web Clock';
-        if (menu.debugcheckbox.checked) {console.log('DEBUG - Title and favicon reset...');}
+        logDebug('Title and favicon reset...');
     }
 
     // Seconds progress bar
@@ -268,9 +269,7 @@ function startNewClock() {
         clockInterval = setInterval(() => {
             updateTime();
             updatePageDuration();
-            if (menu.debugcheckbox.checked) {
-                console.log('DEBUG - Time and page duration updated...');
-            }
+            logDebug('Time and page duration updated...');
 
             // Correct the interval drift
             const now = Date.now();
@@ -279,9 +278,7 @@ function startNewClock() {
 
             const drift = elapsed - 1000;
             if (Math.abs(drift) > 50) {
-                if (menu.debugcheckbox.checked) {
-                    console.log(`DEBUG - Time drift detected: ${drift}ms.`);
-                }
+                logDebug('Time drift detected: ${drift}ms.');
                 clearInterval(clockInterval!);
                 setTimeout(startNewClock, 1000 - drift);
             }
@@ -294,9 +291,7 @@ function startOldClock() {
     clockInterval = setInterval(() => {
         updateTime();
         updatePageDuration();
-        if (menu.debugcheckbox.checked) {
-            console.log('DEBUG - Time and page duration updated (Legacy method)...');
-        }
+        logDebug('Time and page duration updated (Legacy method)...');
     }, 250) as unknown as NodeJS.Timeout;
 }
 
@@ -307,5 +302,5 @@ startClock();
 
 setInterval(function() {
     updateDate();
-    if (menu.debugcheckbox.checked) {console.log('DEBUG - Date updated...');}
+    logDebug('Date updated...');
 }, 15000);

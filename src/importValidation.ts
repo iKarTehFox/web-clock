@@ -1,7 +1,7 @@
-import { menu } from './global';
+import { logDebug } from './utils/dom-utils';
 
 function containsValue(array: string | any[], value: any) {
-    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Checking if array ${array} contains value: ${value}`);}
+    logDebug(`Checking if array ${array} contains value: ${value}`);
     return array.includes(value);
 }
 

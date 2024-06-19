@@ -1,4 +1,4 @@
-import { getElement, getElements } from './utils/dom-utils';
+import { getElement, getElements, logDebug } from './utils/dom-utils';
 import * as bootstrap from 'bootstrap';
 
 const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -89,25 +89,25 @@ function modifyFontStyle(type: string, value: string) {
     switch (type) {
     case 'style':
         dtdisplay.ccontainer.style.fontStyle = value;
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Font style set to: ${value}`);}
+        logDebug(`Font style set to: ${value}`);
         break;
     case 'weight':
         dtdisplay.ccontainer.style.fontWeight = value;
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Font weight set to: ${value}`);}
+        logDebug(`Font weight set to: ${value}`);
         break;
     case 'size':
         if (fontSize in fontSizeOptions) { // Check if the casted value is a valid key
             dtdisplay.ccontainer.style.fontSize = value;
             dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[fontSize];
             dtdisplay.date.style.fontSize = fontSizeOptions[fontSize];
-            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Font sizing set to: ${value}`);}
+            logDebug(`Font sizing set to: ${value}`);
         } else {
             console.error(`ERROR - Invalid font size: ${value}`);
         }
         break;
     case 'family':
         dtdisplay.ccontainer.style.fontFamily = value;
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Font family set to: ${value}`);}
+        logDebug(`Font family set to: ${value}`);
         break;
     default:
         console.error(`ERROR - Invalid font modification type: ${type}`);
@@ -121,7 +121,7 @@ menu.secondsvisradio.forEach((radio) => {
         const value = radio.dataset.value;
         dtdisplay.colon2.style.display = value as string;
         dtdisplay.secondSlot.style.display = value as string;
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`);}
+        logDebug(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`);
     });
 });
 
@@ -143,7 +143,7 @@ menu.secondsbarradio.forEach((radio) => {
             });
         }
         dtdisplay.secondsBar.style.display = value as string;
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`);}
+        logDebug(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`);
     });
 });
 
@@ -152,7 +152,7 @@ menu.datealignradio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = radio.dataset.value;
         dtdisplay.date.style.textAlign = value as string;
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Date alignment set to: ${value}`);}
+        logDebug(`Date alignment set to: ${value}`);
     });
 });
 
@@ -218,7 +218,7 @@ font.shadowrange.addEventListener('input', function() {
     font.shadowlabel.textContent = `Drop shadow: ${strength}px`;
 
     dtdisplay.ccontainer.style.textShadow = value > 0 ? dropShadowValue : '';
-    if (menu.debugcheckbox.checked) {console.log(`DEBUG - Font text shadow set to: ${dropShadowValue}`);}
+    logDebug(`Font text shadow set to: ${dropShadowValue}`);
 });
 
 // Border type listener
@@ -234,7 +234,7 @@ menu.bordertyperadio.forEach((radio) => {
             });
             dtdisplay.tcontainer.style.borderStyle = value;
             dtdisplay.tcontainer.style.borderBottomStyle = value;
-            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Border type set to: ${value}`);}
+            logDebug(`Border type set to: ${value}`);
             break;
         case 'regular':
             menu.secondsbarradio.forEach((btn) => {
@@ -246,7 +246,7 @@ menu.bordertyperadio.forEach((radio) => {
             });
             dtdisplay.tcontainer.style.borderBottomStyle = 'none';
             dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
-            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Border type set to: ${value}`);}
+            logDebug(`Border type set to: ${value}`);
             break;
         case 'bottom':
             menu.secondsbarradio.forEach((btn) => {
@@ -258,7 +258,7 @@ menu.bordertyperadio.forEach((radio) => {
             });
             dtdisplay.tcontainer.style.borderStyle = 'none';
             dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
-            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Border type set to: ${value}`);}
+            logDebug(`Border type set to: ${value}`);
             break;
         default:
             console.error(`ERROR - Invalid border type: ${value}`);
@@ -272,10 +272,10 @@ menu.borderstyleselect.addEventListener('change', () => {
     const value = menu.borderstyleselect.value;
     if (menu.bordertyperadio[1].checked) {
         dtdisplay.tcontainer.style.borderStyle = value;
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Border style set to: ${value}`);}
+        logDebug(`Border style set to: ${value}`);
     } else if (menu.bordertyperadio[2].checked) {
         dtdisplay.tcontainer.style.borderBottomStyle = value;
-        if (menu.debugcheckbox.checked) {console.log(`DEBUG - Border style set to: ${value}`);}
+        logDebug(`Border style set to: ${value}`);
     }
 });
 
@@ -286,12 +286,12 @@ menu.themeradio.forEach((radio) => {
             menu.container.dataset.bsTheme = 'light';
             menu.options.style.backgroundColor = '#ffffff';
             menu.options.style.color = '#212529';
-            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Menu theme set to: ${radio.id}`);}
+            logDebug(`Menu theme set to: ${radio.id}`);
         } else if (radio.id === 'darkthememode') {
             menu.container.dataset.bsTheme = 'dark';
             menu.options.style.backgroundColor = '#313539';
             menu.options.style.color = '#fff';
-            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Menu theme set to: ${radio.id}`);}
+            logDebug(`Menu theme set to: ${radio.id}`);
         }
     });
 });
@@ -306,7 +306,7 @@ function toggleMenuVisibility(show: boolean) {
         menu.options.className = 'menu-options-show';
         elementDisplay(menu.cbutton, true);
         elementDisplay(menu.obutton, false);
-        if (menu.debugcheckbox.checked) {console.log('DEBUG - Menu panel opened');}
+        logDebug('Menu panel opened');
     } else {
         menu.options.className = 'menu-options-fade';
         elementDisplay(menu.cbutton, false);
@@ -315,7 +315,7 @@ function toggleMenuVisibility(show: boolean) {
         } else {
             elementDisplay(menu.obutton, false);
         }
-        if (menu.debugcheckbox.checked) {console.log('DEBUG - Menu panel closed');}
+        logDebug('Menu panel closed');
     }
 }
 
@@ -384,7 +384,7 @@ export function toggleFullscreen() {
             (document as any).msExitFullscreen();
         }
     }
-    if (menu.debugcheckbox.checked) {console.log('DEBUG - Toggled fullscreen mode');}
+    logDebug('Toggled fullscreen mode');
 }
 
 menu.menubuttonvischeckbox.addEventListener('change', function(e) {

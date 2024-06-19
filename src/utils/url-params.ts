@@ -32,6 +32,6 @@ export function applyURLParams() {
     // Presets
     if (urlParams.get('preset') !== null) {
         const preset = urlParams.get('preset') as string;
-        presetLocalJSON(preset);
+        presetLocalJSON(preset, false);
     }
 }

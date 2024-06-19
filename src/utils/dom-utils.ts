@@ -1,4 +1,5 @@
-// src/utils/dom-utils.ts
+import { menu } from '../global';
+
 export function getElement<T extends HTMLElement>(id: string): T {
     const element = document.getElementById(id);
     if (!element) throw new Error(`Element with ID ${id} not found`);
@@ -13,4 +14,10 @@ export function getElements<T extends Element>(selector: string): NodeListOf<T> 
 export function getFirstElement<T extends Element>(selector: string): T {
     const element = document.querySelector(selector);
     return element as T;
+}
+
+export function logDebug(debugMessage:string):void {
+    if (menu.debugcheckbox.checked) {
+        console.log(`DEBUG - ${debugMessage}`);
+    }
 }

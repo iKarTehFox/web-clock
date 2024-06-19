@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getFirstElement } from './utils/dom-utils';
+import { getFirstElement, logDebug } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, font } from './global';
 import { stopColorFade } from './background-color';
@@ -85,7 +85,7 @@ function processJSONSettings(jsonText: string, alertConfirmation: boolean = true
         }
 
         updateClockSettings(importedSettings);
-        if (menu.debugcheckbox.checked) {console.log('DEBUG - Settings successfully loaded!');}
+        logDebug('Settings successfully loaded!');
         if (alertConfirmation === true) {alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);}
     } catch (error) {
         console.error('ERROR - Error processing settings:', error);
@@ -128,7 +128,7 @@ export function manualJSONImport() {
         // Clear text field after completion
         menu.manualjsontextinput.value = '';
     } else {
-        if (menu.debugcheckbox.checked) {console.log('DEBUG - No settings were provided or the JSON data could not be read.');}
+        logDebug('No settings were provided or the JSON data could not be read.');
     }
 }
 
@@ -144,7 +144,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
             return response.text();
         })
         .then(json => {
-            if (menu.debugcheckbox.checked) {console.log(`DEBUG - Attempting to load settings from preset: '${filename}'...`);}
+            logDebug(`Attempting to load settings from preset: '${filename}'...`);
             processJSONSettings(json, alertConfirmation);
         })
         .catch(error => {
