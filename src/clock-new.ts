@@ -278,7 +278,7 @@ function startNewClock() {
 
             const drift = elapsed - 1000;
             if (Math.abs(drift) > 50) {
-                logDebug('Time drift detected: ${drift}ms.');
+                logDebug(`Time drift detected: ${drift}ms.`);
                 clearInterval(clockInterval!);
                 setTimeout(startNewClock, 1000 - drift);
             }
