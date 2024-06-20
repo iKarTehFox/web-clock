@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.iconify.design https://api.unisvg.com https://cloudflareinsights.com/cdn-cgi/rum; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com/beacon.min.js;">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.iconify.design https://api.unisvg.com https://cloudflareinsights.com/cdn-cgi/rum https://api.openweathermap.org/data/2.5/weather; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com/beacon.min.js;">
         <title>Online Web Clock</title>
         <!-- Favicon -->
         <link rel="icon" type="image/svg+xml" id="favicon" href="./icons/clock-time-12.svg">
@@ -116,11 +116,11 @@
                     </div>
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFO" aria-expanded="false" aria-controls="collapseFO">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFC" aria-expanded="false" aria-controls="collapseFC">
                             Font Customization
                             </button>
                         </h2>
-                        <div id="collapseFO" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
+                        <div id="collapseFC" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body">
                                 <h6 class="mb-1">Font Family</h6>
                                 <select class="form-select" id="fontFamilySelect">
@@ -336,13 +336,49 @@
                     </div>
                     <div class="accordion-item">
                         <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWe" aria-expanded="false" aria-controls="collapseWe">
+                            Weather
+                          </button>
+                        </h2>
+                        <div id="collapseWe" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
+                            <div class="accordion-body">
+                                <h6 class="mb-1">OpenWeatherMap AppID</h6>
+                                <input type="text" class="form-control" id="weatherAppIDTextArea" aria-describedby="weatherAppIDHelp" placeholder="API key">
+                                <span id="weatherAppIDHelp" class="form-text">
+                                    <a href="https://home.openweathermap.org/api_keys" target="_blank">Find your API key</a>
+                                </span>
+                                <hr>
+                                <h6 class="mb-1 mt-2">Location</h6>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="weatherLatTextArea" placeholder="Latitude">
+                                    <input type="text" class="form-control" id="weatherLonTextArea" placeholder="Longitude">
+                                </div>
+                                <button type="button" class="btn btn-outline-info" id="weatherGeoBtn">
+                                    <iconify-icon icon="mdi:location-searching" width="19" height="19" style="height: 15px;"></iconify-icon> Get location
+                                </button>
+                                <h6 class="mb-1 mt-2">Units</h6>
+                                <div class="btn-group" role="group" aria-label="Weather unit radio group">
+                                    <input type="radio" class="btn-check" name="weather-unit-radio" id="imperial" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="imperial">Imperial</label>
+                                    <input type="radio" class="btn-check" name="weather-unit-radio" id="metric" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="metric">Metric</label>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-outline-danger mt-2 me-1" id="weatherStopBtn" disabled>Disable</button>
+                                    <button type="button" class="btn btn-outline-success mt-2" id="weatherSubmitBtn">Enable</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMV" aria-expanded="false" aria-controls="collapseMV">
                             Display Options
                             </button>
                         </h2>
                         <div id="collapseMV" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body">
-                                <h6 class="mb-1 mt-2">Menu Theme</h6>
+                                <h6 class="mb-1">Menu Theme</h6>
                                 <div class="btn-group" role="group" aria-label="Menu theme button group">
                                     <input type="radio" class="btn-check" name="menu-theme-radio" id="lightthememode" autocomplete="off" checked>
                                     <label class="btn btn-outline-primary" for="lightthememode">Light</label>
@@ -423,14 +459,30 @@
             </div>
             <p id="date"><noscript>JavaScript is disabled!</noscript></p>
         </div>
+        <div class="weather-hidden" id="weather-widget">
+            <div class="card shadow-0 border">
+                <div class="card-body p-3">
+                    <h4 class="mb-1" id="weather-name">City, Country</h4>
+                    <div class="mb-2">Temperature: <strong id="weather-temp">--.-°F</strong></div>
+                    <div>Feels like: <strong id="weather-feelslike">--.-°F</strong></div>
+                    <div>Max: <strong id="weather-max">--.-°F</strong>, Min: <strong id="weather-min">--.-°F</strong></div>
+                    <div>Wind: <strong id="weather-wind">-- mph N</strong></div>
+                    <hr>
+                    <div class="d-flex flex-row align-items-center justify-content-between">
+                        <p class="mb-0 me-2 align-left" id="weather-condition">Condition</p>
+                        <iconify-icon icon="mdi:weather-cloudy" id="weather-icon" width="2em" height="2em"></iconify-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- SW -->
         <script>
             if ('serviceWorker' in navigator) {
               window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js').then(registration => {
-                  console.log('SW registered: ', registration);
+                    console.log('SW registered: ', registration);
                 }).catch(registrationError => {
-                  console.log('SW registration failed: ', registrationError);
+                    console.log('SW registration failed: ', registrationError);
                 });
               });
             }

@@ -113,6 +113,17 @@ body {
   transition: width 0.75s;
 }
 
+.weather-container {
+    position: absolute;
+    display: block;
+    left: 10px;
+    bottom: 10px;
+}
+
+.weather-hidden {
+    display: none;
+}
+
 #credit {
     font-size: 15px;
 }

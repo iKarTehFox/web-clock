@@ -1,4 +1,5 @@
 import { getElement, getElements, logDebug } from './utils/dom-utils';
+import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
 import * as bootstrap from 'bootstrap';
 
 const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -14,37 +15,44 @@ export const doc = {
 };
 
 export const menu = {
-    container: getElement<HTMLDivElement>('menu-container'),
-    clockmoderadio: getElements<HTMLInputElement>('input[name="clock-mode-radio"]'),
-    timeMethodSelect: getElement<HTMLSelectElement>('timeMethodSelect'),
-    secondsvisradio: getElements<HTMLInputElement>('input[name="seconds-vis-radio"]'),
-    secondsbarradio: getElements<HTMLInputElement>('input[name="seconds-bar-radio"]'),
-    legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
-    datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
-    themeradio: getElements<HTMLInputElement>('input[name="menu-theme-radio"]'),
-    menubuttonvischeckbox: getElement<HTMLInputElement>('menuButtonVisible'),
-    titlevischeckbox: getElement<HTMLInputElement>('menuTabTitleVisible'),
-    debugcheckbox: getElement<HTMLInputElement>('debugMode'),
-    options: getElement<HTMLDivElement>('menu-options'),
-    obutton: getElement<HTMLButtonElement>('open-button'),
+    bordertyperadio: getElements<HTMLInputElement>('input[name="border-type-radio"]'),
+    borderstyleselect: getElement<HTMLSelectElement>('borderStyleSelect'),
     cbutton: getElement<HTMLButtonElement>('close-button'),
-    dateformselect: getElement<HTMLSelectElement>('dateFormatSelect'),
+    clockmoderadio: getElements<HTMLInputElement>('input[name="clock-mode-radio"]'),
     colorbadge: getElement<HTMLParagraphElement>('current-color-badge'),
     colormoderadio: getElements<HTMLInputElement>('input[name="color-mode-radio"]'),
-    presetgroup: getElement<HTMLDivElement>('presetColorGroup'),
-    presetcolors: getElements<HTMLInputElement>('input[name="preset-color-radio"]'),
-    textcolorgroup: getElement<HTMLDivElement>('textColorGroup'),
-    textcoloroverrideradio: getElements<HTMLInputElement>('input[name="text-color-override-radio"]'),
+    container: getElement<HTMLDivElement>('menu-container'),
+    datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
+    dateformselect: getElement<HTMLSelectElement>('dateFormatSelect'),
+    debugcheckbox: getElement<HTMLInputElement>('debugMode'),
+    durationdisplay: getElement<HTMLParagraphElement>('time-duration'),
+    imageblurrange: getElement<HTMLInputElement>('bgImgBlurRange'),
+    imageblurlabel: getElement<HTMLLabelElement>('bgImgBlurRangeLabel'),
     imagegroup: getElement<HTMLDivElement>('bgImgGroup'),
     imageuploadbutton: getElement<HTMLButtonElement>('bgImageUploadBtn'),
     imagesizeselect: getElement<HTMLSelectElement>('bgImageSizeSelect'),
-    imageblurrange: getElement<HTMLInputElement>('bgImgBlurRange'),
-    imageblurlabel: getElement<HTMLLabelElement>('bgImgBlurRangeLabel'),
-    textcolorinput: getElement<HTMLInputElement>('textColorInput'),
-    bordertyperadio: getElements<HTMLInputElement>('input[name="border-type-radio"]'),
-    borderstyleselect: getElement<HTMLSelectElement>('borderStyleSelect'),
+    legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
     manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
-    durationdisplay: getElement<HTMLParagraphElement>('time-duration')
+    menubuttonvischeckbox: getElement<HTMLInputElement>('menuButtonVisible'),
+    obutton: getElement<HTMLButtonElement>('open-button'),
+    options: getElement<HTMLDivElement>('menu-options'),
+    presetcolors: getElements<HTMLInputElement>('input[name="preset-color-radio"]'),
+    presetgroup: getElement<HTMLDivElement>('presetColorGroup'),
+    secondsbarradio: getElements<HTMLInputElement>('input[name="seconds-bar-radio"]'),
+    secondsvisradio: getElements<HTMLInputElement>('input[name="seconds-vis-radio"]'),
+    textcolorinput: getElement<HTMLInputElement>('textColorInput'),
+    textcolorgroup: getElement<HTMLDivElement>('textColorGroup'),
+    textcoloroverrideradio: getElements<HTMLInputElement>('input[name="text-color-override-radio"]'),
+    themeradio: getElements<HTMLInputElement>('input[name="menu-theme-radio"]'),
+    timeMethodSelect: getElement<HTMLSelectElement>('timeMethodSelect'),
+    titlevischeckbox: getElement<HTMLInputElement>('menuTabTitleVisible'),
+    weatherapiinput: getElement<HTMLInputElement>('weatherAppIDTextArea'),
+    weathergeobtn: getElement<HTMLButtonElement>('weatherGeoBtn'),
+    weatherlatinput: getElement<HTMLInputElement>('weatherLatTextArea'),
+    weatherloninput: getElement<HTMLInputElement>('weatherLonTextArea'),
+    weathersubmitbtn: getElement<HTMLButtonElement>('weatherSubmitBtn'),
+    weatherstopbtn: getElement<HTMLButtonElement>('weatherStopBtn'),
+    weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]')
 };
 
 export const font = {
@@ -69,6 +77,18 @@ export const dtdisplay = {
     indicatorSlot: getElement<HTMLSpanElement>('indicator'),
     date: getElement<HTMLParagraphElement>('date'),
     secondsBar: getElement<HTMLDivElement>('seconds-progress-bar')
+};
+
+export const weather = {
+    container: getElement<HTMLDivElement>('weather-widget'),
+    name: getElement<HTMLParagraphElement>('weather-name'),
+    temp: getElement<HTMLParagraphElement>('weather-temp'),
+    feelslike: getElement<HTMLParagraphElement>('weather-feelslike'),
+    maxtemp: getElement<HTMLParagraphElement>('weather-max'),
+    mintemp: getElement<HTMLParagraphElement>('weather-min'),
+    wind: getElement<HTMLParagraphElement>('weather-wind'),
+    condition: getElement<HTMLParagraphElement>('weather-condition'),
+    icon: document.getElementById('weather-icon')
 };
 
 // Define font sizes
@@ -279,6 +299,28 @@ menu.borderstyleselect.addEventListener('change', () => {
     }
 });
 
+// Weather geo button listener
+menu.weathergeobtn.addEventListener('click', async () => {
+    try {
+        const latlonArray = await getLocation();
+        menu.weatherlatinput.value = latlonArray[0].toString();
+        menu.weatherloninput.value = latlonArray[1].toString();
+        logDebug(`Retrieved geolocation: ${latlonArray}`);
+    } catch (error) {
+        console.error('Error getting location:', error);
+    }
+});
+
+// Weather submit button listener
+menu.weathersubmitbtn.addEventListener('click', () => {
+    submitWeatherSettings();
+    menu.weatherstopbtn.disabled = false;
+});
+
+menu.weatherstopbtn.addEventListener('click', () => {
+    stopWeather();
+});
+
 // Menu theme listener
 menu.themeradio.forEach((radio) => {
     radio.addEventListener('change', () => {
@@ -286,11 +328,17 @@ menu.themeradio.forEach((radio) => {
             menu.container.dataset.bsTheme = 'light';
             menu.options.style.backgroundColor = '#ffffff';
             menu.options.style.color = '#212529';
+            // Weather container
+            weather.container.dataset.bsTheme = 'light';
+            weather.container.style.color = '#212529';
             logDebug(`Menu theme set to: ${radio.id}`);
         } else if (radio.id === 'darkthememode') {
             menu.container.dataset.bsTheme = 'dark';
             menu.options.style.backgroundColor = '#313539';
             menu.options.style.color = '#fff';
+            // Weather container
+            weather.container.dataset.bsTheme = 'dark';
+            weather.container.style.color = '#fff';
             logDebug(`Menu theme set to: ${radio.id}`);
         }
     });

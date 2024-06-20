@@ -39,7 +39,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
 ## Features
 ### Clock Mode
  - Pick between 12 or 24-hour clock modes
-### Clock Display
+### Date and Time
  - Display the time in 7 different methods (Radix/Conversions)  
  - Add a box/bottom border to the clock container (solid, dashed, dotted, double)  
  - Toggle seconds progress bar below clock
@@ -58,11 +58,20 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
  - Solid color mode - Choose from 33 different colors  
  - Background image mode - Upload and set a custom image from your device + change sizing and blurring  
  - Text color override - Set a custom clock text color
-### Menu Visibility
+### Weather
+ - Enable a weather widget to show the current weather (updates every 15 min!)
+ - Enter an OpenWeatherMap API key
+ - Manually set coordinates or use GPS
+ - Choose between Imperial and Metric units
+### Display Options
+ - Toggle Dark Mode for the menu and weather widget
  - Toggle displaying of the menu button
+ - Toggle showing the current time in the tab title
+ - Enter fullscreen mode
 ### Importing/Exporting Settings
  - Download and upload generated JSON files containing all of your settings  
    - Imported JSON files and settings are verified before applying.
+ - Or, choose from a selection of preset settings files!
 
  Try out my [personal config](/src/assets/usdonlineclock-preset.json)!
 ### URL Parameters
@@ -79,11 +88,11 @@ In the URL bar, you can pass the following parameters:
  
 # Gallery
 ### Preview of the page  
- ![A screenshot of the main web clock page. The time 6:19 PM and date of 7/18/2023 is shown against a white background.](/src/assets/images/main.png)  
+ ![A screenshot of the main web clock page. The time 12:00 PM and date of June 1st, 2024 is shown against a white background.](/src/assets/images/main.png)  
 ### Menu options pane
- ![A screenshot of the menu options panel. The "Clock Settings" section is opened.](/src/assets/images/menu.png)  
+ ![A screenshot of the menu options panel. The "Date and Time" section is opened.](/src/assets/images/menu.png)  
 ### Customization example
- ![A screenshot of the main web clock page with many customizations applied, such as custom font, background color, and date format.](/src/assets/images/customizable.png)  
+ ![A screenshot of the main web clock page with many customizations applied, such as custom font, background image, date format, and weather widget.](/src/assets/images/customizable.png)  
  > Like this look? See [Importing/Exporting Settings](#importingexporting-settings) for the config!
  
 # Acknowledgements (OSS)
