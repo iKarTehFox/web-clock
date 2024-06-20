@@ -76,11 +76,17 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
  Try out my [personal config](/src/assets/onlinewebclock-preset.json)!
 ### URL Parameters
 In the URL bar, you can pass the following parameters:  
- 1. **debug=true**: Enables debug logging after the page has loaded
- 2. **darkMode=true**: Sets the menu theme to Dark
- 3. **menuVis=false**: Hides the menu button
- 4. **tabTitle=false**: Disables showing the current time in the tab title
- 5. **preset=\<filename\>**: Loads a JSON preset with the filename \<filename\> from the `/src/assets` directory.
+ - **debug=true**: Enables debug logging after the page has loaded
+ - **darkMode=true**: Sets the menu theme to Dark
+ - **menuVis=false**: Hides the menu button
+ - **tabTitle=false**: Disables showing the current time in the tab title
+ - **preset=\<filename\>**: Loads a JSON preset with the filename \<filename\> from the `/src/assets` directory.
+ 
+For the weather widget, all of the following parameters are required:  
+ - **weatherApi=\<api_key\>**: Input OpenWeatherMap API key  
+ - **weatherLat=\<latitude\>**: Input manual latitude  
+ - **weatherLon=\<longitude\>**: Input manual longitude  
+ - **weatherUnits=imperial/metric**: Set 'imperial' or 'metric' weather units  
 
  For instance, you can [visit](https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=usdonlineclock-amoled-preset) the following URL, `https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=usdonlineclock-amoled-preset` to load with the dark mode menu theme **enabled**, the menu button **hidden**, the tab title **disabled**, and the preset `usdonlineclock-amoled-preset` applied.
 
