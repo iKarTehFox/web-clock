@@ -73,7 +73,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
    - Imported JSON files and settings are verified before applying.
  - Or, choose from a selection of preset settings files!
 
- Try out my [personal config](/src/assets/usdonlineclock-preset.json)!
+ Try out my [personal config](/src/assets/onlinewebclock-preset.json)!
 ### URL Parameters
 In the URL bar, you can pass the following parameters:  
  1. **debug=true**: Enables debug logging after the page has loaded

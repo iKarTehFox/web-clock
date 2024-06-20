@@ -1,5 +1,6 @@
 import { menu } from '../global';
 import { presetLocalJSON } from '../importExport';
+import { getFirstElement } from './dom-utils';
 
 export function applyURLParams() {
     const queryString = window.location.search;
@@ -15,6 +16,16 @@ export function applyURLParams() {
     if (urlParams.get('darkMode') === 'true') {
         menu.themeradio[1].checked = true;
         menu.themeradio[1].dispatchEvent(new Event('change'));
+    }
+
+    // Weather
+    if (urlParams.get('weatherApi') !== null && urlParams.get('weatherLat') !== null && urlParams.get('weatherLon') !== null && (urlParams.get('weatherUnits') == 'imperial' || urlParams.get('weatherUnits') == 'metric')) {
+        menu.weatherapiinput.value = urlParams.get('weatherApi') as string;
+        menu.weatherlatinput.value = urlParams.get('weatherLat') as string;
+        menu.weatherloninput.value = urlParams.get('weatherLon') as string;
+        getFirstElement<HTMLInputElement>(`input[name="weather-unit-radio"][id="${urlParams.get('weatherUnits')}"]`).checked = true;
+        getFirstElement<HTMLInputElement>(`input[name="weather-unit-radio"][id="${urlParams.get('weatherUnits')}"]`).dispatchEvent(new Event('change'));
+        menu.weathersubmitbtn.click();
     }
 
     // Menu visibility
