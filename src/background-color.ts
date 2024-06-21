@@ -5,7 +5,19 @@ let fadeIntervalID: NodeJS.Timeout;
 
 function startColorFade() {
     logDebug('Color fade started');
-    const colors = ['#FFC0CB', '#FFD700', '#7FFFD4', '#FFA500', '#9370DB', '#00FFFF'];
+    const colors = [
+        '#FFC0CB', // Pink
+        '#FFD700', // Gold
+        '#7FFFD4', // Aquamarine
+        '#FFA500', // Web Orange
+        '#9370DB', // Dull Lavender
+        '#00FFFF', // Cyan
+        '#E969B4', // Deep Blush
+        '#8BCE25', // Atlantis
+        '#40E0D0', // Turquoise
+        '#FF7C4C', // Coral
+        '#DA70D6', // Orchid
+        '#00FA9A'];// Spring Green
     let currentIndex = 0;
     const bodyElement = document.body;
 

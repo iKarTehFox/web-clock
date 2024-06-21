@@ -2,9 +2,15 @@
 #FFC0CB - Pink
 #FFD700 - Gold
 #7FFFD4 - Aquamarine
-#FFA500 - Orange
-#9370DB - Medium Purple
+#FFA500 - Web Orange
+#B39AE5 - Dull Lavender
 #00FFFF - Cyan
+#E969B4 - Deep Blush
+#8BCE25 - Atlantis
+#40E0D0 - Turquoise
+#FF7C4C - Coral
+#DA70D6 - Orchid
+#00FA9A - Spring Green
 
  - Basic colors
 #FF0000 - Basic red
