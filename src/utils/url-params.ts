@@ -2,7 +2,7 @@ import { menu } from '../global';
 import { presetLocalJSON } from '../importExport';
 import { getFirstElement } from './dom-utils';
 
-export function applyURLParams() {
+export async function applyURLParams() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -43,6 +43,12 @@ export function applyURLParams() {
     // Presets
     if (urlParams.get('preset') !== null) {
         const preset = urlParams.get('preset') as string;
-        presetLocalJSON(preset, false);
+        await presetLocalJSON(preset, false);
+    }
+    
+    // Prevent end-user options modification by removing menu container entirely
+    if (urlParams.get('lockSettings') === 'true') {
+        menu.container.remove();
+        console.log('Settings locked - Menu container removed...');
     }
 }

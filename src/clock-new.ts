@@ -72,6 +72,7 @@ function updateTime() {
     type UnixTimeFunction = () => number;
 
     interface TimeDisplayFunctions {
+        [key: string]: TimeFunction | UnixTimeFunction;
         binary: TimeFunction;
         emoji: TimeFunction;
         roman: TimeFunction;
@@ -82,31 +83,29 @@ function updateTime() {
         unixmillis: UnixTimeFunction;
         unixsec: UnixTimeFunction;
         unixcountdown: UnixTimeFunction;
-        [key: string]: TimeFunction | UnixTimeFunction;
     }
 
     const timeDisplayFunctions: TimeDisplayFunctions = {
-        binary: toBinary,
+        binary: (value: string) => toRadix(value, 2),
         emoji: convertToEmojiBlock,
         roman: convertToRomanNumerals,
-        hexa: toHexadecimal,
-        hexatri: toHexatrigesimal,
-        octal: toOctal,
+        hexa: (value: string) => toRadix(value, 16),
+        hexatri: (value: string) => toRadix(value, 36),
+        octal: (value: string) => toRadix(value, 8),
         words: toWords,
         unixmillis: toUnixMillis,
         unixsec: toUnixSec,
-        unixcountdown: toUnixMillis,
+        unixcountdown: toUnixMillis
     };
 
     if (timeDisplayMethod in timeDisplayFunctions) {
         if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
             // Handle Unix time functions separately as they do not take parameters
             const unixFunction = timeDisplayFunctions[timeDisplayMethod] as UnixTimeFunction;
-            const unixTime = unixFunction(); // call the function without parameters
+            const unixTime = unixFunction();
             dtdisplay.hourSlot.textContent = String(unixTime);
             dtdisplay.minuteSlot.textContent = '';
             dtdisplay.secondSlot.textContent = '';
-
             dtdisplay.indicatorSlot.textContent = '';
             return;
         } else if (timeDisplayMethod === 'unixcountdown') {
@@ -114,29 +113,27 @@ function updateTime() {
             dtdisplay.hourSlot.textContent = `${Math.floor(secondsUntilY2K38 / 3600)}h`;
             dtdisplay.minuteSlot.textContent = `${Math.floor((secondsUntilY2K38 % 3600) / 60)}m`;
             dtdisplay.secondSlot.textContent = `${secondsUntilY2K38 % 60}s`;
-
             dtdisplay.indicatorSlot.textContent = '';
             return;
         }
-        
-        dtdisplay.hourSlot.textContent = String(timeDisplayFunctions[timeDisplayMethod](hrs));
+
+        const timeFunction = timeDisplayFunctions[timeDisplayMethod] as TimeFunction;
+        dtdisplay.hourSlot.textContent = timeFunction(hrs);
 
         if (timeDisplayMethod === 'words') {
             dtdisplay.minuteSlot.textContent = formatMinutesForWordsDisplay(min);
         } else {
-            dtdisplay.minuteSlot.textContent = String(timeDisplayFunctions[timeDisplayMethod](min));
+            dtdisplay.minuteSlot.textContent = timeFunction(min);
         }
 
-        dtdisplay.secondSlot.textContent = String(timeDisplayFunctions[timeDisplayMethod](sec));
-
+        dtdisplay.secondSlot.textContent = timeFunction(sec);
     } else {
-        dtdisplay.hourSlot.textContent = String(hrs);
-        dtdisplay.minuteSlot.textContent = String(min);
-        dtdisplay.secondSlot.textContent = String(sec);
+        dtdisplay.hourSlot.textContent = hrs;
+        dtdisplay.minuteSlot.textContent = min;
+        dtdisplay.secondSlot.textContent = sec;
     }
 
     dtdisplay.indicatorSlot.textContent = ind;
-
 
     // Helper function for time display method 'words'
     function formatMinutesForWordsDisplay(min: string) {
@@ -152,22 +149,13 @@ function updateTime() {
     }
 }
 
-
-// Helper functions for time display methods
-function toBinary(value: string) {
-    return parseInt(value, 10).toString(2);
-}
-
-function toOctal(value: string) {
-    return parseInt(value, 10).toString(8);
-}
-
-function toHexadecimal(value: string) {
-    return parseInt(value, 10).toString(16);
-}
-
-function toHexatrigesimal(value: string) {
-    return parseInt(value, 10).toString(32);
+function toRadix(value: string, radix: number): string {
+    if (radix >= 2 && radix <= 36) {
+        return parseInt(value, 10).toString(radix);
+    } else {
+        console.error('Radix must be between 2 and 36, inclusive.');
+        return 'ERR';
+    }
 }
 
 function toWords(value: string): string {

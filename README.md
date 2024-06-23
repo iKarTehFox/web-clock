@@ -81,6 +81,8 @@ In the URL bar, you can pass the following parameters:
  - **menuVis=false**: Hides the menu button
  - **tabTitle=false**: Disables showing the current time in the tab title
  - **preset=\<filename\>**: Loads a JSON preset with the filename \<filename\> from the `/src/assets` directory.
+ - **lockSettings=true**: Prevent end-user settings modification by removing menu container
+   - This parameter is best used with the `preset` parameter! If necessary, clone the repo and add your own settings preset file!
  
 For the weather widget, all of the following parameters are required:  
  - **weatherApi=\<api_key\>**: Input OpenWeatherMap API key  
@@ -88,7 +90,7 @@ For the weather widget, all of the following parameters are required:
  - **weatherLon=\<longitude\>**: Input manual longitude  
  - **weatherUnits=imperial/metric**: Set 'imperial' or 'metric' weather units  
 
- For instance, you can [visit](https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=usdonlineclock-amoled-preset) the following URL, `https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=usdonlineclock-amoled-preset` to load with the dark mode menu theme **enabled**, the menu button **hidden**, the tab title **disabled**, and the preset `usdonlineclock-amoled-preset` applied.
+ For instance, you can [visit](https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset) the following URL, `https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset` to load with the dark mode menu theme **enabled**, the menu button **hidden**, the tab title **disabled**, and the preset `onlinewebclock-amoled-preset` applied.
 
  With this in mind, you can bookmark the URL with the parameters you want, and it will load the page with those settings every time!
  
