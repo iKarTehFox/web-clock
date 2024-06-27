@@ -1,5 +1,5 @@
 // TS Imports
-import './code.iconify.design_iconify-icon_1.0.7_iconify-icon.min';
+import 'iconify-icon';
 import * as ieJSON from './importExport';
 import * as wcGlobal from './global';
 import * as bgImg from './background-image';
