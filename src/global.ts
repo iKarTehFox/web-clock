@@ -91,6 +91,10 @@ export const weather = {
     icon: document.getElementById('weather-icon')
 };
 
+// Fix menu button spacing
+menu.obutton.innerHTML = '<iconify-icon inline icon="mdi:menu"></iconify-icon> Menu';
+menu.cbutton.innerHTML = '<iconify-icon inline icon="mdi:close"></iconify-icon> Close';
+
 // Define font sizes
 type FontSizeKey = '6vw' | '8vw' | '10vw' | '12vw' | '14vw' | '18vw';
 
