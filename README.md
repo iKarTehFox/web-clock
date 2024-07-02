@@ -81,6 +81,8 @@ In the URL bar, you can pass the following parameters:
  - **menuVis=false**: Hides the menu button
  - **tabTitle=false**: Disables showing the current time in the tab title
  - **preset=\<filename\>**: Loads a JSON preset with the filename \<filename\> from the `/src/assets` directory.
+ - **autoRestart=\<length\>**: Automatically reloads the page after \<length\> seconds
+   - \<length\> must be an integer between 15 and 86400, inclusive (15 seconds and 24 hours)
  - **lockSettings=true**: Prevent end-user settings modification by removing menu container
    - This parameter is best used with the `preset` parameter! If necessary, clone the repo and add your own settings preset file!
  

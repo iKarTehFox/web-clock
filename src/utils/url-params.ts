@@ -1,6 +1,6 @@
 import { menu } from '../global';
 import { presetLocalJSON } from '../importExport';
-import { getFirstElement } from './dom-utils';
+import { getFirstElement, logDebug } from './dom-utils';
 
 export async function applyURLParams() {
     const queryString = window.location.search;
@@ -45,10 +45,24 @@ export async function applyURLParams() {
         const preset = urlParams.get('preset') as string;
         await presetLocalJSON(preset, false);
     }
+
+    // Auto-restart
+    if (urlParams.get('autoRestart') !== null) {
+        const autoRestartTime = parseInt(urlParams.get('autoRestart') as string);
+        if (!isNaN(autoRestartTime) && autoRestartTime >= 15 && autoRestartTime <= 86400) {
+            logDebug(`Set auto restart time for: ${autoRestartTime} seconds...`);
+            menu.autorestarttime.innerHTML = `Auto restart: <b>${autoRestartTime} sec</b>`;
+            setTimeout(() => {
+                window.location.reload();
+            }, autoRestartTime * 1000);
+        } else {
+            console.warn('Invalid autoRestart value. It should be an integer between 15 and 86400 inclusive.');
+        }
+    }
     
     // Prevent end-user options modification by removing menu container entirely
     if (urlParams.get('lockSettings') === 'true') {
         menu.container.remove();
-        console.log('Settings locked - Menu container removed...');
+        logDebug('Settings locked - Menu container removed...');
     }
 }

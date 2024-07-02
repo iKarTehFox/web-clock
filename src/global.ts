@@ -15,6 +15,7 @@ export const doc = {
 };
 
 export const menu = {
+    autorestarttime: getElement<HTMLSpanElement>('autorestart-time'),
     bordertyperadio: getElements<HTMLInputElement>('input[name="border-type-radio"]'),
     borderstyleselect: getElement<HTMLSelectElement>('borderStyleSelect'),
     cbutton: getElement<HTMLButtonElement>('close-button'),
@@ -56,39 +57,39 @@ export const menu = {
 };
 
 export const font = {
-    familysel: getElement<HTMLSelectElement>('fontFamilySelect'),
-    customfontinput: getElement<HTMLInputElement>('customFontInputForm'),
     applyfontinput: getElement<HTMLButtonElement>('applyCustomFontButton'),
-    styleradio: getElements<HTMLInputElement>('input[name="font-style-radio"]'),
-    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]'),
-    sizesel: getElement<HTMLSelectElement>('sizeSelect'),
+    customfontinput: getElement<HTMLInputElement>('customFontInputForm'),
+    familysel: getElement<HTMLSelectElement>('fontFamilySelect'),
+    shadowlabel: getElement<HTMLLabelElement>('dropShadowRangeLabel'),
     shadowrange: getElement<HTMLInputElement>('dropShadowRange'),
-    shadowlabel: getElement<HTMLLabelElement>('dropShadowRangeLabel')
+    sizesel: getElement<HTMLSelectElement>('sizeSelect'),
+    styleradio: getElements<HTMLInputElement>('input[name="font-style-radio"]'),
+    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]')
 };
 
 export const dtdisplay = {
     ccontainer: getElement<HTMLDivElement>('clock-container'),
-    tcontainer: getElement<HTMLDivElement>('time-container'),
-    hourSlot: getElement<HTMLSpanElement>('hour-slot'),
     colon1: getElement<HTMLSpanElement>('colon1'),
-    minuteSlot: getElement<HTMLSpanElement>('minute-slot'),
     colon2: getElement<HTMLSpanElement>('colon2'),
-    secondSlot: getElement<HTMLSpanElement>('second-slot'),
-    indicatorSlot: getElement<HTMLSpanElement>('indicator'),
     date: getElement<HTMLParagraphElement>('date'),
-    secondsBar: getElement<HTMLDivElement>('seconds-progress-bar')
+    hourSlot: getElement<HTMLSpanElement>('hour-slot'),
+    indicatorSlot: getElement<HTMLSpanElement>('indicator'),
+    minuteSlot: getElement<HTMLSpanElement>('minute-slot'),
+    secondSlot: getElement<HTMLSpanElement>('second-slot'),
+    secondsBar: getElement<HTMLDivElement>('seconds-progress-bar'),
+    tcontainer: getElement<HTMLDivElement>('time-container')
 };
 
 export const weather = {
+    condition: getElement<HTMLParagraphElement>('weather-condition'),
     container: getElement<HTMLDivElement>('weather-widget'),
-    name: getElement<HTMLParagraphElement>('weather-name'),
-    temp: getElement<HTMLParagraphElement>('weather-temp'),
     feelslike: getElement<HTMLParagraphElement>('weather-feelslike'),
+    icon: document.getElementById('weather-icon'),
     maxtemp: getElement<HTMLParagraphElement>('weather-max'),
     mintemp: getElement<HTMLParagraphElement>('weather-min'),
-    wind: getElement<HTMLParagraphElement>('weather-wind'),
-    condition: getElement<HTMLParagraphElement>('weather-condition'),
-    icon: document.getElementById('weather-icon')
+    name: getElement<HTMLParagraphElement>('weather-name'),
+    temp: getElement<HTMLParagraphElement>('weather-temp'),
+    wind: getElement<HTMLParagraphElement>('weather-wind')
 };
 
 // Fix menu button spacing
