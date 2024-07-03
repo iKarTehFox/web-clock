@@ -4,7 +4,8 @@
     "noImplicitAny": true,
     "moduleResolution": "Bundler",
     "module": "es6",
-    "target": "es5",
+    "target": "es2022",
+    "lib": ["dom", "es2022"],
     "allowJs": true
   },
   "files": ["src/global.ts"]

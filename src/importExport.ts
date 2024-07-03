@@ -30,7 +30,7 @@ export function exportSettingsToJSON() {
     const usersettings = {
         clockConfig: {
             clockMode: getFirstElement<HTMLInputElement>('input[name="clock-mode-radio"]:checked').id,
-            clockDisplay: menu.timeMethodSelect.value,
+            clockDisplay: menu.timemethodselect.value,
             secondsVis: getFirstElement<HTMLInputElement>('input[name="seconds-vis-radio"]:checked').id,
             dateFormat: menu.dateformselect.value,
             dateAlign: getFirstElement<HTMLInputElement>('input[name="date-position-radio"]:checked').id,
@@ -161,7 +161,7 @@ function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: a
     // Update clockConfig settings
     const clockConfig = importedSettings.clockConfig;
     getFirstElement<HTMLInputElement>(`input[name="clock-mode-radio"][id="${clockConfig.clockMode}"]`).checked = true;
-    menu.timeMethodSelect.value = clockConfig.clockDisplay;
+    menu.timemethodselect.value = clockConfig.clockDisplay;
     getFirstElement<HTMLInputElement>(`input[name="seconds-vis-radio"][id="${clockConfig.secondsVis}"]`).checked = true;
     menu.dateformselect.value = clockConfig.dateFormat;
     getFirstElement<HTMLInputElement>(`input[name="date-position-radio"][id="${clockConfig.dateAlign}"]`).checked = true;
@@ -200,7 +200,7 @@ function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: a
 
     // Trigger change events for updated elements
     getFirstElement<HTMLInputElement>(`input[name="clock-mode-radio"][id="${clockConfig.clockMode}"]`).dispatchEvent(new Event('change'));
-    menu.timeMethodSelect.dispatchEvent(new Event('change'));
+    menu.timemethodselect.dispatchEvent(new Event('change'));
     getFirstElement<HTMLInputElement>(`input[name="seconds-vis-radio"][id="${clockConfig.secondsVis}"]`).dispatchEvent(new Event('change'));
     menu.dateformselect.dispatchEvent(new Event('change'));
     getFirstElement<HTMLInputElement>(`input[name="date-position-radio"][id="${clockConfig.dateAlign}"]`).dispatchEvent(new Event('change'));
