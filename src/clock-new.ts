@@ -7,8 +7,8 @@ let cMode = '0';
 let dateFormat = 'D';
 let timeDisplayMethod: string;
 
-menu.timeMethodSelect.addEventListener('change', () => {
-    const selectedValue = menu.timeMethodSelect.value as unknown as number;
+menu.timemethodselect.addEventListener('change', () => {
+    const selectedValue = menu.timemethodselect.value as unknown as number;
     timeDisplayMethod = String(selectedValue);
     logDebug(`Time display method set to: ${selectedValue}`);
     updateTime();
@@ -38,6 +38,58 @@ menu.clockmoderadio.forEach((radio) => {
         logDebug(`Clock mode set to: ${value}`);
         updateTime();
     });
+});
+
+// Function to get the list of time zones and group them by region
+function getTimeZonesByRegion() {
+    const timeZones = (Intl as any).supportedValuesOf('timeZone');
+    const timeZoneGroups: { [key: string]: string[] } = {};
+  
+    timeZones.forEach((timeZone) => {
+        const [region] = timeZone.split('/');
+      
+        if (!timeZoneGroups[region]) {
+            timeZoneGroups[region] = [];
+        }
+  
+        timeZoneGroups[region].push(timeZone);
+    });
+  
+    return timeZoneGroups;
+}
+  
+// Function to populate the existing select element with time zones
+export function populateTimeZoneSelect() {
+    const timeZoneGroups = getTimeZonesByRegion();
+  
+    // Populate the select element with optgroups and options
+    Object.keys(timeZoneGroups).forEach((region) => {
+        const optGroupElement = document.createElement('optgroup');
+        optGroupElement.label = region;
+  
+        timeZoneGroups[region].forEach((timeZone) => {
+            const optionElement = document.createElement('option');
+            optionElement.value = timeZone;
+            const timeZoneName = timeZone.replace(/_/g,' ');
+            optionElement.textContent = timeZoneName;
+            // Select current time zone
+            if (luxon.DateTime.local().zoneName === timeZone) {
+                optionElement.selected = true;
+            }
+            optGroupElement.appendChild(optionElement);
+        });
+  
+        menu.timezoneselect.appendChild(optGroupElement);
+    });
+}
+
+// Time zone selector listener
+menu.timezoneselect.addEventListener('change', function() {
+    const timeZone = menu.timezoneselect.value;
+    logDebug(`Time zone set to: ${timeZone}`);
+    luxon.Settings.defaultZoneLike = timeZone;
+    updateTime();
+    updateDate();
 });
 
 // Date format selector listener

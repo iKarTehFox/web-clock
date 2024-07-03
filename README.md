@@ -10,18 +10,21 @@ Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri**
 **Need compatibility with older browsers?** [Check out the compatibility repository](https://github.com/iKarTehFox/web-clock-compatibility)!
 
 ## Table of Contents
-- [Build Instructions](#build-instructions)
+- [Build/run Instructions](#building)
 - [Features](#features)
   - [URL Parameters](#url-parameters)
 - [Gallery](#gallery)
 - [Acknowledgements (OSS)](#acknowledgements-oss)
 - [Acknowledgements (Fonts)](#acknowledgements-fonts)
 
-## Build Instructions
-Online Web Clock is bundled with Webpack. You can follow the steps below to build the project.
+## Build/run Instructions
+Don't want to build the project? Check out the [Releases](https://github.com/iKarTehFox/web-clock/releases) page to download pre-bundled archives!
+
+Online Web Clock is bundled with Webpack. Follow the instructions below to get started with building the project.
 
 #### Prerequisites
  - [Node.js](https://nodejs.org/)
+ - Basic CLI knowledge (download a release if this is too hard for you to understand 😟)
 
 #### Instructions
 1. Clone the repository and `cd` into it.
@@ -40,6 +43,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
 ### Clock Mode
  - Pick between 12 or 24-hour clock modes
 ### Date and Time
+ - Manually set a timezone
  - Display the time in 7 different methods (Radix/Conversions)  
  - Add a box/bottom border to the clock container (solid, dashed, dotted, double)  
  - Toggle seconds progress bar below clock

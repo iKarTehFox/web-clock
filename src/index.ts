@@ -8,6 +8,7 @@ import './numberToWords.min';
 import './clock-new';
 import './clock-color';
 import { applyURLParams } from './utils/url-params';
+import { populateTimeZoneSelect } from './clock-new';
 
 // Export some functions globally for HTML
 declare global {
@@ -25,4 +26,5 @@ window.wcGlobal = wcGlobal;
 // Functions to run when DOM has loaded
 window.addEventListener('DOMContentLoaded', () => {
     applyURLParams();
+    populateTimeZoneSelect(); // This might be performance hungry...
 });
