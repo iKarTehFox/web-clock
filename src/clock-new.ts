@@ -70,7 +70,7 @@ export function populateTimeZoneSelect() {
         timeZoneGroups[region].forEach((timeZone) => {
             const optionElement = document.createElement('option');
             optionElement.value = timeZone;
-            const timeZoneName = timeZone.replace('_','');
+            const timeZoneName = timeZone.replace(/_/g,' ');
             optionElement.textContent = timeZoneName;
             // Select current time zone
             if (luxon.DateTime.local().zoneName === timeZone) {
