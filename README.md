@@ -40,6 +40,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
 ### Clock Mode
  - Pick between 12 or 24-hour clock modes
 ### Date and Time
+ - Manually set a timezone
  - Display the time in 7 different methods (Radix/Conversions)  
  - Add a box/bottom border to the clock container (solid, dashed, dotted, double)  
  - Toggle seconds progress bar below clock
