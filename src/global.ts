@@ -323,6 +323,11 @@ menu.borderstyleselect.addEventListener('change', () => {
 // Text stroke range listener
 font.strokerange.addEventListener('input', function() {
     const size = this.value;
+    if (parseInt(size) > 0) {
+        font.strokecolor.disabled = false;
+    } else {
+        font.strokecolor.disabled = true;
+    }
     modifyFontStyle('strokewidth', size);
 });
 
