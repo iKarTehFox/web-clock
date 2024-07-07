@@ -65,7 +65,11 @@ export const font = {
     shadowrange: getElement<HTMLInputElement>('dropShadowRange'),
     sizesel: getElement<HTMLSelectElement>('sizeSelect'),
     styleradio: getElements<HTMLInputElement>('input[name="font-style-radio"]'),
-    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]')
+    strokecolor: getElement<HTMLInputElement>('textStrokeColor'),
+    strokecolorlabel: getElement<HTMLLabelElement>('textStrokeColorLabel'),
+    strokerange: getElement<HTMLInputElement>('textStrokeRange'),
+    strokerangelabel: getElement<HTMLLabelElement>('textStrokeRangeLabel'),
+    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]'),
 };
 
 export const dtdisplay = {
@@ -134,6 +138,16 @@ function modifyFontStyle(type: string, value: string) {
     case 'family':
         dtdisplay.ccontainer.style.fontFamily = value;
         logDebug(`Font family set to: ${value}`);
+        break;
+    case 'strokewidth':
+        dtdisplay.ccontainer.style.webkitTextStrokeWidth = `${value}px`;
+        font.strokerangelabel.textContent = `Stroke width: ${value}px`;
+        logDebug(`Font stroke width set to: ${value}px`);
+        break;
+    case 'strokecolor':
+        dtdisplay.ccontainer.style.webkitTextStrokeColor = value;
+        font.strokecolorlabel.textContent = `Stroke color: ${value}`;
+        logDebug(`Font stroke color set to: ${value}`);
         break;
     default:
         console.error(`ERROR - Invalid font modification type: ${type}`);
@@ -303,6 +317,18 @@ menu.borderstyleselect.addEventListener('change', () => {
         dtdisplay.tcontainer.style.borderBottomStyle = value;
         logDebug(`Border style set to: ${value}`);
     }
+});
+
+// Text stroke range listener
+font.strokerange.addEventListener('input', function() {
+    const size = this.value;
+    modifyFontStyle('strokewidth', size);
+});
+
+// Text stroke color listener
+font.strokecolor.addEventListener('input', function() {
+    const value = this.value;
+    modifyFontStyle('strokecolor', value);
 });
 
 // Weather geo button listener
