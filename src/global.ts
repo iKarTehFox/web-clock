@@ -69,7 +69,7 @@ export const font = {
     strokecolorlabel: getElement<HTMLLabelElement>('textStrokeColorLabel'),
     strokerange: getElement<HTMLInputElement>('textStrokeRange'),
     strokerangelabel: getElement<HTMLLabelElement>('textStrokeRangeLabel'),
-    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]'),
+    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]')
 };
 
 export const dtdisplay = {
