@@ -30,6 +30,7 @@ menu.textcolorinput.addEventListener('input', function() {
     const color = menu.textcolorinput.value;
     dtdisplay.ccontainer.style.color = color;
     dtdisplay.secondsBar.style.backgroundColor = color;
+    menu.textcolorlabel.textContent = `Text color: ${menu.textcolorinput.value}`;
     logDebug(`Text color override: ${color}`);
 });
 

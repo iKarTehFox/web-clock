@@ -43,6 +43,7 @@ export const menu = {
     secondsvisradio: getElements<HTMLInputElement>('input[name="seconds-vis-radio"]'),
     textcolorinput: getElement<HTMLInputElement>('textColorInput'),
     textcolorgroup: getElement<HTMLDivElement>('textColorGroup'),
+    textcolorlabel: getElement<HTMLLabelElement>('textColorLabel'),
     textcoloroverrideradio: getElements<HTMLInputElement>('input[name="text-color-override-radio"]'),
     themeradio: getElements<HTMLInputElement>('input[name="menu-theme-radio"]'),
     timemethodselect: getElement<HTMLSelectElement>('timeMethodSelect'),
