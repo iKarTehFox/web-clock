@@ -77,12 +77,6 @@ module.exports = () => {
     if (isProduction) {
         config.mode = 'production';
         config.plugins.push(new MiniCssExtractPlugin());
-        config.plugins.push(new WorkboxWebpackPlugin.GenerateSW({
-            // these options encourage the ServiceWorkers to get in there fast
-            // and not allow any straggling "old" SWs to hang around
-            clientsClaim: true,
-            skipWaiting: true,
-        }));
     } else {
         config.mode = 'development';
     }

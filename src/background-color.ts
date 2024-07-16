@@ -2,6 +2,7 @@ import { menu, dtdisplay } from './global';
 import { logDebug } from './utils/dom-utils';
 
 let fadeIntervalID: NodeJS.Timeout;
+const bodyElement = document.body;
 
 function startColorFade() {
     logDebug('Color fade started');
@@ -19,10 +20,11 @@ function startColorFade() {
         '#DA70D6', // Orchid
         '#00FA9A'];// Spring Green
     let currentIndex = 0;
-    const bodyElement = document.body;
 
     bodyElement.style.backgroundColor = colors[currentIndex];
-    bodyElement.style.transition = 'background-color 2.8s ease-in-out';
+    const fadetime = menu.fadetransrange.value; // Get fade transition length value when restarted
+    bodyElement.style.transition = `background-color ${fadetime}s ease-in-out`;
+    menu.colorbadge.textContent = colors[currentIndex]; // Initial color badge update
 
     fadeIntervalID = setInterval(() => {
         currentIndex = (currentIndex + 1) % colors.length;
@@ -44,7 +46,6 @@ menu.colormoderadio.forEach(radio => {
         dtdisplay.ccontainer.style.color = '#212529';
         dtdisplay.secondsBar.style.backgroundColor = '#212529';
         const colorMode = radio.id;
-        const bodyElement = document.body;
         
         if (colorMode === 'fademode') {
             startColorFade();
@@ -64,6 +65,7 @@ menu.colormoderadio.forEach(radio => {
             menu.imagesizeselect.disabled = true;
             bodyElement.style.backgroundImage = '';
             // Set groups display
+            menu.fadegroup.style.display = 'block';
             menu.presetgroup.style.display = 'none';
             menu.textcolorgroup.style.display = 'none';
             menu.imagegroup.style.display = 'none';
@@ -80,6 +82,7 @@ menu.colormoderadio.forEach(radio => {
             menu.imagesizeselect.disabled = true;
             bodyElement.style.backgroundImage = '';
             // Set groups display
+            menu.fadegroup.style.display = 'block';
             menu.presetgroup.style.display = '';
             menu.textcolorgroup.style.display = '';
             menu.imagegroup.style.display = 'none';
@@ -104,6 +107,7 @@ menu.colormoderadio.forEach(radio => {
             menu.imageuploadbutton.disabled = false;
             menu.imagesizeselect.disabled = false;
             // Set groups display
+            menu.fadegroup.style.display = 'none';
             menu.presetgroup.style.display = 'none';
             menu.textcolorgroup.style.display = '';
             menu.imagegroup.style.display = '';
@@ -111,11 +115,25 @@ menu.colormoderadio.forEach(radio => {
     });
 });
 
+// Fade transition range listener
+menu.fadetransrange.addEventListener('input', () => {
+    const value = menu.fadetransrange.value;
+    bodyElement.style.transition = `background-color ${value}s ease-in-out`;
+    menu.fadetransrangelabel.textContent = `Length: ${value}s`;
+    logDebug(`Fade transition length set to: ${value}s`);
+});
+
+// Fade length reset button listener
+menu.faderesetbutton.addEventListener('click', () => {
+    menu.fadetransrange.value = '2.8';
+    menu.fadetransrange.dispatchEvent(new Event('input'));
+});
+
 // Add listeners to all preset color buttons
 menu.presetcolors.forEach((radio) => {
     radio.addEventListener('change', () => {
         const selectedColor = String(radio.getAttribute('data-color'));
-        document.body.style.backgroundColor = selectedColor;
+        bodyElement.style.backgroundColor = selectedColor;
         menu.colorbadge.textContent = selectedColor;
         logDebug(`Preset color changed to: ${selectedColor}`);
     });
