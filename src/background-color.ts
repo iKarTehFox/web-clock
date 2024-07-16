@@ -65,6 +65,7 @@ menu.colormoderadio.forEach(radio => {
             menu.imagesizeselect.disabled = true;
             bodyElement.style.backgroundImage = '';
             // Set groups display
+            menu.colorbadgelabel.style.display = 'block';
             menu.fadegroup.style.display = 'block';
             menu.presetgroup.style.display = 'none';
             menu.textcolorgroup.style.display = 'none';
@@ -82,6 +83,7 @@ menu.colormoderadio.forEach(radio => {
             menu.imagesizeselect.disabled = true;
             bodyElement.style.backgroundImage = '';
             // Set groups display
+            menu.colorbadgelabel.style.display = 'block';
             menu.fadegroup.style.display = 'block';
             menu.presetgroup.style.display = '';
             menu.textcolorgroup.style.display = '';
@@ -95,6 +97,7 @@ menu.colormoderadio.forEach(radio => {
             });
             // Reset background color to black
             document.body.style.backgroundColor = '#000000';
+            menu.colorbadge.textContent = '#000000'; // Just for looks. Will appear when switching back to solidmode.
             menu.textcoloroverrideradio.forEach((radio) => {
                 if (radio.id === 'tcovO') {
                     radio.disabled = false;
@@ -107,6 +110,7 @@ menu.colormoderadio.forEach(radio => {
             menu.imageuploadbutton.disabled = false;
             menu.imagesizeselect.disabled = false;
             // Set groups display
+            menu.colorbadgelabel.style.display = 'none';
             menu.fadegroup.style.display = 'none';
             menu.presetgroup.style.display = 'none';
             menu.textcolorgroup.style.display = '';

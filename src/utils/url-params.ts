@@ -10,6 +10,7 @@ export async function applyURLParams() {
     // Debug logging mode
     if (urlParams.get('debug') === 'true') {
         menu.debugcheckbox.checked = true;
+        alert('URLPARAMS - Debug logging enabled. DevTools memory will increase over time.');
     }
 
     // Menu theme
