@@ -111,7 +111,7 @@
                                     <input class="form-check-input" type="checkbox" id="legacyRefreshMethod">
                                     <label class="form-check-label" for="legacyRefreshMethod">Use legacy refresh method</label>
                                 </div>
-                                <p style="font-size: smaller; font-weight: lighter;">Enable if you encounter clock instability on Firefox or non-Chromium-based browsers (refreshes clock every 250ms).</p>
+                                <p id="subtext-light">Enable if you encounter clock instability on Firefox or non-Chromium-based browsers (refreshes clock every 250ms).</p>
                             </div>
                         </div>
                     </div>
@@ -214,7 +214,7 @@
                                 <div class="form-group mt-2" id="fadeGroup">
                                     <h6 class="mb-1 mt-2">Color Transition</h6>
                                     <label for="fadeTransitionRange" class="form-label" id="fadeTransitionRangeLabel">Length: 2.8s</label>
-                                    <input type="range" id="fadeTransitionRange" min="0" max="3" value="2.8" step="0.1">
+                                    <input type="range" class="form-range" id="fadeTransitionRange" min="0" max="3" value="2.8" step="0.1">
                                     <div class="d-flex justify-content-end">
                                         <button type="button" class="btn btn-outline-danger" id="fadeTransitionResetBtn" data-bs-toggle="tooltip" data-bs-title="Reset length to default.">Reset</button>
                                     </div>
@@ -329,7 +329,7 @@
                                     </select>
                                     <label for="bgImgBlurRange" class="form-label mt-2" id="bgImgBlurRangeLabel">Image Blur: 0px</label>
                                     <input type="range" id="bgImgBlurRange" min="0" max="10" step="1" value="0">
-                                    <p style="font-weight: bold;">Note: May use more power when active</p>
+                                    <p><b>Note: May use more power when active</b></p>
                                 </div>
                                 <div class="form-group mt-2" id="textColorGroup" style="display: none;">
                                     <hr>
@@ -406,7 +406,7 @@
                                     <input class="form-check-input" type="checkbox" id="menuButtonVisible" checked>
                                     <label class="form-check-label" for="menuButtonVisible">Show menu button</label>
                                 </div>
-                                <p class="mb-2" style="font-size: smaller; font-weight: lighter;">Double click the screen to make menu button visible again</p>
+                                <p class="mb-2" id="subtext-light">Double click the screen to make menu button visible again</p>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Tab Title</h6>
                                 <div class="form-check">
@@ -450,7 +450,7 @@
                                 <hr>
                                 <h6 class="mb-1 mt-2">Export settings</h6>
                                 <button type="button" class="btn btn-outline-secondary" onClick="ieJSON.exportSettingsToJSON()">Download JSON file</button>
-                                <p class="mb-1 mt-2">Note: Display Options and custom font settings will not be exported.</p>
+                                <p class="mb-1 mt-2" id="subtext-light">Note: Display Options and custom font settings will not be exported.</p>
                             </div>
                         </div>
                     </div>

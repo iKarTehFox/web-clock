@@ -14,7 +14,8 @@
 		"fontStyle": "fstR",
 		"fontWeight": "fweL",
 		"fontSize": "14vw",
-		"dropShadow": "0"
+		"dropShadow": "0",
+		"strokeWidth": "0"
 	},
 	"colorTheme": {
 		"colorMode": "solidmode",
@@ -26,5 +27,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "Minimalism or maximalism? I choose optimism!",
-	"version": 6
+	"version": 7
 }

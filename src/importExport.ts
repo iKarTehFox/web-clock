@@ -44,7 +44,9 @@ export function exportSettingsToJSON() {
             fontStyle: getFirstElement<HTMLInputElement>('input[name="font-style-radio"]:checked').id,
             fontWeight: getFirstElement<HTMLInputElement>('input[name="font-weight-radio"]:checked').id,
             fontSize: font.sizesel.value,
-            dropShadow: font.shadowrange.value
+            dropShadow: font.shadowrange.value,
+            strokeWidth: font.strokerange.value,
+            strokeColor: (parseInt(font.strokerange.value) > 0) ? font.strokecolor.value : ''
         },
         colorTheme: {
             colorMode: getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id,
@@ -56,7 +58,7 @@ export function exportSettingsToJSON() {
             bgImageBlur: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
         },
         exportTimestamp: timeExported,
-        version: 6
+        version: 7
     };
 
     const settingsJSON = JSON.stringify(usersettings);
@@ -151,7 +153,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
 }
 
 function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: any; colorTheme: any; }) {
-    // Update clockConfig settings
+    // Set clockConfig settings
     const clockConfig = importedSettings.clockConfig;
     getFirstElement<HTMLInputElement>(`input[name="clock-mode-radio"][id="${clockConfig.clockMode}"]`).checked = true;
     menu.timemethodselect.value = clockConfig.clockDisplay;
@@ -166,15 +168,19 @@ function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: a
         getFirstElement<HTMLInputElement>(`input[name="seconds-bar-radio"][id="${clockConfig.secondsBarVis}"]`).checked = true;
     }
 
-    // Update fontConfig settings
+    // Set fontConfig settings
     const fontConfig = importedSettings.fontConfig;
     font.familysel.value = fontConfig.fontFamily;
     getFirstElement<HTMLInputElement>(`input[name="font-style-radio"][id="${fontConfig.fontStyle}"]`).checked = true;
     getFirstElement<HTMLInputElement>(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).checked = true;
     font.sizesel.value = fontConfig.fontSize;
     font.shadowrange.value = fontConfig.dropShadow;
+    font.strokerange.value = fontConfig.strokeWidth;
+    if (parseInt(fontConfig.strokeWidth) > 0) {
+        font.strokecolor.value = fontConfig.strokeColor;
+    }
 
-    // Update colorTheme settings
+    // Set colorTheme settings
     const colorTheme = importedSettings.colorTheme;
     getFirstElement<HTMLInputElement>(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).checked = true;
     if (colorTheme.colorMode === 'solidmode') {
@@ -206,6 +212,8 @@ function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: a
     getFirstElement<HTMLInputElement>(`input[name="font-weight-radio"][id="${fontConfig.fontWeight}"]`).dispatchEvent(new Event('change'));
     font.sizesel.dispatchEvent(new Event('change'));
     font.shadowrange.dispatchEvent(new Event('input'));
+    font.strokecolor.dispatchEvent(new Event('input'));
+    font.strokerange.dispatchEvent(new Event('input'));
 
     stopColorFade(); // Stop fade interval to avoid running interval twice if already running!!!
     getFirstElement<HTMLInputElement>(`input[name="color-mode-radio"][id="${colorTheme.colorMode}"]`).dispatchEvent(new Event('change'));
@@ -261,12 +269,13 @@ const valid = {
     FW: ['fweL', 'fweN', 'fweB'],
     FZ: ['6vw', '8vw', '10vw', '12vw', '14vw', '18vw'],
     DS: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+    FStW: ['0', '1', '2', '3', '4', '5'],
     CMo: ['fademode', 'solidmode', 'imgmode'],
     SC: ['#FF0000', '#FFA500', '#FFFF00', '#00FF00', '#0000FF', '#FF00FF', '#FFFFFF', '#808080', '#000000', '#F2B5D4', '#C2E0E9', '#E1D5E7', '#B0E0E6', '#F7D5AA', '#D5E8D4', '#92A8D1', '#E6AF75', '#D9B5A5', '#9AC1B7', '#D0B9C3', '#C4B7D9', '#D72C6F', '#227FBF', '#7E3F9D', '#367F89', '#FF713F', '#549F55', '#2B4771', '#C55324', '#954A3E', '#457E70', '#8B2C5A', '#7C5793'],
     TCM: ['tcovD', 'tcovO'],
     BIS: ['', 'auto', 'cover', 'stretch'],
     BIB: ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    Ver: [5, 6]
+    Ver: [7]
 };
 
 function verifySettingsJSON(jsonData: { version: any; clockConfig: any; fontConfig: any; colorTheme: any; }) {

@@ -14,7 +14,8 @@
 		"fontStyle": "fstR",
 		"fontWeight": "fweB",
 		"fontSize": "10vw",
-		"dropShadow": "2"
+		"dropShadow": "2",
+		"strokeWidth": "0"
 	},
 	"colorTheme": {
 		"colorMode": "imgmode",
@@ -26,5 +27,5 @@
 		"bgImageBlur": "5"
 	},
 	"exportTimestamp": "Thanks for trying out my personal config! -iKarTehFox",
-	"version": 6
+	"version": 7
 }
