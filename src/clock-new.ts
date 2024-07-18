@@ -109,8 +109,8 @@ function updateTime() {
     if (menu.titlevischeckbox.checked) {
         updateFavicon(time.toFormat('h'));
         document.title = `Time: ${hrs}:${min}:${sec} ${ind}`;
-    } else if (document.title !== 'Online Web Clock' || !doc.favicon.href.endsWith('/icons/clock-time-4.svg')) {
-        updateFavicon('4');
+    } else if (document.title !== 'Online Web Clock' || !doc.favicon.href.endsWith('/icons/clock-time-3.svg')) {
+        updateFavicon('3');
         document.title = 'Online Web Clock';
         logDebug('Title and favicon reset...');
     }

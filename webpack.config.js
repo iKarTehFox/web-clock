@@ -28,6 +28,11 @@ const config = {
         new HtmlWebpackPlugin({
             template: './src/original_index.html',
             filename: './index.html'
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/404.html',
+            filename: '404.html',
+            excludeChunks: ['main', 'presets']
         })
     ],
     devServer: {
