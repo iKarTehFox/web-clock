@@ -18,7 +18,8 @@ const config = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].bundle.js',
-        assetModuleFilename: 'assets/[hash][ext][query]'
+        assetModuleFilename: 'assets/[hash][ext][query]',
+        publicPath: '/'
     },
     plugins: [
         new CleanWebpackPlugin(),
@@ -32,7 +33,9 @@ const config = {
         new HtmlWebpackPlugin({
             template: './src/404.html',
             filename: '404.html',
-            excludeChunks: ['main', 'presets']
+            excludeChunks: ['main', 'presets'],
+            inject: 'body',
+            publicPath: '/'
         })
     ],
     devServer: {
