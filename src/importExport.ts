@@ -10,6 +10,7 @@ import {
     validateFontConfig,
     validateColorTheme
 } from './importValidation';
+import axios from 'axios';
 
 function getSolidColorValue() {
     const checkedColorInput = getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked');
@@ -134,28 +135,20 @@ export function manualJSONImport() {
 
 // Import settings from a local JSON file
 export function presetLocalJSON(filename: string, alertConfirmation: boolean = true): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-        const url = `./assets/${filename}.json`;
+    // Make URL
+    const url = `./assets/${filename}.json`;
 
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP status ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(json => {
-                logDebug(`Attempting to load settings from preset: '${filename}'...`);
-                processJSONSettings(json, alertConfirmation);
-                resolve();
-            })
-            .catch(error => {
-                console.error('ERROR - Error fetching local settings file:', error);
-                alert('Could not fetch local settings file. Please check the filename and ensure the file exists.');
-                reject();
-            });
-    });
-}  
+    // Fetch file using Axios and return Promise
+    return axios.get(url)
+        .then(response => {
+            logDebug(`Attempting to load settings from preset: '${filename}'...`);
+            processJSONSettings(JSON.stringify(response.data), alertConfirmation);
+        })
+        .catch(error => {
+            console.error('ERROR - Error fetching local settings file:', error);
+            alert('Could not fetch local settings file. Please check the filename and ensure the file exists.');
+        });
+}
 
 function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: any; colorTheme: any; }) {
     // Update clockConfig settings
