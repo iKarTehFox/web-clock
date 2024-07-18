@@ -36,6 +36,13 @@ const config = {
             excludeChunks: ['main', 'presets'],
             inject: 'body',
             publicPath: '/'
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/privacy.html',
+            filename: 'privacy.html',
+            excludeChunks: ['main', 'presets'],
+            inject: 'body',
+            publicPath: '/'
         })
     ],
     devServer: {
