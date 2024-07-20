@@ -1,6 +1,6 @@
 import OpenWeatherMap from 'openweathermap-ts';
 import { menu, weather } from '../global';
-import { getFirstElement, logDebug } from './dom-utils';
+import { getFirstElement, logDebug, showToast } from './dom-utils';
 import { CurrentResponse } from 'openweathermap-ts/dist/types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -110,7 +110,7 @@ export function submitWeatherSettings(): void {
                 } else {
                     stopWeather();
                     console.error('Error fetching weather data:', currentWeatherData.cod);
-                    alert(`Error fetching weather data: ${currentWeatherData.cod}`);
+                    showToast(`Error fetching weather data: ${currentWeatherData.cod}`, 10000);
                 }
             })
             .catch(error => {

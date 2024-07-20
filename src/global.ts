@@ -1,4 +1,4 @@
-import { getElement, getElements, logDebug } from './utils/dom-utils';
+import { getElement, getElements, logDebug, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
 import * as bootstrap from 'bootstrap';
 
@@ -375,6 +375,7 @@ menu.themeradio.forEach((radio) => {
             weather.container.dataset.bsTheme = 'light';
             weather.container.style.color = '#212529';
             logDebug(`Menu theme set to: ${radio.id}`);
+            showToast('Theme set to light mode ☀️');
         } else if (radio.id === 'darkthememode') {
             menu.container.dataset.bsTheme = 'dark';
             menu.options.style.backgroundColor = '#313539';
@@ -383,6 +384,7 @@ menu.themeradio.forEach((radio) => {
             weather.container.dataset.bsTheme = 'dark';
             weather.container.style.color = '#fff';
             logDebug(`Menu theme set to: ${radio.id}`);
+            showToast('Theme set to dark mode 🌙');
         }
     });
 });
@@ -476,6 +478,7 @@ export function toggleFullscreen() {
         }
     }
     logDebug('Toggled fullscreen mode');
+    showToast('Toggled fullscreen mode');
 }
 
 menu.menubuttonvischeckbox.addEventListener('change', function(e) {

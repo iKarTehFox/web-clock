@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getFirstElement, logDebug } from './utils/dom-utils';
+import { getFirstElement, logDebug, showToast } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, font } from './global';
 import { stopColorFade } from './background-color';
@@ -89,10 +89,12 @@ function processJSONSettings(jsonText: string, alertConfirmation: boolean = true
 
         updateClockSettings(importedSettings);
         logDebug('Settings successfully loaded!');
-        if (alertConfirmation === true) {alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);}
+        if (alertConfirmation === true) {
+            showToast(`Settings successfully imported!<hr><b>File timestamp:</b> ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`, 5000);
+        }
     } catch (error) {
         console.error('ERROR - Error processing settings:', error);
-        alert('Invalid settings file. Please make sure the file contains valid JSON.');
+        showToast('Invalid settings file. Please make sure the file contains valid JSON.', 5000);
     }
 }
 
@@ -148,7 +150,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
         })
         .catch(error => {
             console.error('ERROR - Error fetching local settings file:', error);
-            alert('Could not fetch local settings file. Please check the filename and ensure the file exists.');
+            showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 5000);
         });
 }
 

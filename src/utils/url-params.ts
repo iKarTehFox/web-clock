@@ -1,6 +1,6 @@
 import { menu } from '../global';
 import { presetLocalJSON } from '../importExport';
-import { getFirstElement, logDebug } from './dom-utils';
+import { getFirstElement, logDebug, showToast } from './dom-utils';
 
 export async function applyURLParams() {
     const queryString = window.location.search;
@@ -10,7 +10,7 @@ export async function applyURLParams() {
     // Debug logging mode
     if (urlParams.get('debug') === 'true') {
         menu.debugcheckbox.checked = true;
-        alert('URLPARAMS - Debug logging enabled. DevTools memory will increase over time.');
+        showToast('Debug logging enabled. DevTools memory will increase over time.', 5000);
     }
 
     // Menu theme
