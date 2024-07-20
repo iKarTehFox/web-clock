@@ -20,13 +20,18 @@ export const menu = {
     borderstyleselect: getElement<HTMLSelectElement>('borderStyleSelect'),
     cbutton: getElement<HTMLButtonElement>('close-button'),
     clockmoderadio: getElements<HTMLInputElement>('input[name="clock-mode-radio"]'),
-    colorbadge: getElement<HTMLParagraphElement>('current-color-badge'),
+    colorbadge: getElement<HTMLParagraphElement>('currentColorBadge'),
+    colorbadgelabel: getElement<HTMLDivElement>('currentColorLabel'),
     colormoderadio: getElements<HTMLInputElement>('input[name="color-mode-radio"]'),
     container: getElement<HTMLDivElement>('menu-container'),
     datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
     dateformselect: getElement<HTMLSelectElement>('dateFormatSelect'),
     debugcheckbox: getElement<HTMLInputElement>('debugMode'),
     durationdisplay: getElement<HTMLParagraphElement>('time-duration'),
+    fadegroup: getElement<HTMLDivElement>('fadeGroup'),
+    faderesetbutton: getElement<HTMLButtonElement>('fadeTransitionResetBtn'),
+    fadetransrange: getElement<HTMLInputElement>('fadeTransitionRange'),
+    fadetransrangelabel: getElement<HTMLLabelElement>('fadeTransitionRangeLabel'),
     imageblurrange: getElement<HTMLInputElement>('bgImgBlurRange'),
     imageblurlabel: getElement<HTMLLabelElement>('bgImgBlurRangeLabel'),
     imagegroup: getElement<HTMLDivElement>('bgImgGroup'),
@@ -43,6 +48,7 @@ export const menu = {
     secondsvisradio: getElements<HTMLInputElement>('input[name="seconds-vis-radio"]'),
     textcolorinput: getElement<HTMLInputElement>('textColorInput'),
     textcolorgroup: getElement<HTMLDivElement>('textColorGroup'),
+    textcolorlabel: getElement<HTMLLabelElement>('textColorLabel'),
     textcoloroverrideradio: getElements<HTMLInputElement>('input[name="text-color-override-radio"]'),
     themeradio: getElements<HTMLInputElement>('input[name="menu-theme-radio"]'),
     timemethodselect: getElement<HTMLSelectElement>('timeMethodSelect'),
@@ -65,6 +71,10 @@ export const font = {
     shadowrange: getElement<HTMLInputElement>('dropShadowRange'),
     sizesel: getElement<HTMLSelectElement>('sizeSelect'),
     styleradio: getElements<HTMLInputElement>('input[name="font-style-radio"]'),
+    strokecolor: getElement<HTMLInputElement>('textStrokeColor'),
+    strokecolorlabel: getElement<HTMLLabelElement>('textStrokeColorLabel'),
+    strokerange: getElement<HTMLInputElement>('textStrokeRange'),
+    strokerangelabel: getElement<HTMLLabelElement>('textStrokeRangeLabel'),
     weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]')
 };
 
@@ -134,6 +144,16 @@ function modifyFontStyle(type: string, value: string) {
     case 'family':
         dtdisplay.ccontainer.style.fontFamily = value;
         logDebug(`Font family set to: ${value}`);
+        break;
+    case 'strokewidth':
+        dtdisplay.ccontainer.style.webkitTextStrokeWidth = `${value}px`;
+        font.strokerangelabel.textContent = `Stroke width: ${value}px`;
+        logDebug(`Font stroke width set to: ${value}px`);
+        break;
+    case 'strokecolor':
+        dtdisplay.ccontainer.style.webkitTextStrokeColor = value;
+        font.strokecolorlabel.textContent = `Stroke color: ${value}`;
+        logDebug(`Font stroke color set to: ${value}`);
         break;
     default:
         console.error(`ERROR - Invalid font modification type: ${type}`);
@@ -303,6 +323,23 @@ menu.borderstyleselect.addEventListener('change', () => {
         dtdisplay.tcontainer.style.borderBottomStyle = value;
         logDebug(`Border style set to: ${value}`);
     }
+});
+
+// Text stroke range listener
+font.strokerange.addEventListener('input', function() {
+    const size = this.value;
+    if (parseInt(size) > 0) {
+        font.strokecolor.disabled = false;
+    } else {
+        font.strokecolor.disabled = true;
+    }
+    modifyFontStyle('strokewidth', size);
+});
+
+// Text stroke color listener
+font.strokecolor.addEventListener('input', function() {
+    const value = this.value;
+    modifyFontStyle('strokecolor', value);
 });
 
 // Weather geo button listener

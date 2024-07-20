@@ -102,6 +102,11 @@ body {
     font-weight: bold;
 }
 
+#subtext-light {
+    font-size: smaller;
+    font-weight: lighter;
+}
+
 /* Seconds progress bar */
 #seconds-progress-bar {
   position: absolute;

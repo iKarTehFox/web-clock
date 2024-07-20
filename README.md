@@ -57,6 +57,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
  - Light, regular, and **bold** font weights  
  - 5 different font sizes  
  - Text shadow customization  
+ - Text stroke/outline customization
 ### Background Theme
  - Color fade mode - Automatically transitions between 6 colors  
  - Solid color mode - Choose from 33 different colors  

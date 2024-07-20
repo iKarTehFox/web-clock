@@ -14,7 +14,8 @@
 		"fontStyle": "fstR",
 		"fontWeight": "fweB",
 		"fontSize": "10vw",
-		"dropShadow": "2"
+		"dropShadow": "2",
+		"strokeWidth": "0"
 	},
 	"colorTheme": {
 		"colorMode": "solidmode",
@@ -26,5 +27,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "This is my favorite way to theme the clock, especially when testing and debugging! It's become a habit. -iKarTehFox",
-	"version": 6
+	"version": 7
 }

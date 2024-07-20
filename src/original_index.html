@@ -1,12 +1,14 @@
 <!doctype html>
 <html lang="en" class="prevent-selection">
     <head>
+        <!-- Meta -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.iconify.design https://api.unisvg.com https://cloudflareinsights.com/cdn-cgi/rum https://api.openweathermap.org/data/2.5/weather; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com/beacon.min.js;">
         <title>Online Web Clock</title>
+        <meta name="description" content="Online clock web app on steroids, built with customization in mind! Made by iKarTehFox.">
         <!-- Favicon -->
-        <link rel="icon" type="image/svg+xml" id="favicon" href="./icons/clock-time-12.svg">
+        <link rel="icon" type="image/svg+xml" id="favicon" href="./icons/clock-time-3.svg">
     </head>
     <body>
         <div id="blur-panel"></div>
@@ -109,7 +111,7 @@
                                     <input class="form-check-input" type="checkbox" id="legacyRefreshMethod">
                                     <label class="form-check-label" for="legacyRefreshMethod">Use legacy refresh method</label>
                                 </div>
-                                <p style="font-size: smaller; font-weight: lighter;">Enable if you encounter clock instability on Firefox or non-Chromium-based browsers (refreshes clock every 250ms).</p>
+                                <p id="subtext-light">Enable if you encounter clock instability on Firefox or non-Chromium-based browsers (refreshes clock every 250ms).</p>
                             </div>
                         </div>
                     </div>
@@ -178,6 +180,10 @@
                                 <h6 class="mb-1">Text Effects</h6>
                                 <label for="dropShadowRange" class="form-label" id="dropShadowRangeLabel">Drop shadow: 0px</label>
                                 <input type="range" class="form-range" id="dropShadowRange" min="0" max="10" value="0" step="1">
+                                <label for="textStrokeRange" class="form-label" id="textStrokeRangeLabel">Stroke width: 0px</label>
+                                <input type="range" class="form-range" id="textStrokeRange" min="0" max="5" value="0" step="1">
+                                <label for="textStrokeColor" class="form-label" id="textStrokeColorLabel">Stroke color: Unset</label>
+                                <input type="color" class="form-control form-control-color" id="textStrokeColor" value="#000000" disabled>
                             </div>
                         </div>
                     </div>
@@ -201,7 +207,17 @@
                                         <input type="radio" class="btn-check" name="color-mode-radio" id="imgmode" autocomplete="off">
                                         <label class="btn btn-outline-primary" for="imgmode">Use Custom Image</label>
                                     </div>
-                                    <p class="mt-2 mb-0">Current color: <span class="badge text-bg-secondary" id="current-color-badge">#000000</span></p>
+                                    <div id="currentColorLabel">
+                                        <p class="mt-2 mb-0">Current color: <span class="badge text-bg-secondary" id="currentColorBadge">#000000</span></p>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2" id="fadeGroup">
+                                    <h6 class="mb-1 mt-2">Color Transition</h6>
+                                    <label for="fadeTransitionRange" class="form-label" id="fadeTransitionRangeLabel">Length: 2.8s</label>
+                                    <input type="range" class="form-range" id="fadeTransitionRange" min="0" max="3" value="2.8" step="0.1">
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-outline-danger" id="fadeTransitionResetBtn" data-bs-toggle="tooltip" data-bs-title="Reset length to default.">Reset</button>
+                                    </div>
                                 </div>
                                 <div class="form-group mt-2" id="presetColorGroup" style="display: none;">
                                     <hr>
@@ -313,7 +329,7 @@
                                     </select>
                                     <label for="bgImgBlurRange" class="form-label mt-2" id="bgImgBlurRangeLabel">Image Blur: 0px</label>
                                     <input type="range" id="bgImgBlurRange" min="0" max="10" step="1" value="0">
-                                    <p style="font-weight: bold;">Note: May use more power when active</p>
+                                    <p><b>Note: May use more power when active</b></p>
                                 </div>
                                 <div class="form-group mt-2" id="textColorGroup" style="display: none;">
                                     <hr>
@@ -326,8 +342,8 @@
                                         <label class="btn btn-outline-primary" for="tcovO">Enable</label>
                                     </div>
                                     <div class="form-group mt-2">
-                                        <label for="textColorInput">Color: </label>
-                                        <input type="color" id="textColorInput" value="#ffffff" disabled>
+                                        <label class="form-label" for="textColorInput" id="textColorLabel">Text color: #000000</label>
+                                        <input type="color" class="form-control form-control-color" id="textColorInput" value="#000000" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -366,6 +382,7 @@
                                     <button type="button" class="btn btn-outline-danger mt-2 me-1" id="weatherStopBtn" disabled>Disable</button>
                                     <button type="button" class="btn btn-outline-success mt-2" id="weatherSubmitBtn">Enable</button>
                                 </div>
+                                <p class="mb-1 mt-2">Review the <a href="/privacy.html">Privacy Policy</a>.</p>
                             </div>
                         </div>
                     </div>
@@ -390,7 +407,7 @@
                                     <input class="form-check-input" type="checkbox" id="menuButtonVisible" checked>
                                     <label class="form-check-label" for="menuButtonVisible">Show menu button</label>
                                 </div>
-                                <p class="mb-2" style="font-size: smaller; font-weight: lighter;">Double click the screen to make menu button visible again</p>
+                                <p class="mb-2" id="subtext-light">Double click the screen to make menu button visible again</p>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Tab Title</h6>
                                 <div class="form-check">
@@ -434,7 +451,7 @@
                                 <hr>
                                 <h6 class="mb-1 mt-2">Export settings</h6>
                                 <button type="button" class="btn btn-outline-secondary" onClick="ieJSON.exportSettingsToJSON()">Download JSON file</button>
-                                <p class="mb-1 mt-2">Note: Display Options and custom font settings will not be exported.</p>
+                                <p class="mb-1 mt-2" id="subtext-light">Note: Display Options and custom font settings will not be exported.</p>
                             </div>
                         </div>
                     </div>
@@ -449,7 +466,8 @@
                     <a type="button" class="btn btn-primary btn-social-icon btn-github" data-bs-toggle="tooltip" data-bs-custom-class="secondary-tooltip" data-bs-title="View on GitHub" href="https://github.com/ikartehfox/web-clock" target="_blank">
                         <p style="margin-top: -1.5px;"><iconify-icon inline icon="mdi:github"></iconify-icon></p>
                     </a>
-                    <p class="mb-1 mt-2" id="version">Version: <b>v1.2.0</b></p>
+                    <p class="mb-1 mt-2">Review the <a href="/privacy.html">Privacy Policy</a>.</p>
+                    <p class="mb-1 mt-2" id="version">Version: <b>v1.3.0</b></p>
                 </div>
             </div>
         </div>
@@ -476,18 +494,6 @@
                 </div>
             </div>
         </div>
-        <!-- SW -->
-        <script>
-            if ('serviceWorker' in navigator) {
-              window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js').then(registration => {
-                    console.log('SW registered: ', registration);
-                }).catch(registrationError => {
-                    console.log('SW registration failed: ', registrationError);
-                });
-              });
-            }
-          </script>
     </body>
 </html>
 

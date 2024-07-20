@@ -93,6 +93,7 @@ export function validateFontConfig(fontConfig: any, valid: any) {
         { key: 'fontWeight', validValues: valid.FW },
         { key: 'fontSize', validValues: valid.FZ },
         { key: 'dropShadow', validValues: valid.DS },
+        { key: 'strokeWidth', validValues: valid.FStW }
     ];
 
     for (const { key, validValues } of keys) {

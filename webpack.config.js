@@ -18,7 +18,8 @@ const config = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].bundle.js',
-        assetModuleFilename: 'assets/[hash][ext][query]'
+        assetModuleFilename: 'assets/[hash][ext][query]',
+        publicPath: '/'
     },
     plugins: [
         new CleanWebpackPlugin(),
@@ -28,6 +29,20 @@ const config = {
         new HtmlWebpackPlugin({
             template: './src/original_index.html',
             filename: './index.html'
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/404.html',
+            filename: '404.html',
+            excludeChunks: ['main', 'presets'],
+            inject: 'body',
+            publicPath: '/'
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/privacy.html',
+            filename: 'privacy.html',
+            excludeChunks: ['main', 'presets'],
+            inject: 'body',
+            publicPath: '/'
         })
     ],
     devServer: {
@@ -77,12 +92,6 @@ module.exports = () => {
     if (isProduction) {
         config.mode = 'production';
         config.plugins.push(new MiniCssExtractPlugin());
-        config.plugins.push(new WorkboxWebpackPlugin.GenerateSW({
-            // these options encourage the ServiceWorkers to get in there fast
-            // and not allow any straggling "old" SWs to hang around
-            clientsClaim: true,
-            skipWaiting: true,
-        }));
     } else {
         config.mode = 'development';
     }

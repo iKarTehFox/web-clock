@@ -14,7 +14,8 @@
 		"fontStyle": "fstR",
 		"fontWeight": "fweB",
 		"fontSize": "10vw",
-		"dropShadow": "0"
+		"dropShadow": "0",
+		"strokeWidth": "0"
 	},
 	"colorTheme": {
 		"colorMode": "solidmode",
@@ -26,5 +27,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "Enjoy keeping your AMOLED screens safe with this preset!",
-	"version": 6
+	"version": 7
 }
