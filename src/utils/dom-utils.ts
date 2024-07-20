@@ -23,13 +23,43 @@ export function logDebug(debugMessage:string):void {
     }
 }
 
-function getCurrentTheme(): string {
-    return menu.container.dataset.bsTheme;
+function getThemeInfo(colorTheme: string = 'auto') {
+    let theme;
+    if (colorTheme === 'auto') {
+        theme = menu.container.dataset.bsTheme;
+    } else {
+        theme = colorTheme;
+    }
+
+    if (theme == 'dark') {
+        return {
+            bgColor: '#313539',
+            textColor: '#FFFFFF',
+            outline: 'rgba(49, 43, 57, 0.5) solid 2px'
+        };
+    } else if (theme == 'light') {
+        return {
+            bgColor: '#FFFFFF',
+            textColor: '#212529',
+            outline: 'rgba(255, 255, 255, 0.5) solid 2px'
+        };
+    } else if (theme == 'danger') {
+        return {
+            bgColor: '#DC3545',
+            textColor: '#FFFFFF',
+            outline: 'rgba(220, 53, 69, 0.5) solid 2px'
+        };
+    } else {
+        return {
+            bgColor: '#FFFFFF',
+            textColor: '#212529',
+            outline: 'rgba(255, 255, 255, 0.5) solid 2px'
+        };
+    }
 }
 
-export function showToast(message: string, duration: number = 3000): void {
-    const theme = getCurrentTheme();
-    const backgroundColor = theme == 'dark' ? '#313539' : '#ffffff';
+export function showToast(message: string, duration: number = 3000, style: string = 'auto'): void {
+    const theme = getThemeInfo(style);
     
     Toastify({
         text: message,
@@ -37,8 +67,9 @@ export function showToast(message: string, duration: number = 3000): void {
         duration: duration,
         close: duration > 3000 ? true : false,
         style: {
-            background: backgroundColor,
-            color: theme == 'dark' ? '#fff' : '#212529',
+            background: theme.bgColor,
+            color: theme.textColor,
+            outline: theme.outline
         },
         gravity: 'bottom',
         position: 'right',

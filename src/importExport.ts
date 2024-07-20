@@ -94,7 +94,7 @@ function processJSONSettings(jsonText: string, alertConfirmation: boolean = true
         }
     } catch (error) {
         console.error('ERROR - Error processing settings:', error);
-        showToast('Invalid settings file. Please make sure the file contains valid JSON.', 5000);
+        showToast('Invalid settings file. Please make sure the file contains valid JSON.', 5000, 'danger');
     }
 }
 
