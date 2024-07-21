@@ -12,8 +12,14 @@ menu.textcoloroverrideradio.forEach((radio) => {
                 try {
                     getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
                 } catch (error) {
-                    dtdisplay.ccontainer.style.color = '#212529';
-                    dtdisplay.secondsBar.style.backgroundColor = '#212529';
+                    // Catch if none are selected (switching from imgmode to solidmode)
+                    if (document.body.style.backgroundColor === 'rgb(0, 0, 0)') {
+                        dtdisplay.ccontainer.style.color = '#FFFFFF';
+                        dtdisplay.secondsBar.style.backgroundColor = '#FFFFFF';
+                    } else {
+                        dtdisplay.ccontainer.style.color = '#212529';
+                        dtdisplay.secondsBar.style.backgroundColor = '#212529';
+                    }
                 }
             }
             logConsole('Text color override disabled', 'info');
