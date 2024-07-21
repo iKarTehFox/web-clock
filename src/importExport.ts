@@ -93,7 +93,7 @@ function processJSONSettings(jsonText: string, alertConfirmation: boolean = true
             showToast(`Settings successfully imported!<hr><b>File timestamp:</b> ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`, 5000);
         }
     } catch (error) {
-        logConsole(`Error processing settings: ${error}`, 'error');
+        logConsole(`Issue processing settings: ${error}`, 'error');
         showToast('Invalid settings file. Please make sure the file contains valid JSON.', 5000, 'danger');
     }
 }
