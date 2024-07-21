@@ -110,7 +110,7 @@ export function submitWeatherSettings(): void {
                 } else {
                     stopWeather();
                     console.error('Error fetching weather data:', currentWeatherData.cod);
-                    showToast(`Error fetching weather data: ${currentWeatherData.cod}`, 10000);
+                    showToast(`Error fetching weather data: ${currentWeatherData.cod}`, 5000);
                 }
             })
             .catch(error => {
