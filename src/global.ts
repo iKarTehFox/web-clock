@@ -125,38 +125,38 @@ function modifyFontStyle(type: string, value: string) {
     switch (type) {
     case 'style':
         dtdisplay.ccontainer.style.fontStyle = value;
-        logConsole(`Font style set to: ${value}`);
+        logConsole(`Font style set to: ${value}`, 'info');
         break;
     case 'weight':
         dtdisplay.ccontainer.style.fontWeight = value;
-        logConsole(`Font weight set to: ${value}`);
+        logConsole(`Font weight set to: ${value}`, 'info');
         break;
     case 'size':
         if (fontSize in fontSizeOptions) { // Check if the casted value is a valid key
             dtdisplay.ccontainer.style.fontSize = value;
             dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[fontSize];
             dtdisplay.date.style.fontSize = fontSizeOptions[fontSize];
-            logConsole(`Font sizing set to: ${value}`);
+            logConsole(`Font sizing set to: ${value}`, 'info');
         } else {
-            console.error(`ERROR - Invalid font size: ${value}`);
+            logConsole(`Invalid font size: ${value}`, 'error');
         }
         break;
     case 'family':
         dtdisplay.ccontainer.style.fontFamily = value;
-        logConsole(`Font family set to: ${value}`);
+        logConsole(`Font family set to: ${value}`, 'info');
         break;
     case 'strokewidth':
         dtdisplay.ccontainer.style.webkitTextStrokeWidth = `${value}px`;
         font.strokerangelabel.textContent = `Stroke width: ${value}px`;
-        logConsole(`Font stroke width set to: ${value}px`);
+        logConsole(`Font stroke width set to: ${value}px`, 'info');
         break;
     case 'strokecolor':
         dtdisplay.ccontainer.style.webkitTextStrokeColor = value;
         font.strokecolorlabel.textContent = `Stroke color: ${value}`;
-        logConsole(`Font stroke color set to: ${value}`);
+        logConsole(`Font stroke color set to: ${value}`, 'info');
         break;
     default:
-        console.error(`ERROR - Invalid font modification type: ${type}`);
+        logConsole(`Invalid font modification type: ${type}`, 'error');
         break;
     }
 }
@@ -167,7 +167,7 @@ menu.secondsvisradio.forEach((radio) => {
         const value = radio.dataset.value;
         dtdisplay.colon2.style.display = value as string;
         dtdisplay.secondSlot.style.display = value as string;
-        logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`);
+        logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
     });
 });
 
@@ -189,7 +189,7 @@ menu.secondsbarradio.forEach((radio) => {
             });
         }
         dtdisplay.secondsBar.style.display = value as string;
-        logConsole(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`);
+        logConsole(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
     });
 });
 
@@ -198,7 +198,7 @@ menu.datealignradio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = radio.dataset.value;
         dtdisplay.date.style.textAlign = value as string;
-        logConsole(`Date alignment set to: ${value}`);
+        logConsole(`Date alignment set to: ${value}`, 'info');
     });
 });
 
@@ -264,7 +264,7 @@ font.shadowrange.addEventListener('input', function() {
     font.shadowlabel.textContent = `Drop shadow: ${strength}px`;
 
     dtdisplay.ccontainer.style.textShadow = value > 0 ? dropShadowValue : '';
-    logConsole(`Font text shadow set to: ${dropShadowValue}`);
+    logConsole(`Font text shadow set to: ${dropShadowValue}`, 'info');
 });
 
 // Border type listener
@@ -280,7 +280,7 @@ menu.bordertyperadio.forEach((radio) => {
             });
             dtdisplay.tcontainer.style.borderStyle = value;
             dtdisplay.tcontainer.style.borderBottomStyle = value;
-            logConsole(`Border type set to: ${value}`);
+            logConsole(`Border type set to: ${value}`, 'info');
             break;
         case 'regular':
             menu.secondsbarradio.forEach((btn) => {
@@ -292,7 +292,7 @@ menu.bordertyperadio.forEach((radio) => {
             });
             dtdisplay.tcontainer.style.borderBottomStyle = 'none';
             dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
-            logConsole(`Border type set to: ${value}`);
+            logConsole(`Border type set to: ${value}`, 'info');
             break;
         case 'bottom':
             menu.secondsbarradio.forEach((btn) => {
@@ -304,10 +304,10 @@ menu.bordertyperadio.forEach((radio) => {
             });
             dtdisplay.tcontainer.style.borderStyle = 'none';
             dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
-            logConsole(`Border type set to: ${value}`);
+            logConsole(`Border type set to: ${value}`, 'info');
             break;
         default:
-            console.error(`ERROR - Invalid border type: ${value}`);
+            logConsole(`Invalid border type: ${value}`, 'error');
             break;
         }
     });
@@ -318,10 +318,10 @@ menu.borderstyleselect.addEventListener('change', () => {
     const value = menu.borderstyleselect.value;
     if (menu.bordertyperadio[1].checked) {
         dtdisplay.tcontainer.style.borderStyle = value;
-        logConsole(`Border style set to: ${value}`);
+        logConsole(`Border style set to: ${value}`, 'info');
     } else if (menu.bordertyperadio[2].checked) {
         dtdisplay.tcontainer.style.borderBottomStyle = value;
-        logConsole(`Border style set to: ${value}`);
+        logConsole(`Border style set to: ${value}`, 'info');
     }
 });
 
@@ -348,9 +348,9 @@ menu.weathergeobtn.addEventListener('click', async () => {
         const latlonArray = await getLocation();
         menu.weatherlatinput.value = latlonArray[0].toString();
         menu.weatherloninput.value = latlonArray[1].toString();
-        logConsole(`Retrieved geolocation: ${latlonArray}`);
+        logConsole(`Retrieved geolocation: ${latlonArray}`, 'info');
     } catch (error) {
-        console.error('Error getting location:', error);
+        logConsole(`Failed to get location: ${error}`, 'error');
     }
 });
 
@@ -374,7 +374,7 @@ menu.themeradio.forEach((radio) => {
             // Weather container
             weather.container.dataset.bsTheme = 'light';
             weather.container.style.color = '#212529';
-            logConsole(`Menu theme set to: ${radio.id}`);
+            logConsole(`Menu theme set to: ${radio.id}`, 'info');
             showToast('Theme set to light mode ☀️');
         } else if (radio.id === 'darkthememode') {
             menu.container.dataset.bsTheme = 'dark';
@@ -383,7 +383,7 @@ menu.themeradio.forEach((radio) => {
             // Weather container
             weather.container.dataset.bsTheme = 'dark';
             weather.container.style.color = '#fff';
-            logConsole(`Menu theme set to: ${radio.id}`);
+            logConsole(`Menu theme set to: ${radio.id}`, 'info');
             showToast('Theme set to dark mode 🌙');
         }
     });
@@ -399,7 +399,7 @@ function toggleMenuVisibility(show: boolean) {
         menu.options.className = 'menu-options-show';
         elementDisplay(menu.cbutton, true);
         elementDisplay(menu.obutton, false);
-        logConsole('Menu panel opened');
+        logConsole('Menu panel opened', 'info');
     } else {
         menu.options.className = 'menu-options-fade';
         elementDisplay(menu.cbutton, false);
@@ -408,7 +408,7 @@ function toggleMenuVisibility(show: boolean) {
         } else {
             elementDisplay(menu.obutton, false);
         }
-        logConsole('Menu panel closed');
+        logConsole('Menu panel closed', 'info');
     }
 }
 
@@ -477,7 +477,7 @@ export function toggleFullscreen() {
             (document as any).msExitFullscreen();
         }
     }
-    logConsole('Toggled fullscreen mode');
+    logConsole('Toggled fullscreen mode', 'info');
     showToast('Toggled fullscreen mode');
 }
 

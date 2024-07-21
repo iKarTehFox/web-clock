@@ -88,12 +88,12 @@ function processJSONSettings(jsonText: string, alertConfirmation: boolean = true
         }
 
         updateClockSettings(importedSettings);
-        logConsole('Settings successfully loaded!');
+        logConsole('Settings successfully loaded!', 'info');
         if (alertConfirmation === true) {
             showToast(`Settings successfully imported!<hr><b>File timestamp:</b> ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`, 5000);
         }
     } catch (error) {
-        console.error('ERROR - Error processing settings:', error);
+        logConsole(`Error processing settings: ${error}`, 'error');
         showToast('Invalid settings file. Please make sure the file contains valid JSON.', 5000, 'danger');
     }
 }
@@ -133,7 +133,7 @@ export function manualJSONImport() {
         // Clear text field after completion
         menu.manualjsontextinput.value = '';
     } else {
-        logConsole('No settings were provided or the JSON data could not be read.');
+        logConsole('No settings were provided or the JSON data could not be read.', 'info');
     }
 }
 
@@ -145,11 +145,11 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
     // Fetch file using Axios and return Promise
     return axios.get(url)
         .then(response => {
-            logConsole(`Attempting to load settings from preset: '${filename}'...`);
+            logConsole(`Attempting to load settings from preset: '${filename}'...`, 'info');
             processJSONSettings(JSON.stringify(response.data), alertConfirmation);
         })
         .catch(error => {
-            console.error('ERROR - Error fetching local settings file:', error);
+            logConsole(`Error fetching local settings file: ${error}`, 'error');
             showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 5000, 'danger');
         });
 }
@@ -252,7 +252,7 @@ function handleValidationFailure(errorDetails: ErrorDetails) {
     };
     
     const errorMessage = errorMsg[`${errorDetails.type}`] || 'Unknown validation failure';
-    console.error('ERROR - ' + errorMessage);
+    logConsole(`${errorMessage}`, 'error');
     alert(`Error loading settings from imported file.\n\n${errorMessage}\n\nIf this is a version error, please export a new settings file as settings may have been updated! If you need further assistance, please post an issue on GitHub.`);
 }
 

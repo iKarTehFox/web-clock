@@ -51,7 +51,7 @@ export async function applyURLParams() {
     if (urlParams.get('autoRestart') !== null) {
         const autoRestartTime = parseInt(urlParams.get('autoRestart') as string);
         if (!isNaN(autoRestartTime) && autoRestartTime >= 15 && autoRestartTime <= 86400) {
-            logConsole(`Set auto restart time for: ${autoRestartTime} seconds...`);
+            logConsole(`Set auto restart time for: ${autoRestartTime} seconds...`, 'info');
             menu.autorestarttime.innerHTML = `Auto restart: <b>${autoRestartTime} sec</b>`;
             setTimeout(() => {
                 window.location.reload();
@@ -64,6 +64,6 @@ export async function applyURLParams() {
     // Prevent end-user options modification by removing menu container entirely
     if (urlParams.get('lockSettings') === 'true') {
         menu.container.remove();
-        logConsole('Settings locked - Menu container removed...');
+        logConsole('Settings locked - Menu container removed...', 'info');
     }
 }

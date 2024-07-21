@@ -17,15 +17,15 @@ export function getFirstElement<T extends Element>(selector: string): T {
     return element as T;
 }
 
-export function logConsole(debugMessage: string, type: string = 'debug'):void {
+export function logConsole(message: string, type: string = 'debug'):void {
     if (menu.debugcheckbox.checked && type === 'debug') {
-        console.log(`DEBUG - ${debugMessage}`);
+        console.log(`DEBUG - ${message}`);
     } else if (type === 'error') {
-        console.error(`ERROR - ${debugMessage}`);
+        console.error(`ERROR - ${message}`);
     } else if (type === 'warning') {
-        console.warn(`WARNING - ${debugMessage}`);
+        console.warn(`WARNING - ${message}`);
     } else if (menu.debugcheckbox.checked && type === 'info') {
-        console.info(`INFO - ${debugMessage}`);
+        console.info(`INFO - ${message}`);
     }
 }
 
