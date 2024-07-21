@@ -27,7 +27,7 @@ const config = {
             filename: 'css/[name].css', // This pattern names the output CSS files
         }),
         new HtmlWebpackPlugin({
-            template: './src/original_index.html',
+            template: './src/index.html',
             filename: './index.html'
         }),
         new HtmlWebpackPlugin({
