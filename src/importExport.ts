@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getFirstElement, logDebug, showToast } from './utils/dom-utils';
+import { getFirstElement, logConsole, showToast } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, font } from './global';
 import { stopColorFade } from './background-color';
@@ -88,7 +88,7 @@ function processJSONSettings(jsonText: string, alertConfirmation: boolean = true
         }
 
         updateClockSettings(importedSettings);
-        logDebug('Settings successfully loaded!');
+        logConsole('Settings successfully loaded!');
         if (alertConfirmation === true) {
             showToast(`Settings successfully imported!<hr><b>File timestamp:</b> ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`, 5000);
         }
@@ -133,7 +133,7 @@ export function manualJSONImport() {
         // Clear text field after completion
         menu.manualjsontextinput.value = '';
     } else {
-        logDebug('No settings were provided or the JSON data could not be read.');
+        logConsole('No settings were provided or the JSON data could not be read.');
     }
 }
 
@@ -145,7 +145,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
     // Fetch file using Axios and return Promise
     return axios.get(url)
         .then(response => {
-            logDebug(`Attempting to load settings from preset: '${filename}'...`);
+            logConsole(`Attempting to load settings from preset: '${filename}'...`);
             processJSONSettings(JSON.stringify(response.data), alertConfirmation);
         })
         .catch(error => {

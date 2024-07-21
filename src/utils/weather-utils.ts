@@ -1,6 +1,6 @@
 import OpenWeatherMap from 'openweathermap-ts';
 import { menu, weather } from '../global';
-import { getFirstElement, logDebug, showToast } from './dom-utils';
+import { getFirstElement, logConsole, showToast } from './dom-utils';
 import { CurrentResponse } from 'openweathermap-ts/dist/types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -106,7 +106,7 @@ export function submitWeatherSettings(): void {
             .then(currentWeatherData => {
                 if (currentWeatherData.cod === 200) {
                     updateWeatherWidget(currentWeatherData, units);
-                    logDebug('Weather data fetched successfully.');
+                    logConsole('Weather data fetched successfully.');
                 } else {
                     stopWeather();
                     console.error('Error fetching weather data:', currentWeatherData.cod);
@@ -124,7 +124,7 @@ export function submitWeatherSettings(): void {
                 .then(currentWeatherData => {
                     if (currentWeatherData.cod === 200) {
                         updateWeatherWidget(currentWeatherData, units);
-                        logDebug('Updated weather data.');
+                        logConsole('Updated weather data.');
                     } else {
                         stopWeather();
                         console.error('Error updating weather data:', currentWeatherData.cod);
@@ -162,5 +162,5 @@ export function stopWeather() {
     weather.container.className = 'weather-hidden';
     menu.weathersubmitbtn.disabled = false;
     menu.weatherstopbtn.disabled = true;
-    logDebug('Weather interval stopped.');
+    logConsole('Weather interval stopped.');
 }

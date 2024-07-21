@@ -1,6 +1,6 @@
 import { menu } from '../global';
 import { presetLocalJSON } from '../importExport';
-import { getFirstElement, logDebug, showToast } from './dom-utils';
+import { getFirstElement, logConsole, showToast } from './dom-utils';
 
 export async function applyURLParams() {
     const queryString = window.location.search;
@@ -51,7 +51,7 @@ export async function applyURLParams() {
     if (urlParams.get('autoRestart') !== null) {
         const autoRestartTime = parseInt(urlParams.get('autoRestart') as string);
         if (!isNaN(autoRestartTime) && autoRestartTime >= 15 && autoRestartTime <= 86400) {
-            logDebug(`Set auto restart time for: ${autoRestartTime} seconds...`);
+            logConsole(`Set auto restart time for: ${autoRestartTime} seconds...`);
             menu.autorestarttime.innerHTML = `Auto restart: <b>${autoRestartTime} sec</b>`;
             setTimeout(() => {
                 window.location.reload();
@@ -64,6 +64,6 @@ export async function applyURLParams() {
     // Prevent end-user options modification by removing menu container entirely
     if (urlParams.get('lockSettings') === 'true') {
         menu.container.remove();
-        logDebug('Settings locked - Menu container removed...');
+        logConsole('Settings locked - Menu container removed...');
     }
 }

@@ -17,45 +17,40 @@ export function getFirstElement<T extends Element>(selector: string): T {
     return element as T;
 }
 
-export function logDebug(debugMessage:string):void {
-    if (menu.debugcheckbox.checked) {
+export function logConsole(debugMessage: string, type: string = 'debug'):void {
+    if (menu.debugcheckbox.checked && type === 'debug') {
         console.log(`DEBUG - ${debugMessage}`);
+    } else if (type === 'error') {
+        console.error(`ERROR - ${debugMessage}`);
+    } else if (type === 'warning') {
+        console.warn(`WARNING - ${debugMessage}`);
+    } else if (menu.debugcheckbox.checked && type === 'info') {
+        console.info(`INFO - ${debugMessage}`);
     }
 }
 
 function getThemeInfo(colorTheme: string = 'auto') {
-    let theme;
-    if (colorTheme === 'auto') {
-        theme = menu.container.dataset.bsTheme;
-    } else {
-        theme = colorTheme;
-    }
+    const theme = colorTheme === 'auto' ? menu.container.dataset.bsTheme : colorTheme;
 
-    if (theme == 'dark') {
-        return {
+    const themes = {
+        dark: {
             bgColor: '#313539',
             textColor: '#FFFFFF',
             outline: 'rgba(49, 43, 57, 0.5) solid 2px'
-        };
-    } else if (theme == 'light') {
-        return {
+        },
+        light: {
             bgColor: '#FFFFFF',
             textColor: '#212529',
             outline: 'rgba(255, 255, 255, 0.5) solid 2px'
-        };
-    } else if (theme == 'danger') {
-        return {
+        },
+        danger: {
             bgColor: '#DC3545',
             textColor: '#FFFFFF',
             outline: 'rgba(220, 53, 69, 0.5) solid 2px'
-        };
-    } else {
-        return {
-            bgColor: '#FFFFFF',
-            textColor: '#212529',
-            outline: 'rgba(255, 255, 255, 0.5) solid 2px'
-        };
-    }
+        }
+    };
+
+    return themes[theme] || themes.light;
 }
 
 export function showToast(message: string, duration: number = 3000, style: string = 'auto'): void {

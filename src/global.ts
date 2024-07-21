@@ -1,4 +1,4 @@
-import { getElement, getElements, logDebug, showToast } from './utils/dom-utils';
+import { getElement, getElements, logConsole, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
 import * as bootstrap from 'bootstrap';
 
@@ -125,35 +125,35 @@ function modifyFontStyle(type: string, value: string) {
     switch (type) {
     case 'style':
         dtdisplay.ccontainer.style.fontStyle = value;
-        logDebug(`Font style set to: ${value}`);
+        logConsole(`Font style set to: ${value}`);
         break;
     case 'weight':
         dtdisplay.ccontainer.style.fontWeight = value;
-        logDebug(`Font weight set to: ${value}`);
+        logConsole(`Font weight set to: ${value}`);
         break;
     case 'size':
         if (fontSize in fontSizeOptions) { // Check if the casted value is a valid key
             dtdisplay.ccontainer.style.fontSize = value;
             dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[fontSize];
             dtdisplay.date.style.fontSize = fontSizeOptions[fontSize];
-            logDebug(`Font sizing set to: ${value}`);
+            logConsole(`Font sizing set to: ${value}`);
         } else {
             console.error(`ERROR - Invalid font size: ${value}`);
         }
         break;
     case 'family':
         dtdisplay.ccontainer.style.fontFamily = value;
-        logDebug(`Font family set to: ${value}`);
+        logConsole(`Font family set to: ${value}`);
         break;
     case 'strokewidth':
         dtdisplay.ccontainer.style.webkitTextStrokeWidth = `${value}px`;
         font.strokerangelabel.textContent = `Stroke width: ${value}px`;
-        logDebug(`Font stroke width set to: ${value}px`);
+        logConsole(`Font stroke width set to: ${value}px`);
         break;
     case 'strokecolor':
         dtdisplay.ccontainer.style.webkitTextStrokeColor = value;
         font.strokecolorlabel.textContent = `Stroke color: ${value}`;
-        logDebug(`Font stroke color set to: ${value}`);
+        logConsole(`Font stroke color set to: ${value}`);
         break;
     default:
         console.error(`ERROR - Invalid font modification type: ${type}`);
@@ -167,7 +167,7 @@ menu.secondsvisradio.forEach((radio) => {
         const value = radio.dataset.value;
         dtdisplay.colon2.style.display = value as string;
         dtdisplay.secondSlot.style.display = value as string;
-        logDebug(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`);
+        logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`);
     });
 });
 
@@ -189,7 +189,7 @@ menu.secondsbarradio.forEach((radio) => {
             });
         }
         dtdisplay.secondsBar.style.display = value as string;
-        logDebug(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`);
+        logConsole(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`);
     });
 });
 
@@ -198,7 +198,7 @@ menu.datealignradio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = radio.dataset.value;
         dtdisplay.date.style.textAlign = value as string;
-        logDebug(`Date alignment set to: ${value}`);
+        logConsole(`Date alignment set to: ${value}`);
     });
 });
 
@@ -264,7 +264,7 @@ font.shadowrange.addEventListener('input', function() {
     font.shadowlabel.textContent = `Drop shadow: ${strength}px`;
 
     dtdisplay.ccontainer.style.textShadow = value > 0 ? dropShadowValue : '';
-    logDebug(`Font text shadow set to: ${dropShadowValue}`);
+    logConsole(`Font text shadow set to: ${dropShadowValue}`);
 });
 
 // Border type listener
@@ -280,7 +280,7 @@ menu.bordertyperadio.forEach((radio) => {
             });
             dtdisplay.tcontainer.style.borderStyle = value;
             dtdisplay.tcontainer.style.borderBottomStyle = value;
-            logDebug(`Border type set to: ${value}`);
+            logConsole(`Border type set to: ${value}`);
             break;
         case 'regular':
             menu.secondsbarradio.forEach((btn) => {
@@ -292,7 +292,7 @@ menu.bordertyperadio.forEach((radio) => {
             });
             dtdisplay.tcontainer.style.borderBottomStyle = 'none';
             dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
-            logDebug(`Border type set to: ${value}`);
+            logConsole(`Border type set to: ${value}`);
             break;
         case 'bottom':
             menu.secondsbarradio.forEach((btn) => {
@@ -304,7 +304,7 @@ menu.bordertyperadio.forEach((radio) => {
             });
             dtdisplay.tcontainer.style.borderStyle = 'none';
             dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
-            logDebug(`Border type set to: ${value}`);
+            logConsole(`Border type set to: ${value}`);
             break;
         default:
             console.error(`ERROR - Invalid border type: ${value}`);
@@ -318,10 +318,10 @@ menu.borderstyleselect.addEventListener('change', () => {
     const value = menu.borderstyleselect.value;
     if (menu.bordertyperadio[1].checked) {
         dtdisplay.tcontainer.style.borderStyle = value;
-        logDebug(`Border style set to: ${value}`);
+        logConsole(`Border style set to: ${value}`);
     } else if (menu.bordertyperadio[2].checked) {
         dtdisplay.tcontainer.style.borderBottomStyle = value;
-        logDebug(`Border style set to: ${value}`);
+        logConsole(`Border style set to: ${value}`);
     }
 });
 
@@ -348,7 +348,7 @@ menu.weathergeobtn.addEventListener('click', async () => {
         const latlonArray = await getLocation();
         menu.weatherlatinput.value = latlonArray[0].toString();
         menu.weatherloninput.value = latlonArray[1].toString();
-        logDebug(`Retrieved geolocation: ${latlonArray}`);
+        logConsole(`Retrieved geolocation: ${latlonArray}`);
     } catch (error) {
         console.error('Error getting location:', error);
     }
@@ -374,7 +374,7 @@ menu.themeradio.forEach((radio) => {
             // Weather container
             weather.container.dataset.bsTheme = 'light';
             weather.container.style.color = '#212529';
-            logDebug(`Menu theme set to: ${radio.id}`);
+            logConsole(`Menu theme set to: ${radio.id}`);
             showToast('Theme set to light mode ☀️');
         } else if (radio.id === 'darkthememode') {
             menu.container.dataset.bsTheme = 'dark';
@@ -383,7 +383,7 @@ menu.themeradio.forEach((radio) => {
             // Weather container
             weather.container.dataset.bsTheme = 'dark';
             weather.container.style.color = '#fff';
-            logDebug(`Menu theme set to: ${radio.id}`);
+            logConsole(`Menu theme set to: ${radio.id}`);
             showToast('Theme set to dark mode 🌙');
         }
     });
@@ -399,7 +399,7 @@ function toggleMenuVisibility(show: boolean) {
         menu.options.className = 'menu-options-show';
         elementDisplay(menu.cbutton, true);
         elementDisplay(menu.obutton, false);
-        logDebug('Menu panel opened');
+        logConsole('Menu panel opened');
     } else {
         menu.options.className = 'menu-options-fade';
         elementDisplay(menu.cbutton, false);
@@ -408,7 +408,7 @@ function toggleMenuVisibility(show: boolean) {
         } else {
             elementDisplay(menu.obutton, false);
         }
-        logDebug('Menu panel closed');
+        logConsole('Menu panel closed');
     }
 }
 
@@ -477,7 +477,7 @@ export function toggleFullscreen() {
             (document as any).msExitFullscreen();
         }
     }
-    logDebug('Toggled fullscreen mode');
+    logConsole('Toggled fullscreen mode');
     showToast('Toggled fullscreen mode');
 }
 
