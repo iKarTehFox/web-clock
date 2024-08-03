@@ -23,6 +23,8 @@ function getSolidColorValue() {
 }
 
 export function exportSettingsToJSON() {
+    showToast('Exporting settings...');
+
     // Get time and set export timestamp
     const time = luxon.DateTime.now();
     const timeExported = time.toFormat('FFFF');
@@ -74,6 +76,7 @@ export function exportSettingsToJSON() {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
+    showToast('Settings exported! Took ', undefined, 'success');
 }
 
 // Helper function to process JSON settings
