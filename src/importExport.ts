@@ -26,48 +26,63 @@ export function exportSettingsToJSON() {
     showToast('Exporting settings...');
 
     // Get time and set export timestamp
+    let usersettings;
+    let url;
     const time = luxon.DateTime.now();
     const timeExported = time.toFormat('FFFF');
 
     // Get all settings
-    const usersettings = {
-        clockConfig: {
-            clockMode: getFirstElement<HTMLInputElement>('input[name="clock-mode-radio"]:checked').id,
-            clockDisplay: menu.timemethodselect.value,
-            secondsVis: getFirstElement<HTMLInputElement>('input[name="seconds-vis-radio"]:checked').id,
-            dateFormat: menu.dateformselect.value,
-            dateAlign: getFirstElement<HTMLInputElement>('input[name="date-position-radio"]:checked').id,
-            borderMode: getFirstElement<HTMLInputElement>('input[name="border-type-radio"]:checked').id,
-            borderStyle: menu.borderstyleselect.value,
-            secondsBarVis: getFirstElement<HTMLInputElement>('input[name="seconds-bar-radio"]:checked').id
-        },
-        fontConfig: {
-            fontFamily: font.familysel.value,
-            fontStyle: getFirstElement<HTMLInputElement>('input[name="font-style-radio"]:checked').id,
-            fontWeight: getFirstElement<HTMLInputElement>('input[name="font-weight-radio"]:checked').id,
-            fontSize: font.sizesel.value,
-            dropShadow: font.shadowrange.value,
-            strokeWidth: font.strokerange.value,
-            strokeColor: (parseInt(font.strokerange.value) > 0) ? font.strokecolor.value : ''
-        },
-        colorTheme: {
-            colorMode: getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id,
-            solidColor: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
-            textColorMode: getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id,
-            textColorValue: (getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : '',
-            bgImage: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? document.body.style.backgroundImage : '',
-            bgImageSize: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : '',
-            bgImageBlur: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
-        },
-        exportTimestamp: timeExported,
-        version: 7
-    };
+    try {
+        usersettings = {
+            clockConfig: {
+                clockMode: getFirstElement<HTMLInputElement>('input[name="clock-mode-radio"]:checked').id,
+                clockDisplay: menu.timemethodselect.value,
+                secondsVis: getFirstElement<HTMLInputElement>('input[name="seconds-vis-radio"]:checked').id,
+                dateFormat: menu.dateformselect.value,
+                dateAlign: getFirstElement<HTMLInputElement>('input[name="date-position-radio"]:checked').id,
+                borderMode: getFirstElement<HTMLInputElement>('input[name="border-type-radio"]:checked').id,
+                borderStyle: menu.borderstyleselect.value,
+                secondsBarVis: getFirstElement<HTMLInputElement>('input[name="seconds-bar-radio"]:checked').id
+            },
+            fontConfig: {
+                fontFamily: font.familysel.value,
+                fontStyle: getFirstElement<HTMLInputElement>('input[name="font-style-radio"]:checked').id,
+                fontWeight: getFirstElement<HTMLInputElement>('input[name="font-weight-radio"]:checked').id,
+                fontSize: font.sizesel.value,
+                dropShadow: font.shadowrange.value,
+                strokeWidth: font.strokerange.value,
+                strokeColor: (parseInt(font.strokerange.value) > 0) ? font.strokecolor.value : ''
+            },
+            colorTheme: {
+                colorMode: getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id,
+                solidColor: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
+                textColorMode: getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id,
+                textColorValue: (getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : '',
+                bgImage: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? document.body.style.backgroundImage : '',
+                bgImageSize: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : '',
+                bgImageBlur: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
+            },
+            exportTimestamp: timeExported,
+            version: 7
+        };
+    } catch (error) {
+        logConsole(`Failed getting settings: ${error}`, 'error');
+        showToast('Error getting settings! Please check the console for more info.', 5000, 'danger');
+        return;
+    }
 
-    const settingsJSON = JSON.stringify(usersettings);
-    const blob = new Blob([settingsJSON], {
-        type: 'application/json'
-    });
-    const url = URL.createObjectURL(blob);
+    // Format settings
+    try {
+        const settingsJSON = JSON.stringify(usersettings);
+        const blob = new Blob([settingsJSON], {
+            type: 'application/json'
+        });
+        url = URL.createObjectURL(blob);
+    } catch (error) {
+        logConsole(`Failed formatting settings: ${error}`, 'error');
+        showToast('Error formatting settings! Please check the console for more info.', 5000, 'danger');
+        return;
+    }
 
     // Initiate download
     const downloadLink = document.createElement('a');
@@ -76,7 +91,7 @@ export function exportSettingsToJSON() {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-    showToast('Settings exported! Took ', undefined, 'success');
+    showToast(`Settings exported! Took ${((luxon.DateTime.now()).toMillis()) - time.toMillis()}ms`, undefined, 'success');
 }
 
 // Helper function to process JSON settings
