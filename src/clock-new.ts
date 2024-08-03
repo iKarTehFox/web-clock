@@ -116,8 +116,12 @@ function updateTime() {
     }
 
     // Seconds progress bar
-    const secBarWidth = (Number(sec) / 59) * 100;
-    dtdisplay.secondsBar.style.width = `${secBarWidth}%`;
+    if (menu.secondsbarradio[0].checked) { // Check if visible, 0% if not.
+        const secBarWidth = (Number(sec) / 59) * 100;
+        dtdisplay.secondsBar.style.width = `${secBarWidth}%`;
+    } else {
+        dtdisplay.secondsBar.style.width = '0%';
+    }
 
     // Time display methods
     type TimeFunction = (value: string) => string;
