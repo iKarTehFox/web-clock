@@ -83,7 +83,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
 In the URL bar, you can pass the following parameters:  
  - **debug=true**: Enables debug logging after the page has loaded
  - **darkMode=true**: Sets the menu theme to Dark
- - **menuVis=false**: Hides the menu button
+ - **panelVis=false**: Hides the panel buttons (stopwatch, countdown, and menu buttons)
  - **tabTitle=false**: Disables showing the current time in the tab title
  - **preset=\<filename\>**: Loads a JSON preset with the filename \<filename\> from the `/src/assets` directory.
  - **autoRestart=\<length\>**: Automatically reloads the page after \<length\> seconds
