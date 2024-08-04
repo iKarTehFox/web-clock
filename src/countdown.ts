@@ -34,7 +34,9 @@ function startCountdown() {
             if (totalSeconds > 0) {
                 totalSeconds--;
                 updateDisplay();
-            } else {
+            }
+            // Check if reached 0, end immediately to avoid 1 second delay.
+            if (totalSeconds === 0 || totalSeconds < 1) {
                 clearInterval(countdownInterval);
                 running = false;
                 showToast('Countdown finished!', 30000, 'success');
