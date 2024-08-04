@@ -39,7 +39,7 @@ export const menu = {
     imagesizeselect: getElement<HTMLSelectElement>('bgImageSizeSelect'),
     legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
     manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
-    menubuttonvischeckbox: getElement<HTMLInputElement>('menuButtonVisible'),
+    panelvischeckbox: getElement<HTMLInputElement>('panelVisible'),
     obutton: getElement<HTMLButtonElement>('open-button'),
     options: getElement<HTMLDivElement>('menu-options'),
     presetcolors: getElements<HTMLInputElement>('input[name="preset-color-radio"]'),
@@ -103,9 +103,32 @@ export const weather = {
     wind: getElement<HTMLParagraphElement>('weather-wind')
 };
 
+export const stopwatch = {
+    container: getElement<HTMLDivElement>('stopwatch-container'),
+    obutton: getElement<HTMLButtonElement>('stopwatch-button'),
+    display: getElement<HTMLHeadingElement>('stopwatch-display'),
+    startbtn: getElement<HTMLButtonElement>('stopwatch-start'),
+    pausebtn: getElement<HTMLButtonElement>('stopwatch-pause'),
+    resetbtn: getElement<HTMLButtonElement>('stopwatch-reset')
+};
+
+export const countdown = {
+    container: getElement<HTMLDivElement>('countdown-container'),
+    obutton: getElement<HTMLButtonElement>('countdown-button'),
+    display: getElement<HTMLHeadingElement>('countdown-display'),
+    startbtn: getElement<HTMLButtonElement>('countdown-start'),
+    pausebtn: getElement<HTMLButtonElement>('countdown-pause'),
+    resetbtn: getElement<HTMLButtonElement>('countdown-reset'),
+    hrsinput: getElement<HTMLInputElement>('countdown-hours'),
+    mininput: getElement<HTMLInputElement>('countdown-minutes'),
+    secinput: getElement<HTMLInputElement>('countdown-seconds')
+};
+
 // Fix menu button spacing
 menu.obutton.innerHTML = '<iconify-icon inline icon="mdi:menu"></iconify-icon> Menu';
 menu.cbutton.innerHTML = '<iconify-icon inline icon="mdi:close"></iconify-icon> Close';
+stopwatch.obutton.innerHTML = '<iconify-icon inline icon="mdi:timer"></iconify-icon>';
+countdown.obutton.innerHTML = '<iconify-icon inline icon="mdi:timer-sand-complete"></iconify-icon>';
 
 // Define font sizes
 type FontSizeKey = '6vw' | '8vw' | '10vw' | '12vw' | '14vw' | '18vw';
@@ -125,10 +148,14 @@ function modifyFontStyle(type: string, value: string) {
     switch (type) {
     case 'style':
         dtdisplay.ccontainer.style.fontStyle = value;
+        stopwatch.display.style.fontStyle = value;
+        countdown.display.style.fontStyle = value;
         logConsole(`Font style set to: ${value}`, 'info');
         break;
     case 'weight':
         dtdisplay.ccontainer.style.fontWeight = value;
+        stopwatch.display.style.fontWeight = value;
+        countdown.display.style.fontWeight = value;
         logConsole(`Font weight set to: ${value}`, 'info');
         break;
     case 'size':
@@ -143,6 +170,8 @@ function modifyFontStyle(type: string, value: string) {
         break;
     case 'family':
         dtdisplay.ccontainer.style.fontFamily = value;
+        stopwatch.display.style.fontFamily = value;
+        countdown.display.style.fontFamily = value;
         logConsole(`Font family set to: ${value}`, 'info');
         break;
     case 'strokewidth':
@@ -374,6 +403,14 @@ menu.themeradio.forEach((radio) => {
             // Weather container
             weather.container.dataset.bsTheme = 'light';
             weather.container.style.color = '#212529';
+            // Stopwatch container
+            stopwatch.container.dataset.bsTheme = 'light';
+            stopwatch.container.style.backgroundColor = '#ffffff';
+            stopwatch.container.style.color = '#212529';
+            // Countdown container
+            countdown.container.dataset.bsTheme = 'light';
+            countdown.container.style.backgroundColor = '#ffffff';
+            countdown.container.style.color = '#212529';
             logConsole(`Menu theme set to: ${radio.id}`, 'info');
             showToast('Theme set to light mode ☀️');
         } else if (radio.id === 'darkthememode') {
@@ -383,6 +420,14 @@ menu.themeradio.forEach((radio) => {
             // Weather container
             weather.container.dataset.bsTheme = 'dark';
             weather.container.style.color = '#fff';
+            // Stopwatch container
+            stopwatch.container.dataset.bsTheme = 'dark';
+            stopwatch.container.style.backgroundColor = '#313539';
+            stopwatch.container.style.color = '#fff';
+            // Countdown container
+            countdown.container.dataset.bsTheme = 'dark';
+            countdown.container.style.backgroundColor = '#313539';
+            countdown.container.style.color = '#fff';
             logConsole(`Menu theme set to: ${radio.id}`, 'info');
             showToast('Theme set to dark mode 🌙');
         }
@@ -403,7 +448,7 @@ function toggleMenuVisibility(show: boolean) {
     } else {
         menu.options.className = 'menu-options-fade';
         elementDisplay(menu.cbutton, false);
-        if (menu.menubuttonvischeckbox.checked) {
+        if (menu.panelvischeckbox.checked) {
             elementDisplay(menu.obutton, true);
         } else {
             elementDisplay(menu.obutton, false);
@@ -425,7 +470,7 @@ menu.cbutton.addEventListener('click', function() {
 // Click outside to close menu
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
-        if (!menu.options.contains((e.target as Node)) && !menu.obutton.contains((e.target as Node)) && !menu.cbutton.contains((e.target as Node)) && !menu.options.classList.contains('menu-options-fade') && !menu.options.classList.contains('menu-options-initial')) {
+        if (!menu.options.contains((e.target as Node)) && !menu.obutton.contains((e.target as Node)) && !menu.cbutton.contains((e.target as Node)) && !stopwatch.obutton.contains((e.target as Node)) && !countdown.obutton.contains((e.target as Node)) && !menu.options.classList.contains('menu-options-fade') && !menu.options.classList.contains('menu-options-initial')) {
             toggleMenuVisibility(false);
         }
     });
@@ -442,7 +487,9 @@ document.addEventListener('keydown', function(e) {
 document.addEventListener('dblclick', function(e) {
     if (!menu.options.contains(e.target as Node) && !menu.obutton.contains(e.target as Node) && !menu.cbutton.contains(e.target as Node)) {
         elementDisplay(menu.obutton, true);
-        menu.menubuttonvischeckbox.checked = true;
+        menu.panelvischeckbox.checked = true;
+        elementDisplay(stopwatch.obutton, true);
+        elementDisplay(countdown.obutton, true);
     }
 });
 
@@ -481,14 +528,18 @@ export function toggleFullscreen() {
     showToast('Toggled fullscreen mode');
 }
 
-menu.menubuttonvischeckbox.addEventListener('change', function(e) {
-    if (menu.menubuttonvischeckbox.checked) {
+menu.panelvischeckbox.addEventListener('change', function(e) {
+    if (menu.panelvischeckbox.checked) {
         // Show the menu button
         if (!menu.options.contains(e.target as Node) && !menu.obutton.contains(e.target as Node) && !menu.cbutton.contains(e.target as Node)) {
             menu.obutton.style.display = 'block';
+            elementDisplay(stopwatch.obutton, true);
+            elementDisplay(countdown.obutton, true);
         }
     } else {
         // Hide the menu button
         menu.obutton.style.display = 'none';
+        elementDisplay(stopwatch.obutton, false);
+        elementDisplay(countdown.obutton, false);
     }
 });

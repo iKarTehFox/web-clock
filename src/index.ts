@@ -7,6 +7,8 @@ import './background-color';
 import './numberToWords.min';
 import './clock-new';
 import './clock-color';
+import './stopwatch';
+import './countdown';
 import { applyURLParams } from './utils/url-params';
 import { populateTimeZoneSelect } from './clock-new';
 

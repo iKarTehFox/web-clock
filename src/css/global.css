@@ -118,6 +118,7 @@ body {
   transition: width 0.75s;
 }
 
+/* Weather widget */
 .weather-container {
     position: absolute;
     display: block;
@@ -131,4 +132,38 @@ body {
 
 #credit {
     font-size: 15px;
+}
+
+/* Stopwatch popup */
+#stopwatch-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    min-width: 40vw;
+    max-width: 90vw;
+    max-height: fit-content;
+    box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    border-radius: 10px;
+}
+
+/* Countdown popup */
+#countdown-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    min-width: 40vw;
+    max-width: 90vw;
+    max-height: fit-content;
+    box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    border-radius: 10px;
 }

@@ -29,10 +29,10 @@ export async function applyURLParams() {
         menu.weathersubmitbtn.click();
     }
 
-    // Menu visibility
-    if (urlParams.get('menuVis') === 'false') {
-        menu.menubuttonvischeckbox.checked = false;
-        menu.menubuttonvischeckbox.dispatchEvent(new Event('change'));
+    // Panel visibility
+    if (urlParams.get('panelVis') === 'false') {
+        menu.panelvischeckbox.checked = false;
+        menu.panelvischeckbox.dispatchEvent(new Event('change'));
     }
 
     // Tab title
