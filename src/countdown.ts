@@ -2,9 +2,9 @@ import { menu, countdown } from './global';
 import { logConsole, showToast } from './utils/dom-utils';
 
 
-let countdownInterval;
-let totalSeconds = 0;
-let isRunning = false;
+let countdownInterval: NodeJS.Timeout;
+let totalSeconds: number = 0;
+let running: boolean = false;
 
 function updateDisplay() {
     const hours = Math.floor(totalSeconds / 3600);
@@ -28,39 +28,46 @@ function inputsDisabled(disabled: boolean) {
 }
 
 function startCountdown() {
-    if (!isRunning) {
-        isRunning = true;
+    if (!running) {
+        running = true;
         countdownInterval = setInterval(() => {
             if (totalSeconds > 0) {
                 totalSeconds--;
                 updateDisplay();
             } else {
                 clearInterval(countdownInterval);
-                isRunning = false;
+                running = false;
                 showToast('Countdown finished!', 30000, 'success');
                 inputsDisabled(false);
             }
         }, 1000);
+        logConsole('Countdown started...', 'info');
     }
 }
 
 function pauseCountdown() {
-    isRunning = false;
-    clearInterval(countdownInterval);
+    if (running) {
+        running = false;
+        clearInterval(countdownInterval);
+        logConsole('Countdown paused...', 'info');
+    }
 }
 
 function resetCountdown() {
-    isRunning = false;
-    totalSeconds = 0;
-    clearInterval(countdownInterval);
-    updateDisplay();
-
-    // Re-enable inputs
-    inputsDisabled(false);
+    if (running || totalSeconds > 0) {
+        running = false;
+        totalSeconds = 0;
+        clearInterval(countdownInterval);
+        updateDisplay();
+    
+        // Re-enable inputs
+        inputsDisabled(false);
+        logConsole('Countdown reset...', 'info');
+    }
 }
 
 countdown.startbtn.addEventListener('click', () => {
-    if (!isRunning) {
+    if (!running) {
         if (totalSeconds === 0) {
             const hours = parseInt(countdown.hrsinput.value) || 0;
             const minutes = parseInt(countdown.mininput.value) || 0;

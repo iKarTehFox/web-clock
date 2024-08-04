@@ -34,8 +34,8 @@ function startStopwatch() {
         running = true;
         startTime = Date.now();
         timeInterval = setInterval(updateDisplay, 25);
+        logConsole('Stopwatch started...', 'info');
     }
-    logConsole('Stopwatch started...', 'info');
 }
 
 // Pause the timer
@@ -44,17 +44,19 @@ export function pauseStopwatch() {
         running = false;
         elapsedTime += Date.now() - startTime;
         clearInterval(timeInterval);
+        logConsole('Stopwatch paused...', 'info');
     }
-    logConsole('Stopwatch paused...', 'info');
 }
 
 // Reset the timer
 function resetStopwatch() {
-    running = false;
-    clearInterval(timeInterval);
-    elapsedTime = 0;
-    updateDisplay();
-    logConsole('Stopwatch reset...', 'info');
+    if (running || elapsedTime > 0) {
+        running = false;
+        clearInterval(timeInterval);
+        elapsedTime = 0;
+        updateDisplay();
+        logConsole('Stopwatch reset...', 'info');
+    }
 }
 
 // Stopwatch button listener
