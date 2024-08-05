@@ -533,9 +533,9 @@ menu.panelvischeckbox.addEventListener('change', function(e) {
         // Show the menu button
         if (!menu.options.contains(e.target as Node) && !menu.obutton.contains(e.target as Node) && !menu.cbutton.contains(e.target as Node)) {
             menu.obutton.style.display = 'block';
-            elementDisplay(stopwatch.obutton, true);
-            elementDisplay(countdown.obutton, true);
         }
+        elementDisplay(stopwatch.obutton, true);
+        elementDisplay(countdown.obutton, true);
     } else {
         // Hide the menu button
         menu.obutton.style.display = 'none';
