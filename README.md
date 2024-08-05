@@ -72,7 +72,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
  - Start, pause, and reset a countdown or stopwatch
  - Manually enter any time for the countdown
 ### Display Options
- - Toggle Dark Mode for the menu and weather widget
+ - Toggle Dark Mode for the menu, weather widget, and stopwatch/countdown panels
  - Toggle displaying of the menu button
  - Toggle showing the current time in the tab title
  - Enter fullscreen mode
@@ -85,7 +85,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
 ### URL Parameters
 In the URL bar, you can pass the following parameters:  
  - **debug=true**: Enables debug logging after the page has loaded
- - **darkMode=true**: Sets the menu theme to Dark
+ - **darkMode=true**: Sets the theme to Dark
  - **panelVis=false**: Hides the panel buttons (stopwatch, countdown, and menu buttons)
  - **tabTitle=false**: Disables showing the current time in the tab title
  - **preset=\<filename\>**: Loads a JSON preset with the filename \<filename\> from the `/src/assets` directory.
