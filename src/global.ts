@@ -470,7 +470,17 @@ menu.cbutton.addEventListener('click', function() {
 // Click outside to close menu
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
-        if (!menu.options.contains((e.target as Node)) && !menu.obutton.contains((e.target as Node)) && !menu.cbutton.contains((e.target as Node)) && !stopwatch.obutton.contains((e.target as Node)) && !countdown.obutton.contains((e.target as Node)) && !menu.options.classList.contains('menu-options-fade') && !menu.options.classList.contains('menu-options-initial')) {
+        const target = e.target as HTMLElement;
+        const isTooltip = target.closest('.tooltip') !== null;
+
+        if (!isTooltip && 
+            !menu.options.contains(target as Node) && 
+            !menu.obutton.contains(target as Node) && 
+            !menu.cbutton.contains(target as Node) && 
+            !stopwatch.obutton.contains(target as Node) && 
+            !countdown.obutton.contains(target as Node) && 
+            !menu.options.classList.contains('menu-options-fade') && 
+            !menu.options.classList.contains('menu-options-initial')) {
             toggleMenuVisibility(false);
         }
     });
