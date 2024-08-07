@@ -488,14 +488,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Esc down to close menu
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && !menu.options.classList.contains('menu-options-fade') && !menu.options.classList.contains('menu-options-initial')) {
+    const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
+                          !menu.options.classList.contains('menu-options-initial');
+
+    if (e.key === 'Escape' && isMenuVisible) {
         toggleMenuVisibility(false);
     }
 });
 
 // Menu button visibility on double click
 document.addEventListener('dblclick', function(e) {
-    if (!menu.options.contains(e.target as Node) && !menu.obutton.contains(e.target as Node) && !menu.cbutton.contains(e.target as Node)) {
+    const target = e.target as HTMLElement;
+    const isMenuRelated = menu.options.contains(target) || 
+                          menu.obutton.contains(target) || 
+                          menu.cbutton.contains(target);
+
+    if (!isMenuRelated) {
         elementDisplay(menu.obutton, true);
         menu.panelvischeckbox.checked = true;
         elementDisplay(stopwatch.obutton, true);
@@ -539,15 +547,18 @@ export function toggleFullscreen() {
 }
 
 menu.panelvischeckbox.addEventListener('change', function(e) {
+    const target = e.target as HTMLElement;
+    const isMenuRelated = menu.options.contains(target) || 
+                          menu.obutton.contains(target) || 
+                          menu.cbutton.contains(target);
+
     if (menu.panelvischeckbox.checked) {
-        // Show the menu button
-        if (!menu.options.contains(e.target as Node) && !menu.obutton.contains(e.target as Node) && !menu.cbutton.contains(e.target as Node)) {
+        if (!isMenuRelated) {
             menu.obutton.style.display = 'block';
         }
         elementDisplay(stopwatch.obutton, true);
         elementDisplay(countdown.obutton, true);
     } else {
-        // Hide the menu button
         menu.obutton.style.display = 'none';
         elementDisplay(stopwatch.obutton, false);
         elementDisplay(countdown.obutton, false);

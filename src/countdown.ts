@@ -110,7 +110,13 @@ countdown.obutton.addEventListener('click', () => {
 // Click outside to close countdown
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
-        if (!menu.options.contains((e.target as Node)) && !menu.obutton.contains((e.target as Node)) && !countdown.container.contains((e.target as Node)) && !countdown.obutton.contains((e.target as Node)) && !(countdown.container.style.display == 'none')) {
+        const target = e.target as HTMLElement;
+        const isCountdownRelated = menu.options.contains(target) || 
+                                   menu.obutton.contains(target) || 
+                                   countdown.container.contains(target) || 
+                                   countdown.obutton.contains(target);
+
+        if (!isCountdownRelated && countdown.container.style.display !== 'none') {
             countdown.container.style.display = 'none';
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');
@@ -120,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Esc down to close countdown
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && !(countdown.container.style.display == 'none')) {
+    if (e.key === 'Escape' && countdown.container.style.display !== 'none') {
         countdown.container.style.display = 'none';
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');

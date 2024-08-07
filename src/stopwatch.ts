@@ -77,7 +77,13 @@ stopwatch.obutton.addEventListener('click', () => {
 // Click outside to close stopwatch
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
-        if (!menu.options.contains((e.target as Node)) && !menu.obutton.contains((e.target as Node)) && !stopwatch.container.contains((e.target as Node)) && !stopwatch.obutton.contains((e.target as Node)) && !(stopwatch.container.style.display == 'none')) {
+        const target = e.target as HTMLElement;
+        const isMenuRelated = menu.options.contains(target) || 
+                                   menu.obutton.contains(target) || 
+                                   stopwatch.container.contains(target) || 
+                                   stopwatch.obutton.contains(target);
+
+        if (!isMenuRelated && stopwatch.container.style.display !== 'none') {
             stopwatch.container.style.display = 'none';
             stopwatch.obutton.className = 'btn btn-secondary';
             logConsole('Stopwatch panel closed', 'info');
@@ -88,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Esc down to close stopwatch
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && !(stopwatch.container.style.display == 'none')) {
+    if (e.key === 'Escape' && stopwatch.container.style.display !== 'none') {
         stopwatch.container.style.display = 'none';
         stopwatch.obutton.className = 'btn btn-secondary';
         logConsole('Stopwatch panel closed', 'info');
