@@ -128,6 +128,8 @@ Copyright 2019 JS Foundation and other contributors
 Copyright (c) 2015 Martin Eneqvist
 - **Social Buttons for Bootstrap** ([GitHub](https://github.com/lipis/bootstrap-social)): Licensed under MIT License  
 Copyright (c) 2013-2016 Panayiotis Lipiridis
+- **Toastify**  ([GitHub](https://github.com/apvarun/toastify-js)): Licensed under MIT License
+Copyright (c) 2018 apvarun
 - **ts-luxon** ([Link](https://www.npmjs.com/package/ts-luxon)): Licensed under MIT License  
 Copyright (c) 2023 Tony Samperi and other contributors
 - **Webpack** ([Link](https://webpack.js.org/)): Licensed under MIT License  
