@@ -12,7 +12,10 @@
     </head>
     <body>
         <div id="blur-panel"></div>
+        <!-- Menu -->
         <div id="menu-container" data-bs-theme="light">
+            <button id="countdown-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Countdown" style="position: absolute; top: 0px; right: 152px;"></button>
+            <button id="stopwatch-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Stopwatch" style="position: absolute; top: 0px; right: 105px;"></button>
             <button id="open-button" class="btn btn-secondary" style="width: 100px;"></button>
             <button id="close-button" class="btn btn-danger" style="display: none; position: absolute; top: 0px; right: 0px; width: 100px;"></button>
             <div id="menu-options" class="menu-options-initial">
@@ -402,12 +405,12 @@
                                     <label class="btn btn-outline-primary" for="darkthememode">Dark</label>
                                 </div>
                                 <hr>
-                                <h6 class="mb-1 mt-2">Menu Visibility</h6>
+                                <h6 class="mb-1 mt-2">Panel Visibility</h6>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="menuButtonVisible" checked>
-                                    <label class="form-check-label" for="menuButtonVisible">Show menu button</label>
+                                    <input class="form-check-input" type="checkbox" id="panelVisible" checked>
+                                    <label class="form-check-label" for="panelVisible">Show panel buttons</label>
                                 </div>
-                                <p class="mb-2" id="subtext-light">Double click the screen to make menu button visible again</p>
+                                <p class="mb-2" id="subtext-light">Double click the screen to make buttons visible again</p>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Tab Title</h6>
                                 <div class="form-check">
@@ -467,10 +470,11 @@
                         <p style="margin-top: -1.5px;"><iconify-icon inline icon="mdi:github"></iconify-icon></p>
                     </a>
                     <p class="mb-1 mt-2">Review the <a href="/privacy.html">Privacy Policy</a>.</p>
-                    <p class="mb-1 mt-2" id="version">Version: <b>v1.3.0</b></p>
+                    <p class="mb-1 mt-2" id="version">Version: <b>v1.4.0</b></p>
                 </div>
             </div>
         </div>
+        <!-- Clock -->
         <div id="clock-container">
             <div id="time-container">
                 <span class="clock-part" id="hour-slot">00</span><span class="colon" id="colon1">:</span><span class="clock-part" id="minute-slot">00</span><span class="colon" id="colon2">:</span><span class="clock-part" id="second-slot">00</span><span id="indicator"></span>
@@ -478,6 +482,7 @@
             </div>
             <p id="date"><noscript>JavaScript is disabled!</noscript></p>
         </div>
+        <!-- Weather Widget -->
         <div class="weather-hidden" id="weather-widget">
             <div class="card shadow-0 border">
                 <div class="card-body p-3">
@@ -490,6 +495,45 @@
                     <div class="d-flex flex-row align-items-center justify-content-between">
                         <p class="mb-0 me-2 align-left" id="weather-condition">Condition</p>
                         <iconify-icon icon="mdi:weather-cloudy" id="weather-icon" width="2em" height="2em"></iconify-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Stopwatch Popup -->
+        <div id="stopwatch-container" style="display: none;">
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="container text-center">
+                    <div class="row">
+                        <div class="col">
+                            <h1 class="display-1 mb-4" id="stopwatch-display">00:00:00</h1>
+                            <div class="btn-group" role="group" aria-label="Stopwatch controls">
+                                <button type="button" class="btn btn-primary" id="stopwatch-start">Start</button>
+                                <button type="button" class="btn btn-warning" id="stopwatch-pause">Pause</button>
+                                <button type="button" class="btn btn-danger" id="stopwatch-reset">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Countdown Popup -->
+        <div id="countdown-container" style="display: none;">
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="container text-center">
+                    <div class="row">
+                        <div class="col">
+                            <h1 class="display-1 mb-4" id="countdown-display">00:00:00</h1>
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" id="countdown-hours" placeholder="Hours" min="0" max="23">
+                                <input type="number" class="form-control" id="countdown-minutes" placeholder="Minutes" min="0" max="59">
+                                <input type="number" class="form-control" id="countdown-seconds" placeholder="Seconds" min="0" max="59">
+                            </div>
+                            <div class="btn-group" role="group" aria-label="Countdown controls">
+                                <button type="button" class="btn btn-primary" id="countdown-start">Start</button>
+                                <button type="button" class="btn btn-warning" id="countdown-pause">Pause</button>
+                                <button type="button" class="btn btn-danger" id="countdown-reset">Reset</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

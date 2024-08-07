@@ -1,5 +1,5 @@
 import { doc, menu } from './global';
-import { logDebug } from './utils/dom-utils';
+import { logConsole } from './utils/dom-utils';
 
 export function uploadBGImg() {
     const input = document.createElement('input');
@@ -20,10 +20,10 @@ export function uploadBGImg() {
                 // Ensure the result is treated as a string
                 const imageUrl = reader.result as string;
                 bodyElement.style.backgroundImage = `url('${imageUrl}')`;
-                logDebug('Background image set.');
+                logConsole('Background image set.', 'info');
             };
         } else {
-            console.error('ERROR - No file selected or input element is missing.');
+            logConsole('No file selected or input element is missing.', 'error');
         }
     });
     
@@ -37,18 +37,18 @@ menu.imagesizeselect.addEventListener('change', () => {
     switch (value) {
     case 'auto':
         bodyElement.style.backgroundSize = value;
-        logDebug(`Image sizing set to: ${value}`);
+        logConsole(`Image sizing set to: ${value}`, 'info');
         break;
     case 'cover':
         bodyElement.style.backgroundSize = value;
-        logDebug(`Image sizing set to: ${value}`);
+        logConsole(`Image sizing set to: ${value}`, 'info');
         break;
     case 'stretch':
         bodyElement.style.backgroundSize = '100vw 100vh';
-        logDebug(`Image sizing set to: ${value}`);
+        logConsole(`Image sizing set to: ${value}`, 'info');
         break;
     default:
-        console.error(`ERROR - Unsupported background size value: ${value}`);
+        logConsole(`Unsupported background size value: ${value}`, 'error');
         break;
     }
 });
@@ -57,5 +57,5 @@ menu.imageblurrange.addEventListener('input', () => {
     const blurValue = menu.imageblurrange.value;
     doc.blurpanel.style.backdropFilter = (`blur(${blurValue}px)`);
     menu.imageblurlabel.textContent = `Image Blur: ${blurValue}px`;
-    logDebug(`Image blur set to: ${blurValue}px`);
+    logConsole(`Image blur set to: ${blurValue}px`, 'info');
 });

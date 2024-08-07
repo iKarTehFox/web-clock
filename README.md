@@ -68,8 +68,11 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
  - Enter an OpenWeatherMap API key
  - Manually set coordinates or use GPS
  - Choose between Imperial and Metric units
+### Countdown/Stopwatch
+ - Start, pause, and reset a countdown or stopwatch
+ - Manually enter any time for the countdown
 ### Display Options
- - Toggle Dark Mode for the menu and weather widget
+ - Toggle Dark Mode for the menu, weather widget, and stopwatch/countdown panels
  - Toggle displaying of the menu button
  - Toggle showing the current time in the tab title
  - Enter fullscreen mode
@@ -82,8 +85,8 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
 ### URL Parameters
 In the URL bar, you can pass the following parameters:  
  - **debug=true**: Enables debug logging after the page has loaded
- - **darkMode=true**: Sets the menu theme to Dark
- - **menuVis=false**: Hides the menu button
+ - **darkMode=true**: Sets the theme to Dark
+ - **panelVis=false**: Hides the panel buttons (stopwatch, countdown, and menu buttons)
  - **tabTitle=false**: Disables showing the current time in the tab title
  - **preset=\<filename\>**: Loads a JSON preset with the filename \<filename\> from the `/src/assets` directory.
  - **autoRestart=\<length\>**: Automatically reloads the page after \<length\> seconds
@@ -97,13 +100,13 @@ For the weather widget, all of the following parameters are required:
  - **weatherLon=\<longitude\>**: Input manual longitude  
  - **weatherUnits=imperial/metric**: Set 'imperial' or 'metric' weather units  
 
- For instance, you can [visit](https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset) the following URL, `https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset` to load with the dark mode menu theme **enabled**, the menu button **hidden**, the tab title **disabled**, and the preset `onlinewebclock-amoled-preset` applied.
+ For instance, you can [visit](https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset) the following URL, `https://online-clock.pages.dev/?darkMode=true&panelVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset` to load with the dark mode menu theme **enabled**, the menu button **hidden**, the tab title **disabled**, and the preset `onlinewebclock-amoled-preset` applied.
 
  With this in mind, you can bookmark the URL with the parameters you want, and it will load the page with those settings every time!
  
 # Gallery
-### Preview of the page  
- ![A screenshot of the main web clock page. The time 12:00 PM and date of June 1st, 2024 is shown against a white background.](/src/assets/images/main.png)  
+### Preview of the clock  
+ ![A screenshot of the main web clock page. The time 12:00 PM and date of August 1st, 2024 is shown against a white background.](/src/assets/images/main.png)  
 ### Menu options pane
  ![A screenshot of the menu options panel. The "Date and Time" section is opened.](/src/assets/images/menu.png)  
 ### Customization example
@@ -111,21 +114,26 @@ For the weather widget, all of the following parameters are required:
  > Like this look? See [Importing/Exporting Settings](#importingexporting-settings) for the config!
  
 # Acknowledgements (OSS)
-- **Bootstrap** ([Link](https://getbootstrap.com/)): Licensed under MIT License
- 
-- **Iconify** ([Link](https://iconify.design)): Licensed under MIT License
- 
-- **Material Design Icons by Pictogrammers** ([GitHub](https://github.com/Templarian/MaterialDesign)): Licensed under Apache License 2.0
- 
-- **Luxon** ([GitHub](https://github.com/moment/luxon)): Licensed under MIT License
- 
-- **number-to-words** ([GitHub](https://github.com/marlun78/number-to-words)): Licensed under MIT License
- 
-- **Social Buttons for Bootstrap** ([GitHub](https://github.com/lipis/bootstrap-social)): Licensed under MIT License
+- **Axios**  ([GitHub](https://github.com/axios/axios)): Licensed under MIT License  
+Copyright (c) 2014-present Matt Zabriskie & Collaborators
+- **Bootstrap** ([Link](https://getbootstrap.com/)): Licensed under MIT License  
+Copyright (c) 2011-2024 The Bootstrap Authors
+- **Iconify** ([Link](https://iconify.design)): Licensed under MIT License  
+Copyright (c) 2021-PRESENT Vjacheslav Trushkin
+- **Material Design Icons by Pictogrammers** ([GitHub](https://github.com/Templarian/MaterialDesign)): Icons licensed under Apache License 2.0  
 
-- **ts-luxon** ([Link](https://www.npmjs.com/package/ts-luxon)): Licensed under MIT
-
-- **Webpack** ([Link](https://webpack.js.org/)): Licensed under MIT License
+- **Luxon** ([GitHub](https://github.com/moment/luxon)): Licensed under MIT License  
+Copyright 2019 JS Foundation and other contributors
+- **number-to-words** ([GitHub](https://github.com/marlun78/number-to-words)): Licensed under MIT License  
+Copyright (c) 2015 Martin Eneqvist
+- **Social Buttons for Bootstrap** ([GitHub](https://github.com/lipis/bootstrap-social)): Licensed under MIT License  
+Copyright (c) 2013-2016 Panayiotis Lipiridis
+- **Toastify**  ([GitHub](https://github.com/apvarun/toastify-js)): Licensed under MIT License  
+Copyright (c) 2018 apvarun
+- **ts-luxon** ([Link](https://www.npmjs.com/package/ts-luxon)): Licensed under MIT License  
+Copyright (c) 2023 Tony Samperi and other contributors
+- **Webpack** ([Link](https://webpack.js.org/)): Licensed under MIT License  
+Copyright JS Foundation and other contributors  
 
 Each license can be found in the code's respective files or website.
  

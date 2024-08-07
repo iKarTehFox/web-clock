@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getFirstElement, logDebug } from './utils/dom-utils';
+import { getFirstElement, logConsole, showToast } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, font } from './global';
 import { stopColorFade } from './background-color';
@@ -23,49 +23,66 @@ function getSolidColorValue() {
 }
 
 export function exportSettingsToJSON() {
+    showToast('Exporting settings...');
+
     // Get time and set export timestamp
+    let usersettings;
+    let url;
     const time = luxon.DateTime.now();
     const timeExported = time.toFormat('FFFF');
 
     // Get all settings
-    const usersettings = {
-        clockConfig: {
-            clockMode: getFirstElement<HTMLInputElement>('input[name="clock-mode-radio"]:checked').id,
-            clockDisplay: menu.timemethodselect.value,
-            secondsVis: getFirstElement<HTMLInputElement>('input[name="seconds-vis-radio"]:checked').id,
-            dateFormat: menu.dateformselect.value,
-            dateAlign: getFirstElement<HTMLInputElement>('input[name="date-position-radio"]:checked').id,
-            borderMode: getFirstElement<HTMLInputElement>('input[name="border-type-radio"]:checked').id,
-            borderStyle: menu.borderstyleselect.value,
-            secondsBarVis: getFirstElement<HTMLInputElement>('input[name="seconds-bar-radio"]:checked').id
-        },
-        fontConfig: {
-            fontFamily: font.familysel.value,
-            fontStyle: getFirstElement<HTMLInputElement>('input[name="font-style-radio"]:checked').id,
-            fontWeight: getFirstElement<HTMLInputElement>('input[name="font-weight-radio"]:checked').id,
-            fontSize: font.sizesel.value,
-            dropShadow: font.shadowrange.value,
-            strokeWidth: font.strokerange.value,
-            strokeColor: (parseInt(font.strokerange.value) > 0) ? font.strokecolor.value : ''
-        },
-        colorTheme: {
-            colorMode: getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id,
-            solidColor: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
-            textColorMode: getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id,
-            textColorValue: (getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : '',
-            bgImage: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? document.body.style.backgroundImage : '',
-            bgImageSize: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : '',
-            bgImageBlur: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
-        },
-        exportTimestamp: timeExported,
-        version: 7
-    };
+    try {
+        usersettings = {
+            clockConfig: {
+                clockMode: getFirstElement<HTMLInputElement>('input[name="clock-mode-radio"]:checked').id,
+                clockDisplay: menu.timemethodselect.value,
+                secondsVis: getFirstElement<HTMLInputElement>('input[name="seconds-vis-radio"]:checked').id,
+                dateFormat: menu.dateformselect.value,
+                dateAlign: getFirstElement<HTMLInputElement>('input[name="date-position-radio"]:checked').id,
+                borderMode: getFirstElement<HTMLInputElement>('input[name="border-type-radio"]:checked').id,
+                borderStyle: menu.borderstyleselect.value,
+                secondsBarVis: getFirstElement<HTMLInputElement>('input[name="seconds-bar-radio"]:checked').id
+            },
+            fontConfig: {
+                fontFamily: font.familysel.value,
+                fontStyle: getFirstElement<HTMLInputElement>('input[name="font-style-radio"]:checked').id,
+                fontWeight: getFirstElement<HTMLInputElement>('input[name="font-weight-radio"]:checked').id,
+                fontSize: font.sizesel.value,
+                dropShadow: font.shadowrange.value,
+                strokeWidth: font.strokerange.value,
+                strokeColor: (parseInt(font.strokerange.value) > 0) ? font.strokecolor.value : ''
+            },
+            colorTheme: {
+                colorMode: getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id,
+                solidColor: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
+                textColorMode: getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id,
+                textColorValue: (getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : '',
+                bgImage: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? document.body.style.backgroundImage : '',
+                bgImageSize: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : '',
+                bgImageBlur: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
+            },
+            exportTimestamp: timeExported,
+            version: 7
+        };
+    } catch (error) {
+        logConsole(`Failed getting settings: ${error}`, 'error');
+        showToast('Error getting settings! Please check the console for more info.', 5000, 'danger');
+        return;
+    }
 
-    const settingsJSON = JSON.stringify(usersettings);
-    const blob = new Blob([settingsJSON], {
-        type: 'application/json'
-    });
-    const url = URL.createObjectURL(blob);
+    // Format settings
+    try {
+        const settingsJSON = JSON.stringify(usersettings);
+        const blob = new Blob([settingsJSON], {
+            type: 'application/json'
+        });
+        url = URL.createObjectURL(blob);
+    } catch (error) {
+        logConsole(`Failed formatting settings: ${error}`, 'error');
+        showToast('Error formatting settings! Please check the console for more info.', 5000, 'danger');
+        return;
+    }
 
     // Initiate download
     const downloadLink = document.createElement('a');
@@ -74,6 +91,7 @@ export function exportSettingsToJSON() {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
+    showToast(`Settings exported! Took ${((luxon.DateTime.now()).toMillis()) - time.toMillis()}ms`, undefined, 'success');
 }
 
 // Helper function to process JSON settings
@@ -88,11 +106,13 @@ function processJSONSettings(jsonText: string, alertConfirmation: boolean = true
         }
 
         updateClockSettings(importedSettings);
-        logDebug('Settings successfully loaded!');
-        if (alertConfirmation === true) {alert(`Settings successfully imported!\nFile timestamp: ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`);}
+        logConsole('Settings successfully loaded!', 'info');
+        if (alertConfirmation === true) {
+            showToast(`Settings successfully imported!<hr><b>File timestamp:</b> ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`, 5000);
+        }
     } catch (error) {
-        console.error('ERROR - Error processing settings:', error);
-        alert('Invalid settings file. Please make sure the file contains valid JSON.');
+        logConsole(`Issue processing settings: ${error}`, 'error');
+        showToast('Invalid settings file. Please make sure the file contains valid JSON.', 5000, 'danger');
     }
 }
 
@@ -131,7 +151,7 @@ export function manualJSONImport() {
         // Clear text field after completion
         menu.manualjsontextinput.value = '';
     } else {
-        logDebug('No settings were provided or the JSON data could not be read.');
+        logConsole('No settings were provided or the JSON data could not be read.', 'info');
     }
 }
 
@@ -143,12 +163,12 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
     // Fetch file using Axios and return Promise
     return axios.get(url)
         .then(response => {
-            logDebug(`Attempting to load settings from preset: '${filename}'...`);
+            logConsole(`Attempting to load settings from preset: '${filename}'...`, 'info');
             processJSONSettings(JSON.stringify(response.data), alertConfirmation);
         })
         .catch(error => {
-            console.error('ERROR - Error fetching local settings file:', error);
-            alert('Could not fetch local settings file. Please check the filename and ensure the file exists.');
+            logConsole(`Error fetching local settings file: ${error}`, 'error');
+            showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 5000, 'danger');
         });
 }
 
@@ -250,7 +270,7 @@ function handleValidationFailure(errorDetails: ErrorDetails) {
     };
     
     const errorMessage = errorMsg[`${errorDetails.type}`] || 'Unknown validation failure';
-    console.error('ERROR - ' + errorMessage);
+    logConsole(`${errorMessage}`, 'error');
     alert(`Error loading settings from imported file.\n\n${errorMessage}\n\nIf this is a version error, please export a new settings file as settings may have been updated! If you need further assistance, please post an issue on GitHub.`);
 }
 

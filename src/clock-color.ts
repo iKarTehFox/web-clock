@@ -1,5 +1,5 @@
 import { menu, dtdisplay } from './global';
-import { getFirstElement, logDebug } from './utils/dom-utils';
+import { getFirstElement, logConsole } from './utils/dom-utils';
 
 // Text color override listener
 let tcoO = 0;
@@ -12,16 +12,22 @@ menu.textcoloroverrideradio.forEach((radio) => {
                 try {
                     getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
                 } catch (error) {
-                    dtdisplay.ccontainer.style.color = '#212529';
-                    dtdisplay.secondsBar.style.backgroundColor = '#212529';
+                    // Catch if none are selected (switching from imgmode to solidmode)
+                    if (document.body.style.backgroundColor === 'rgb(0, 0, 0)') {
+                        dtdisplay.ccontainer.style.color = '#FFFFFF';
+                        dtdisplay.secondsBar.style.backgroundColor = '#FFFFFF';
+                    } else {
+                        dtdisplay.ccontainer.style.color = '#212529';
+                        dtdisplay.secondsBar.style.backgroundColor = '#212529';
+                    }
                 }
             }
-            logDebug('Text color override disabled');
+            logConsole('Text color override disabled', 'info');
         } else {
             tcoO = 1;
             menu.textcolorinput.disabled = false;
             menu.textcolorinput.dispatchEvent(new Event('input'));
-            logDebug('Text color override enabled');
+            logConsole('Text color override enabled', 'info');
         }
     });
 });
@@ -31,7 +37,7 @@ menu.textcolorinput.addEventListener('input', function() {
     dtdisplay.ccontainer.style.color = color;
     dtdisplay.secondsBar.style.backgroundColor = color;
     menu.textcolorlabel.textContent = `Text color: ${menu.textcolorinput.value}`;
-    logDebug(`Text color override: ${color}`);
+    logConsole(`Text color override: ${color}`, 'info');
 });
 
 // Preset color buttons listener
@@ -60,7 +66,7 @@ function getLuminance(color: string): number {
 
     // Calculate the relative luminance using the sRGB color space formula
     const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    logDebug(`Luminance for ${color}: ${luminance}`);
+    logConsole(`Luminance for ${color}: ${luminance}`, 'info');
 
     return luminance;
 }

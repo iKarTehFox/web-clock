@@ -1,42 +1,45 @@
 import { menu, dtdisplay } from './global';
-import { logDebug } from './utils/dom-utils';
+import { logConsole } from './utils/dom-utils';
 
 let fadeIntervalID: NodeJS.Timeout;
 const bodyElement = document.body;
 
 function startColorFade() {
-    logDebug('Color fade started');
-    const colors = [
-        '#FFC0CB', // Pink
-        '#FFD700', // Gold
-        '#7FFFD4', // Aquamarine
-        '#FFA500', // Web Orange
-        '#9370DB', // Dull Lavender
-        '#00FFFF', // Cyan
-        '#E969B4', // Deep Blush
-        '#8BCE25', // Atlantis
-        '#40E0D0', // Turquoise
-        '#FF7C4C', // Coral
-        '#DA70D6', // Orchid
-        '#00FA9A'];// Spring Green
+    logConsole('Color fade started', 'info');
+    const colors = {
+        'Pink': '#FFC0CB',
+        'Gold': '#FFD700',
+        'Aquamarine': '#7FFFD4',
+        'Web Orange': '#FFA500',
+        'Dull Lavender': '#9370DB',
+        'Cyan': '#00FFFF',
+        'Deep Blush': '#E969B4',
+        'Atlantis': '#8BCE25',
+        'Turquoise': '#40E0D0',
+        'Coral': '#FF7C4C',
+        'Orchid': '#DA70D6',
+        'Spring Green': '#00FA9A'
+    };
+    const colorNames = Object.keys(colors);
     let currentIndex = 0;
 
-    bodyElement.style.backgroundColor = colors[currentIndex];
+    bodyElement.style.backgroundColor = colors[colorNames[currentIndex]];
     const fadetime = menu.fadetransrange.value; // Get fade transition length value when restarted
     bodyElement.style.transition = `background-color ${fadetime}s ease-in-out`;
-    menu.colorbadge.textContent = colors[currentIndex]; // Initial color badge update
+    menu.colorbadge.textContent = colors[colorNames[currentIndex]]; // Initial color badge update
 
     fadeIntervalID = setInterval(() => {
-        currentIndex = (currentIndex + 1) % colors.length;
-        bodyElement.style.backgroundColor = colors[currentIndex];
-        menu.colorbadge.textContent = colors[currentIndex];
-        logDebug(`Fade background color to: ${colors[currentIndex]}`);
+        currentIndex = (currentIndex + 1) % colorNames.length;
+        const currentColor = colors[colorNames[currentIndex]];
+        bodyElement.style.backgroundColor = currentColor;
+        menu.colorbadge.textContent = currentColor;
+        logConsole(`Fade background color to: ${currentColor}`, 'info');
     }, 3000);
 }
 
 export function stopColorFade() {
     clearInterval(fadeIntervalID);
-    logDebug('Color fade stopped');
+    logConsole('Color fade stopped', 'info');
 }
 
 // Color mode listener
@@ -49,7 +52,7 @@ menu.colormoderadio.forEach(radio => {
         
         if (colorMode === 'fademode') {
             startColorFade();
-            logDebug(`Color mode set to: ${colorMode}`);
+            logConsole(`Color mode set to: ${colorMode}`, 'info');
             menu.presetcolors.forEach((radio) => {
                 radio.disabled = true;
                 radio.checked = false;
@@ -72,7 +75,7 @@ menu.colormoderadio.forEach(radio => {
             menu.imagegroup.style.display = 'none';
         } else if (colorMode === 'solidmode') {
             stopColorFade();
-            logDebug(`Color mode set to: ${colorMode}`);
+            logConsole(`Color mode set to: ${colorMode}`, 'info');
             menu.presetcolors.forEach((radio) => {
                 radio.disabled = false;
             });
@@ -90,7 +93,7 @@ menu.colormoderadio.forEach(radio => {
             menu.imagegroup.style.display = 'none';
         } else if (colorMode === 'imgmode') {
             stopColorFade();
-            logDebug(`Color mode set to: ${colorMode}`);
+            logConsole(`Color mode set to: ${colorMode}`, 'info');
             menu.presetcolors.forEach((radio) => {
                 radio.disabled = true;
                 radio.checked = false;
@@ -124,7 +127,7 @@ menu.fadetransrange.addEventListener('input', () => {
     const value = menu.fadetransrange.value;
     bodyElement.style.transition = `background-color ${value}s ease-in-out`;
     menu.fadetransrangelabel.textContent = `Length: ${value}s`;
-    logDebug(`Fade transition length set to: ${value}s`);
+    logConsole(`Fade transition length set to: ${value}s`, 'info');
 });
 
 // Fade length reset button listener
@@ -139,7 +142,7 @@ menu.presetcolors.forEach((radio) => {
         const selectedColor = String(radio.getAttribute('data-color'));
         bodyElement.style.backgroundColor = selectedColor;
         menu.colorbadge.textContent = selectedColor;
-        logDebug(`Preset color changed to: ${selectedColor}`);
+        logConsole(`Preset color changed to: ${selectedColor}`, 'info');
     });
 });
 

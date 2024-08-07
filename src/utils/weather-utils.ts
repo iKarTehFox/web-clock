@@ -1,6 +1,6 @@
 import OpenWeatherMap from 'openweathermap-ts';
 import { menu, weather } from '../global';
-import { getFirstElement, logDebug } from './dom-utils';
+import { getFirstElement, logConsole, showToast } from './dom-utils';
 import { CurrentResponse } from 'openweathermap-ts/dist/types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -38,7 +38,7 @@ async function fetchWeather(appID: string, lat: number, lon: number, units: any)
         const currentWeatherData = await owm.getCurrentWeatherByGeoCoordinates(lat, lon);
         return currentWeatherData;
     } catch (error) {
-        console.error('Error fetching weather data:', error);
+        logConsole(`Failed fetching weather data: ${error}`, 'error');
         throw error;
     }
 }
@@ -106,16 +106,16 @@ export function submitWeatherSettings(): void {
             .then(currentWeatherData => {
                 if (currentWeatherData.cod === 200) {
                     updateWeatherWidget(currentWeatherData, units);
-                    logDebug('Weather data fetched successfully.');
+                    logConsole('Weather data fetched successfully.', 'info');
                 } else {
                     stopWeather();
-                    console.error('Error fetching weather data:', currentWeatherData.cod);
-                    alert(`Error fetching weather data: ${currentWeatherData.cod}`);
+                    logConsole(`Failed fetching weather data: ${currentWeatherData.cod}`, 'error');
+                    showToast(`Error fetching weather data: ${currentWeatherData.cod}`, 5000, 'danger');
                 }
             })
             .catch(error => {
                 stopWeather();
-                console.error('Error handling weather data:', error);
+                logConsole(`Failed while handling weather data: ${error}`, 'error');
             });
 
         // Start 15m interval
@@ -124,15 +124,15 @@ export function submitWeatherSettings(): void {
                 .then(currentWeatherData => {
                     if (currentWeatherData.cod === 200) {
                         updateWeatherWidget(currentWeatherData, units);
-                        logDebug('Updated weather data.');
+                        logConsole('Updated weather data.', 'info');
                     } else {
                         stopWeather();
-                        console.error('Error updating weather data:', currentWeatherData.cod);
+                        logConsole(`Failed to update weather data: ${currentWeatherData.cod}`, 'error');
                     }
                 })
                 .catch(error => {
                     stopWeather();
-                    console.error('Error handling weather data:', error);
+                    logConsole(`Failed while handling weather data: ${error}`, 'error');
                 });
         }, 900000);
     }
@@ -162,5 +162,5 @@ export function stopWeather() {
     weather.container.className = 'weather-hidden';
     menu.weathersubmitbtn.disabled = false;
     menu.weatherstopbtn.disabled = true;
-    logDebug('Weather interval stopped.');
+    logConsole('Weather interval stopped.', 'info');
 }

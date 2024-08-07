@@ -1,7 +1,7 @@
 import { doc, menu, dtdisplay } from './global';
 import { numberToWords } from './numberToWords.min';
 import * as luxon from 'ts-luxon';
-import { logDebug } from './utils/dom-utils';
+import { logConsole } from './utils/dom-utils';
 
 let cMode = '0';
 let dateFormat = 'D';
@@ -10,7 +10,7 @@ let timeDisplayMethod: string;
 menu.timemethodselect.addEventListener('change', () => {
     const selectedValue = menu.timemethodselect.value as unknown as number;
     timeDisplayMethod = String(selectedValue);
-    logDebug(`Time display method set to: ${selectedValue}`);
+    logConsole(`Time display method set to: ${selectedValue}`, 'info');
     updateTime();
 });
 
@@ -35,7 +35,7 @@ menu.clockmoderadio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = String(radio.dataset.value);
         cMode = value;
-        logDebug(`Clock mode set to: ${value}`);
+        logConsole(`Clock mode set to: ${value}`, 'info');
         updateTime();
     });
 });
@@ -86,7 +86,7 @@ export function populateTimeZoneSelect() {
 // Time zone selector listener
 menu.timezoneselect.addEventListener('change', function() {
     const timeZone = menu.timezoneselect.value;
-    logDebug(`Time zone set to: ${timeZone}`);
+    logConsole(`Time zone set to: ${timeZone}`, 'info');
     luxon.Settings.defaultZoneLike = timeZone;
     updateTime();
     updateDate();
@@ -95,7 +95,7 @@ menu.timezoneselect.addEventListener('change', function() {
 // Date format selector listener
 menu.dateformselect.addEventListener('change', function() {
     dateFormat = menu.dateformselect.value;
-    logDebug(`Date format set to: ${menu.dateformselect.value}`);
+    logConsole(`Date format set to: ${menu.dateformselect.value}`, 'info');
     updateDate();
 });
 
@@ -112,12 +112,16 @@ function updateTime() {
     } else if (document.title !== 'Online Web Clock' || !doc.favicon.href.endsWith('/icons/clock-time-3.svg')) {
         updateFavicon('3');
         document.title = 'Online Web Clock';
-        logDebug('Title and favicon reset...');
+        logConsole('Title and favicon reset...', 'info');
     }
 
     // Seconds progress bar
-    const secBarWidth = (Number(sec) / 59) * 100;
-    dtdisplay.secondsBar.style.width = `${secBarWidth}%`;
+    if (menu.secondsbarradio[0].checked) { // Check if visible, 0% if not.
+        const secBarWidth = (Number(sec) / 59) * 100;
+        dtdisplay.secondsBar.style.width = `${secBarWidth}%`;
+    } else {
+        dtdisplay.secondsBar.style.width = '0%';
+    }
 
     // Time display methods
     type TimeFunction = (value: string) => string;
@@ -205,7 +209,7 @@ function toRadix(value: string, radix: number): string {
     if (radix >= 2 && radix <= 36) {
         return parseInt(value, 10).toString(radix);
     } else {
-        console.error('Radix must be between 2 and 36, inclusive.');
+        logConsole('Radix must be between 2 and 36, inclusive.', 'error');
         return 'ERR';
     }
 }
@@ -309,7 +313,7 @@ function startNewClock() {
         clockInterval = setInterval(() => {
             updateTime();
             updatePageDuration();
-            logDebug('Time and page duration updated...');
+            logConsole('Time and page duration updated...', 'info');
 
             // Correct the interval drift
             const now = Date.now();
@@ -318,7 +322,7 @@ function startNewClock() {
 
             const drift = elapsed - 1000;
             if (Math.abs(drift) > 50) {
-                logDebug(`Time drift detected: ${drift}ms.`);
+                logConsole(`Time drift detected: ${drift}ms.`, 'info');
                 clearInterval(clockInterval!);
                 setTimeout(startNewClock, 1000 - drift);
             }
@@ -331,7 +335,7 @@ function startOldClock() {
     clockInterval = setInterval(() => {
         updateTime();
         updatePageDuration();
-        logDebug('Time and page duration updated (Legacy method)...');
+        logConsole('Time and page duration updated (Legacy method)...', 'info');
     }, 250) as unknown as NodeJS.Timeout;
 }
 
@@ -342,5 +346,5 @@ startClock();
 
 setInterval(function() {
     updateDate();
-    logDebug('Date updated...');
+    logConsole('Date updated...', 'info');
 }, 15000);
