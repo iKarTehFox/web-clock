@@ -111,12 +111,12 @@ countdown.obutton.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
         const target = e.target as HTMLElement;
-        const isCountdownRelated = menu.options.contains(target) || 
+        const isMenuRelated = menu.options.contains(target) || 
                                    menu.obutton.contains(target) || 
                                    countdown.container.contains(target) || 
                                    countdown.obutton.contains(target);
 
-        if (!isCountdownRelated && countdown.container.style.display !== 'none') {
+        if (!isMenuRelated && countdown.container.style.display !== 'none') {
             countdown.container.style.display = 'none';
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');
