@@ -115,8 +115,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                    menu.obutton.contains(target) || 
                                    countdown.container.contains(target) || 
                                    countdown.obutton.contains(target);
+        const isTooltip = target.closest('.tooltip') !== null;
 
-        if (!isMenuRelated && countdown.container.style.display !== 'none') {
+        if (!isMenuRelated && !isTooltip && countdown.container.style.display !== 'none') {
             countdown.container.style.display = 'none';
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');

@@ -82,8 +82,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                    menu.obutton.contains(target) || 
                                    stopwatch.container.contains(target) || 
                                    stopwatch.obutton.contains(target);
+        const isTooltip = target.closest('.tooltip') !== null;
 
-        if (!isMenuRelated && stopwatch.container.style.display !== 'none') {
+        if (!isMenuRelated && !isTooltip && stopwatch.container.style.display !== 'none') {
             stopwatch.container.style.display = 'none';
             stopwatch.obutton.className = 'btn btn-secondary';
             logConsole('Stopwatch panel closed', 'info');
