@@ -143,8 +143,7 @@ body {
     transform: translate(-50%, -50%);
     background-color: white;
     padding: 20px;
-    min-width: 40vw;
-    max-width: 90vw;
+    width: 50vw;
     max-height: fit-content;
     box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
     z-index: 2;
@@ -160,8 +159,7 @@ body {
     transform: translate(-50%, -50%);
     background-color: white;
     padding: 20px;
-    min-width: 40vw;
-    max-width: 90vw;
+    width: 50vw;
     max-height: fit-content;
     box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
     z-index: 2;

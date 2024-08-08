@@ -28,6 +28,22 @@ function updateDisplay() {
     stopwatch.display.textContent = formatTime(timeDiff);
 }
 
+function disableBtns(buttons: string[], disabled: boolean) {
+    buttons.forEach(button => {
+        switch (button) {
+        case 'start':
+            stopwatch.startbtn.disabled = disabled;
+            break;
+        case 'pause':
+            stopwatch.pausebtn.disabled = disabled;
+            break;
+        case 'reset':
+            stopwatch.resetbtn.disabled = disabled;
+            break;
+        }
+    });
+}
+
 // Start the stopwatch
 function startStopwatch() {
     if (!running) {
@@ -35,6 +51,8 @@ function startStopwatch() {
         startTime = Date.now();
         timeInterval = setInterval(updateDisplay, 25);
         logConsole('Stopwatch started...', 'info');
+        disableBtns(['start'], true);
+        disableBtns(['pause', 'reset'], false);
     }
 }
 
@@ -45,6 +63,8 @@ export function pauseStopwatch() {
         elapsedTime += Date.now() - startTime;
         clearInterval(timeInterval);
         logConsole('Stopwatch paused...', 'info');
+        disableBtns(['start'], false);
+        disableBtns(['pause'], true);
     }
 }
 
@@ -56,6 +76,8 @@ function resetStopwatch() {
         elapsedTime = 0;
         updateDisplay();
         logConsole('Stopwatch reset...', 'info');
+        disableBtns(['start'], false);
+        disableBtns(['pause', 'reset'], true);
     }
 }
 

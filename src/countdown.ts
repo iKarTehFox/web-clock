@@ -27,6 +27,22 @@ function inputsDisabled(disabled: boolean) {
     }
 }
 
+function disableBtns(buttons: string[], disabled: boolean) {
+    buttons.forEach(button => {
+        switch (button) {
+        case 'start':
+            countdown.startbtn.disabled = disabled;
+            break;
+        case 'pause':
+            countdown.pausebtn.disabled = disabled;
+            break;
+        case 'reset':
+            countdown.resetbtn.disabled = disabled;
+            break;
+        }
+    });
+}
+
 function startCountdown() {
     if (!running) {
         running = true;
@@ -41,9 +57,13 @@ function startCountdown() {
                 running = false;
                 showToast('Countdown finished!', 30000, 'success');
                 inputsDisabled(false);
+                disableBtns(['start'], false);
+                disableBtns(['pause', 'reset'], true);
             }
         }, 1000);
         logConsole('Countdown started...', 'info');
+        disableBtns(['start'], true);
+        disableBtns(['pause', 'reset'], false);
     }
 }
 
@@ -52,6 +72,8 @@ function pauseCountdown() {
         running = false;
         clearInterval(countdownInterval);
         logConsole('Countdown paused...', 'info');
+        disableBtns(['start'], false);
+        disableBtns(['pause'], true);
     }
 }
 
@@ -65,6 +87,8 @@ function resetCountdown() {
         // Re-enable inputs
         inputsDisabled(false);
         logConsole('Countdown reset...', 'info');
+        disableBtns(['start'], false);
+        disableBtns(['pause', 'reset'], true);
     }
 }
 
