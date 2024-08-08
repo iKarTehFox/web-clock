@@ -1,6 +1,7 @@
 import Toastify from 'toastify-js';
 import { menu } from '../global';
 
+// Element finding functions
 export function getElement<T extends HTMLElement>(id: string): T {
     const element = document.getElementById(id);
     if (!element) throw new Error(`Element with ID ${id} not found`);
@@ -17,6 +18,7 @@ export function getFirstElement<T extends Element>(selector: string): T {
     return element as T;
 }
 
+// Custom console logging function
 export function logConsole(message: string, type: string = 'debug'):void {
     if (menu.debugcheckbox.checked && type === 'debug') {
         console.log(`DEBUG - ${message}`);
@@ -29,6 +31,7 @@ export function logConsole(message: string, type: string = 'debug'):void {
     }
 }
 
+// Function to set toast theme
 function getThemeInfo(colorTheme: string = 'auto') {
     const theme = colorTheme === 'auto' ? menu.container.dataset.bsTheme : colorTheme;
 
@@ -58,6 +61,7 @@ function getThemeInfo(colorTheme: string = 'auto') {
     return themes[theme] || themes.light;
 }
 
+// Function to show a toast message
 export function showToast(message: string, duration: number = 3000, style: string = 'auto'): void {
     const theme = getThemeInfo(style);
     
