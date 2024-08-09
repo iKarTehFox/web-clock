@@ -109,7 +109,9 @@ export const stopwatch = {
     display: getElement<HTMLHeadingElement>('stopwatch-display'),
     startbtn: getElement<HTMLButtonElement>('stopwatch-start'),
     pausebtn: getElement<HTMLButtonElement>('stopwatch-pause'),
-    resetbtn: getElement<HTMLButtonElement>('stopwatch-reset')
+    resetbtn: getElement<HTMLButtonElement>('stopwatch-reset'),
+    lapbtn: getElement<HTMLButtonElement>('stopwatch-lap'),
+    lapfield: getElement<HTMLButtonElement>('stopwatch-lapfield')
 };
 
 export const countdown = {

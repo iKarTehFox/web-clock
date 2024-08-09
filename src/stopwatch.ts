@@ -5,6 +5,7 @@ let timeInterval: NodeJS.Timeout;
 let running: boolean = false;
 let startTime: number;
 let elapsedTime: number = 0;
+let counter: number = 0;
 
 // Format time to HH:MM:SS.mmm
 function formatTime(totalMilliseconds: number) {
@@ -21,10 +22,13 @@ function formatTime(totalMilliseconds: number) {
     ].join(':') + '.' + ms.toString().padStart(3, '0');
 }
 
-// Update the stopwatch display
-function updateDisplay() {
+// Update the stopwatch display (+ return current time if needed)
+function updateDisplay(getCurrent: boolean = false) {
     const currentTime = Date.now();
     const timeDiff = elapsedTime + (running ? currentTime - startTime : 0);
+    if (getCurrent) {
+        return formatTime(timeDiff);
+    }
     stopwatch.display.textContent = formatTime(timeDiff);
 }
 
@@ -40,6 +44,8 @@ function disableBtns(buttons: string[], disabled: boolean) {
         case 'reset':
             stopwatch.resetbtn.disabled = disabled;
             break;
+        case 'lap':
+            stopwatch.lapbtn.disabled = disabled;
         }
     });
 }
@@ -53,6 +59,7 @@ function startStopwatch() {
         logConsole('Stopwatch started...', 'info');
         disableBtns(['start'], true);
         disableBtns(['pause', 'reset'], false);
+        disableBtns(['lap'], false);
     }
 }
 
@@ -65,6 +72,7 @@ export function pauseStopwatch() {
         logConsole('Stopwatch paused...', 'info');
         disableBtns(['start'], false);
         disableBtns(['pause'], true);
+        disableBtns(['lap'], true);
     }
 }
 
@@ -78,6 +86,21 @@ function resetStopwatch() {
         logConsole('Stopwatch reset...', 'info');
         disableBtns(['start'], false);
         disableBtns(['pause', 'reset'], true);
+        disableBtns(['lap'], false);
+
+        // Clear lap textarea history
+        stopwatch.lapfield.value ='';
+        counter = 0;
+    }
+}
+
+// Lap the stopwatch
+function lapStopwatch() {
+    if (running || elapsedTime > 0) {
+        const laptxt = stopwatch.lapfield.value;
+        counter++;
+        stopwatch.lapfield.value = `#${counter}: ${updateDisplay(true)}\n${laptxt}`;
+        logConsole('Stopwatch lapped...', 'info');
     }
 }
 
@@ -129,6 +152,7 @@ document.addEventListener('keydown', function(e) {
 stopwatch.startbtn.addEventListener('click', startStopwatch);
 stopwatch.pausebtn.addEventListener('click', pauseStopwatch);
 stopwatch.resetbtn.addEventListener('click', resetStopwatch);
+stopwatch.lapbtn.addEventListener('click', lapStopwatch);
 
 // Initialize display
 updateDisplay();

@@ -150,6 +150,11 @@ body {
     border-radius: 10px;
 }
 
+#stopwatch-lapfield {
+    height: 100%;
+    width: 100%;
+}
+
 /* Countdown popup */
 #countdown-container {
     display: none;
