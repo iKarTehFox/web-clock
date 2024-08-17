@@ -6,6 +6,7 @@ let running: boolean = false;
 let startTime: number;
 let elapsedTime: number = 0;
 let counter: number = 0;
+let lastLapTime;
 
 // Format time to HH:MM:SS.mmm
 function formatTime(totalMilliseconds: number) {
@@ -23,11 +24,13 @@ function formatTime(totalMilliseconds: number) {
 }
 
 // Update the stopwatch display (+ return current time if needed)
-function updateDisplay(getCurrent: boolean = false) {
+function updateDisplay(returnCurrent: boolean = false, isFormatted: boolean = false) {
     const currentTime = Date.now();
     const timeDiff = elapsedTime + (running ? currentTime - startTime : 0);
-    if (getCurrent) {
+    if (returnCurrent && isFormatted) {
         return formatTime(timeDiff);
+    } else if (returnCurrent && !isFormatted) {
+        return timeDiff;
     }
     stopwatch.display.textContent = formatTime(timeDiff);
 }
@@ -97,9 +100,20 @@ function resetStopwatch() {
 // Lap the stopwatch
 function lapStopwatch() {
     if (running || elapsedTime > 0) {
+        const currentTime = Number(updateDisplay(true, false));
         const laptxt = stopwatch.lapfield.value;
         counter++;
-        stopwatch.lapfield.value = `#${counter}: ${updateDisplay(true)}\n${laptxt}`;
+        
+        let lapEntry = '';
+        if (lastLapTime !== undefined) {
+            const lapDifference = currentTime - lastLapTime;
+            lapEntry = `#${counter}: ${formatTime(lapDifference)} - ${updateDisplay(true, true)}\n`;
+        } else {
+            lapEntry = `#${counter}: ${updateDisplay(true, true)} - ${updateDisplay(true, true)}\n`;
+        }
+        
+        stopwatch.lapfield.value = lapEntry + laptxt;
+        lastLapTime = currentTime;
         logConsole('Stopwatch lapped...', 'info');
     }
 }
