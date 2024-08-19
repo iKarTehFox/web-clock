@@ -172,7 +172,6 @@ function modifyFontStyle(type: string, value: string) {
         break;
     case 'family':
         dtdisplay.ccontainer.style.fontFamily = value;
-        stopwatch.display.style.fontFamily = value;
         countdown.display.style.fontFamily = value;
         logConsole(`Font family set to: ${value}`, 'info');
         break;
