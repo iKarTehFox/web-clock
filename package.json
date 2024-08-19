@@ -45,7 +45,7 @@
     "@types/body-parser": "^1.19.5",
     "@types/intl": "^1.2.2",
     "@types/toastify-js": "^1.12.3",
-    "axios": "^1.7.2",
+    "axios": "^1.7.4",
     "bootstrap": "^5.3.3",
     "iconify-icon": "^2.1.0",
     "openweathermap-ts": "^1.2.10",
