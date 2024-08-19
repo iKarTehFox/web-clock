@@ -109,7 +109,9 @@ export const stopwatch = {
     display: getElement<HTMLHeadingElement>('stopwatch-display'),
     startbtn: getElement<HTMLButtonElement>('stopwatch-start'),
     pausebtn: getElement<HTMLButtonElement>('stopwatch-pause'),
-    resetbtn: getElement<HTMLButtonElement>('stopwatch-reset')
+    resetbtn: getElement<HTMLButtonElement>('stopwatch-reset'),
+    lapbtn: getElement<HTMLButtonElement>('stopwatch-lap'),
+    lapfield: getElement<HTMLButtonElement>('stopwatch-lapfield')
 };
 
 export const countdown = {
@@ -170,7 +172,6 @@ function modifyFontStyle(type: string, value: string) {
         break;
     case 'family':
         dtdisplay.ccontainer.style.fontFamily = value;
-        stopwatch.display.style.fontFamily = value;
         countdown.display.style.fontFamily = value;
         logConsole(`Font family set to: ${value}`, 'info');
         break;

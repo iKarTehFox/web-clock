@@ -5,6 +5,8 @@ let timeInterval: NodeJS.Timeout;
 let running: boolean = false;
 let startTime: number;
 let elapsedTime: number = 0;
+let counter: number = 0;
+let lastLapTime;
 
 // Format time to HH:MM:SS.mmm
 function formatTime(totalMilliseconds: number) {
@@ -21,11 +23,34 @@ function formatTime(totalMilliseconds: number) {
     ].join(':') + '.' + ms.toString().padStart(3, '0');
 }
 
-// Update the stopwatch display
-function updateDisplay() {
+// Update the stopwatch display (+ return current time if needed)
+function updateDisplay(returnCurrent: boolean = false, isFormatted: boolean = false) {
     const currentTime = Date.now();
     const timeDiff = elapsedTime + (running ? currentTime - startTime : 0);
+    if (returnCurrent && isFormatted) {
+        return formatTime(timeDiff);
+    } else if (returnCurrent && !isFormatted) {
+        return timeDiff;
+    }
     stopwatch.display.textContent = formatTime(timeDiff);
+}
+
+function disableBtns(buttons: string[], disabled: boolean) {
+    buttons.forEach(button => {
+        switch (button) {
+        case 'start':
+            stopwatch.startbtn.disabled = disabled;
+            break;
+        case 'pause':
+            stopwatch.pausebtn.disabled = disabled;
+            break;
+        case 'reset':
+            stopwatch.resetbtn.disabled = disabled;
+            break;
+        case 'lap':
+            stopwatch.lapbtn.disabled = disabled;
+        }
+    });
 }
 
 // Start the stopwatch
@@ -35,6 +60,9 @@ function startStopwatch() {
         startTime = Date.now();
         timeInterval = setInterval(updateDisplay, 25);
         logConsole('Stopwatch started...', 'info');
+        disableBtns(['start'], true);
+        disableBtns(['pause', 'reset'], false);
+        disableBtns(['lap'], false);
     }
 }
 
@@ -45,6 +73,9 @@ export function pauseStopwatch() {
         elapsedTime += Date.now() - startTime;
         clearInterval(timeInterval);
         logConsole('Stopwatch paused...', 'info');
+        disableBtns(['start'], false);
+        disableBtns(['pause'], true);
+        disableBtns(['lap'], true);
     }
 }
 
@@ -56,6 +87,34 @@ function resetStopwatch() {
         elapsedTime = 0;
         updateDisplay();
         logConsole('Stopwatch reset...', 'info');
+        disableBtns(['start'], false);
+        disableBtns(['pause', 'reset'], true);
+        disableBtns(['lap'], false);
+
+        // Clear lap textarea history
+        stopwatch.lapfield.value ='';
+        counter = 0;
+    }
+}
+
+// Lap the stopwatch
+function lapStopwatch() {
+    if (running || elapsedTime > 0) {
+        const currentTime = Number(updateDisplay(true, false));
+        const laptxt = stopwatch.lapfield.value;
+        counter++;
+        
+        let lapEntry = '';
+        if (lastLapTime !== undefined) {
+            const lapDifference = currentTime - lastLapTime;
+            lapEntry = `#${counter}: ${formatTime(lapDifference)} - ${updateDisplay(true, true)}\n`;
+        } else {
+            lapEntry = `#${counter}: ${updateDisplay(true, true)} - ${updateDisplay(true, true)}\n`;
+        }
+        
+        stopwatch.lapfield.value = lapEntry + laptxt;
+        lastLapTime = currentTime;
+        logConsole('Stopwatch lapped...', 'info');
     }
 }
 
@@ -107,6 +166,7 @@ document.addEventListener('keydown', function(e) {
 stopwatch.startbtn.addEventListener('click', startStopwatch);
 stopwatch.pausebtn.addEventListener('click', pauseStopwatch);
 stopwatch.resetbtn.addEventListener('click', resetStopwatch);
+stopwatch.lapbtn.addEventListener('click', lapStopwatch);
 
 // Initialize display
 updateDisplay();
