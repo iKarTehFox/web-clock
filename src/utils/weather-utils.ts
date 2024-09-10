@@ -154,6 +154,8 @@ function weatherMenuDisable(disabled: boolean) {
         radio.disabled = disabled;
     });
     menu.weathersubmitbtn.disabled = disabled;
+    menu.weathermovetoggle.disabled = !disabled;
+    menu.weathermovereset.disabled = !disabled;
 }
 
 export function stopWeather() {

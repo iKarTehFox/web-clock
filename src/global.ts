@@ -60,7 +60,9 @@ export const menu = {
     weatherloninput: getElement<HTMLInputElement>('weatherLonTextArea'),
     weathersubmitbtn: getElement<HTMLButtonElement>('weatherSubmitBtn'),
     weatherstopbtn: getElement<HTMLButtonElement>('weatherStopBtn'),
-    weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]')
+    weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]'),
+    weathermovetoggle: getElement<HTMLInputElement>('weatherMoveToggle'),
+    weathermovereset: getElement<HTMLButtonElement>('weatherMoveReset')
 };
 
 export const font = {
@@ -392,6 +394,45 @@ menu.weathersubmitbtn.addEventListener('click', () => {
 
 menu.weatherstopbtn.addEventListener('click', () => {
     stopWeather();
+});
+
+// Weather move toggle listener
+let isMoving: boolean = false;
+
+menu.weathermovetoggle.addEventListener('click', () => {
+    isMoving = menu.weathermovetoggle.classList.contains('active');
+    weather.container.style.cursor = isMoving ? 'grab' : 'default';
+    logConsole(`Weather moving toggle set to: ${isMoving}`, 'info');
+});
+
+weather.container.addEventListener('mousedown', (e) => {
+    if (!isMoving) return;
+    
+    weather.container.style.cursor = 'grabbing';
+    logConsole('Mouse down on weather widget...', 'info');
+    const startX = e.clientX - weather.container.offsetLeft;
+    const startY = e.clientY - weather.container.offsetTop;
+
+    function onMouseMove(e: { clientX: number; clientY: number; }) {
+        weather.container.style.left = `${e.clientX - startX}px`;
+        weather.container.style.top = `${e.clientY - startY}px`;
+    }
+
+    function onMouseUp() {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        weather.container.style.cursor = 'grab';
+        logConsole('Mouse up on weather widget...', 'info');
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+});
+
+menu.weathermovereset.addEventListener('click', () => {
+    weather.container.style.left = '';
+    weather.container.style.top = '';
+    logConsole('Weather widget position reset...', 'info');
 });
 
 // Menu theme listener
