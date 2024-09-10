@@ -68,6 +68,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
  - Enter an OpenWeatherMap API key
  - Manually set coordinates or use GPS
  - Choose between Imperial and Metric units
+ - Manually drag the weather widget to any position on the screen
 ### Countdown/Stopwatch
  - Start, pause, and reset a countdown or stopwatch
  - Manually enter any time for the countdown
@@ -83,6 +84,7 @@ git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
 
  Try out my [personal config](/src/assets/onlinewebclock-preset.json)!
 ### URL Parameters
+For deployment purposes, you can pass URL parameters to the page to customize the settings on startup.  
 In the URL bar, you can pass the following parameters:  
  - **debug=true**: Enables debug logging after the page has loaded
  - **darkMode=true**: Sets the theme to Dark
@@ -94,13 +96,19 @@ In the URL bar, you can pass the following parameters:
  - **lockSettings=true**: Prevent end-user settings modification by removing menu container
    - This parameter is best used with the `preset` parameter! If necessary, clone the repo and add your own settings preset file!
  
-For the weather widget, all of the following parameters are required:  
+To enable the weather widget, all of the following parameters are required:  
  - **weatherApi=\<api_key\>**: Input OpenWeatherMap API key  
  - **weatherLat=\<latitude\>**: Input manual latitude  
  - **weatherLon=\<longitude\>**: Input manual longitude  
  - **weatherUnits=imperial/metric**: Set 'imperial' or 'metric' weather units  
 
- For instance, you can [visit](https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset) the following URL, `https://online-clock.pages.dev/?darkMode=true&panelVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset` to load with the dark mode menu theme **enabled**, the menu button **hidden**, the tab title **disabled**, and the preset `onlinewebclock-amoled-preset` applied.
+Positioning the weather widget is also possible. The following parameters are required:  
+ - **weatherWidgetPosX=\<position\>**: Horizontal X position offset from left (in pixels)  
+ - **weatherWidgetPosY=\<position\>**: Vertical Y position offset from top (in pixels)  
+ 
+ *The weather widget must be enabled for this to show!*
+
+ For instance, you can [visit](https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset) the following URL, `https://online-clock.pages.dev/?darkMode=true&panelVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset` to load with the dark mode menu theme **enabled**, the panel buttons **hidden**, the tab title **disabled**, and the preset `onlinewebclock-amoled-preset` applied.
 
  With this in mind, you can bookmark the URL with the parameters you want, and it will load the page with those settings every time!
  
