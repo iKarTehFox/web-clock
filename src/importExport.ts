@@ -22,7 +22,7 @@ function getSolidColorValue() {
     }
 }
 
-export function exportSettingsToJSON() {
+export function exportSettingsToJSON(copyToClipboard: boolean = false) {
     showToast('Exporting settings...');
 
     // Get time and set export timestamp
@@ -74,6 +74,12 @@ export function exportSettingsToJSON() {
     // Format settings
     try {
         const settingsJSON = JSON.stringify(usersettings);
+        // Check for copyToClipboard
+        if (copyToClipboard) {
+            navigator.clipboard.writeText(settingsJSON);
+            showToast(`Copied settings to clipboard! Took ${((luxon.DateTime.now()).toMillis()) - time.toMillis()}ms`, undefined, 'warning');
+            return;
+        }
         const blob = new Blob([settingsJSON], {
             type: 'application/json'
         });
