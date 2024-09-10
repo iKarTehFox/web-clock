@@ -108,7 +108,7 @@ Positioning the weather widget is also possible. The following parameters are re
  
  *The weather widget must be enabled for this to show!*
 
- For instance, you can [visit](https://online-clock.pages.dev/?darkMode=true&menuVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset) the following URL, `https://online-clock.pages.dev/?darkMode=true&panelVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset` to load with the dark mode menu theme **enabled**, the panel buttons **hidden**, the tab title **disabled**, and the preset `onlinewebclock-amoled-preset` applied.
+ For instance, you can [visit](https://online-clock.pages.dev/?darkMode=true&panelVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset) the following URL, `https://online-clock.pages.dev/?darkMode=true&panelVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset` to load with the dark mode menu theme **enabled**, the panel buttons **hidden**, the tab title **disabled**, and the preset `onlinewebclock-amoled-preset` applied.
 
  With this in mind, you can bookmark the URL with the parameters you want, and it will load the page with those settings every time!
  
