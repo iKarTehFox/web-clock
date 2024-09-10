@@ -409,20 +409,24 @@ weather.container.addEventListener('mousedown', (e) => {
     if (!isMoving) return;
     
     weather.container.style.cursor = 'grabbing';
-    logConsole('Mouse down on weather widget...', 'info');
+    logConsole('Weather widget mousedown...', 'info');
     const startX = e.clientX - weather.container.offsetLeft;
     const startY = e.clientY - weather.container.offsetTop;
 
     function onMouseMove(e: { clientX: number; clientY: number; }) {
-        weather.container.style.left = `${e.clientX - startX}px`;
-        weather.container.style.top = `${e.clientY - startY}px`;
+        const posX = e.clientX - startX;
+        const posY = e.clientY - startY;
+
+        weather.container.style.left = `${posX}px`;
+        weather.container.style.top = `${posY}px`;
+        logConsole(`Weather widget moving. PosX: ${posX}, PosY: ${posY}`, 'info');
     }
 
     function onMouseUp() {
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
         weather.container.style.cursor = 'grab';
-        logConsole('Mouse up on weather widget...', 'info');
+        logConsole('Weather widget mouseup...', 'info');
     }
 
     document.addEventListener('mousemove', onMouseMove);
