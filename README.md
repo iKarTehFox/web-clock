@@ -140,6 +140,7 @@ Copyright (c) 2013-2016 Panayiotis Lipiridis
 Copyright (c) 2018 apvarun
 - **ts-luxon** ([Link](https://www.npmjs.com/package/ts-luxon)): Licensed under MIT License  
 Copyright (c) 2023 Tony Samperi and other contributors
+- **ts-pattern** ([Link](https://www.npmjs.com/package/ts-pattern)): Licensed under MIT License  
 - **Webpack** ([Link](https://webpack.js.org/)): Licensed under MIT License  
 Copyright JS Foundation and other contributors  
 
