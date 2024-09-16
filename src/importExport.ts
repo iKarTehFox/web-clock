@@ -26,8 +26,8 @@ export function exportSettingsToJSON(copyToClipboard: boolean = false) {
     showToast('Exporting settings...');
 
     // Get time and set export timestamp
-    let usersettings;
-    let url;
+    let usersettings: { clockConfig: { clockMode: string; clockDisplay: string; secondsVis: string; dateFormat: string; dateAlign: string; borderMode: string; borderStyle: string; secondsBarVis: string; }; fontConfig: { fontFamily: string; fontStyle: string; fontWeight: string; fontSize: string; dropShadow: string; strokeWidth: string; strokeColor: string; }; colorTheme: { colorMode: string; solidColor: string | undefined; textColorMode: string; textColorValue: string; bgImage: string; bgImageSize: string; bgImageBlur: string; }; exportTimestamp: string; version: number; };
+    let url: string;
     const time = luxon.DateTime.now();
     const timeExported = time.toFormat('FFFF');
 

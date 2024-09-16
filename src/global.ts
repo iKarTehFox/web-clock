@@ -1,3 +1,4 @@
+import { match } from 'ts-pattern';
 import { getElement, getElements, logConsole, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
 import * as bootstrap from 'bootstrap';
@@ -149,48 +150,47 @@ const fontSizeOptions: Record<FontSizeKey, string> = {
 // Font style handler function
 function modifyFontStyle(type: string, value: string) {
     const fontSize = value as FontSizeKey;
-    switch (type) {
-    case 'style':
-        dtdisplay.ccontainer.style.fontStyle = value;
-        stopwatch.display.style.fontStyle = value;
-        countdown.display.style.fontStyle = value;
-        logConsole(`Font style set to: ${value}`, 'info');
-        break;
-    case 'weight':
-        dtdisplay.ccontainer.style.fontWeight = value;
-        stopwatch.display.style.fontWeight = value;
-        countdown.display.style.fontWeight = value;
-        logConsole(`Font weight set to: ${value}`, 'info');
-        break;
-    case 'size':
-        if (fontSize in fontSizeOptions) { // Check if the casted value is a valid key
-            dtdisplay.ccontainer.style.fontSize = value;
-            dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[fontSize];
-            dtdisplay.date.style.fontSize = fontSizeOptions[fontSize];
-            logConsole(`Font sizing set to: ${value}`, 'info');
-        } else {
-            logConsole(`Invalid font size: ${value}`, 'error');
-        }
-        break;
-    case 'family':
-        dtdisplay.ccontainer.style.fontFamily = value;
-        countdown.display.style.fontFamily = value;
-        logConsole(`Font family set to: ${value}`, 'info');
-        break;
-    case 'strokewidth':
-        dtdisplay.ccontainer.style.webkitTextStrokeWidth = `${value}px`;
-        font.strokerangelabel.textContent = `Stroke width: ${value}px`;
-        logConsole(`Font stroke width set to: ${value}px`, 'info');
-        break;
-    case 'strokecolor':
-        dtdisplay.ccontainer.style.webkitTextStrokeColor = value;
-        font.strokecolorlabel.textContent = `Stroke color: ${value}`;
-        logConsole(`Font stroke color set to: ${value}`, 'info');
-        break;
-    default:
-        logConsole(`Invalid font modification type: ${type}`, 'error');
-        break;
-    }
+    match(type)
+        .with('style', () => {
+            dtdisplay.ccontainer.style.fontStyle = value;
+            stopwatch.display.style.fontStyle = value;
+            countdown.display.style.fontStyle = value;
+            logConsole(`Font style set to: ${value}`, 'info');
+        })
+        .with('weight', () => {
+            dtdisplay.ccontainer.style.fontWeight = value;
+            stopwatch.display.style.fontWeight = value;
+            countdown.display.style.fontWeight = value;
+            logConsole(`Font weight set to: ${value}`, 'info');
+        })
+        .with('size', () => {
+            if (fontSize in fontSizeOptions) {
+                dtdisplay.ccontainer.style.fontSize = value;
+                dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[fontSize];
+                dtdisplay.date.style.fontSize = fontSizeOptions[fontSize];
+                logConsole(`Font sizing set to: ${value}`, 'info');
+            } else {
+                logConsole(`Invalid font size: ${value}`, 'error');
+            }
+        })
+        .with('family', () => {
+            dtdisplay.ccontainer.style.fontFamily = value;
+            countdown.display.style.fontFamily = value;
+            logConsole(`Font family set to: ${value}`, 'info');
+        })
+        .with('strokewidth', () => {
+            dtdisplay.ccontainer.style.webkitTextStrokeWidth = `${value}px`;
+            font.strokerangelabel.textContent = `Stroke width: ${value}px`;
+            logConsole(`Font stroke width set to: ${value}px`, 'info');
+        })
+        .with('strokecolor', () => {
+            dtdisplay.ccontainer.style.webkitTextStrokeColor = value;
+            font.strokecolorlabel.textContent = `Stroke color: ${value}`;
+            logConsole(`Font stroke color set to: ${value}`, 'info');
+        })
+        .otherwise(() => {
+            logConsole(`Invalid font modification type: ${type}`, 'error');
+        });
 }
 
 // Seconds visibility listener
@@ -305,43 +305,42 @@ menu.bordertyperadio.forEach((radio) => {
         const value = radio.dataset.value;
         menu.borderstyleselect.disabled = value === 'none';
 
-        switch (value) {
-        case 'none':
-            menu.secondsbarradio.forEach((btn) => {
-                btn.disabled = false;
+        match(value)
+            .with('none', () => {
+                menu.secondsbarradio.forEach((btn) => {
+                    btn.disabled = false;
+                });
+                dtdisplay.tcontainer.style.borderStyle = value;
+                dtdisplay.tcontainer.style.borderBottomStyle = value;
+                logConsole(`Border type set to: ${value}`, 'info');
+            })
+            .with('regular', () => {
+                menu.secondsbarradio.forEach((btn) => {
+                    btn.disabled = true;
+                    if (btn.id === 'sbaN') {
+                        btn.checked = true;
+                        btn.dispatchEvent(new Event('change'));
+                    }
+                });
+                dtdisplay.tcontainer.style.borderBottomStyle = 'none';
+                dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
+                logConsole(`Border type set to: ${value}`, 'info');
+            })
+            .with('bottom', () => {
+                menu.secondsbarradio.forEach((btn) => {
+                    btn.disabled = true;
+                    if (btn.id === 'sbaN') {
+                        btn.checked = true;
+                        btn.dispatchEvent(new Event('change'));
+                    }
+                });
+                dtdisplay.tcontainer.style.borderStyle = 'none';
+                dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
+                logConsole(`Border type set to: ${value}`, 'info');
+            })
+            .otherwise(() => {
+                logConsole(`Invalid border type: ${value}`, 'error');
             });
-            dtdisplay.tcontainer.style.borderStyle = value;
-            dtdisplay.tcontainer.style.borderBottomStyle = value;
-            logConsole(`Border type set to: ${value}`, 'info');
-            break;
-        case 'regular':
-            menu.secondsbarradio.forEach((btn) => {
-                btn.disabled = true;
-                if (btn.id === 'sbaN') {
-                    btn.checked = true;
-                    btn.dispatchEvent(new Event('change'));
-                }
-            });
-            dtdisplay.tcontainer.style.borderBottomStyle = 'none';
-            dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
-            logConsole(`Border type set to: ${value}`, 'info');
-            break;
-        case 'bottom':
-            menu.secondsbarradio.forEach((btn) => {
-                btn.disabled = true;
-                if (btn.id === 'sbaN') {
-                    btn.checked = true;
-                    btn.dispatchEvent(new Event('change'));
-                }
-            });
-            dtdisplay.tcontainer.style.borderStyle = 'none';
-            dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
-            logConsole(`Border type set to: ${value}`, 'info');
-            break;
-        default:
-            logConsole(`Invalid border type: ${value}`, 'error');
-            break;
-        }
     });
 });
 

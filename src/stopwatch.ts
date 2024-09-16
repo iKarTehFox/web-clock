@@ -1,3 +1,4 @@
+import { match } from 'ts-pattern';
 import { menu, stopwatch } from './global';
 import { logConsole } from './utils/dom-utils';
 
@@ -37,19 +38,22 @@ function updateDisplay(returnCurrent: boolean = false, isFormatted: boolean = fa
 
 function disableBtns(buttons: string[], disabled: boolean) {
     buttons.forEach(button => {
-        switch (button) {
-        case 'start':
-            stopwatch.startbtn.disabled = disabled;
-            break;
-        case 'pause':
-            stopwatch.pausebtn.disabled = disabled;
-            break;
-        case 'reset':
-            stopwatch.resetbtn.disabled = disabled;
-            break;
-        case 'lap':
-            stopwatch.lapbtn.disabled = disabled;
-        }
+        match(button)
+            .with('start', () => {
+                stopwatch.startbtn.disabled = disabled;
+            })
+            .with('pause', () => {
+                stopwatch.pausebtn.disabled = disabled;
+            })
+            .with('reset', () => {
+                stopwatch.resetbtn.disabled = disabled;
+            })
+            .with('lap', () => {
+                stopwatch.lapbtn.disabled = disabled;
+            })
+            .otherwise(() => {
+                logConsole(`Invalid stopwatch button: ${button}`, 'error');
+            });
     });
 }
 
