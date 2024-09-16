@@ -9,7 +9,7 @@ export async function applyURLParams() {
     // Debug logging mode
     if (urlParams.get('debug') === 'true') {
         menu.debugcheckbox.checked = true;
-        showToast('Debug logging enabled. DevTools memory will increase over time.', 5000);
+        showToast('Debug logging enabled. DevTools memory will increase over time.', 5000, 'warning');
     }
 
     // Menu theme
