@@ -1,6 +1,6 @@
 {
   "name": "web-clock",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Online digital clock web app with customizability in mind!",
   "main": "./src/index.ts",
   "scripts": {
@@ -50,6 +50,7 @@
     "iconify-icon": "^2.1.0",
     "openweathermap-ts": "^1.2.10",
     "toastify-js": "^1.12.0",
-    "ts-luxon": "^4.5.2"
+    "ts-luxon": "^4.5.2",
+    "ts-pattern": "^5.3.1"
   }
 }

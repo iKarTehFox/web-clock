@@ -1,4 +1,4 @@
-import { menu } from '../global';
+import { menu, weather } from '../global';
 import { presetLocalJSON } from '../importExport';
 import { getFirstElement, logConsole, showToast } from './dom-utils';
 
@@ -6,11 +6,10 @@ export async function applyURLParams() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
-    // Display settings
     // Debug logging mode
     if (urlParams.get('debug') === 'true') {
         menu.debugcheckbox.checked = true;
-        showToast('Debug logging enabled. DevTools memory will increase over time.', 5000);
+        showToast('Debug logging enabled. DevTools memory will increase over time.', 5000, 'warning');
     }
 
     // Menu theme
@@ -27,6 +26,16 @@ export async function applyURLParams() {
         getFirstElement<HTMLInputElement>(`input[name="weather-unit-radio"][id="${urlParams.get('weatherUnits')}"]`).checked = true;
         getFirstElement<HTMLInputElement>(`input[name="weather-unit-radio"][id="${urlParams.get('weatherUnits')}"]`).dispatchEvent(new Event('change'));
         menu.weathersubmitbtn.click();
+    }
+
+    // Weather widget position
+    if (urlParams.get('weatherWidgetPosX') !== null && urlParams.get('weatherWidgetPosY') !== null) {
+        const posX = parseInt(urlParams.get('weatherWidgetPosX') as string);
+        const posY = parseInt(urlParams.get('weatherWidgetPosY') as string);
+        if (!isNaN(posX) && !isNaN(posY)) {
+            weather.container.style.left = `${posX}px`;
+            weather.container.style.top = `${posY}px`;
+        }
     }
 
     // Panel visibility

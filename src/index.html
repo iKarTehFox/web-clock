@@ -385,6 +385,11 @@
                                     <button type="button" class="btn btn-outline-danger mt-2 me-1" id="weatherStopBtn" disabled>Disable</button>
                                     <button type="button" class="btn btn-outline-success mt-2" id="weatherSubmitBtn">Enable</button>
                                 </div>
+                                <hr>
+                                <h6 class="mb-1 mt-2">Widget Position</h6>
+                                <button type="button" class="btn btn-outline-primary mb-1" data-bs-toggle="button" id="weatherMoveToggle" disabled>Toggle drag-to-move</button>
+                                <button type="button" class="btn btn-outline-warning mb-1" id="weatherMoveReset" disabled>Reset position...</button>
+                                <p id="subtext-light">Note: After toggling, drag the weather widget with your cursor!</p>
                                 <p class="mb-1 mt-2">Review the <a href="/privacy.html">Privacy Policy</a>.</p>
                             </div>
                         </div>
@@ -453,7 +458,9 @@
                                 <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="A personal favorite from iKarTehFox... me! :)" onClick="ieJSON.presetLocalJSON('onlinewebclock-devfavorite-preset')">Simple blue</button>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Export settings</h6>
-                                <button type="button" class="btn btn-outline-secondary" onClick="ieJSON.exportSettingsToJSON()">Download JSON file</button>
+                                <!-- Why do these buttons use onClick instead of listeners? Idk, I'm just lazy -->
+                                <button type="button" class="btn btn-outline-secondary mb-1" onClick="ieJSON.exportSettingsToJSON()">Download JSON file</button>
+                                <button type="button" class="btn btn-outline-warning" onClick="ieJSON.exportSettingsToJSON(true)">Copy to clipboard</button>
                                 <p class="mb-1 mt-2" id="subtext-light">Note: Display Options and custom font settings will not be exported.</p>
                             </div>
                         </div>
@@ -470,7 +477,7 @@
                         <p style="margin-top: -1.5px;"><iconify-icon inline icon="mdi:github"></iconify-icon></p>
                     </a>
                     <p class="mb-1 mt-2">Review the <a href="/privacy.html">Privacy Policy</a>.</p>
-                    <p class="mb-1 mt-2" id="version">Version: <b>v1.4.1</b></p>
+                    <p class="mb-1 mt-2" id="version">Version: <b>v1.4.2</b></p>
                 </div>
             </div>
         </div>

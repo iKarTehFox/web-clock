@@ -55,6 +55,11 @@ function getThemeInfo(colorTheme: string = 'auto') {
             bgColor: '#198754',
             textColor: '#FFFFFF',
             outline: 'rgba(25, 135, 84, 0.5) solid 2px'
+        },
+        warning: {
+            bgColor: '#FFC107',
+            textColor: '#212529',
+            outline: 'rgba(255, 193, 7, 0.5) solid 2px'
         }
     };
 

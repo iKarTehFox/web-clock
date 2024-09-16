@@ -1,3 +1,4 @@
+import { match } from 'ts-pattern';
 import { getElement, getElements, logConsole, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
 import * as bootstrap from 'bootstrap';
@@ -60,7 +61,9 @@ export const menu = {
     weatherloninput: getElement<HTMLInputElement>('weatherLonTextArea'),
     weathersubmitbtn: getElement<HTMLButtonElement>('weatherSubmitBtn'),
     weatherstopbtn: getElement<HTMLButtonElement>('weatherStopBtn'),
-    weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]')
+    weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]'),
+    weathermovetoggle: getElement<HTMLInputElement>('weatherMoveToggle'),
+    weathermovereset: getElement<HTMLButtonElement>('weatherMoveReset')
 };
 
 export const font = {
@@ -147,48 +150,47 @@ const fontSizeOptions: Record<FontSizeKey, string> = {
 // Font style handler function
 function modifyFontStyle(type: string, value: string) {
     const fontSize = value as FontSizeKey;
-    switch (type) {
-    case 'style':
-        dtdisplay.ccontainer.style.fontStyle = value;
-        stopwatch.display.style.fontStyle = value;
-        countdown.display.style.fontStyle = value;
-        logConsole(`Font style set to: ${value}`, 'info');
-        break;
-    case 'weight':
-        dtdisplay.ccontainer.style.fontWeight = value;
-        stopwatch.display.style.fontWeight = value;
-        countdown.display.style.fontWeight = value;
-        logConsole(`Font weight set to: ${value}`, 'info');
-        break;
-    case 'size':
-        if (fontSize in fontSizeOptions) { // Check if the casted value is a valid key
-            dtdisplay.ccontainer.style.fontSize = value;
-            dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[fontSize];
-            dtdisplay.date.style.fontSize = fontSizeOptions[fontSize];
-            logConsole(`Font sizing set to: ${value}`, 'info');
-        } else {
-            logConsole(`Invalid font size: ${value}`, 'error');
-        }
-        break;
-    case 'family':
-        dtdisplay.ccontainer.style.fontFamily = value;
-        countdown.display.style.fontFamily = value;
-        logConsole(`Font family set to: ${value}`, 'info');
-        break;
-    case 'strokewidth':
-        dtdisplay.ccontainer.style.webkitTextStrokeWidth = `${value}px`;
-        font.strokerangelabel.textContent = `Stroke width: ${value}px`;
-        logConsole(`Font stroke width set to: ${value}px`, 'info');
-        break;
-    case 'strokecolor':
-        dtdisplay.ccontainer.style.webkitTextStrokeColor = value;
-        font.strokecolorlabel.textContent = `Stroke color: ${value}`;
-        logConsole(`Font stroke color set to: ${value}`, 'info');
-        break;
-    default:
-        logConsole(`Invalid font modification type: ${type}`, 'error');
-        break;
-    }
+    match(type)
+        .with('style', () => {
+            dtdisplay.ccontainer.style.fontStyle = value;
+            stopwatch.display.style.fontStyle = value;
+            countdown.display.style.fontStyle = value;
+            logConsole(`Font style set to: ${value}`, 'info');
+        })
+        .with('weight', () => {
+            dtdisplay.ccontainer.style.fontWeight = value;
+            stopwatch.display.style.fontWeight = value;
+            countdown.display.style.fontWeight = value;
+            logConsole(`Font weight set to: ${value}`, 'info');
+        })
+        .with('size', () => {
+            if (fontSize in fontSizeOptions) {
+                dtdisplay.ccontainer.style.fontSize = value;
+                dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[fontSize];
+                dtdisplay.date.style.fontSize = fontSizeOptions[fontSize];
+                logConsole(`Font sizing set to: ${value}`, 'info');
+            } else {
+                logConsole(`Invalid font size: ${value}`, 'error');
+            }
+        })
+        .with('family', () => {
+            dtdisplay.ccontainer.style.fontFamily = value;
+            countdown.display.style.fontFamily = value;
+            logConsole(`Font family set to: ${value}`, 'info');
+        })
+        .with('strokewidth', () => {
+            dtdisplay.ccontainer.style.webkitTextStrokeWidth = `${value}px`;
+            font.strokerangelabel.textContent = `Stroke width: ${value}px`;
+            logConsole(`Font stroke width set to: ${value}px`, 'info');
+        })
+        .with('strokecolor', () => {
+            dtdisplay.ccontainer.style.webkitTextStrokeColor = value;
+            font.strokecolorlabel.textContent = `Stroke color: ${value}`;
+            logConsole(`Font stroke color set to: ${value}`, 'info');
+        })
+        .otherwise(() => {
+            logConsole(`Invalid font modification type: ${type}`, 'error');
+        });
 }
 
 // Seconds visibility listener
@@ -303,43 +305,42 @@ menu.bordertyperadio.forEach((radio) => {
         const value = radio.dataset.value;
         menu.borderstyleselect.disabled = value === 'none';
 
-        switch (value) {
-        case 'none':
-            menu.secondsbarradio.forEach((btn) => {
-                btn.disabled = false;
+        match(value)
+            .with('none', () => {
+                menu.secondsbarradio.forEach((btn) => {
+                    btn.disabled = false;
+                });
+                dtdisplay.tcontainer.style.borderStyle = value;
+                dtdisplay.tcontainer.style.borderBottomStyle = value;
+                logConsole(`Border type set to: ${value}`, 'info');
+            })
+            .with('regular', () => {
+                menu.secondsbarradio.forEach((btn) => {
+                    btn.disabled = true;
+                    if (btn.id === 'sbaN') {
+                        btn.checked = true;
+                        btn.dispatchEvent(new Event('change'));
+                    }
+                });
+                dtdisplay.tcontainer.style.borderBottomStyle = 'none';
+                dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
+                logConsole(`Border type set to: ${value}`, 'info');
+            })
+            .with('bottom', () => {
+                menu.secondsbarradio.forEach((btn) => {
+                    btn.disabled = true;
+                    if (btn.id === 'sbaN') {
+                        btn.checked = true;
+                        btn.dispatchEvent(new Event('change'));
+                    }
+                });
+                dtdisplay.tcontainer.style.borderStyle = 'none';
+                dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
+                logConsole(`Border type set to: ${value}`, 'info');
+            })
+            .otherwise(() => {
+                logConsole(`Invalid border type: ${value}`, 'error');
             });
-            dtdisplay.tcontainer.style.borderStyle = value;
-            dtdisplay.tcontainer.style.borderBottomStyle = value;
-            logConsole(`Border type set to: ${value}`, 'info');
-            break;
-        case 'regular':
-            menu.secondsbarradio.forEach((btn) => {
-                btn.disabled = true;
-                if (btn.id === 'sbaN') {
-                    btn.checked = true;
-                    btn.dispatchEvent(new Event('change'));
-                }
-            });
-            dtdisplay.tcontainer.style.borderBottomStyle = 'none';
-            dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
-            logConsole(`Border type set to: ${value}`, 'info');
-            break;
-        case 'bottom':
-            menu.secondsbarradio.forEach((btn) => {
-                btn.disabled = true;
-                if (btn.id === 'sbaN') {
-                    btn.checked = true;
-                    btn.dispatchEvent(new Event('change'));
-                }
-            });
-            dtdisplay.tcontainer.style.borderStyle = 'none';
-            dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
-            logConsole(`Border type set to: ${value}`, 'info');
-            break;
-        default:
-            logConsole(`Invalid border type: ${value}`, 'error');
-            break;
-        }
     });
 });
 
@@ -392,6 +393,49 @@ menu.weathersubmitbtn.addEventListener('click', () => {
 
 menu.weatherstopbtn.addEventListener('click', () => {
     stopWeather();
+});
+
+// Weather move toggle listener
+let isMoving: boolean = false;
+
+menu.weathermovetoggle.addEventListener('click', () => {
+    isMoving = menu.weathermovetoggle.classList.contains('active');
+    weather.container.style.cursor = isMoving ? 'grab' : 'default';
+    logConsole(`Weather moving toggle set to: ${isMoving}`, 'info');
+});
+
+weather.container.addEventListener('mousedown', (e) => {
+    if (!isMoving) return;
+    
+    weather.container.style.cursor = 'grabbing';
+    logConsole('Weather widget mousedown...', 'info');
+    const startX = e.clientX - weather.container.offsetLeft;
+    const startY = e.clientY - weather.container.offsetTop;
+
+    function onMouseMove(e: { clientX: number; clientY: number; }) {
+        const posX = e.clientX - startX;
+        const posY = e.clientY - startY;
+
+        weather.container.style.left = `${posX}px`;
+        weather.container.style.top = `${posY}px`;
+        logConsole(`Weather widget moving. PosX: ${posX}, PosY: ${posY}`, 'info');
+    }
+
+    function onMouseUp() {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        weather.container.style.cursor = 'grab';
+        logConsole('Weather widget mouseup...', 'info');
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+});
+
+menu.weathermovereset.addEventListener('click', () => {
+    weather.container.style.left = '';
+    weather.container.style.top = '';
+    logConsole('Weather widget position reset...', 'info');
 });
 
 // Menu theme listener

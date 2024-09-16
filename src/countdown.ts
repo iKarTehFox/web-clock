@@ -1,3 +1,4 @@
+import { match } from 'ts-pattern';
 import { menu, countdown } from './global';
 import { logConsole, showToast } from './utils/dom-utils';
 
@@ -29,17 +30,19 @@ function inputsDisabled(disabled: boolean) {
 
 function disableBtns(buttons: string[], disabled: boolean) {
     buttons.forEach(button => {
-        switch (button) {
-        case 'start':
-            countdown.startbtn.disabled = disabled;
-            break;
-        case 'pause':
-            countdown.pausebtn.disabled = disabled;
-            break;
-        case 'reset':
-            countdown.resetbtn.disabled = disabled;
-            break;
-        }
+        match(button)
+            .with('start', () => {
+                countdown.startbtn.disabled = disabled;
+            })
+            .with('pause', () => {
+                countdown.pausebtn.disabled = disabled;
+            })
+            .with('reset', () => {
+                countdown.resetbtn.disabled = disabled;
+            })
+            .otherwise(() => {
+                logConsole(`Unknown button: ${button}`, 'error');
+            });
     });
 }
 

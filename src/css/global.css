@@ -4,6 +4,8 @@
 
 body {
     background-repeat: no-repeat;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 #blur-panel {
@@ -124,6 +126,7 @@ body {
     display: block;
     left: 10px;
     bottom: 10px;
+    cursor: default;
 }
 
 .weather-hidden {

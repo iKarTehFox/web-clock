@@ -1,3 +1,4 @@
+import { match } from 'ts-pattern';
 import OpenWeatherMap from 'openweathermap-ts';
 import { menu, weather } from '../global';
 import { getFirstElement, logConsole, showToast } from './dom-utils';
@@ -47,6 +48,7 @@ function updateWeatherWidget(data: CurrentResponse, units: string) {
     const tempunit = units == 'imperial' ? 'F' : 'C';
     const windunit = units == 'imperial' ? 'mph' : 'm/s';
 
+    // Fill weather widget data. Can this be done better? Probably...
     weather.name.innerText = `${data.name}, ${data.sys.country}`;
     weather.temp.innerText = `${data.main.temp}°${tempunit}`;
     weather.feelslike.innerText = `${data.main.feels_like}°${tempunit}`;
@@ -56,38 +58,18 @@ function updateWeatherWidget(data: CurrentResponse, units: string) {
     weather.condition.innerText = `${data.weather[0].description.charAt(0).toUpperCase() + data.weather[0].description.slice(1)}`;
 
     // Icon logic
-    switch (data.weather[0].icon) {
-    case '01d': // clear sky
-        weather.icon.setAttribute('icon', 'mdi:weather-sunny');
-        break;
-    case '02d': // few clouds
-        weather.icon.setAttribute('icon', 'mdi:weather-partly-cloudy');
-        break;
-    case '03d': //scattered clouds
-        weather.icon.setAttribute('icon', 'mdi:weather-cloudy');
-        break;
-    case '04d': // broken clouds
-        weather.icon.setAttribute('icon', 'mdi:weather-cloudy');
-        break;
-    case '09d': // shower rain
-        weather.icon.setAttribute('icon', 'mdi:weather-partly-rainy');
-        break;
-    case '10d': // rain
-        weather.icon.setAttribute('icon', 'mdi:weather-pouring');
-        break;
-    case '11d': // thunderstorm
-        weather.icon.setAttribute('icon', 'mdi:weather-lightning');
-        break;
-    case '13d': // snow
-        weather.icon.setAttribute('icon', 'mdi:weather-snowy');
-        break;
-    case '50d': // mist
-        weather.icon.setAttribute('icon', 'mdi:weather-fog');
-        break;
-    default:
-        weather.icon.setAttribute('icon', 'mdi:weather-cloudy');
-        break;
-    }
+    weather.icon.setAttribute('icon', match(data.weather[0].icon)
+        .with('01d', () => 'mdi:weather-sunny')
+        .with('02d', () => 'mdi:weather-partly-cloudy')
+        .with('03d', () => 'mdi:weather-cloudy')
+        .with('04d', () => 'mdi:weather-cloudy')
+        .with('09d', () => 'mdi:weather-partly-rainy')
+        .with('10d', () => 'mdi:weather-pouring')
+        .with('11d', () => 'mdi:weather-lightning')
+        .with('13d', () => 'mdi:weather-snowy')
+        .with('50d', () => 'mdi:weather-fog')
+        .otherwise(() => 'mdi:weather-cloudy')
+    );
 
     weather.container.className = 'weather-container';
 }
@@ -154,6 +136,8 @@ function weatherMenuDisable(disabled: boolean) {
         radio.disabled = disabled;
     });
     menu.weathersubmitbtn.disabled = disabled;
+    menu.weathermovetoggle.disabled = !disabled;
+    menu.weathermovereset.disabled = !disabled;
 }
 
 export function stopWeather() {

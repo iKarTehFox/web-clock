@@ -1,3 +1,4 @@
+import { match } from 'ts-pattern';
 import { doc, menu } from './global';
 import { logConsole } from './utils/dom-utils';
 
@@ -34,23 +35,22 @@ menu.imagesizeselect.addEventListener('change', () => {
     const value = menu.imagesizeselect.value;
     const bodyElement = document.body;
     
-    switch (value) {
-    case 'auto':
-        bodyElement.style.backgroundSize = value;
-        logConsole(`Image sizing set to: ${value}`, 'info');
-        break;
-    case 'cover':
-        bodyElement.style.backgroundSize = value;
-        logConsole(`Image sizing set to: ${value}`, 'info');
-        break;
-    case 'stretch':
-        bodyElement.style.backgroundSize = '100vw 100vh';
-        logConsole(`Image sizing set to: ${value}`, 'info');
-        break;
-    default:
-        logConsole(`Unsupported background size value: ${value}`, 'error');
-        break;
-    }
+    match(value)
+        .with('auto', () => {
+            bodyElement.style.backgroundSize = value;
+            logConsole(`Image sizing set to: ${value}`, 'info');
+        })
+        .with('cover', () => {
+            bodyElement.style.backgroundSize = value;
+            logConsole(`Image sizing set to: ${value}`, 'info');
+        })
+        .with('stretch', () => {
+            bodyElement.style.backgroundSize = '100vw 100vh';
+            logConsole(`Image sizing set to: ${value}`, 'info');
+        })
+        .otherwise(() => {
+            logConsole(`Unsupported background size value: ${value}`, 'error');
+        });
 });
 
 menu.imageblurrange.addEventListener('input', () => {
