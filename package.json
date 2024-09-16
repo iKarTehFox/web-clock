@@ -50,6 +50,7 @@
     "iconify-icon": "^2.1.0",
     "openweathermap-ts": "^1.2.10",
     "toastify-js": "^1.12.0",
-    "ts-luxon": "^4.5.2"
+    "ts-luxon": "^4.5.2",
+    "ts-pattern": "^5.3.1"
   }
 }
