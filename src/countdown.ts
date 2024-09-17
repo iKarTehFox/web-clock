@@ -174,5 +174,15 @@ document.addEventListener('keydown', function(e) {
 countdown.pausebtn.addEventListener('click', pauseCountdown);
 countdown.resetbtn.addEventListener('click', resetCountdown);
 
+// Prevent close if running
+window.addEventListener('beforeunload', function(e) {
+    if (running) {
+        e.preventDefault();
+
+        // DEPRECATED: For compatibility only.
+        e.returnValue = true;
+    }
+});
+
 // Initialize display
 updateDisplay();

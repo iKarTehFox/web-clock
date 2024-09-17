@@ -180,5 +180,15 @@ stopwatch.pausebtn.addEventListener('click', pauseStopwatch);
 stopwatch.resetbtn.addEventListener('click', resetStopwatch);
 stopwatch.lapbtn.addEventListener('click', lapStopwatch);
 
+// Prevent close if running
+window.addEventListener('beforeunload', function(e) {
+    if (running) {
+        e.preventDefault();
+
+        // DEPRECATED: For compatibility only.
+        e.returnValue = true;
+    }
+});
+
 // Initialize display
 updateDisplay();
