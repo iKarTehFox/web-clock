@@ -111,9 +111,13 @@ countdown.startbtn.addEventListener('click', () => {
                 return;
             }
             
+            // Calculate total seconds
             totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+            // Check if totalSeconds is too long (greater than 100 hours)
             if (totalSeconds > 360000) {
-                showToast('Time too long! Make sure it is less than 100 hours.', 5000, 'danger');
+                showToast('Time set too long! Make sure it is less than 100 hours.', 5000, 'danger');
+                totalSeconds = 0;
                 return;
             }
         }
