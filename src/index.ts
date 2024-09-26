@@ -1,5 +1,6 @@
 // TS Imports
 import 'iconify-icon';
+import './utils/iconify-preload';
 import * as ieJSON from './importExport';
 import * as wcGlobal from './global';
 import * as bgImg from './background-image';
