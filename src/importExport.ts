@@ -164,7 +164,7 @@ export function manualJSONImport() {
 // Import settings from a local JSON file
 export function presetLocalJSON(filename: string, alertConfirmation: boolean = true): Promise<void> {
     // Sanitize the filename
-    const sanitizedFilename = filename.replace(/[^a-zA-Z0-9]/g, '');
+    const sanitizedFilename = filename.replace(/[^a-zA-Z0-9-]/g, '');
 
     // Reject sanitized filename if it doesn't match the original filename
     if (sanitizedFilename !== filename) {
