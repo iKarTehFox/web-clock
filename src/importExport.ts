@@ -167,9 +167,8 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
     const sanitizedFilename = filename.replace(/[^a-zA-Z0-9]/g, '');
 
     // Reject sanitized filename if it doesn't match the original filename
-    // Kinda defeats the purpose of sanitizing, but it's a safety measure
     if (sanitizedFilename !== filename) {
-        // No visual error, but reject the Promise
+        showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 5000, 'danger');
         return Promise.reject(new Error('Illegal characters in preset filename. Only alphanumeric characters are allowed.'));
     }
 
