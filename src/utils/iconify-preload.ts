@@ -30,8 +30,10 @@ export function preloadIcons(): Promise<void> {
             if (loaded.length > 0) {
                 logConsole(`Successfully preloaded ${loaded.length} Iconify icons`, 'info');
             }
-            if (missing.length > 0) {
-                logConsole(`Failed to preload ${missing.length} Iconify icons. No internet?`, 'warning');
+            if (missing.length > 0 && missing.length < panelIcons.length) {
+                logConsole(`Missing ${missing.length} Iconify icons. Unstable internet?`, 'warning');
+            } else if (missing.length == panelIcons.length) {
+                logConsole(`Failed to preload all ${missing.length} Iconify icons. No internet?`, 'error');
             }
             resolve();
         });
