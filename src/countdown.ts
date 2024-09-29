@@ -16,20 +16,14 @@ function updateDisplay() {
         .join(':');
 }
 
-function inputsDisabled(disabled: boolean) {
-    if (disabled === false) {
-        countdown.hrsinput.disabled = false;
-        countdown.mininput.disabled = false;
-        countdown.secinput.disabled = false;
-    } else {
-        countdown.hrsinput.disabled = true;
-        countdown.mininput.disabled = true;
-        countdown.secinput.disabled = true;
-    }
+function inputsState(disabled: boolean) {
+    countdown.hrsinput.disabled = disabled;
+    countdown.mininput.disabled = disabled;
+    countdown.secinput.disabled = disabled;
 }
 
-function disableBtns(buttons: string[], disabled: boolean) {
-    buttons.forEach(button => {
+function btnState(buttonStates: { [key: string]: boolean }) {
+    Object.entries(buttonStates).forEach(([button, disabled]) => {
         match(button)
             .with('start', () => {
                 countdown.startbtn.disabled = disabled;
@@ -59,14 +53,20 @@ function startCountdown() {
                 clearInterval(countdownInterval);
                 running = false;
                 showToast('Countdown finished!', 30000, 'success');
-                inputsDisabled(false);
-                disableBtns(['start'], false);
-                disableBtns(['pause', 'reset'], true);
+                inputsState(false);
+                btnState({
+                    start: false,
+                    pause: true,
+                    reset: true,
+                });
             }
         }, 1000);
         logConsole('Countdown started...', 'info');
-        disableBtns(['start'], true);
-        disableBtns(['pause', 'reset'], false);
+        btnState({
+            start: true,
+            pause: false,
+            reset: false,
+        });
     }
 }
 
@@ -75,8 +75,10 @@ function pauseCountdown() {
         running = false;
         clearInterval(countdownInterval);
         logConsole('Countdown paused...', 'info');
-        disableBtns(['start'], false);
-        disableBtns(['pause'], true);
+        btnState({
+            start: false,
+            pause: true,
+        });
     }
 }
 
@@ -88,10 +90,13 @@ function resetCountdown() {
         updateDisplay();
     
         // Re-enable inputs
-        inputsDisabled(false);
+        inputsState(false);
         logConsole('Countdown reset...', 'info');
-        disableBtns(['start'], false);
-        disableBtns(['pause', 'reset'], true);
+        btnState({
+            start: false,
+            pause: true,
+            reset: true,
+        });
     }
 }
 
@@ -106,9 +111,13 @@ countdown.startbtn.addEventListener('click', () => {
                 return;
             }
             
+            // Calculate total seconds
             totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+            // Check if totalSeconds is too long (greater than 100 hours)
             if (totalSeconds > 360000) {
-                showToast('Time too long! Make sure it is less than 100 hours.', 5000, 'danger');
+                showToast('Time set too long! Make sure it is less than 100 hours.', 5000, 'danger');
+                totalSeconds = 0;
                 return;
             }
         }
@@ -116,7 +125,7 @@ countdown.startbtn.addEventListener('click', () => {
         startCountdown();
 
         // Disable inputs
-        inputsDisabled(true);
+        inputsState(true);
     }
 });
 
@@ -164,6 +173,16 @@ document.addEventListener('keydown', function(e) {
 // Event listeners for buttons
 countdown.pausebtn.addEventListener('click', pauseCountdown);
 countdown.resetbtn.addEventListener('click', resetCountdown);
+
+// Prevent close if running
+window.addEventListener('beforeunload', function(e) {
+    if (running) {
+        e.preventDefault();
+
+        // DEPRECATED: For compatibility only.
+        e.returnValue = true;
+    }
+});
 
 // Initialize display
 updateDisplay();

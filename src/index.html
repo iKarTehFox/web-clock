@@ -4,7 +4,7 @@
         <!-- Meta -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.iconify.design https://api.unisvg.com https://cloudflareinsights.com/cdn-cgi/rum https://api.openweathermap.org/data/2.5/weather; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com/beacon.min.js;">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.iconify.design https://api.unisvg.com https://cloudflareinsights.com/cdn-cgi/rum https://api.openweathermap.org/data/2.5/weather https://api.simplesvg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com/beacon.min.js;">
         <title>Online Web Clock</title>
         <meta name="description" content="Online clock web app on steroids, built with customization in mind! Made by iKarTehFox.">
         <!-- Favicon -->
@@ -14,10 +14,10 @@
         <div id="blur-panel"></div>
         <!-- Menu -->
         <div id="menu-container" data-bs-theme="light">
-            <button id="countdown-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Countdown" style="position: absolute; top: 0px; right: 152px;"></button>
-            <button id="stopwatch-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Stopwatch" style="position: absolute; top: 0px; right: 105px;"></button>
-            <button id="open-button" class="btn btn-secondary" style="width: 100px;"></button>
-            <button id="close-button" class="btn btn-danger" style="display: none; position: absolute; top: 0px; right: 0px; width: 100px;"></button>
+            <button id="countdown-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Countdown" style="position: absolute; top: 0px; right: 152px;">⏳</button>
+            <button id="stopwatch-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Stopwatch" style="position: absolute; top: 0px; right: 105px;">⏱️</button>
+            <button id="open-button" class="btn btn-secondary" style="width: 100px;">☰ Menu</button>
+            <button id="close-button" class="btn btn-danger" style="display: none; position: absolute; top: 0px; right: 0px; width: 100px;">❌ Close</button>
             <div id="menu-options" class="menu-options-initial">
                 <div class="accordion" id="menuAccordion">
                     <div class="accordion-item">
@@ -473,11 +473,11 @@
                         Developed by iKarTehFox. Made possible with other open-source projects.<br>This app is licenced under the <a href="https://github.com/iKarTehFox/web-clock/blob/main/LICENSE" target="_blank">Mozilla Public License 2.0 (MPL-2.0)</a>.
                     </span>
                     <br>
-                    <a type="button" class="btn btn-primary btn-social-icon btn-github" data-bs-toggle="tooltip" data-bs-custom-class="secondary-tooltip" data-bs-title="View on GitHub" href="https://github.com/ikartehfox/web-clock" target="_blank">
-                        <p style="margin-top: -1.5px;"><iconify-icon inline icon="mdi:github"></iconify-icon></p>
+                    <a type="button" class="btn btn-primary btn-social-icon btn-github" data-bs-toggle="tooltip" data-bs-custom-class="secondary-tooltip" data-bs-title="View on GitHub" href="https://github.com/ikartehfox/web-clock" target="_blank" id="github-btn">
+                        <p style="margin-top: -1.5px;">🐙</p>
                     </a>
                     <p class="mb-1 mt-2">Review the <a href="/privacy.html">Privacy Policy</a>.</p>
-                    <p class="mb-1 mt-2" id="version">Version: <b>v1.4.2</b></p>
+                    <p class="mb-1 mt-2" id="version">Version: <b>v1.4.3</b></p>
                 </div>
             </div>
         </div>

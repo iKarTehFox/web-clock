@@ -163,13 +163,22 @@ export function manualJSONImport() {
 
 // Import settings from a local JSON file
 export function presetLocalJSON(filename: string, alertConfirmation: boolean = true): Promise<void> {
+    // Sanitize the filename
+    const sanitizedFilename = filename.replace(/[^a-zA-Z0-9-]/g, '');
+
+    // Reject sanitized filename if it doesn't match the original filename
+    if (sanitizedFilename !== filename) {
+        showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 5000, 'danger');
+        return Promise.reject(new Error('Illegal characters in preset filename. Only alphanumeric characters are allowed.'));
+    }
+
     // Make URL
-    const url = `./assets/${filename}.json`;
+    const url = `./assets/${sanitizedFilename}.json`;
 
     // Fetch file using Axios and return Promise
     return axios.get(url)
         .then(response => {
-            logConsole(`Attempting to load settings from preset: '${filename}'...`, 'info');
+            logConsole(`Attempting to load settings from preset: '${sanitizedFilename}'...`, 'info');
             processJSONSettings(JSON.stringify(response.data), alertConfirmation);
         })
         .catch(error => {

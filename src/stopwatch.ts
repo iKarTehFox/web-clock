@@ -36,8 +36,8 @@ function updateDisplay(returnCurrent: boolean = false, isFormatted: boolean = fa
     stopwatch.display.textContent = formatTime(timeDiff);
 }
 
-function disableBtns(buttons: string[], disabled: boolean) {
-    buttons.forEach(button => {
+function btnState(buttons: { [key: string]: boolean }) {
+    Object.entries(buttons).forEach(([button, disabled]) => {
         match(button)
             .with('start', () => {
                 stopwatch.startbtn.disabled = disabled;
@@ -64,9 +64,12 @@ function startStopwatch() {
         startTime = Date.now();
         timeInterval = setInterval(updateDisplay, 25);
         logConsole('Stopwatch started...', 'info');
-        disableBtns(['start'], true);
-        disableBtns(['pause', 'reset'], false);
-        disableBtns(['lap'], false);
+        btnState({
+            start: true,
+            pause: false,
+            reset: false,
+            lap: false,
+        });
     }
 }
 
@@ -77,9 +80,11 @@ export function pauseStopwatch() {
         elapsedTime += Date.now() - startTime;
         clearInterval(timeInterval);
         logConsole('Stopwatch paused...', 'info');
-        disableBtns(['start'], false);
-        disableBtns(['pause'], true);
-        disableBtns(['lap'], true);
+        btnState({
+            start: false,
+            pause: true,
+            lap: true,
+        });
     }
 }
 
@@ -91,9 +96,12 @@ function resetStopwatch() {
         elapsedTime = 0;
         updateDisplay();
         logConsole('Stopwatch reset...', 'info');
-        disableBtns(['start'], false);
-        disableBtns(['pause', 'reset'], true);
-        disableBtns(['lap'], false);
+        btnState({
+            start: false,
+            pause: true,
+            reset: true,
+            lap: false,
+        });
 
         // Clear lap textarea history
         stopwatch.lapfield.value ='';
@@ -171,6 +179,16 @@ stopwatch.startbtn.addEventListener('click', startStopwatch);
 stopwatch.pausebtn.addEventListener('click', pauseStopwatch);
 stopwatch.resetbtn.addEventListener('click', resetStopwatch);
 stopwatch.lapbtn.addEventListener('click', lapStopwatch);
+
+// Prevent close if running
+window.addEventListener('beforeunload', function(e) {
+    if (running) {
+        e.preventDefault();
+
+        // DEPRECATED: For compatibility only.
+        e.returnValue = true;
+    }
+});
 
 // Initialize display
 updateDisplay();

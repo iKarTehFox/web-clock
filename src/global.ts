@@ -63,7 +63,8 @@ export const menu = {
     weatherstopbtn: getElement<HTMLButtonElement>('weatherStopBtn'),
     weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]'),
     weathermovetoggle: getElement<HTMLInputElement>('weatherMoveToggle'),
-    weathermovereset: getElement<HTMLButtonElement>('weatherMoveReset')
+    weathermovereset: getElement<HTMLButtonElement>('weatherMoveReset'),
+    githubbtn: getElement<HTMLButtonElement>('github-btn'),
 };
 
 export const font = {
@@ -128,12 +129,6 @@ export const countdown = {
     mininput: getElement<HTMLInputElement>('countdown-minutes'),
     secinput: getElement<HTMLInputElement>('countdown-seconds')
 };
-
-// Fix menu button spacing
-menu.obutton.innerHTML = '<iconify-icon inline icon="mdi:menu"></iconify-icon> Menu';
-menu.cbutton.innerHTML = '<iconify-icon inline icon="mdi:close"></iconify-icon> Close';
-stopwatch.obutton.innerHTML = '<iconify-icon inline icon="mdi:timer"></iconify-icon>';
-countdown.obutton.innerHTML = '<iconify-icon inline icon="mdi:timer-sand-complete"></iconify-icon>';
 
 // Define font sizes
 type FontSizeKey = '6vw' | '8vw' | '10vw' | '12vw' | '14vw' | '18vw';
