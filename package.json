@@ -1,6 +1,6 @@
 {
   "name": "web-clock",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Online digital clock web app with customizability in mind!",
   "main": "./src/index.ts",
   "scripts": {
