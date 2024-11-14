@@ -33,6 +33,8 @@ export const menu = {
     faderesetbutton: getElement<HTMLButtonElement>('fadeTransitionResetBtn'),
     fadetransrange: getElement<HTMLInputElement>('fadeTransitionRange'),
     fadetransrangelabel: getElement<HTMLLabelElement>('fadeTransitionRangeLabel'),
+    fullscreenbtn: getElement<HTMLButtonElement>('fs-toggle'),
+    githubbtn: getElement<HTMLButtonElement>('github-btn'),
     imageblurrange: getElement<HTMLInputElement>('bgImgBlurRange'),
     imageblurlabel: getElement<HTMLLabelElement>('bgImgBlurRangeLabel'),
     imagegroup: getElement<HTMLDivElement>('bgImgGroup'),
@@ -64,7 +66,6 @@ export const menu = {
     weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]'),
     weathermovetoggle: getElement<HTMLInputElement>('weatherMoveToggle'),
     weathermovereset: getElement<HTMLButtonElement>('weatherMoveReset'),
-    githubbtn: getElement<HTMLButtonElement>('github-btn'),
 };
 
 export const font = {
