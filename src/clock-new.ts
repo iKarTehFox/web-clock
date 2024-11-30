@@ -339,7 +339,7 @@ function startOldClock() {
     }, 250) as unknown as NodeJS.Timeout;
 }
 
-// Add an event listener to the select element to detect changes
+// Listener for the legacy refresh checkbox
 menu.legacyrefreshcheckbox.addEventListener('change', startClock);
 
 startClock();
