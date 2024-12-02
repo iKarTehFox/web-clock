@@ -46,15 +46,9 @@ const config = {
         })
     ],
     devServer: {
-        static: {
-          directory: path.join(__dirname, 'public'),
-        },
-        hot: false,
-        liveReload: true,
-        compress: true,
-        host: '127.0.0.1',
-        port: 4000,
-      },
+        open: false,
+        host: 'localhost',
+    },
     module: {
         rules: [
             {
