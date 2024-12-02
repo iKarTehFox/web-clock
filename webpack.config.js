@@ -49,6 +49,7 @@ const config = {
         static: {
           directory: path.join(__dirname, 'public'),
         },
+        hot: false,
         liveReload: true,
         compress: true,
         host: '127.0.0.1',
