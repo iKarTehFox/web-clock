@@ -1,15 +1,18 @@
 import { menu, weather } from '../global';
 import { presetLocalJSON } from '../importExport';
 import { getFirstElement, logConsole, showToast } from './dom-utils';
+import { setDebug } from './debug';
+import { initializeDebugUI } from './debugUI';
 
 export async function applyURLParams() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
     // Debug logging mode
-    if (urlParams.get('debug') === 'true') {
-        menu.debugcheckbox.checked = true;
-        showToast('Debug logging enabled. DevTools memory will increase over time.', 5000, 'warning');
+    if (urlParams.get('debugMode') === 'true') {
+        setDebug(true);
+        initializeDebugUI();
+        showToast('Debug mode enabled. DevTools memory will increase over time.', 5000, 'warning');
     }
 
     // Menu theme

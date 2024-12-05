@@ -1,5 +1,6 @@
 import Toastify from 'toastify-js';
 import { menu } from '../global';
+import { debugMode } from './debug';
 
 // Element finding functions
 export function getElement<T extends HTMLElement>(id: string): T {
@@ -20,13 +21,13 @@ export function getFirstElement<T extends Element>(selector: string): T {
 
 // Custom console logging function
 export function logConsole(message: string, type: string = 'debug'):void {
-    if (menu.debugcheckbox.checked && type === 'debug') {
+    if (debugMode && type === 'debug') {
         console.log(`DEBUG - ${message}`);
     } else if (type === 'error') {
         console.error(`ERROR - ${message}`);
     } else if (type === 'warning') {
         console.warn(`WARNING - ${message}`);
-    } else if (menu.debugcheckbox.checked && type === 'info') {
+    } else if (debugMode && type === 'info') {
         console.info(`INFO - ${message}`);
     }
 }

@@ -27,7 +27,6 @@ export const menu = {
     container: getElement<HTMLDivElement>('menu-container'),
     datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
     dateformselect: getElement<HTMLSelectElement>('dateFormatSelect'),
-    debugcheckbox: getElement<HTMLInputElement>('debugMode'),
     durationdisplay: getElement<HTMLParagraphElement>('time-duration'),
     fadegroup: getElement<HTMLDivElement>('fadeGroup'),
     faderesetbutton: getElement<HTMLButtonElement>('fadeTransitionResetBtn'),
@@ -129,6 +128,12 @@ export const countdown = {
     hrsinput: getElement<HTMLInputElement>('countdown-hours'),
     mininput: getElement<HTMLInputElement>('countdown-minutes'),
     secinput: getElement<HTMLInputElement>('countdown-seconds')
+};
+
+export const debug = {
+    container: getElement<HTMLDivElement>('debuggingContainer'),
+    uastring: getElement<HTMLParagraphElement>('debugUAString'),
+    devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
 };
 
 // Define font sizes
