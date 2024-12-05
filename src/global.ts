@@ -134,6 +134,7 @@ export const debug = {
     container: getElement<HTMLDivElement>('debuggingContainer'),
     uastring: getElement<HTMLParagraphElement>('debugUAString'),
     devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
+    toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
 };
 
 // Define font sizes
