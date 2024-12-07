@@ -1,14 +1,6 @@
 import { match } from 'ts-pattern';
 import { getElement, getElements, logConsole, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
-import * as bootstrap from 'bootstrap';
-
-const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-const tooltipTriggerElArray = Array.from(tooltipTriggerList);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const tooltipList = tooltipTriggerElArray.map(tooltipTriggerEl => {
-    return new bootstrap.Tooltip(tooltipTriggerEl); 
-});
 
 export const doc = {
     blurpanel: getElement<HTMLDivElement>('blur-panel'),
