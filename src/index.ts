@@ -13,6 +13,7 @@ import './countdown';
 import './utils/debugUI';
 import { applyURLParams } from './utils/url-params';
 import { populateTimeZoneSelect } from './clock-new';
+import { generatePresetButtons } from './assets/presets';
 
 // Export some functions globally for HTML
 declare global {
@@ -31,4 +32,5 @@ window.wcGlobal = wcGlobal;
 window.addEventListener('DOMContentLoaded', () => {
     applyURLParams();
     populateTimeZoneSelect(); // This might be performance hungry...
+    generatePresetButtons();
 });

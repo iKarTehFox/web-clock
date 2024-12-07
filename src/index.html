@@ -437,8 +437,8 @@
                             <div class="accordion-body">
                                 <h6 class="mb-1">Debug info</h6>
                                 <p>User Agent: <span id="debugUAString"></span></p>
-                                <hr>
                                 <div id="devColorsContainer" style="display: none;">
+                                    <hr>
                                     <h6 class="mb-1 mt-2">Dev Colors</h6>
                                     <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
                                         <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="jekylldark" autocomplete="off" data-color="#27262B">
@@ -495,10 +495,8 @@
                                 <hr>
                                 <h6 class="mb-1">Built-in presets</h6>
                                 <p class="mb-1 mt-2">Import from preset settings:</p>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Save yourself from burn-in with this preset!" onClick="ieJSON.presetLocalJSON('onlinewebclock-amoled-preset')">AMOLED theme</button>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Become a hacker with this green, digital binary clock! kinda..." onclick="ieJSON.presetLocalJSON('onlinewebclock-digitsbinary-preset')">Hacker Green</button>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Go minimal with this black on white, simple theme!" onclick="ieJSON.presetLocalJSON('onlinewebclock-minimallight-preset')">Minimalist Light</button>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="A personal favorite from iKarTehFox... me! :)" onClick="ieJSON.presetLocalJSON('onlinewebclock-devfavorite-preset')">Simple blue</button>
+                                <div id="jsonPresetsContainer"></div>
+                                <p class="mb-1 mt-2" id="subtext-light">Note: You can press the corresponding number on your keyboard to use these presets at any time!</p>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Export settings</h6>
                                 <!-- Why do these buttons use onClick instead of listeners? Idk, I'm just lazy -->

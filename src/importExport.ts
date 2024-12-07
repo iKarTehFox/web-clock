@@ -10,6 +10,7 @@ import {
     validateFontConfig,
     validateColorTheme
 } from './importValidation';
+import { getPresetByHotkey } from './assets/presets';
 import axios from 'axios';
 
 function getSolidColorValue() {
@@ -193,6 +194,19 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
             showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 5000, 'danger');
         });
 }
+
+// Preset hotkey functionality
+document.addEventListener('keydown', (e) => {
+    // Only handle number keys 1-9
+    const key = parseInt(e.key);
+    if (key >= 1 && key <= 9) {
+        const preset = getPresetByHotkey(key);
+        if (preset) {
+            presetLocalJSON(preset.filename);
+            logConsole(`Hotkey ${key} pressed - Loading preset: ${preset.displayName}`, 'info');
+        }
+    }
+});
 
 function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: any; colorTheme: any; }) {
     // Set clockConfig settings
