@@ -11,7 +11,7 @@ Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri**
 
 # Install guide and features
 The documentation for Online Web Clock has moved! You can find it in the [Docs](https://online-clock-docs.pages.dev/)!  
-There, you can find installation instructions and a list of all features.
+There, you can find [installation instructions](https://online-clock-docs.pages.dev/docs/installation) and a [list of all features](https://online-clock-docs.pages.dev/docs).
  
 # Gallery
 ### Preview of the clock  
