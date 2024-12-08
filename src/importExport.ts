@@ -364,3 +364,20 @@ function verifySettingsJSON(jsonData: { version: any; clockConfig: any; fontConf
 
     return true;
 }
+
+// Surprise! More event listeners!
+menu.jsonexportclipbtn.addEventListener('click', () => {
+    exportSettingsToJSON(true);
+});
+
+menu.jsonexportdownloadbtn.addEventListener('click', () => {
+    exportSettingsToJSON();
+});
+
+menu.jsonimportuploadbtn.addEventListener('click', () => {
+    importSettingsFromJSON();
+});
+
+menu.jsonmanualimportbtn.addEventListener('click', () => {
+    manualJSONImport();
+});
