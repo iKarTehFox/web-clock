@@ -20,7 +20,7 @@ There, you can find [installation instructions](https://online-clock-docs.pages.
  ![A screenshot of the menu options panel. The "Date and Time" section is opened.](/src/assets/images/menu.png)  
 ### Customization example
  ![A screenshot of the main web clock page with many customizations applied, such as custom font, background image, date format, and weather widget.](/src/assets/images/customizable.png)  
- > Like this look? See [Importing/Exporting Settings](#importingexporting-settings) for the config!
+ > Like this look? Download [the preset](/src/assets/onlinewebclock-preset.json)!
  
 # Acknowledgements (OSS)
 - **Axios**  ([GitHub](https://github.com/axios/axios)): Licensed under MIT License  
