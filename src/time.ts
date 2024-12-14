@@ -2,32 +2,22 @@ import { doc, menu, dtdisplay } from './global';
 import { numberToWords } from './numberToWords.min';
 import * as luxon from 'ts-luxon';
 import { logConsole } from './utils/dom-utils';
+import { convertToEmojiBlock, convertToRomanNumerals, toRadix, toUnixMillis, toUnixSec, toWords, updateFavicon } from './time-help';
 
-let cMode = '0';
-let dateFormat = 'D';
-let timeDisplayMethod: string;
+// Default modes
+export let cMode = '0';
+export let dateFormat = 'D';
+export let timeDisplayMethod: string;
+const pageLoadTime = getLuxNow('sec');
+type TimeFormat = 'sec' | 'millis' | 'obj';
 
-menu.timemethodselect.addEventListener('change', () => {
-    const selectedValue = menu.timemethodselect.value as unknown as number;
-    timeDisplayMethod = String(selectedValue);
-    logConsole(`Time display method set to: ${selectedValue}`, 'info');
-    updateTime();
-});
-
-// Page duration elements
-const pageLoadTime = Date.now();
-
-function updatePageDuration() {
-    const currentTime = Date.now();
-
-    const timeDiff = currentTime - pageLoadTime;
-
-    // Convert the time difference to seconds, minutes, and hours
-    const seconds = Math.floor(timeDiff / 1000) % 60;
-    const minutes = Math.floor(timeDiff / (1000 * 60)) % 60;
-    const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-
-    menu.durationdisplay.textContent = `${hours}h, ${minutes}m, and ${seconds}s`;
+function getLuxNow(format: TimeFormat = 'sec'): number | luxon.DateTime {
+    const now = luxon.DateTime.now();
+    return {
+        'sec': () => now.toUnixInteger(),
+        'millis': () => now.toMillis(),
+        'obj': () => now
+    }[format]();
 }
 
 // Clock mode radio
@@ -40,66 +30,16 @@ menu.clockmoderadio.forEach((radio) => {
     });
 });
 
-// Function to get the list of time zones and group them by region
-function getTimeZonesByRegion() {
-    const timeZones = (Intl as any).supportedValuesOf('timeZone');
-    const timeZoneGroups: { [key: string]: string[] } = {};
-  
-    timeZones.forEach((timeZone) => {
-        const [region] = timeZone.split('/');
-      
-        if (!timeZoneGroups[region]) {
-            timeZoneGroups[region] = [];
-        }
-  
-        timeZoneGroups[region].push(timeZone);
-    });
-  
-    return timeZoneGroups;
-}
-  
-// Function to populate the existing select element with time zones
-export function populateTimeZoneSelect() {
-    const timeZoneGroups = getTimeZonesByRegion();
-  
-    // Populate the select element with optgroups and options
-    Object.keys(timeZoneGroups).forEach((region) => {
-        const optGroupElement = document.createElement('optgroup');
-        optGroupElement.label = region;
-  
-        timeZoneGroups[region].forEach((timeZone) => {
-            const optionElement = document.createElement('option');
-            optionElement.value = timeZone;
-            const timeZoneName = timeZone.replace(/_/g,' ');
-            optionElement.textContent = timeZoneName;
-            // Select current time zone
-            if (luxon.DateTime.local().zoneName === timeZone) {
-                optionElement.selected = true;
-            }
-            optGroupElement.appendChild(optionElement);
-        });
-  
-        menu.timezoneselect.appendChild(optGroupElement);
-    });
+// Page duration
+function updatePageDuration(): void {
+    const currentTime = getLuxNow('obj') as luxon.DateTime;
+    const duration = currentTime.diff(luxon.DateTime.fromSeconds(pageLoadTime as number), ['hours', 'minutes', 'seconds']);
+    
+    menu.durationdisplay.textContent = `${Math.floor(duration.hours)}h, ${Math.floor(duration.minutes)}m, and ${Math.floor(duration.seconds)}s`;
 }
 
-// Time zone selector listener
-menu.timezoneselect.addEventListener('change', function() {
-    const timeZone = menu.timezoneselect.value;
-    logConsole(`Time zone set to: ${timeZone}`, 'info');
-    luxon.Settings.defaultZoneLike = timeZone;
-    updateTime();
-    updateDate();
-});
-
-// Date format selector listener
-menu.dateformselect.addEventListener('change', function() {
-    dateFormat = menu.dateformselect.value;
-    logConsole(`Date format set to: ${menu.dateformselect.value}`, 'info');
-    updateDate();
-});
-
-function updateTime() {
+// Main update time
+function updateTime(): void {
     const time = luxon.DateTime.now();
     const hrs = cMode === '0' ? time.toFormat('h') : time.toFormat('HH');
     const min = time.toFormat('mm');
@@ -205,34 +145,74 @@ function updateTime() {
     }
 }
 
-function toRadix(value: string, radix: number): string {
-    if (radix >= 2 && radix <= 36) {
-        return parseInt(value, 10).toString(radix);
-    } else {
-        logConsole('Radix must be between 2 and 36, inclusive.', 'error');
-        return 'ERR';
-    }
+menu.timemethodselect.addEventListener('change', () => {
+    const selectedValue = menu.timemethodselect.value as unknown as number;
+    timeDisplayMethod = String(selectedValue);
+    logConsole(`Time display method set to: ${selectedValue}`, 'info');
+    updateTime();
+});
+
+// Timezone
+// Function to get the list of time zones and group them by region
+function getTimeZonesByRegion() {
+    const timeZones = (Intl as any).supportedValuesOf('timeZone');
+    const timeZoneGroups: { [key: string]: string[] } = {};
+  
+    timeZones.forEach((timeZone) => {
+        const [region] = timeZone.split('/');
+      
+        if (!timeZoneGroups[region]) {
+            timeZoneGroups[region] = [];
+        }
+  
+        timeZoneGroups[region].push(timeZone);
+    });
+  
+    return timeZoneGroups;
 }
 
-function toWords(value: string): string {
-    const num = parseFloat(value);
-    if (!isNaN(num) && isFinite(num)) {
-        return numberToWords.toWords(num);
-    } else {
-        return 'Invalid number';
-    }
+// Function to populate the existing select element with time zones
+export function populateTimeZoneSelect() {
+    const timeZoneGroups = getTimeZonesByRegion();
+  
+    // Populate the select element with optgroups and options
+    Object.keys(timeZoneGroups).forEach((region) => {
+        const optGroupElement = document.createElement('optgroup');
+        optGroupElement.label = region;
+  
+        timeZoneGroups[region].forEach((timeZone) => {
+            const optionElement = document.createElement('option');
+            optionElement.value = timeZone;
+            const timeZoneName = timeZone.replace(/_/g,' ');
+            optionElement.textContent = timeZoneName;
+            // Select current time zone
+            if (luxon.DateTime.local().zoneName === timeZone) {
+                optionElement.selected = true;
+            }
+            optGroupElement.appendChild(optionElement);
+        });
+  
+        menu.timezoneselect.appendChild(optGroupElement);
+    });
 }
 
-// Unix timestamp functions
-function toUnixMillis() {
-    return Date.now();
-}
+menu.timezoneselect.addEventListener('change', function() {
+    const timeZone = menu.timezoneselect.value;
+    logConsole(`Time zone set to: ${timeZone}`, 'info');
+    luxon.Settings.defaultZoneLike = timeZone;
+    updateTime();
+    updateDate();
+});
 
-function toUnixSec() {
-    return Math.floor(Date.now()/1000);
-}
+// Date
+// Date format selector listener
+menu.dateformselect.addEventListener('change', function() {
+    dateFormat = menu.dateformselect.value;
+    logConsole(`Date format set to: ${menu.dateformselect.value}`, 'info');
+    updateDate();
+});
 
-function updateDate() {
+export function updateDate() {
     const time = luxon.DateTime.now();
     dtdisplay.date.textContent = time.toFormat(dateFormat);
 
@@ -241,38 +221,6 @@ function updateDate() {
             child.textContent = time.toFormat(child.value);
         }
     });
-}
-
-
-// Change tab favicon function
-function updateFavicon(hour: string) {
-    doc.favicon.href = `./icons/clock-time-${hour}.svg`;
-}
-
-// Emoji block function
-function convertToEmojiBlock(number: { toString: () => string; }) {
-    const emojiBlocks = ['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
-    const digits = number.toString().split('');
-    const emojiDigits = digits.map((digit: string) => emojiBlocks[parseInt(digit, 10)]);
-    return emojiDigits.join('');
-}
-
-// Roman numeral converter function
-function convertToRomanNumerals(number: string | number): string {
-    if (isNaN(Number(number)))
-        return 'NaN';
-    if (number === 0 || number === '00')
-        return String(number);
-    const digits = String(+number).split('');
-    const key = ['', 'C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM',
-        '', 'X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC',
-        '', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'
-    ];
-    let roman = '',
-        i = 3;
-    while (i--)
-        roman = (key[+digits.pop()! + (i * 10)] || '') + roman;
-    return Array(+digits.join('') + 1).join('M') + roman;
 }
 
 // Initial update, then start intervals
@@ -300,8 +248,7 @@ function startClock() {
 
 // Function to start the new clock method
 function startNewClock() {
-    const now = luxon.DateTime.now();
-    const timeToNextSecond = 1000 - now.toMillis() % 1000;
+    const timeToNextSecond = 1000 - Number(getLuxNow('millis')) % 1000;
 
     setTimeout(() => {
         updateTime();

@@ -7,13 +7,13 @@ import * as wcGlobal from './global';
 import * as bgImg from './background-image';
 import './background-color';
 import './numberToWords.min';
-import './clock-new';
+import './time';
 import './clock-color';
 import './stopwatch';
 import './countdown';
 import './utils/debugUI';
 import { applyURLParams } from './utils/url-params';
-import { populateTimeZoneSelect } from './clock-new';
+import { populateTimeZoneSelect } from './time';
 import { generatePresetButtons } from './assets/presets';
 
 // Export some functions globally for HTML
