@@ -197,6 +197,11 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
 
 // Preset hotkey functionality
 document.addEventListener('keydown', (e) => {
+    // Skip if text input is focused
+    if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') {
+        return;
+    }
+
     // Only handle number keys 1-9
     const key = parseInt(e.key);
     if (key >= 1 && key <= 9) {
