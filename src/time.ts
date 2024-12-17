@@ -249,8 +249,8 @@ function startNewClock() {
             lastUpdateTime = now;
 
             const drift = elapsed - 1000;
-            if (Math.abs(drift) > 50) {
-                logConsole(`Time drift detected: ${drift}ms.`, 'info');
+            if (Math.abs(drift) > 150) {
+                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.`, 'info');
                 clearInterval(clockInterval!);
                 setTimeout(startNewClock, 1000 - drift);
             }
