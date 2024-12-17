@@ -1,4 +1,4 @@
-import { doc, dtdisplay } from './global';
+import { doc, menu, dtdisplay } from './global';
 import { numberToWords } from './numberToWords.min';
 import { logConsole } from './utils/dom-utils';
 
@@ -64,8 +64,50 @@ export function convertToRomanNumerals(number: string | number): string {
     return Array(+digits.join('') + 1).join('M') + roman;
 }
 
+// Element display
 // Colon visibility function
 export function colonVisibility([c1Vis, c2Vis]: boolean[]): void {
-    dtdisplay.colon1.style.display = c1Vis ? 'block' : 'none';
-    dtdisplay.colon2.style.display = c2Vis ? 'inline' : 'none';
+    dtdisplay.colon1.style.display = c1Vis ? '' : 'none';
+    dtdisplay.colon2.style.display = c2Vis ? '' : 'none';
 }
+
+// Seconds visibility listener
+menu.secondsvisradio.forEach((radio) => {
+    radio.addEventListener('change', () => {
+        const value = radio.dataset.value;
+        colonVisibility([true, (value == 'none' ? false : true)]);
+        dtdisplay.secondSlot.style.display = value as string;
+        logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
+    });
+});
+
+// Seconds bar visibility listener
+menu.secondsbarradio.forEach((radio) => {
+    radio.addEventListener('change', () => {
+        const value = radio.dataset.value;
+        if (value === 'block') {
+            menu.bordertyperadio.forEach((btn) => {
+                btn.disabled = true;
+                if (btn.id === 'btyD') {
+                    btn.checked = true;
+                    btn.dispatchEvent(new Event('change'));
+                }
+            });
+        } else {
+            menu.bordertyperadio.forEach((btn) => {
+                btn.disabled = false;
+            });
+        }
+        dtdisplay.secondsBar.style.display = value as string;
+        logConsole(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
+    });
+});
+
+// Date alignment listener
+menu.datealignradio.forEach((radio) => {
+    radio.addEventListener('change', () => {
+        const value = radio.dataset.value;
+        dtdisplay.date.style.textAlign = value as string;
+        logConsole(`Date alignment set to: ${value}`, 'info');
+    });
+});

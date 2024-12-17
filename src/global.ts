@@ -191,47 +191,6 @@ function modifyFontStyle(type: string, value: string) {
         });
 }
 
-// Seconds visibility listener
-menu.secondsvisradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
-        dtdisplay.colon2.style.display = value as string;
-        dtdisplay.secondSlot.style.display = value as string;
-        logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
-    });
-});
-
-// Seconds bar visibility listener
-menu.secondsbarradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
-        if (value === 'block') {
-            menu.bordertyperadio.forEach((btn) => {
-                btn.disabled = true;
-                if (btn.id === 'btyD') {
-                    btn.checked = true;
-                    btn.dispatchEvent(new Event('change'));
-                }
-            });
-        } else {
-            menu.bordertyperadio.forEach((btn) => {
-                btn.disabled = false;
-            });
-        }
-        dtdisplay.secondsBar.style.display = value as string;
-        logConsole(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
-    });
-});
-
-// Date alignment listener
-menu.datealignradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
-        dtdisplay.date.style.textAlign = value as string;
-        logConsole(`Date alignment set to: ${value}`, 'info');
-    });
-});
-
 // Font family listener
 font.familysel.addEventListener('change', function() {
     const value = font.familysel.value;

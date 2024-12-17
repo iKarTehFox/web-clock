@@ -2,7 +2,7 @@ import { doc, menu, dtdisplay } from './global';
 import { numberToWords } from './numberToWords.min';
 import * as luxon from 'ts-luxon';
 import { logConsole } from './utils/dom-utils';
-import { convertToEmojiBlock, convertToRomanNumerals, toRadix, toUnixMillis, toUnixSec, toWords, updateFavicon } from './time-help';
+import * as clock from './time-help';
 
 // Default modes
 export let cMode = '0';
@@ -40,108 +40,89 @@ function updatePageDuration(): void {
 
 // Main update time
 function updateTime(): void {
-    const time = luxon.DateTime.now();
+    const time = getLuxNow('obj') as luxon.DateTime;
     const hrs = cMode === '0' ? time.toFormat('h') : time.toFormat('HH');
     const min = time.toFormat('mm');
     const sec = time.toFormat('ss');
     const ind = cMode === '0' ? time.toFormat('a') : '';
 
+    // Handle title and favicon updates
     if (menu.titlevischeckbox.checked) {
-        updateFavicon(time.toFormat('h'));
+        clock.updateFavicon(time.toFormat('h'));
         document.title = `Time: ${hrs}:${min}:${sec} ${ind}`;
     } else if (document.title !== 'Online Web Clock' || !doc.favicon.href.endsWith('/icons/clock-time-3.svg')) {
-        updateFavicon('3');
+        clock.updateFavicon('3');
         document.title = 'Online Web Clock';
         logConsole('Title and favicon reset...', 'info');
     }
 
-    // Seconds progress bar
-    if (menu.secondsbarradio[0].checked) { // Check if visible, 0% if not.
+    // Handle seconds progress bar
+    if (menu.secondsbarradio[0].checked) {
         const secBarWidth = (Number(sec) / 59) * 100;
         dtdisplay.secondsBar.style.width = `${secBarWidth}%`;
     } else {
         dtdisplay.secondsBar.style.width = '0%';
     }
 
-    // Time display methods
-    type TimeFunction = (value: string) => string;
-    type UnixTimeFunction = () => number;
+    let displayHour = '';
+    let displayMinute = '';
+    let displaySecond = '';
+    let displayIndicator = '';
 
-    interface TimeDisplayFunctions {
-        [key: string]: TimeFunction | UnixTimeFunction;
-        binary: TimeFunction;
-        emoji: TimeFunction;
-        roman: TimeFunction;
-        hexa: TimeFunction;
-        hexatri: TimeFunction;
-        octal: TimeFunction;
-        words: TimeFunction;
-        unixmillis: UnixTimeFunction;
-        unixsec: UnixTimeFunction;
-        unixcountdown: UnixTimeFunction;
-    }
-
-    const timeDisplayFunctions: TimeDisplayFunctions = {
-        binary: (value: string) => toRadix(value, 2),
-        emoji: convertToEmojiBlock,
-        roman: convertToRomanNumerals,
-        hexa: (value: string) => toRadix(value, 16),
-        hexatri: (value: string) => toRadix(value, 36),
-        octal: (value: string) => toRadix(value, 8),
-        words: toWords,
-        unixmillis: toUnixMillis,
-        unixsec: toUnixSec,
-        unixcountdown: toUnixMillis
-    };
-
-    if (timeDisplayMethod in timeDisplayFunctions) {
-        if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
-            // Handle Unix time functions separately as they do not take parameters
-            const unixFunction = timeDisplayFunctions[timeDisplayMethod] as UnixTimeFunction;
-            const unixTime = unixFunction();
-            dtdisplay.hourSlot.textContent = String(unixTime);
-            dtdisplay.minuteSlot.textContent = '';
-            dtdisplay.secondSlot.textContent = '';
-            dtdisplay.indicatorSlot.textContent = '';
-            return;
-        } else if (timeDisplayMethod === 'unixcountdown') {
-            const secondsUntilY2K38 = 2147483647 - Math.floor(Date.now() / 1000);
-            dtdisplay.hourSlot.textContent = `${Math.floor(secondsUntilY2K38 / 3600)}h`;
-            dtdisplay.minuteSlot.textContent = `${Math.floor((secondsUntilY2K38 % 3600) / 60)}m`;
-            dtdisplay.secondSlot.textContent = `${secondsUntilY2K38 % 60}s`;
-            dtdisplay.indicatorSlot.textContent = '';
-            return;
-        }
-
-        const timeFunction = timeDisplayFunctions[timeDisplayMethod] as TimeFunction;
-        dtdisplay.hourSlot.textContent = timeFunction(hrs);
-
-        if (timeDisplayMethod === 'words') {
-            dtdisplay.minuteSlot.textContent = formatMinutesForWordsDisplay(min);
-        } else {
-            dtdisplay.minuteSlot.textContent = timeFunction(min);
-        }
-
-        dtdisplay.secondSlot.textContent = timeFunction(sec);
+    if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
+        const unixTime = timeDisplayMethod === 'unixmillis' ? clock.toUnixMillis() : clock.toUnixSec();
+        displayHour = String(unixTime);
+    } else if (timeDisplayMethod === 'unixcountdown') {
+        const secondsUntilY2K38 = 2147483647 - Math.floor(Date.now() / 1000);
+        displayHour = `${Math.floor(secondsUntilY2K38 / 3600)}h`;
+        displayMinute = `${Math.floor((secondsUntilY2K38 % 3600) / 60)}m`;
+        displaySecond = `${secondsUntilY2K38 % 60}s`;
     } else {
-        dtdisplay.hourSlot.textContent = hrs;
-        dtdisplay.minuteSlot.textContent = min;
-        dtdisplay.secondSlot.textContent = sec;
+        const timeFunction = {
+            binary: (value: string) => clock.toRadix(value, 2),
+            emoji: clock.convertToEmojiBlock,
+            roman: clock.convertToRomanNumerals,
+            hexa: (value: string) => clock.toRadix(value, 16),
+            hexatri: (value: string) => clock.toRadix(value, 36),
+            octal: (value: string) => clock.toRadix(value, 8),
+            words: clock.toWords
+        }[timeDisplayMethod];
+
+        if (timeFunction) {
+            displayHour = timeFunction(hrs);
+            displayMinute = timeDisplayMethod === 'words' ? formatMinutesForWordsDisplay(min) : timeFunction(min);
+            displaySecond = timeFunction(sec);
+            displayIndicator = ind;
+        } else {
+            displayHour = hrs;
+            displayMinute = min;
+            displaySecond = sec;
+            displayIndicator = ind;
+        }
     }
 
-    dtdisplay.indicatorSlot.textContent = ind;
+    setClockDisplay([displayHour, displayMinute, displaySecond, displayIndicator]);
+}
 
-    // Helper function for time display method 'words'
-    function formatMinutesForWordsDisplay(min: string) {
-        const parsedMinutes = parseInt(min, 10);
 
-        if (parsedMinutes === 0) {
-            return 'o\'clock';
-        } else if (parsedMinutes < 10) {
-            return `oh ${numberToWords.toWords(parsedMinutes)}`;
-        } else {
-            return numberToWords.toWords(parsedMinutes);
-        }
+// Clock DOM update
+function setClockDisplay([hour, minute, second, indicator]: [string, string, string, string]): void {
+    dtdisplay.hourSlot.textContent = hour;
+    dtdisplay.minuteSlot.textContent = minute;
+    dtdisplay.secondSlot.textContent = second;
+    dtdisplay.indicatorSlot.textContent = indicator;
+}
+
+// Helper function for time display method 'words'
+function formatMinutesForWordsDisplay(min: string) {
+    const parsedMinutes = parseInt(min, 10);
+
+    if (parsedMinutes === 0) {
+        return 'o\'clock';
+    } else if (parsedMinutes < 10) {
+        return `oh ${numberToWords.toWords(parsedMinutes)}`;
+    } else {
+        return numberToWords.toWords(parsedMinutes);
     }
 }
 
@@ -213,7 +194,7 @@ menu.dateformselect.addEventListener('change', function() {
 });
 
 export function updateDate() {
-    const time = luxon.DateTime.now();
+    const time = getLuxNow('obj') as luxon.DateTime;
     dtdisplay.date.textContent = time.toFormat(dateFormat);
 
     Array.from(menu.dateformselect.children).forEach((child: Element) => {
@@ -224,10 +205,10 @@ export function updateDate() {
 }
 
 // Initial update, then start intervals
-const time = luxon.DateTime.now();
+const time = getLuxNow('obj') as luxon.DateTime;
 updateTime();
 updateDate();
-updateFavicon(time.toFormat('h'));
+clock.updateFavicon(time.toFormat('h'));
 
 // Sync clock to system time function
 let clockInterval: NodeJS.Timeout | null = null; // Variable to store the interval ID
