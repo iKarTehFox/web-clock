@@ -469,22 +469,21 @@ menu.cbutton.addEventListener('click', function() {
 });
 
 // Click outside to close menu
-document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('click', function(e) {
-        const target = e.target as HTMLElement;
-        const isTooltip = target.closest('.tooltip') !== null;
+document.addEventListener('click', function(e) {
+    const target = e.target as HTMLElement;
+    const isTooltip = target.closest('.tooltip') !== null;
 
-        if (!isTooltip && 
-            !menu.options.contains(target as Node) && 
-            !menu.obutton.contains(target as Node) && 
-            !menu.cbutton.contains(target as Node) && 
-            !stopwatch.obutton.contains(target as Node) && 
-            !countdown.obutton.contains(target as Node) && 
-            !menu.options.classList.contains('menu-options-fade') && 
-            !menu.options.classList.contains('menu-options-initial')) {
-            toggleMenuVisibility(false);
-        }
-    });
+    const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
+                          !menu.options.classList.contains('menu-options-initial');
+
+    if (!isTooltip && isMenuVisible &&
+        !menu.options.contains(target as Node) && 
+        !menu.obutton.contains(target as Node) && 
+        !menu.cbutton.contains(target as Node) && 
+        !stopwatch.obutton.contains(target as Node) && 
+        !countdown.obutton.contains(target as Node)) {
+        toggleMenuVisibility(false);
+    }
 });
 
 // Esc down to close menu
