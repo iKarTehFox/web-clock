@@ -345,7 +345,6 @@ menu.weathergeobtn.addEventListener('click', async () => {
 // Weather submit button listener
 menu.weathersubmitbtn.addEventListener('click', () => {
     submitWeatherSettings();
-    menu.weatherstopbtn.disabled = false;
 });
 
 menu.weatherstopbtn.addEventListener('click', () => {
