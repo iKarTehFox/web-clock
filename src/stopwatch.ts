@@ -7,7 +7,7 @@ let running: boolean = false;
 let startTime: number;
 let elapsedTime: number = 0;
 let counter: number = 0;
-let lastLapTime;
+let lastLapTime = 0;
 
 // Format time to HH:MM:SS.mmm
 function formatTime(totalMilliseconds: number) {

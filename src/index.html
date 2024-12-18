@@ -552,22 +552,16 @@
                 <div class="container text-center">
                     <h4>Stopwatch</h4>
                     <hr>
-                    <div class="row">
-                        <div class="col">
-                            <textarea id="stopwatch-lapfield" disabled></textarea>
-                        </div>
-                        <div class="col">
-                            <h1 class="display-1 mb-4" id="stopwatch-display">00:00:00</h1>
-                            <div class="btn-group mb-1" role="group" aria-label="Stopwatch controls">
-                                <button type="button" class="btn btn-primary" id="stopwatch-start">Start</button>
-                                <button type="button" class="btn btn-warning" id="stopwatch-pause" disabled>Pause</button>
-                                <button type="button" class="btn btn-danger" id="stopwatch-reset" disabled>Reset</button>
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-secondary" id="stopwatch-lap" disabled>Lap</button>
-                            </div>
-                        </div>
+                    <h1 class="display-1 mb-4" id="stopwatch-display">00:00:00</h1>
+                    <div class="btn-group mb-2" role="group" aria-label="Stopwatch controls">
+                        <button type="button" class="btn btn-primary" id="stopwatch-start">Start</button>
+                        <button type="button" class="btn btn-warning" id="stopwatch-pause" disabled>Pause</button>
+                        <button type="button" class="btn btn-danger" id="stopwatch-reset" disabled>Reset</button>
                     </div>
+                    <div>
+                        <button type="button" class="btn btn-secondary" id="stopwatch-lap" disabled>Lap</button>
+                    </div>
+                    <textarea class="mt-2" id="stopwatch-lapfield" disabled></textarea>
                 </div>
             </div>
         </div>
