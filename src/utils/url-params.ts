@@ -1,7 +1,7 @@
 import { menu, weather } from '../global';
 import { presetLocalJSON } from '../importExport';
 import { getFirstElement, logConsole, showToast } from './dom-utils';
-import { setDebug } from './debug';
+import { setDebug, setTimeRefresh } from './debug';
 import { initializeDebugUI } from './debugUI';
 
 export async function applyURLParams() {
@@ -13,6 +13,11 @@ export async function applyURLParams() {
         setDebug(true);
         initializeDebugUI();
         showToast('Debug mode enabled. DevTools memory will increase over time.', 5000, 'warning');
+    }
+
+    // Fast time refresh
+    if (urlParams.get('fastRefresh') === 'true') {
+        setTimeRefresh(1);
     }
 
     // Menu theme

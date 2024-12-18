@@ -3,6 +3,7 @@ import { numberToWords } from './numberToWords.min';
 import * as luxon from 'ts-luxon';
 import { logConsole } from './utils/dom-utils';
 import * as clock from './time-help';
+import { timeRefresh } from './utils/debug';
 
 // Default modes
 export let cMode = '0';
@@ -264,7 +265,7 @@ function startOldClock() {
         updateTime();
         updatePageDuration();
         logConsole('Time and page duration updated (Legacy method)...', 'info');
-    }, 250) as unknown as NodeJS.Timeout;
+    }, timeRefresh) as unknown as NodeJS.Timeout;
 }
 
 // Listener for the legacy refresh checkbox
