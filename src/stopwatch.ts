@@ -7,7 +7,7 @@ let running: boolean = false;
 let startTime: number;
 let elapsedTime: number = 0;
 let counter: number = 0;
-let lastLapTime = 0;
+let lastLapTime;
 
 // Format time to HH:MM:SS.mmm
 function formatTime(totalMilliseconds: number) {
@@ -103,9 +103,10 @@ function resetStopwatch() {
             lap: false,
         });
 
-        // Clear lap textarea history
+        // Reset display
         stopwatch.lapfield.value ='';
         counter = 0;
+        lastLapTime = undefined;
     }
 }
 
