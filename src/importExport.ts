@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getFirstElement, logConsole, showToast, AMOne, makeCardOverlay } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
-import { menu, font } from './global';
+import { menu, font, debug } from './global';
 import { stopColorFade } from './background-color';
 import {
     validateRequiredKeys,
@@ -110,13 +110,12 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr') 
     return new Blob([settingsJSON], { type: 'application/json' });
 }
 
-
-export function exportSettingsToJSON(copyToClipboard: boolean = false, logJSON: boolean = false, toQRCode: boolean = false) {
+export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolean = false, toQRCode: boolean = false) {
     const startTime = luxon.DateTime.now();
     showToast('Exporting settings...');
 
     // Enforce single export type
-    if (!AMOne(copyToClipboard, logJSON, toQRCode)) {
+    if (!AMOne(toClipboard, toLog, toQRCode)) {
         showToast('Multiple export types not allowed.', 5000, 'error');
         return;
     }
@@ -129,13 +128,13 @@ export function exportSettingsToJSON(copyToClipboard: boolean = false, logJSON: 
             logConsole('Settings JSON may be invalid. If you have modified the settings manually, ignore this message.', 'warning');
         }
         
-        if (copyToClipboard) {
+        if (toClipboard) {
             handleExport(settings, 'clipboard');
             showToast(`Copied settings to clipboard! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
             return;
         }
         
-        if (logJSON) {
+        if (toLog) {
             handleExport(settings, 'log');
             showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
             return;
@@ -431,10 +430,28 @@ menu.jsonexportqrbtn.addEventListener('click', () => {
     exportSettingsToJSON(undefined, undefined, true);
 });
 
+debug.jsonexportconsolebtn.addEventListener('click', () => {
+    exportSettingsToJSON(false, true);
+});
+
 menu.jsonimportuploadbtn.addEventListener('click', () => {
     importSettingsFromJSON();
 });
 
 menu.jsonmanualimportbtn.addEventListener('click', () => {
     manualJSONImport();
+});
+
+debug.getbgimgbtn.addEventListener('click', () => {
+    const bgImageUrl = document.body.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
+    const imgElement = document.createElement('img');
+    imgElement.src = bgImageUrl;
+    Object.assign(imgElement.style, {
+        maxWidth: '90vw',
+        maxHeight: '80vh',
+        width: 'auto',
+        height: 'auto',
+        objectFit: 'contain'
+    });
+    makeCardOverlay('Background Image', imgElement);
 });
