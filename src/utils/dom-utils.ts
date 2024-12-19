@@ -97,24 +97,28 @@ export function AMOne(...values: boolean[]) {
 export function makeCardOverlay(title: string, content: HTMLElement): void {
     // Create container
     const container = document.createElement('div');
-    container.style.position = 'fixed';
-    container.style.top = '0';
-    container.style.left = '0';
-    container.style.width = '100%';
-    container.style.height = '100%';
-    container.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-    container.style.display = 'flex';
-    container.style.justifyContent = 'center';
-    container.style.alignItems = 'center';
-    container.style.zIndex = '1050';
+    Object.assign(container.style, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: '1050'
+    });
 
     // Create card
     const card = document.createElement('div');
+    Object.assign(card.style, {
+        width: '90%',
+        maxWidth: '600px',
+        maxHeight: '90vh',
+        overflow: 'auto'
+    });
     card.className = 'card';
-    card.style.width = '90%';
-    card.style.maxWidth = '600px';
-    card.style.maxHeight = '90vh';
-    card.style.overflow = 'auto';
 
     // Create card body
     const cardBody = document.createElement('div');
@@ -122,7 +126,7 @@ export function makeCardOverlay(title: string, content: HTMLElement): void {
 
     // Create title
     const titleElement = document.createElement('h5');
-    titleElement.className = 'card-title';
+    titleElement.className = 'card-title text-center';
     titleElement.textContent = title;
 
     // Create horizontal rule
@@ -138,6 +142,7 @@ export function makeCardOverlay(title: string, content: HTMLElement): void {
     closeButton.textContent = 'Close';
     closeButton.onclick = () => {
         document.body.removeChild(container);
+        logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'info');
     };
 
     // Append elements
@@ -150,4 +155,6 @@ export function makeCardOverlay(title: string, content: HTMLElement): void {
 
     // Add to document
     document.body.appendChild(container);
+
+    logConsole(`Overlay card container created with settings: (${title}, ${content})`, 'info');
 }
