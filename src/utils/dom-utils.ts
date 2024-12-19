@@ -98,6 +98,7 @@ export function AMOne(...values: boolean[]) {
 export function makeCardOverlay(title: string, content: HTMLElement): void {
     // Create container
     const container = document.createElement('div');
+    container.dataset.bsTheme = menu.container.dataset.bsTheme;
     Object.assign(container.style, {
         position: 'fixed',
         top: '0',
