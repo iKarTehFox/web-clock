@@ -86,3 +86,9 @@ export function showToast(message: string, duration: number = 3000, style: strin
         stopOnFocus: true
     }).showToast();
 }
+
+// At most one true value function
+export function AMOne(...values: boolean[]) {
+    const trueCount = values.filter(value => value === true).length;
+    return trueCount === 1 || trueCount === 0;
+}

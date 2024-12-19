@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getFirstElement, logConsole, showToast } from './utils/dom-utils';
+import { getFirstElement, logConsole, showToast, AMOne } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, font } from './global';
 import { stopColorFade } from './background-color';
@@ -103,6 +103,12 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log') {
 export function exportSettingsToJSON(copyToClipboard: boolean = false, logJSON: boolean = false) {
     const startTime = luxon.DateTime.now();
     showToast('Exporting settings...');
+
+    // Enforce single export type
+    if (!AMOne(copyToClipboard, logJSON)) {
+        showToast('Multiple export types not allowed.', 5000, 'error');
+        return;
+    }
 
     try {
         const settings = getSettings();
