@@ -547,6 +547,10 @@ export function toggleFullscreen() {
     showToast('Toggled fullscreen mode');
 }
 
+menu.fullscreenbtn.addEventListener('click', function() {
+    toggleFullscreen();
+});
+
 menu.panelvischeckbox.addEventListener('change', function(e) {
     const target = e.target as HTMLElement;
     const isMenuRelated = menu.options.contains(target) || 
