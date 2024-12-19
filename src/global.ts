@@ -33,6 +33,7 @@ export const menu = {
     imagesizeselect: getElement<HTMLSelectElement>('bgImageSizeSelect'),
     jsonexportclipbtn: getElement<HTMLButtonElement>('jsonExportClipBtn'),
     jsonexportdownloadbtn: getElement<HTMLButtonElement>('jsonExportDlBtn'),
+    jsonexportqrbtn: getElement<HTMLButtonElement>('jsonExportQrBtn'),
     jsonimportuploadbtn: getElement<HTMLButtonElement>('jsonImportUlBtn'),
     jsonmanualimportbtn: getElement<HTMLButtonElement>('jsonImportTxtBtn'),
     legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),

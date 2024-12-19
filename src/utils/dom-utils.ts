@@ -92,3 +92,62 @@ export function AMOne(...values: boolean[]) {
     const trueCount = values.filter(value => value === true).length;
     return trueCount === 1 || trueCount === 0;
 }
+
+// Function to create an overlay card element
+export function makeCardOverlay(title: string, content: HTMLElement): void {
+    // Create container
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    container.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    container.style.display = 'flex';
+    container.style.justifyContent = 'center';
+    container.style.alignItems = 'center';
+    container.style.zIndex = '1050';
+
+    // Create card
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.width = '90%';
+    card.style.maxWidth = '600px';
+    card.style.maxHeight = '90vh';
+    card.style.overflow = 'auto';
+
+    // Create card body
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body';
+
+    // Create title
+    const titleElement = document.createElement('h5');
+    titleElement.className = 'card-title';
+    titleElement.textContent = title;
+
+    // Create horizontal rule
+    const hr = document.createElement('hr');
+
+    // Create content container
+    const contentContainer = document.createElement('div');
+    contentContainer.appendChild(content);
+
+    // Create close button
+    const closeButton = document.createElement('button');
+    closeButton.className = 'btn btn-secondary mt-3';
+    closeButton.textContent = 'Close';
+    closeButton.onclick = () => {
+        document.body.removeChild(container);
+    };
+
+    // Append elements
+    cardBody.appendChild(titleElement);
+    cardBody.appendChild(hr);
+    cardBody.appendChild(contentContainer);
+    cardBody.appendChild(closeButton);
+    card.appendChild(cardBody);
+    container.appendChild(card);
+
+    // Add to document
+    document.body.appendChild(container);
+}

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getFirstElement, logConsole, showToast, AMOne } from './utils/dom-utils';
+import { getFirstElement, logConsole, showToast, AMOne, makeCardOverlay } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, font } from './global';
 import { stopColorFade } from './background-color';
@@ -12,6 +12,7 @@ import {
 } from './importValidation';
 import { getPresetByHotkey } from './assets/presets';
 import axios from 'axios';
+import QRCode from 'qrcode';
 
 function getSolidColorValue() {
     const checkedColorInput = getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked');
@@ -85,7 +86,7 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
     showToast(`Settings exported! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, 10000, 'success');
 }
 
-function handleExport(settings: any, type: 'clipboard' | 'json' | 'log') {
+function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr') {
     const settingsJSON = JSON.stringify(settings);
     
     if (type === 'clipboard') {
@@ -94,18 +95,28 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log') {
     } else if (type === 'log') {
         logConsole(`Settings JSON: ${settingsJSON}`, 'info');
         return;
+    } else if (type === 'qr') {
+        QRCode.toCanvas(settingsJSON, {
+            errorCorrectionLevel: 'M',
+            margin: 2,
+            scale: 4,
+            width: 400
+        }).then(canvas => {
+            makeCardOverlay('QR Code', canvas);
+        });
+        return;
     }
     
     return new Blob([settingsJSON], { type: 'application/json' });
 }
 
 
-export function exportSettingsToJSON(copyToClipboard: boolean = false, logJSON: boolean = false) {
+export function exportSettingsToJSON(copyToClipboard: boolean = false, logJSON: boolean = false, toQRCode: boolean = false) {
     const startTime = luxon.DateTime.now();
     showToast('Exporting settings...');
 
     // Enforce single export type
-    if (!AMOne(copyToClipboard, logJSON)) {
+    if (!AMOne(copyToClipboard, logJSON, toQRCode)) {
         showToast('Multiple export types not allowed.', 5000, 'error');
         return;
     }
@@ -127,6 +138,12 @@ export function exportSettingsToJSON(copyToClipboard: boolean = false, logJSON: 
         if (logJSON) {
             handleExport(settings, 'log');
             showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
+            return;
+        }
+
+        if (toQRCode) {
+            handleExport(settings, 'qr');
+            showToast(`Exported settings to QR code! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
             return;
         }
 
@@ -408,6 +425,10 @@ menu.jsonexportclipbtn.addEventListener('click', () => {
 
 menu.jsonexportdownloadbtn.addEventListener('click', () => {
     exportSettingsToJSON();
+});
+
+menu.jsonexportqrbtn.addEventListener('click', () => {
+    exportSettingsToJSON(undefined, undefined, true);
 });
 
 menu.jsonimportuploadbtn.addEventListener('click', () => {

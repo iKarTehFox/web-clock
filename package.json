@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",
     "@types/luxon": "^3.4.2",
+    "@types/qrcode": "^1.5.5",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "@webpack-cli/generators": "^3.0.7",
@@ -50,6 +51,7 @@
     "bootstrap": "^5.3.3",
     "iconify-icon": "^2.1.0",
     "openweathermap-ts": "^1.2.10",
+    "qrcode": "^1.5.4",
     "toastify-js": "^1.12.0",
     "ts-luxon": "^4.5.2",
     "ts-pattern": "^5.3.1"
