@@ -23,89 +23,109 @@ function getSolidColorValue() {
     }
 }
 
-export function exportSettingsToJSON(copyToClipboard: boolean = false, logJSON: boolean = false) {
-    showToast('Exporting settings...');
+function getSettings() {
+    return {
+        clockConfig: getClockConfig(),
+        fontConfig: getFontConfig(),
+        colorTheme: getColorThemeConfig(),
+        exportTimestamp: luxon.DateTime.now().toFormat('FFFF'),
+        version: 7
+    };
+}
 
-    // Get time and set export timestamp
-    let usersettings: { clockConfig: { clockMode: string; clockDisplay: string; secondsVis: string; dateFormat: string; dateAlign: string; borderMode: string; borderStyle: string; secondsBarVis: string; }; fontConfig: { fontFamily: string; fontStyle: string; fontWeight: string; fontSize: string; dropShadow: string; strokeWidth: string; strokeColor: string; }; colorTheme: { colorMode: string; solidColor: string | undefined; textColorMode: string; textColorValue: string; bgImage: string; bgImageSize: string; bgImageBlur: string; }; exportTimestamp: string; version: number; };
-    let url: string;
-    const time = luxon.DateTime.now();
-    const timeExported = time.toFormat('FFFF');
+function getClockConfig() {
+    return {
+        clockMode: getFirstElement<HTMLInputElement>('input[name="clock-mode-radio"]:checked').id,
+        clockDisplay: menu.timemethodselect.value,
+        secondsVis: getFirstElement<HTMLInputElement>('input[name="seconds-vis-radio"]:checked').id,
+        dateFormat: menu.dateformselect.value,
+        dateAlign: getFirstElement<HTMLInputElement>('input[name="date-position-radio"]:checked').id,
+        borderMode: getFirstElement<HTMLInputElement>('input[name="border-type-radio"]:checked').id,
+        borderStyle: menu.borderstyleselect.value,
+        secondsBarVis: getFirstElement<HTMLInputElement>('input[name="seconds-bar-radio"]:checked').id
+    };
+}
 
-    // Get all settings
-    try {
-        usersettings = {
-            clockConfig: {
-                clockMode: getFirstElement<HTMLInputElement>('input[name="clock-mode-radio"]:checked').id,
-                clockDisplay: menu.timemethodselect.value,
-                secondsVis: getFirstElement<HTMLInputElement>('input[name="seconds-vis-radio"]:checked').id,
-                dateFormat: menu.dateformselect.value,
-                dateAlign: getFirstElement<HTMLInputElement>('input[name="date-position-radio"]:checked').id,
-                borderMode: getFirstElement<HTMLInputElement>('input[name="border-type-radio"]:checked').id,
-                borderStyle: menu.borderstyleselect.value,
-                secondsBarVis: getFirstElement<HTMLInputElement>('input[name="seconds-bar-radio"]:checked').id
-            },
-            fontConfig: {
-                fontFamily: font.familysel.value,
-                fontStyle: getFirstElement<HTMLInputElement>('input[name="font-style-radio"]:checked').id,
-                fontWeight: getFirstElement<HTMLInputElement>('input[name="font-weight-radio"]:checked').id,
-                fontSize: font.sizesel.value,
-                dropShadow: font.shadowrange.value,
-                strokeWidth: font.strokerange.value,
-                strokeColor: (parseInt(font.strokerange.value) > 0) ? font.strokecolor.value : ''
-            },
-            colorTheme: {
-                colorMode: getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id,
-                solidColor: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
-                textColorMode: getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id,
-                textColorValue: (getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : '',
-                bgImage: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? document.body.style.backgroundImage : '',
-                bgImageSize: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : '',
-                bgImageBlur: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
-            },
-            exportTimestamp: timeExported,
-            version: 7
-        };
-    } catch (error) {
-        logConsole(`Failed getting settings: ${error}`, 'error');
-        showToast('Error getting settings! Please check the console for more info.', 5000, 'danger');
-        return;
-    }
+function getFontConfig() {
+    return {
+        fontFamily: font.familysel.value,
+        fontStyle: getFirstElement<HTMLInputElement>('input[name="font-style-radio"]:checked').id,
+        fontWeight: getFirstElement<HTMLInputElement>('input[name="font-weight-radio"]:checked').id,
+        fontSize: font.sizesel.value,
+        dropShadow: font.shadowrange.value,
+        strokeWidth: font.strokerange.value,
+        strokeColor: (parseInt(font.strokerange.value) > 0) ? font.strokecolor.value : ''
+    };
+}
 
-    // Format settings
-    try {
-        const settingsJSON = JSON.stringify(usersettings);
-        // Check for params
-        if (copyToClipboard && !logJSON) {
-            navigator.clipboard.writeText(settingsJSON);
-            showToast(`Copied settings to clipboard! Took ${((luxon.DateTime.now()).toMillis()) - time.toMillis()}ms`, undefined, 'warning');
-            return; // Exit early if copying to clipboard
-        } else if (logJSON && !copyToClipboard) {
-            logConsole(`Settings JSON: ${settingsJSON}`, 'info');
-            showToast(`Logged settings to console! Took ${((luxon.DateTime.now()).toMillis()) - time.toMillis()}ms`, undefined, 'warning');
-            return; // Exit early if logging to console
-        } else if (copyToClipboard && logJSON) {
-            logConsole('Can\'t copy and log at the same time!', 'warning');
-            return;
-        }
-        const blob = new Blob([settingsJSON], {
-            type: 'application/json'
-        });
-        url = URL.createObjectURL(blob);
-    } catch (error) {
-        logConsole(`Failed formatting settings: ${error}`, 'error');
-        showToast('Error formatting settings! Please check the console for more info.', 5000, 'danger');
-        return;
-    }
+function getColorThemeConfig() {
+    return {
+        colorMode: getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id,
+        solidColor: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
+        textColorMode: getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id,
+        textColorValue: (getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : '',
+        bgImage: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? document.body.style.backgroundImage : '',
+        bgImageSize: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : '',
+        bgImageBlur: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
+    };
+}
 
-    // Initiate download
+function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
+    const url = URL.createObjectURL(blob);
     const downloadLink = document.createElement('a');
     downloadLink.href = url;
-    downloadLink.download = `onlinewebclock-settings_${time.toFormat('X')}.json`;
+    downloadLink.download = `onlinewebclock-settings_${startTime.toFormat('X')}.json`;
+    
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-    showToast(`Settings exported! Took ${((luxon.DateTime.now()).toMillis()) - time.toMillis()}ms`, undefined, 'success');
+    
+    URL.revokeObjectURL(url);
+    
+    showToast(`Settings exported! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, 10000, 'success');
+}
+
+function handleExport(settings: any, type: 'clipboard' | 'json' | 'log') {
+    const settingsJSON = JSON.stringify(settings);
+    
+    if (type === 'clipboard') {
+        navigator.clipboard.writeText(settingsJSON);
+        return;
+    } else if (type === 'log') {
+        logConsole(`Settings JSON: ${settingsJSON}`, 'info');
+        return;
+    }
+    
+    return new Blob([settingsJSON], { type: 'application/json' });
+}
+
+
+export function exportSettingsToJSON(copyToClipboard = false, logJSON = false) {
+    const startTime = luxon.DateTime.now();
+    showToast('Exporting settings...');
+
+    try {
+        const settings = getSettings();
+        
+        if (copyToClipboard) {
+            handleExport(settings, 'clipboard');
+            showToast(`Copied settings to clipboard! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
+            return;
+        }
+        
+        if (logJSON) {
+            handleExport(settings, 'log');
+            showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
+            return;
+        }
+
+        const blob = handleExport(settings, 'json') as Blob;
+        downloadSettingsFile(blob, startTime);
+        
+    } catch (error) {
+        logConsole(`Export failed: ${error}`, 'error');
+        showToast('Error exporting settings! Check console for details.', 5000, 'danger');
+    }
 }
 
 // Helper function to process JSON settings
