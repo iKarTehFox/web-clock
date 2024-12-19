@@ -155,8 +155,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                    stopwatch.container.contains(target) || 
                                    stopwatch.obutton.contains(target);
         const isTooltip = target.closest('.tooltip') !== null;
+        const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
 
-        if (!isMenuRelated && !isTooltip && stopwatch.container.style.display !== 'none') {
+        if (!isMenuRelated && !isTooltip && !isCardOverlay && stopwatch.container.style.display !== 'none') {
             stopwatch.container.style.display = 'none';
             stopwatch.obutton.className = 'btn btn-secondary';
             logConsole('Stopwatch panel closed', 'info');

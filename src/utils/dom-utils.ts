@@ -98,6 +98,7 @@ export function AMOne(...values: boolean[]) {
 export function makeCardOverlay(title: string, content: HTMLElement): void {
     // Create container
     const container = document.createElement('div');
+    container.dataset.overlay = 'card-overlay';
     container.dataset.bsTheme = menu.container.dataset.bsTheme;
     Object.assign(container.style, {
         position: 'fixed',
@@ -145,8 +146,19 @@ export function makeCardOverlay(title: string, content: HTMLElement): void {
     const closeButton = document.createElement('button');
     closeButton.className = 'btn btn-secondary';
     closeButton.textContent = 'Close';
+
+    // Create escape key handler
+    function escapeHandler(e: KeyboardEvent) {
+        if (e.key === 'Escape') {
+            document.body.removeChild(container);
+            document.removeEventListener('keydown', escapeHandler);
+            logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'info');
+        }
+    }
+
     closeButton.onclick = () => {
         document.body.removeChild(container);
+        document.removeEventListener('keydown', escapeHandler);
         logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'info');
     };
 
@@ -185,6 +197,7 @@ export function makeCardOverlay(title: string, content: HTMLElement): void {
 
     // Add to document
     document.body.appendChild(container);
+    document.addEventListener('keydown', escapeHandler);
 
     logConsole(`Overlay card container created with settings: (${title}, ${content})`, 'info');
 }

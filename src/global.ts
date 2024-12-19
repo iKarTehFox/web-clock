@@ -475,11 +475,12 @@ menu.cbutton.addEventListener('click', function() {
 document.addEventListener('click', function(e) {
     const target = e.target as HTMLElement;
     const isTooltip = target.closest('.tooltip') !== null;
+    const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
 
     const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
                           !menu.options.classList.contains('menu-options-initial');
 
-    if (!isTooltip && isMenuVisible &&
+    if (!isTooltip && !isCardOverlay && isMenuVisible &&
         !menu.options.contains(target as Node) && 
         !menu.obutton.contains(target as Node) && 
         !menu.cbutton.contains(target as Node) && 
