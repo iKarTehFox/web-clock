@@ -100,12 +100,17 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log') {
 }
 
 
-export function exportSettingsToJSON(copyToClipboard = false, logJSON = false) {
+export function exportSettingsToJSON(copyToClipboard: boolean = false, logJSON: boolean = false) {
     const startTime = luxon.DateTime.now();
     showToast('Exporting settings...');
 
     try {
         const settings = getSettings();
+
+        // Soft warning for exporting invalid settings
+        if (!(verifySettingsJSON(settings) === true)) {
+            logConsole('Settings JSON may be invalid. If you have modified the settings manually, ignore this message.', 'warning');
+        }
         
         if (copyToClipboard) {
             handleExport(settings, 'clipboard');
