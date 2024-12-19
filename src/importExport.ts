@@ -86,16 +86,23 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
     showToast(`Settings exported! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, 10000, 'success');
 }
 
-function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr') {
+function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', startTime: luxon.DateTime = luxon.DateTime.now()) {
     const settingsJSON = JSON.stringify(settings);
     
     if (type === 'clipboard') {
         navigator.clipboard.writeText(settingsJSON);
+        showToast(`Copied settings to clipboard! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
         return;
     } else if (type === 'log') {
         logConsole(`Settings JSON: ${settingsJSON}`, 'info');
+        showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
         return;
     } else if (type === 'qr') {
+        if (settingsJSON.length > 3072) {
+            logConsole(`Settings JSON too large. Max 3072, got ${settingsJSON.length}`, 'error');
+            showToast('Settings too large for QR code. See console for details.', 5000, 'danger');
+            return;
+        }
         QRCode.toCanvas(settingsJSON, {
             errorCorrectionLevel: 'M',
             margin: 2,
@@ -104,6 +111,7 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr') 
         }).then(canvas => {
             makeCardOverlay('QR Code', canvas);
         });
+        showToast(`Exported settings to QR code! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
         return;
     }
     
@@ -129,20 +137,17 @@ export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolea
         }
         
         if (toClipboard) {
-            handleExport(settings, 'clipboard');
-            showToast(`Copied settings to clipboard! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
+            handleExport(settings, 'clipboard', startTime);
             return;
         }
         
         if (toLog) {
-            handleExport(settings, 'log');
-            showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
+            handleExport(settings, 'log', startTime);
             return;
         }
 
         if (toQRCode) {
-            handleExport(settings, 'qr');
-            showToast(`Exported settings to QR code! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
+            handleExport(settings, 'qr', startTime);
             return;
         }
 
