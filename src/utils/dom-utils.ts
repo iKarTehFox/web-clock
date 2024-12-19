@@ -1,6 +1,7 @@
 import Toastify from 'toastify-js';
 import { menu } from '../global';
 import { debugMode } from './debug';
+import * as luxon from 'ts-luxon';
 
 // Element finding functions
 export function getElement<T extends HTMLElement>(id: string): T {
@@ -135,20 +136,49 @@ export function makeCardOverlay(title: string, content: HTMLElement): void {
     const contentContainer = document.createElement('div');
     contentContainer.appendChild(content);
 
+    // Create button container
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'mt-3 d-flex gap-2 justify-content-center';
+
     // Create close button
     const closeButton = document.createElement('button');
-    closeButton.className = 'btn btn-secondary mt-3';
+    closeButton.className = 'btn btn-secondary';
     closeButton.textContent = 'Close';
     closeButton.onclick = () => {
         document.body.removeChild(container);
         logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'info');
     };
 
+    // Create download button if content is downloadable media
+    if (content instanceof HTMLCanvasElement || content instanceof HTMLImageElement || content instanceof HTMLVideoElement) {
+        const downloadButton = document.createElement('button');
+        downloadButton.className = 'btn btn-primary';
+        downloadButton.textContent = 'Download';
+        downloadButton.onclick = () => {
+            const dlTime = luxon.DateTime.now().toFormat('X');
+            const link = document.createElement('a');
+            // Set filename based on content type
+            const extension = content instanceof HTMLVideoElement ? '.mp4' : '.png';
+            link.download = `${title}_${dlTime}${extension}`;
+            
+            // Get appropriate data URL based on content type
+            link.href = content instanceof HTMLCanvasElement ? 
+                content.toDataURL('image/png') : 
+                content.src;
+                
+            link.click();
+        };
+        buttonContainer.appendChild(downloadButton);
+    }
+
+    // Append buttons
+    buttonContainer.appendChild(closeButton);
+
     // Append elements
     cardBody.appendChild(titleElement);
     cardBody.appendChild(hr);
     cardBody.appendChild(contentContainer);
-    cardBody.appendChild(closeButton);
+    cardBody.appendChild(buttonContainer);
     card.appendChild(cardBody);
     container.appendChild(card);
 
