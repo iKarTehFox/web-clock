@@ -152,6 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const target = e.target as HTMLElement;
         const isMenuRelated = menu.options.contains(target) || 
                                    menu.obutton.contains(target) || 
+                                   menu.cbutton.contains(target) || 
                                    stopwatch.container.contains(target) || 
                                    stopwatch.obutton.contains(target);
         const isTooltip = target.closest('.tooltip') !== null;
