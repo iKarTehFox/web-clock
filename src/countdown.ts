@@ -152,10 +152,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                    menu.cbutton.contains(target) || 
                                    countdown.container.contains(target) || 
                                    countdown.obutton.contains(target);
+        const isCountdownVisible = countdown.container.style.display !== 'none';
         const isTooltip = target.closest('.tooltip') !== null;
         const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
 
-        if (!isMenuRelated && !isTooltip && !isCardOverlay && countdown.container.style.display !== 'none') {
+        if (!isMenuRelated && !isTooltip && !isCardOverlay && isCountdownVisible) {
             countdown.container.style.display = 'none';
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');

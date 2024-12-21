@@ -155,10 +155,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                    menu.cbutton.contains(target) || 
                                    stopwatch.container.contains(target) || 
                                    stopwatch.obutton.contains(target);
+        const isStopwatchVisible = stopwatch.container.style.display !== 'none';
         const isTooltip = target.closest('.tooltip') !== null;
         const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
 
-        if (!isMenuRelated && !isTooltip && !isCardOverlay && stopwatch.container.style.display !== 'none') {
+        if (!isMenuRelated && !isTooltip && !isCardOverlay && isStopwatchVisible) {
             stopwatch.container.style.display = 'none';
             stopwatch.obutton.className = 'btn btn-secondary';
             logConsole('Stopwatch panel closed', 'info');
