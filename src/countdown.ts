@@ -52,7 +52,7 @@ function startCountdown() {
             if (totalSeconds === 0 || totalSeconds < 1) {
                 clearInterval(countdownInterval);
                 running = false;
-                showToast('Countdown finished!', 30000, 'success');
+                showToast('Countdown finished!', 'verylong', 'success');
                 inputsState(false);
                 btnState({
                     start: false,
@@ -116,7 +116,7 @@ countdown.startbtn.addEventListener('click', () => {
 
             // Check if totalSeconds is too long (greater than 100 hours)
             if (totalSeconds > 360000) {
-                showToast('Time set too long! Make sure it is less than 100 hours.', 5000, 'danger');
+                showToast('Time set too long! Make sure it is less than 100 hours.', 'normal', 'danger');
                 totalSeconds = 0;
                 return;
             }

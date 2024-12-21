@@ -83,7 +83,7 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
     
     URL.revokeObjectURL(url);
     
-    showToast(`Settings exported! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, 10000, 'success');
+    showToast(`Settings exported! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, 'long', 'success');
 }
 
 function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', startTime: luxon.DateTime = luxon.DateTime.now()) {
@@ -91,16 +91,16 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', 
     
     if (type === 'clipboard') {
         navigator.clipboard.writeText(settingsJSON);
-        showToast(`Copied settings to clipboard! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
+        showToast(`Copied settings to clipboard! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         return;
     } else if (type === 'log') {
         logConsole(`Settings JSON: ${settingsJSON}`, 'info');
-        showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
+        showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         return;
     } else if (type === 'qr') {
         if (settingsJSON.length > 3072) {
             logConsole(`Settings JSON too large. Max 3072, got ${settingsJSON.length}`, 'error');
-            showToast('Settings too large for QR code. See console for details.', 5000, 'danger');
+            showToast('Settings too large for QR code. See console for details.', 'normal', 'danger');
             return;
         }
         QRCode.toCanvas(settingsJSON, {
@@ -111,7 +111,7 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', 
         }).then(canvas => {
             makeCardOverlay('QR Code', canvas);
         });
-        showToast(`Exported settings to QR code! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, undefined, 'warning');
+        showToast(`Exported settings to QR code! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         return;
     }
     
@@ -124,7 +124,7 @@ export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolea
 
     // Enforce single export type
     if (!AMOne(toClipboard, toLog, toQRCode)) {
-        showToast('Multiple export types not allowed.', 5000, 'error');
+        showToast('Multiple export types not allowed.', 'normal', 'error');
         return;
     }
 
@@ -156,7 +156,7 @@ export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolea
         
     } catch (error) {
         logConsole(`Export failed: ${error}`, 'error');
-        showToast('Error exporting settings! Check console for details.', 5000, 'danger');
+        showToast('Error exporting settings! Check console for details.', 'normal', 'danger');
     }
 }
 
@@ -174,11 +174,11 @@ function processJSONSettings(jsonText: string, alertConfirmation: boolean = true
         updateClockSettings(importedSettings);
         logConsole('Settings successfully loaded!', 'info');
         if (alertConfirmation === true) {
-            showToast(`Settings successfully imported!<hr><b>File timestamp:</b> ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`, 5000);
+            showToast(`Settings successfully imported!<hr><b>File timestamp:</b> ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`, 'normal');
         }
     } catch (error) {
         logConsole(`Issue processing settings: ${error}`, 'error');
-        showToast('Invalid settings file. Please make sure the file contains valid JSON.', 5000, 'danger');
+        showToast('Invalid settings file. Please make sure the file contains valid JSON.', 'normal', 'danger');
     }
 }
 
@@ -228,7 +228,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
 
     // Reject sanitized filename if it doesn't match the original filename
     if (sanitizedFilename !== filename) {
-        showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 5000, 'danger');
+        showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 'normal', 'danger');
         return Promise.reject(new Error('Illegal characters in preset filename. Only alphanumeric characters are allowed.'));
     }
 
@@ -243,7 +243,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
         })
         .catch(error => {
             logConsole(`Error fetching local settings file: ${error}`, 'error');
-            showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 5000, 'danger');
+            showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 'normal', 'danger');
         });
 }
 

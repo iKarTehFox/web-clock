@@ -69,14 +69,23 @@ function getThemeInfo(colorTheme: string = 'auto') {
 }
 
 // Function to show a toast message
-export function showToast(message: string, duration: number = 3000, style: string = 'auto'): void {
+export function showToast(message: string, duration: 'default' | 'normal' | 'long' | 'verylong' = 'default', style: string = 'auto'): void {
     const theme = getThemeInfo(style);
+    
+    const durationMap = {
+        'default': 3000,
+        'normal': 5000,
+        'long': 10000,
+        'verylong': 30000
+    };
+
+    const durationMs = durationMap[duration];
     
     Toastify({
         text: message,
         escapeMarkup: false,
-        duration: duration,
-        close: duration > 3000 ? true : false,
+        duration: durationMs,
+        close: durationMs > 5000 ? true : false,
         style: {
             background: theme.bgColor,
             color: theme.textColor,

@@ -113,7 +113,7 @@ export function submitWeatherSettings(_key: string = undefined, _lat: number = u
             } else {
                 stopWeather();
                 logConsole(`Failed fetching weather data: ${currentWeatherData.cod}`, 'error');
-                showToast(`Error fetching weather data: ${currentWeatherData.cod}`, 5000, 'danger');
+                showToast(`Error fetching weather data: ${currentWeatherData.cod}`, 'normal', 'danger');
             }
         })
         .catch(error => {

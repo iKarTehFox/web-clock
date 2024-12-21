@@ -12,7 +12,9 @@ export function initializeDebugUI(): void {
     debug.toastbtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const theme = btn.dataset.dbgtoasttheme;
-            showToast(`Test toast. Theme "${theme}"`, undefined, theme);
+            const length = btn.dataset.dbgtoastlength as 'default' | 'normal' | 'long' | 'verylong' | undefined;
+
+            showToast(`Test toast. Theme "${theme}"`, length, theme);
         });
     });
 }

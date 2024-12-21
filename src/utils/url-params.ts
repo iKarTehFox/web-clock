@@ -13,7 +13,7 @@ export async function applyURLParams() {
     if (urlParams.get('debugMode') === 'true') {
         setDebug(true);
         initializeDebugUI();
-        showToast('Debug mode enabled. DevTools memory will increase over time.', 5000, 'warning');
+        showToast('Debug mode enabled. DevTools memory will increase over time.', 'normal', 'warning');
     }
 
     // Fast time refresh
