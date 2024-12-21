@@ -1,5 +1,5 @@
 import { debug } from '../global';
-import { showToast } from './dom-utils';
+import { showToast, makeCardOverlay } from './dom-utils';
 
 export function initializeDebugUI(): void {
     // Enable debug container
@@ -15,6 +15,28 @@ export function initializeDebugUI(): void {
             const length = btn.dataset.dbgtoastlength as 'default' | 'normal' | 'long' | 'verylong' | undefined;
 
             showToast(`Test toast. Theme "${theme}"`, length, theme);
+        });
+    });
+
+    debug.cardoverlaybtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const title = btn.dataset.dbgcardtitle || '';
+            const content = btn.dataset.dbgcardcontent || '';
+            
+            if (btn.dataset.dbgcardtype === 'image') {
+                const img = document.createElement('img');
+                img.src = content;
+                Object.assign(img.style, {
+                    maxWidth: '90vw',
+                    maxHeight: '80vh',
+                    width: 'auto',
+                    height: 'auto',
+                    objectFit: 'contain'
+                });
+                makeCardOverlay(title, img);
+            } else {
+                makeCardOverlay(title, content);
+            }
         });
     });
 }

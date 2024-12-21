@@ -104,7 +104,7 @@ export function AMOne(...values: boolean[]) {
 }
 
 // Function to create an overlay card element
-export function makeCardOverlay(title: string, content: HTMLElement): void {
+export function makeCardOverlay(title: string, content: HTMLElement | string): void {
     // Create container
     const container = document.createElement('div');
     container.dataset.overlay = 'card-overlay';
@@ -145,7 +145,11 @@ export function makeCardOverlay(title: string, content: HTMLElement): void {
 
     // Create content container
     const contentContainer = document.createElement('div');
-    contentContainer.appendChild(content);
+    if (typeof content === 'string') {
+        contentContainer.textContent = content;
+    } else {
+        contentContainer.appendChild(content);
+    }
 
     // Create button container
     const buttonContainer = document.createElement('div');

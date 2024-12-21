@@ -134,6 +134,7 @@ export const debug = {
     toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
     getbgimgbtn: getElement<HTMLButtonElement>('debugGetBGBtn'),
     jsonexportconsolebtn:  getElement<HTMLButtonElement>('jsonExportConsoleBtn'),
+    cardoverlaybtns: getElements<HTMLButtonElement>('button[name="debugCard"]'),
 };
 
 // Define font sizes

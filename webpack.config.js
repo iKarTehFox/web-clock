@@ -13,6 +13,7 @@ const config = {
         styles: './src/css/styles.ts',
         presets: './src/assets/presets.ts',
         icons: './src/icons/icons.ts',
+        images: './src/assets/images.ts',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
