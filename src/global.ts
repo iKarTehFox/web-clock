@@ -495,7 +495,9 @@ document.addEventListener('keydown', function(e) {
     const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
                           !menu.options.classList.contains('menu-options-initial');
 
-    if (e.key === 'Escape' && isMenuVisible) {
+    const isCardOverlayVisible = document.querySelector('[data-overlay="card-overlay"]') !== null;
+
+    if (e.key === 'Escape' && isMenuVisible && !isCardOverlayVisible) {
         toggleMenuVisibility(false);
     }
 });

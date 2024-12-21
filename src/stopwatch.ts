@@ -168,7 +168,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Esc down to close stopwatch
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && stopwatch.container.style.display !== 'none') {
+    const isStopwatchVisible = stopwatch.container.style.display !== 'none';
+    const isCardOverlayVisible = document.querySelector('[data-overlay="card-overlay"]') !== null;
+
+    if (e.key === 'Escape' && isStopwatchVisible && !isCardOverlayVisible) {
         stopwatch.container.style.display = 'none';
         stopwatch.obutton.className = 'btn btn-secondary';
         logConsole('Stopwatch panel closed', 'info');

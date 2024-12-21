@@ -164,7 +164,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Esc down to close countdown
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && countdown.container.style.display !== 'none') {
+    const isCountdownVisible = countdown.container.style.display !== 'none';
+    const isCardOverlayVisible = document.querySelector('[data-overlay="card-overlay"]') !== null;
+
+    if (e.key === 'Escape' && isCountdownVisible && !isCardOverlayVisible) {
         countdown.container.style.display = 'none';
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');
