@@ -39,7 +39,7 @@ body {
     position: absolute;
     top: 10px;
     right: 10px;
-    z-index: 1;
+    z-index: 2;
     display: block;
 }
 
@@ -149,7 +149,7 @@ body {
     width: fit-content;
     max-height: fit-content;
     box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
-    z-index: 2;
+    z-index: 1;
     border-radius: 10px;
 }
 
@@ -176,6 +176,6 @@ body {
     width: fit-content;
     max-height: fit-content;
     box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
-    z-index: 2;
+    z-index: 1;
     border-radius: 10px;
 }

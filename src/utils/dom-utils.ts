@@ -110,7 +110,7 @@ export function makeCardOverlay(title: string, content: HTMLElement): void {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: '1050'
+        zIndex: '10'
     });
 
     // Create card
