@@ -27,8 +27,8 @@ export function initializeDebugUI(): void {
                 const img = document.createElement('img');
                 img.src = content;
                 Object.assign(img.style, {
-                    maxWidth: '90vw',
-                    maxHeight: '80vh',
+                    maxWidth: '100%',
+                    maxHeight: '100%',
                     width: 'auto',
                     height: 'auto',
                     objectFit: 'contain'

@@ -126,6 +126,7 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
     const card = document.createElement('div');
     Object.assign(card.style, {
         width: 'fit-content',
+        maxWidth: '95vw',
         maxHeight: '90vh',
         overflow: 'auto'
     });
