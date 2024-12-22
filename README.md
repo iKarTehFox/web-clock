@@ -35,6 +35,7 @@ Copyright (c) 2021-PRESENT Vjacheslav Trushkin
 Copyright 2019 JS Foundation and other contributors
 - **number-to-words** ([GitHub](https://github.com/marlun78/number-to-words)): Licensed under MIT License  
 Copyright (c) 2015 Martin Eneqvist
+- **qrcode** ([GitHub](https://github.com/soldair/node-qrcode)): Licensed under MIT License
 - **Social Buttons for Bootstrap** ([GitHub](https://github.com/lipis/bootstrap-social)): Licensed under MIT License  
 Copyright (c) 2013-2016 Panayiotis Lipiridis
 - **Toastify**  ([GitHub](https://github.com/apvarun/toastify-js)): Licensed under MIT License  
