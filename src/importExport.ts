@@ -98,8 +98,8 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', 
         showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         return;
     } else if (type === 'qr') {
-        if (settingsJSON.length > 3072) {
-            logConsole(`Settings JSON too large. Max 3072, got ${settingsJSON.length}`, 'error');
+        if (settingsJSON.length > 2953) {
+            logConsole(`Settings JSON too large. Max 2953, got ${settingsJSON.length}`, 'error');
             showToast('Settings too large for QR code. See console for details.', 'normal', 'danger');
             return;
         }
