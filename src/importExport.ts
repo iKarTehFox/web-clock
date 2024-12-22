@@ -449,6 +449,10 @@ menu.jsonmanualimportbtn.addEventListener('click', () => {
 
 debug.getbgimgbtn.addEventListener('click', () => {
     const bgImageUrl = document.body.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
+    if (!bgImageUrl) {
+        showToast('No background image to extract.');
+        return;
+    }
     const imgElement = document.createElement('img');
     imgElement.src = bgImageUrl;
     Object.assign(imgElement.style, {
