@@ -423,14 +423,63 @@
                                     <label class="form-check-label" for="menuTabTitleVisible">Display current time in tab title</label>
                                 </div>
                                 <h6 class="mb-1 mt-2">Fullscreen mode</h6>
-                                <button id="close-button" class="btn btn-primary mb-2" onclick="wcGlobal.toggleFullscreen()">
-                                    <iconify-icon icon="mdi:fullscreen" width="19" height="19" style="height: 15px;"></iconify-icon> Toggle View
-                                </button>
-                                <hr>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="debugMode">
-                                    <label class="form-check-label" for="debugMode">Toggle debug logging</label>
+                                <button id="fs-toggle" class="btn btn-primary mb-2">⛶ Toggle View</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item" id="debuggingContainer" style="display: none;">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDbg" aria-expanded="false" aria-controls="collapseDbg">
+                            Debugging
+                            </button>
+                        </h2>
+                        <div id="collapseDbg" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
+                            <div class="accordion-body">
+                                <h6 class="mb-1">Debug info</h6>
+                                <p>User Agent: <span id="debugUAString"></span></p>
+                                <div id="devColorsContainer" style="display: none;">
+                                    <hr>
+                                    <h6 class="mb-1 mt-2">Dev Colors</h6>
+                                    <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="jekylldark" autocomplete="off" data-color="#27262B">
+                                        <label class="btn btn-outline-primary" for="jekylldark" data-bs-toggle="tooltip" data-bs-title="Jekyll Dark"><div class="color-block" style="background-color: #27262B;"></div></label>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="firefoxdark" autocomplete="off" data-color="#232327">
+                                        <label class="btn btn-outline-primary" for="firefoxdark" data-bs-toggle="tooltip" data-bs-title="Firefox Dark"><div class="color-block" style="background-color: #232327;"></div></label>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="chromedark" autocomplete="off" data-color="#282828">
+                                        <label class="btn btn-outline-primary" for="chromedark" data-bs-toggle="tooltip" data-bs-title="Chrome Dark"><div class="color-block" style="background-color: #282828;"></div></label>
+                                    </div>
+                                    <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="githubdark" autocomplete="off" data-color="#1F1F1F">
+                                        <label class="btn btn-outline-primary" for="githubdark" data-bs-toggle="tooltip" data-bs-title="GitHub Dark"><div class="color-block" style="background-color: #1F1F1F;"></div></label>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="vscodedark" autocomplete="off" data-color="#232327">
+                                        <label class="btn btn-outline-primary" for="vscodedark" data-bs-toggle="tooltip" data-bs-title="VS Code Dark"><div class="color-block" style="background-color: #232327;"></div></label>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="windowsdark" autocomplete="off" data-color="#2B2B2C">
+                                        <label class="btn btn-outline-primary" for="windowsdark" data-bs-toggle="tooltip" data-bs-title="Windows Dark"><div class="color-block" style="background-color: #2B2B2C;"></div></label>
+                                    </div>
+                                    <div class="btn-group d-flex flex-wrap" role="group" aria-label="Solid color button group">
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="bootstrapdark1" autocomplete="off" data-color="#212529">
+                                        <label class="btn btn-outline-primary" for="bootstrapdark1" data-bs-toggle="tooltip" data-bs-title="Bootstrap Dark 1"><div class="color-block" style="background-color: #212529;"></div></label>
+                                        <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="bootstrapdark2" autocomplete="off" data-color="#313539">
+                                        <label class="btn btn-outline-primary" for="bootstrapdark2" data-bs-toggle="tooltip" data-bs-title="Bootstrap Dark 2"><div class="color-block" style="background-color: #313539;"></div></label>
+                                    </div>
+                                    <p class="mb-1 mt-2" id="subtext-light">Note: These colors should not be exported. If imported, verification will fail.</p>
                                 </div>
+                                <hr>
+                                <h6 class="mb-1 mt-2">Settings</h6>
+                                <button type="button" class="btn btn-outline-secondary mb-1" data-bs-toggle="tooltip" data-bs-title="Log JSON settings to console" id="jsonExportConsoleBtn">Log JSON</button>
+                                <button type="button" class="btn btn-outline-secondary mb-1" data-bs-toggle="tooltip" data-bs-title="Extract and view current background image" id="debugGetBGBtn">Extract BG image</button>
+                                <hr>
+                                <h6 class="mb-1 mt-2">Toasts</h6>
+                                <button type="button" class="btn btn-dark mb-1" name="debugToast" data-dbgtoasttheme="dark">Dark</button>
+                                <button type="button" class="btn btn-light mb-1" name="debugToast" data-dbgtoasttheme="light">Light</button>
+                                <button type="button" class="btn btn-danger mb-1" name="debugToast" data-dbgtoasttheme="danger">Danger</button>
+                                <button type="button" class="btn btn-success mb-1" name="debugToast" data-dbgtoasttheme="success">Success</button>
+                                <button type="button" class="btn btn-warning mb-1" name="debugToast" data-dbgtoasttheme="warning">Warning</button>
+                                <hr>
+                                <h6 class="mb-1 mt-2">Card Overlay</h6>
+                                <button type="button" class="btn btn-primary mb-1" name="debugCard" data-dbgcardtitle="Overlay example" data-dbgcardcontent="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vestibulum, tortor sed ullamcorper condimentum, lorem lacus rutrum leo, sed tristique eros tellus quis sapien. Phasellus.">Text Card Overlay</button>
+                                <button type="button" class="btn btn-primary mb-1" name="debugCard" 
+                                data-dbgcardtitle="Overlay example" data-dbgcardcontent="/icons/customizable.png" data-dbgcardtype="image">Image Card Overlay</button>
                             </div>
                         </div>
                     </div>
@@ -443,24 +492,22 @@
                         <div id="collapseIE" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body">
                                 <h6 class="mb-1">Import settings</h6>
-                                <button type="button" class="btn btn-outline-primary" onClick="ieJSON.importSettingsFromJSON()">Upload from JSON</button>
+                                <button type="button" class="btn btn-outline-primary" id="jsonImportUlBtn">Upload from JSON</button>
                                 <p class="mb-1 mt-2">Or manually paste JSON settings instead:</p>
                                 <input class="form-control" type="text" placeholder="Paste in JSON here" data-bs-toggle="tooltip" aria-label="Manual JSON settings entry form" id="jsonImportTextarea">
                                 <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-outline-warning" id="jsonImportTextBtn" onClick="ieJSON.manualJSONImport()">Load settings</button>
+                                    <button type="button" class="btn btn-outline-warning" id="jsonImportTxtBtn">Load settings</button>
                                 </div>
                                 <hr>
                                 <h6 class="mb-1">Built-in presets</h6>
                                 <p class="mb-1 mt-2">Import from preset settings:</p>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Save yourself from burn-in with this preset!" onClick="ieJSON.presetLocalJSON('onlinewebclock-amoled-preset')">AMOLED theme</button>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Become a hacker with this green, digital binary clock! kinda..." onclick="ieJSON.presetLocalJSON('onlinewebclock-digitsbinary-preset')">Hacker Green</button>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="Go minimal with this black on white, simple theme!" onclick="ieJSON.presetLocalJSON('onlinewebclock-minimallight-preset')">Minimalist Light</button>
-                                <button type="button" class="btn btn-outline-info mb-1" data-bs-toggle="tooltip" data-bs-title="A personal favorite from iKarTehFox... me! :)" onClick="ieJSON.presetLocalJSON('onlinewebclock-devfavorite-preset')">Simple blue</button>
+                                <div id="jsonPresetsContainer"></div>
+                                <p class="mb-1 mt-2" id="subtext-light">Note: You can press the corresponding number on your keyboard to use these presets at any time!</p>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Export settings</h6>
-                                <!-- Why do these buttons use onClick instead of listeners? Idk, I'm just lazy -->
-                                <button type="button" class="btn btn-outline-secondary mb-1" onClick="ieJSON.exportSettingsToJSON()">Download JSON file</button>
-                                <button type="button" class="btn btn-outline-warning" onClick="ieJSON.exportSettingsToJSON(true)">Copy to clipboard</button>
+                                <button type="button" class="btn btn-outline-secondary mb-1" id="jsonExportDlBtn">Download JSON file</button>
+                                <button type="button" class="btn btn-outline-warning mb-1" id="jsonExportClipBtn">Copy to clipboard</button>
+                                <button type="button" class="btn btn-outline-warning" id="jsonExportQrBtn">Generate QR code</button>
                                 <p class="mb-1 mt-2" id="subtext-light">Note: Display Options and custom font settings will not be exported.</p>
                             </div>
                         </div>
@@ -477,7 +524,7 @@
                         <p style="margin-top: -1.5px;">🐙</p>
                     </a>
                     <p class="mb-1 mt-2">Review the <a href="/privacy.html">Privacy Policy</a>.</p>
-                    <p class="mb-1 mt-2" id="version">Version: <b>v1.4.4</b></p>
+                    <p class="mb-1 mt-2" id="version">Version: <b>v1.5.0</b></p>
                 </div>
             </div>
         </div>
@@ -512,22 +559,16 @@
                 <div class="container text-center">
                     <h4>Stopwatch</h4>
                     <hr>
-                    <div class="row">
-                        <div class="col">
-                            <textarea id="stopwatch-lapfield" disabled></textarea>
-                        </div>
-                        <div class="col">
-                            <h1 class="display-1 mb-4" id="stopwatch-display">00:00:00</h1>
-                            <div class="btn-group mb-1" role="group" aria-label="Stopwatch controls">
-                                <button type="button" class="btn btn-primary" id="stopwatch-start">Start</button>
-                                <button type="button" class="btn btn-warning" id="stopwatch-pause" disabled>Pause</button>
-                                <button type="button" class="btn btn-danger" id="stopwatch-reset" disabled>Reset</button>
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-secondary" id="stopwatch-lap" disabled>Lap</button>
-                            </div>
-                        </div>
+                    <h1 class="display-1 mb-4" id="stopwatch-display">00:00:00</h1>
+                    <div class="btn-group mb-2" role="group" aria-label="Stopwatch controls">
+                        <button type="button" class="btn btn-primary" id="stopwatch-start">Start</button>
+                        <button type="button" class="btn btn-warning" id="stopwatch-pause" disabled>Pause</button>
+                        <button type="button" class="btn btn-danger" id="stopwatch-reset" disabled>Reset</button>
                     </div>
+                    <div>
+                        <button type="button" class="btn btn-secondary" id="stopwatch-lap" disabled>Lap</button>
+                    </div>
+                    <textarea class="mt-2" id="stopwatch-lapfield" disabled></textarea>
                 </div>
             </div>
         </div>

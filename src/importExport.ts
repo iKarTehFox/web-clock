@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getFirstElement, logConsole, showToast } from './utils/dom-utils';
+import { getFirstElement, logConsole, showToast, AMOne, makeCardOverlay } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
-import { menu, font } from './global';
+import { menu, font, debug } from './global';
 import { stopColorFade } from './background-color';
 import {
     validateRequiredKeys,
@@ -10,7 +10,9 @@ import {
     validateFontConfig,
     validateColorTheme
 } from './importValidation';
+import { getPresetByHotkey } from './assets/presets';
 import axios from 'axios';
+import QRCode from 'qrcode';
 
 function getSolidColorValue() {
     const checkedColorInput = getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked');
@@ -22,82 +24,140 @@ function getSolidColorValue() {
     }
 }
 
-export function exportSettingsToJSON(copyToClipboard: boolean = false) {
-    showToast('Exporting settings...');
+function getSettings() {
+    return {
+        clockConfig: getClockConfig(),
+        fontConfig: getFontConfig(),
+        colorTheme: getColorThemeConfig(),
+        exportTimestamp: luxon.DateTime.now().toFormat('FFFF'),
+        version: 7
+    };
+}
 
-    // Get time and set export timestamp
-    let usersettings: { clockConfig: { clockMode: string; clockDisplay: string; secondsVis: string; dateFormat: string; dateAlign: string; borderMode: string; borderStyle: string; secondsBarVis: string; }; fontConfig: { fontFamily: string; fontStyle: string; fontWeight: string; fontSize: string; dropShadow: string; strokeWidth: string; strokeColor: string; }; colorTheme: { colorMode: string; solidColor: string | undefined; textColorMode: string; textColorValue: string; bgImage: string; bgImageSize: string; bgImageBlur: string; }; exportTimestamp: string; version: number; };
-    let url: string;
-    const time = luxon.DateTime.now();
-    const timeExported = time.toFormat('FFFF');
+function getClockConfig() {
+    return {
+        clockMode: getFirstElement<HTMLInputElement>('input[name="clock-mode-radio"]:checked').id,
+        clockDisplay: menu.timemethodselect.value,
+        secondsVis: getFirstElement<HTMLInputElement>('input[name="seconds-vis-radio"]:checked').id,
+        dateFormat: menu.dateformselect.value,
+        dateAlign: getFirstElement<HTMLInputElement>('input[name="date-position-radio"]:checked').id,
+        borderMode: getFirstElement<HTMLInputElement>('input[name="border-type-radio"]:checked').id,
+        borderStyle: menu.borderstyleselect.value,
+        secondsBarVis: getFirstElement<HTMLInputElement>('input[name="seconds-bar-radio"]:checked').id
+    };
+}
 
-    // Get all settings
-    try {
-        usersettings = {
-            clockConfig: {
-                clockMode: getFirstElement<HTMLInputElement>('input[name="clock-mode-radio"]:checked').id,
-                clockDisplay: menu.timemethodselect.value,
-                secondsVis: getFirstElement<HTMLInputElement>('input[name="seconds-vis-radio"]:checked').id,
-                dateFormat: menu.dateformselect.value,
-                dateAlign: getFirstElement<HTMLInputElement>('input[name="date-position-radio"]:checked').id,
-                borderMode: getFirstElement<HTMLInputElement>('input[name="border-type-radio"]:checked').id,
-                borderStyle: menu.borderstyleselect.value,
-                secondsBarVis: getFirstElement<HTMLInputElement>('input[name="seconds-bar-radio"]:checked').id
-            },
-            fontConfig: {
-                fontFamily: font.familysel.value,
-                fontStyle: getFirstElement<HTMLInputElement>('input[name="font-style-radio"]:checked').id,
-                fontWeight: getFirstElement<HTMLInputElement>('input[name="font-weight-radio"]:checked').id,
-                fontSize: font.sizesel.value,
-                dropShadow: font.shadowrange.value,
-                strokeWidth: font.strokerange.value,
-                strokeColor: (parseInt(font.strokerange.value) > 0) ? font.strokecolor.value : ''
-            },
-            colorTheme: {
-                colorMode: getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id,
-                solidColor: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
-                textColorMode: getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id,
-                textColorValue: (getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : '',
-                bgImage: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? document.body.style.backgroundImage : '',
-                bgImageSize: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : '',
-                bgImageBlur: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
-            },
-            exportTimestamp: timeExported,
-            version: 7
-        };
-    } catch (error) {
-        logConsole(`Failed getting settings: ${error}`, 'error');
-        showToast('Error getting settings! Please check the console for more info.', 5000, 'danger');
-        return;
-    }
+function getFontConfig() {
+    return {
+        fontFamily: font.familysel.value,
+        fontStyle: getFirstElement<HTMLInputElement>('input[name="font-style-radio"]:checked').id,
+        fontWeight: getFirstElement<HTMLInputElement>('input[name="font-weight-radio"]:checked').id,
+        fontSize: font.sizesel.value,
+        dropShadow: font.shadowrange.value,
+        strokeWidth: font.strokerange.value,
+        strokeColor: (parseInt(font.strokerange.value) > 0) ? font.strokecolor.value : ''
+    };
+}
 
-    // Format settings
-    try {
-        const settingsJSON = JSON.stringify(usersettings);
-        // Check for copyToClipboard
-        if (copyToClipboard) {
-            navigator.clipboard.writeText(settingsJSON);
-            showToast(`Copied settings to clipboard! Took ${((luxon.DateTime.now()).toMillis()) - time.toMillis()}ms`, undefined, 'warning');
-            return;
-        }
-        const blob = new Blob([settingsJSON], {
-            type: 'application/json'
-        });
-        url = URL.createObjectURL(blob);
-    } catch (error) {
-        logConsole(`Failed formatting settings: ${error}`, 'error');
-        showToast('Error formatting settings! Please check the console for more info.', 5000, 'danger');
-        return;
-    }
+function getColorThemeConfig() {
+    return {
+        colorMode: getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id,
+        solidColor: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'solidmode' ? getSolidColorValue() : '',
+        textColorMode: getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id,
+        textColorValue: (getFirstElement<HTMLInputElement>('input[name="text-color-override-radio"]:checked').id) == 'tcovO' ? menu.textcolorinput.value : '',
+        bgImage: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? document.body.style.backgroundImage : '',
+        bgImageSize: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imagesizeselect.value : '',
+        bgImageBlur: (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id) == 'imgmode' ? menu.imageblurrange.value : ''
+    };
+}
 
-    // Initiate download
+function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
+    const url = URL.createObjectURL(blob);
     const downloadLink = document.createElement('a');
     downloadLink.href = url;
-    downloadLink.download = `onlinewebclock-settings_${time.toFormat('X')}.json`;
+    downloadLink.download = `onlinewebclock-settings_${startTime.toFormat('X')}.json`;
+    
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-    showToast(`Settings exported! Took ${((luxon.DateTime.now()).toMillis()) - time.toMillis()}ms`, undefined, 'success');
+    
+    URL.revokeObjectURL(url);
+    
+    showToast(`Settings exported! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, 'long', 'success');
+}
+
+function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', startTime: luxon.DateTime = luxon.DateTime.now()) {
+    const settingsJSON = JSON.stringify(settings);
+    
+    if (type === 'clipboard') {
+        navigator.clipboard.writeText(settingsJSON);
+        showToast(`Copied settings to clipboard! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
+        return;
+    } else if (type === 'log') {
+        logConsole(`Settings JSON: ${settingsJSON}`, 'info');
+        showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
+        return;
+    } else if (type === 'qr') {
+        if (settingsJSON.length > 2953) {
+            logConsole(`Settings JSON too large. Max 2953, got ${settingsJSON.length}`, 'error');
+            showToast('Settings too large for QR code. See console for details.', 'normal', 'danger');
+            return;
+        }
+        QRCode.toCanvas(settingsJSON, {
+            errorCorrectionLevel: 'M',
+            margin: 2,
+            scale: 4,
+            width: 400
+        }).then(canvas => {
+            makeCardOverlay('QR Code', canvas);
+        });
+        showToast(`Exported settings to QR code! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
+        return;
+    }
+    
+    return new Blob([settingsJSON], { type: 'application/json' });
+}
+
+export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolean = false, toQRCode: boolean = false) {
+    const startTime = luxon.DateTime.now();
+    showToast('Exporting settings...');
+
+    // Enforce single export type
+    if (!AMOne(toClipboard, toLog, toQRCode)) {
+        showToast('Multiple export types not allowed.', 'normal', 'error');
+        return;
+    }
+
+    try {
+        const settings = getSettings();
+
+        // Soft warning for exporting invalid settings
+        if (!(verifySettingsJSON(settings) === true)) {
+            logConsole('Settings JSON may be invalid. If you have modified the settings manually, ignore this message.', 'warning');
+        }
+        
+        if (toClipboard) {
+            handleExport(settings, 'clipboard', startTime);
+            return;
+        }
+        
+        if (toLog) {
+            handleExport(settings, 'log', startTime);
+            return;
+        }
+
+        if (toQRCode) {
+            handleExport(settings, 'qr', startTime);
+            return;
+        }
+
+        const blob = handleExport(settings, 'json') as Blob;
+        downloadSettingsFile(blob, startTime);
+        
+    } catch (error) {
+        logConsole(`Export failed: ${error}`, 'error');
+        showToast('Error exporting settings! Check console for details.', 'normal', 'danger');
+    }
 }
 
 // Helper function to process JSON settings
@@ -114,11 +174,11 @@ function processJSONSettings(jsonText: string, alertConfirmation: boolean = true
         updateClockSettings(importedSettings);
         logConsole('Settings successfully loaded!', 'info');
         if (alertConfirmation === true) {
-            showToast(`Settings successfully imported!<hr><b>File timestamp:</b> ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`, 5000);
+            showToast(`Settings successfully imported!<hr><b>File timestamp:</b> ${(importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp')}`, 'normal');
         }
     } catch (error) {
         logConsole(`Issue processing settings: ${error}`, 'error');
-        showToast('Invalid settings file. Please make sure the file contains valid JSON.', 5000, 'danger');
+        showToast('Invalid settings file. Please make sure the file contains valid JSON.', 'normal', 'danger');
     }
 }
 
@@ -168,7 +228,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
 
     // Reject sanitized filename if it doesn't match the original filename
     if (sanitizedFilename !== filename) {
-        showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 5000, 'danger');
+        showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 'normal', 'danger');
         return Promise.reject(new Error('Illegal characters in preset filename. Only alphanumeric characters are allowed.'));
     }
 
@@ -183,9 +243,27 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
         })
         .catch(error => {
             logConsole(`Error fetching local settings file: ${error}`, 'error');
-            showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 5000, 'danger');
+            showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 'normal', 'danger');
         });
 }
+
+// Preset hotkey functionality
+document.addEventListener('keydown', (e) => {
+    // Skip if text input is focused
+    if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') {
+        return;
+    }
+
+    // Only handle number keys 1-9
+    const key = parseInt(e.key);
+    if (key >= 1 && key <= 9) {
+        const preset = getPresetByHotkey(key);
+        if (preset) {
+            presetLocalJSON(preset.filename);
+            logConsole(`Hotkey ${key} pressed - Loading preset: ${preset.displayName}`, 'info');
+        }
+    }
+});
 
 function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: any; colorTheme: any; }) {
     // Set clockConfig settings
@@ -343,3 +421,46 @@ function verifySettingsJSON(jsonData: { version: any; clockConfig: any; fontConf
 
     return true;
 }
+
+// Surprise! More event listeners!
+menu.jsonexportclipbtn.addEventListener('click', () => {
+    exportSettingsToJSON(true);
+});
+
+menu.jsonexportdownloadbtn.addEventListener('click', () => {
+    exportSettingsToJSON();
+});
+
+menu.jsonexportqrbtn.addEventListener('click', () => {
+    exportSettingsToJSON(undefined, undefined, true);
+});
+
+debug.jsonexportconsolebtn.addEventListener('click', () => {
+    exportSettingsToJSON(false, true);
+});
+
+menu.jsonimportuploadbtn.addEventListener('click', () => {
+    importSettingsFromJSON();
+});
+
+menu.jsonmanualimportbtn.addEventListener('click', () => {
+    manualJSONImport();
+});
+
+debug.getbgimgbtn.addEventListener('click', () => {
+    const bgImageUrl = document.body.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
+    if (!bgImageUrl) {
+        showToast('No background image to extract.');
+        return;
+    }
+    const imgElement = document.createElement('img');
+    imgElement.src = bgImageUrl;
+    Object.assign(imgElement.style, {
+        maxWidth: '90vw',
+        maxHeight: '80vh',
+        width: 'auto',
+        height: 'auto',
+        objectFit: 'contain'
+    });
+    makeCardOverlay('Background Image', imgElement);
+});

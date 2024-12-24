@@ -9,108 +9,9 @@ Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri**
 
 **Need compatibility with older browsers?** [Check out the compatibility repository](https://github.com/iKarTehFox/web-clock-compatibility)!
 
-## Table of Contents
-- [Build/run Instructions](#building)
-- [Features](#features)
-  - [URL Parameters](#url-parameters)
-- [Gallery](#gallery)
-- [Acknowledgements (OSS)](#acknowledgements-oss)
-- [Acknowledgements (Fonts)](#acknowledgements-fonts)
-
-## Build/run Instructions
-Don't want to build the project? Check out the [Releases](https://github.com/iKarTehFox/web-clock/releases) page to download pre-bundled archives!
-
-Online Web Clock is bundled with Webpack. Follow the instructions below to get started with building the project.
-
-#### Prerequisites
- - [Node.js](https://nodejs.org/)
- - Basic CLI knowledge (download a release if this is too hard for you to understand 😟)
-
-#### Instructions
-1. Clone the repository and `cd` into it.
-```bash
-git clone https://github.com/iKarTehFox/web-clock.git && cd web-clock
-```
-2. Install dependencies: `npm install`
-
-3. Run `npm run build` or `npm run build:prod` to bundle with Webpack in production mode.
-   - Bundled files will be located in the `./dist` directory.
-   - You can instead run `npm run build:dev` to bundle for development.
-
-4. Serve the files in the `./dist` directory with your favorite http server.
-
-## Features
-### Clock Mode
- - Pick between 12 or 24-hour clock modes
-### Date and Time
- - Manually set a timezone
- - Display the time in 7 different methods (Radix/Conversions)  
- - Add a box/bottom border to the clock container (solid, dashed, dotted, double)  
- - Toggle seconds progress bar below clock
-### Date Format and Alignment
- - Set 4 different date formats (or disable!)  
- - Date position alignment (left, center, and right)
-### Font Customization
- - 13 predefined font families, or system default  
- - Set custom font from installed system fonts  
- - Regular and _Italicized_ font styles  
- - Light, regular, and **bold** font weights  
- - 5 different font sizes  
- - Text shadow customization  
- - Text stroke/outline customization
-### Background Theme
- - Color fade mode - Automatically transitions between 6 colors  
- - Solid color mode - Choose from 33 different colors  
- - Background image mode - Upload and set a custom image from your device + change sizing and blurring  
- - Text color override - Set a custom clock text color
-### Weather
- - Enable a weather widget to show the current weather (updates every 15 min!)
- - Enter an OpenWeatherMap API key
- - Manually set coordinates or use GPS
- - Choose between Imperial and Metric units
- - Manually drag the weather widget to any position on the screen
-### Countdown/Stopwatch
- - Start, pause, and reset a countdown or stopwatch
- - Manually enter any time for the countdown
-### Display Options
- - Toggle Dark Mode for the menu, weather widget, and stopwatch/countdown panels
- - Toggle displaying of the menu button
- - Toggle showing the current time in the tab title
- - Enter fullscreen mode
-### Importing/Exporting Settings
- - Download and upload generated JSON files containing all of your settings  
-   - Imported JSON files and settings are verified before applying.
- - Or, choose from a selection of preset settings files!
-
- Try out my [personal config](/src/assets/onlinewebclock-preset.json)!
-### URL Parameters
-For deployment purposes, you can pass URL parameters to the page to customize the settings on startup.  
-In the URL bar, you can pass the following parameters:  
- - **debug=true**: Enables debug logging after the page has loaded
- - **darkMode=true**: Sets the theme to Dark
- - **panelVis=false**: Hides the panel buttons (stopwatch, countdown, and menu buttons)
- - **tabTitle=false**: Disables showing the current time in the tab title
- - **preset=\<filename\>**: Loads a JSON preset with the filename \<filename\> from the `/src/assets` directory.
- - **autoRestart=\<length\>**: Automatically reloads the page after \<length\> seconds
-   - \<length\> must be an integer between 15 and 86400, inclusive (15 seconds and 24 hours)
- - **lockSettings=true**: Prevent end-user settings modification by removing menu container
-   - This parameter is best used with the `preset` parameter! If necessary, clone the repo and add your own settings preset file!
- 
-To enable the weather widget, all of the following parameters are required:  
- - **weatherApi=\<api_key\>**: Input OpenWeatherMap API key  
- - **weatherLat=\<latitude\>**: Input manual latitude  
- - **weatherLon=\<longitude\>**: Input manual longitude  
- - **weatherUnits=imperial/metric**: Set 'imperial' or 'metric' weather units  
-
-Positioning the weather widget is also possible. The following parameters are required:  
- - **weatherWidgetPosX=\<position\>**: Horizontal X position offset from left (in pixels)  
- - **weatherWidgetPosY=\<position\>**: Vertical Y position offset from top (in pixels)  
- 
- *The weather widget must be enabled for this to show!*
-
- For instance, you can [visit](https://online-clock.pages.dev/?darkMode=true&panelVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset) the following URL, `https://online-clock.pages.dev/?darkMode=true&panelVis=false&tabTitle=false&preset=onlinewebclock-amoled-preset` to load with the dark mode menu theme **enabled**, the panel buttons **hidden**, the tab title **disabled**, and the preset `onlinewebclock-amoled-preset` applied.
-
- With this in mind, you can bookmark the URL with the parameters you want, and it will load the page with those settings every time!
+# Install guide and features
+The documentation for Online Web Clock has moved! You can find it in the [Docs](https://online-clock-docs.pages.dev/)!  
+There, you can find [installation instructions](https://online-clock-docs.pages.dev/docs/installation) and a [list of all features](https://online-clock-docs.pages.dev/docs).
  
 # Gallery
 ### Preview of the clock  
@@ -119,7 +20,7 @@ Positioning the weather widget is also possible. The following parameters are re
  ![A screenshot of the menu options panel. The "Date and Time" section is opened.](/src/assets/images/menu.png)  
 ### Customization example
  ![A screenshot of the main web clock page with many customizations applied, such as custom font, background image, date format, and weather widget.](/src/assets/images/customizable.png)  
- > Like this look? See [Importing/Exporting Settings](#importingexporting-settings) for the config!
+ > Like this look? Download [the preset](/src/assets/onlinewebclock-preset.json)!
  
 # Acknowledgements (OSS)
 - **Axios**  ([GitHub](https://github.com/axios/axios)): Licensed under MIT License  
@@ -134,6 +35,7 @@ Copyright (c) 2021-PRESENT Vjacheslav Trushkin
 Copyright 2019 JS Foundation and other contributors
 - **number-to-words** ([GitHub](https://github.com/marlun78/number-to-words)): Licensed under MIT License  
 Copyright (c) 2015 Martin Eneqvist
+- **qrcode** ([GitHub](https://github.com/soldair/node-qrcode)): Licensed under MIT License
 - **Social Buttons for Bootstrap** ([GitHub](https://github.com/lipis/bootstrap-social)): Licensed under MIT License  
 Copyright (c) 2013-2016 Panayiotis Lipiridis
 - **Toastify**  ([GitHub](https://github.com/apvarun/toastify-js)): Licensed under MIT License  

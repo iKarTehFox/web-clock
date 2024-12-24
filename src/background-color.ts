@@ -1,4 +1,4 @@
-import { menu, dtdisplay } from './global';
+import { menu, debug, dtdisplay } from './global';
 import { logConsole } from './utils/dom-utils';
 
 let fadeIntervalID: NodeJS.Timeout;
@@ -71,6 +71,7 @@ menu.colormoderadio.forEach(radio => {
             menu.colorbadgelabel.style.display = 'block';
             menu.fadegroup.style.display = 'block';
             menu.presetgroup.style.display = 'none';
+            debug.devcolorscontainer.style.display = 'none';
             menu.textcolorgroup.style.display = 'none';
             menu.imagegroup.style.display = 'none';
         } else if (colorMode === 'solidmode') {
@@ -89,6 +90,7 @@ menu.colormoderadio.forEach(radio => {
             menu.colorbadgelabel.style.display = 'block';
             menu.fadegroup.style.display = 'block';
             menu.presetgroup.style.display = '';
+            debug.devcolorscontainer.style.display = '';
             menu.textcolorgroup.style.display = '';
             menu.imagegroup.style.display = 'none';
         } else if (colorMode === 'imgmode') {
@@ -116,6 +118,7 @@ menu.colormoderadio.forEach(radio => {
             menu.colorbadgelabel.style.display = 'none';
             menu.fadegroup.style.display = 'none';
             menu.presetgroup.style.display = 'none';
+            debug.devcolorscontainer.style.display = 'none';
             menu.textcolorgroup.style.display = '';
             menu.imagegroup.style.display = '';
         }

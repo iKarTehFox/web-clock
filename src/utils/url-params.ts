@@ -1,15 +1,24 @@
 import { menu, weather } from '../global';
 import { presetLocalJSON } from '../importExport';
-import { getFirstElement, logConsole, showToast } from './dom-utils';
+import { logConsole, showToast } from './dom-utils';
+import { setDebug, setTimeRefresh } from './debug';
+import { initializeDebugUI } from './debugUI';
+import { submitWeatherSettings } from './weather-utils';
 
 export async function applyURLParams() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
     // Debug logging mode
-    if (urlParams.get('debug') === 'true') {
-        menu.debugcheckbox.checked = true;
-        showToast('Debug logging enabled. DevTools memory will increase over time.', 5000, 'warning');
+    if (urlParams.get('debugMode') === 'true') {
+        setDebug(true);
+        initializeDebugUI();
+        showToast('Debug mode enabled. DevTools memory will increase over time.', 'normal', 'warning');
+    }
+
+    // Fast time refresh
+    if (urlParams.get('fastRefresh') === 'true') {
+        setTimeRefresh(1);
     }
 
     // Menu theme
@@ -20,12 +29,15 @@ export async function applyURLParams() {
 
     // Weather
     if (urlParams.get('weatherApi') !== null && urlParams.get('weatherLat') !== null && urlParams.get('weatherLon') !== null && (urlParams.get('weatherUnits') == 'imperial' || urlParams.get('weatherUnits') == 'metric')) {
-        menu.weatherapiinput.value = urlParams.get('weatherApi') as string;
-        menu.weatherlatinput.value = urlParams.get('weatherLat') as string;
-        menu.weatherloninput.value = urlParams.get('weatherLon') as string;
-        getFirstElement<HTMLInputElement>(`input[name="weather-unit-radio"][id="${urlParams.get('weatherUnits')}"]`).checked = true;
-        getFirstElement<HTMLInputElement>(`input[name="weather-unit-radio"][id="${urlParams.get('weatherUnits')}"]`).dispatchEvent(new Event('change'));
-        menu.weathersubmitbtn.click();
+        const weatherApi = urlParams.get('weatherApi') as string;
+        const weatherLat = parseFloat(urlParams.get('weatherLat') as string);
+        const weatherLon = parseFloat(urlParams.get('weatherLon') as string);
+        const weatherUnits = urlParams.get('weatherUnits') as string;
+
+        // Secondary check for valid numbers
+        if (!isNaN(weatherLat) && !isNaN(weatherLon)) {
+            submitWeatherSettings(weatherApi, weatherLat, weatherLon, weatherUnits);
+        }
     }
 
     // Weather widget position

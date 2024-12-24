@@ -52,7 +52,7 @@ function startCountdown() {
             if (totalSeconds === 0 || totalSeconds < 1) {
                 clearInterval(countdownInterval);
                 running = false;
-                showToast('Countdown finished!', 30000, 'success');
+                showToast('Countdown finished!', 'verylong', 'success');
                 inputsState(false);
                 btnState({
                     start: false,
@@ -116,7 +116,7 @@ countdown.startbtn.addEventListener('click', () => {
 
             // Check if totalSeconds is too long (greater than 100 hours)
             if (totalSeconds > 360000) {
-                showToast('Time set too long! Make sure it is less than 100 hours.', 5000, 'danger');
+                showToast('Time set too long! Make sure it is less than 100 hours.', 'normal', 'danger');
                 totalSeconds = 0;
                 return;
             }
@@ -149,11 +149,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const target = e.target as HTMLElement;
         const isMenuRelated = menu.options.contains(target) || 
                                    menu.obutton.contains(target) || 
+                                   menu.cbutton.contains(target) || 
                                    countdown.container.contains(target) || 
                                    countdown.obutton.contains(target);
+        const isCountdownVisible = countdown.container.style.display !== 'none';
         const isTooltip = target.closest('.tooltip') !== null;
+        const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
 
-        if (!isMenuRelated && !isTooltip && countdown.container.style.display !== 'none') {
+        if (!isMenuRelated && !isTooltip && !isCardOverlay && isCountdownVisible) {
             countdown.container.style.display = 'none';
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');
@@ -163,7 +166,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Esc down to close countdown
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && countdown.container.style.display !== 'none') {
+    const isCountdownVisible = countdown.container.style.display !== 'none';
+    const isCardOverlayVisible = document.querySelector('[data-overlay="card-overlay"]') !== null;
+
+    if (e.key === 'Escape' && isCountdownVisible && !isCardOverlayVisible) {
         countdown.container.style.display = 'none';
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');

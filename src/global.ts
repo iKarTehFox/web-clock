@@ -1,14 +1,6 @@
 import { match } from 'ts-pattern';
 import { getElement, getElements, logConsole, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
-import * as bootstrap from 'bootstrap';
-
-const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-const tooltipTriggerElArray = Array.from(tooltipTriggerList);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const tooltipList = tooltipTriggerElArray.map(tooltipTriggerEl => {
-    return new bootstrap.Tooltip(tooltipTriggerEl); 
-});
 
 export const doc = {
     blurpanel: getElement<HTMLDivElement>('blur-panel'),
@@ -27,17 +19,23 @@ export const menu = {
     container: getElement<HTMLDivElement>('menu-container'),
     datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
     dateformselect: getElement<HTMLSelectElement>('dateFormatSelect'),
-    debugcheckbox: getElement<HTMLInputElement>('debugMode'),
     durationdisplay: getElement<HTMLParagraphElement>('time-duration'),
     fadegroup: getElement<HTMLDivElement>('fadeGroup'),
     faderesetbutton: getElement<HTMLButtonElement>('fadeTransitionResetBtn'),
     fadetransrange: getElement<HTMLInputElement>('fadeTransitionRange'),
     fadetransrangelabel: getElement<HTMLLabelElement>('fadeTransitionRangeLabel'),
+    fullscreenbtn: getElement<HTMLButtonElement>('fs-toggle'),
+    githubbtn: getElement<HTMLButtonElement>('github-btn'),
     imageblurrange: getElement<HTMLInputElement>('bgImgBlurRange'),
     imageblurlabel: getElement<HTMLLabelElement>('bgImgBlurRangeLabel'),
     imagegroup: getElement<HTMLDivElement>('bgImgGroup'),
     imageuploadbutton: getElement<HTMLButtonElement>('bgImageUploadBtn'),
     imagesizeselect: getElement<HTMLSelectElement>('bgImageSizeSelect'),
+    jsonexportclipbtn: getElement<HTMLButtonElement>('jsonExportClipBtn'),
+    jsonexportdownloadbtn: getElement<HTMLButtonElement>('jsonExportDlBtn'),
+    jsonexportqrbtn: getElement<HTMLButtonElement>('jsonExportQrBtn'),
+    jsonimportuploadbtn: getElement<HTMLButtonElement>('jsonImportUlBtn'),
+    jsonmanualimportbtn: getElement<HTMLButtonElement>('jsonImportTxtBtn'),
     legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
     manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
     panelvischeckbox: getElement<HTMLInputElement>('panelVisible'),
@@ -64,7 +62,6 @@ export const menu = {
     weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]'),
     weathermovetoggle: getElement<HTMLInputElement>('weatherMoveToggle'),
     weathermovereset: getElement<HTMLButtonElement>('weatherMoveReset'),
-    githubbtn: getElement<HTMLButtonElement>('github-btn'),
 };
 
 export const font = {
@@ -130,6 +127,16 @@ export const countdown = {
     secinput: getElement<HTMLInputElement>('countdown-seconds')
 };
 
+export const debug = {
+    container: getElement<HTMLDivElement>('debuggingContainer'),
+    uastring: getElement<HTMLParagraphElement>('debugUAString'),
+    devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
+    toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
+    getbgimgbtn: getElement<HTMLButtonElement>('debugGetBGBtn'),
+    jsonexportconsolebtn:  getElement<HTMLButtonElement>('jsonExportConsoleBtn'),
+    cardoverlaybtns: getElements<HTMLButtonElement>('button[name="debugCard"]'),
+};
+
 // Define font sizes
 type FontSizeKey = '6vw' | '8vw' | '10vw' | '12vw' | '14vw' | '18vw';
 
@@ -187,47 +194,6 @@ function modifyFontStyle(type: string, value: string) {
             logConsole(`Invalid font modification type: ${type}`, 'error');
         });
 }
-
-// Seconds visibility listener
-menu.secondsvisradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
-        dtdisplay.colon2.style.display = value as string;
-        dtdisplay.secondSlot.style.display = value as string;
-        logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
-    });
-});
-
-// Seconds bar visibility listener
-menu.secondsbarradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
-        if (value === 'block') {
-            menu.bordertyperadio.forEach((btn) => {
-                btn.disabled = true;
-                if (btn.id === 'btyD') {
-                    btn.checked = true;
-                    btn.dispatchEvent(new Event('change'));
-                }
-            });
-        } else {
-            menu.bordertyperadio.forEach((btn) => {
-                btn.disabled = false;
-            });
-        }
-        dtdisplay.secondsBar.style.display = value as string;
-        logConsole(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
-    });
-});
-
-// Date alignment listener
-menu.datealignradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
-        dtdisplay.date.style.textAlign = value as string;
-        logConsole(`Date alignment set to: ${value}`, 'info');
-    });
-});
 
 // Font family listener
 font.familysel.addEventListener('change', function() {
@@ -383,7 +349,6 @@ menu.weathergeobtn.addEventListener('click', async () => {
 // Weather submit button listener
 menu.weathersubmitbtn.addEventListener('click', () => {
     submitWeatherSettings();
-    menu.weatherstopbtn.disabled = false;
 });
 
 menu.weatherstopbtn.addEventListener('click', () => {
@@ -508,22 +473,22 @@ menu.cbutton.addEventListener('click', function() {
 });
 
 // Click outside to close menu
-document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('click', function(e) {
-        const target = e.target as HTMLElement;
-        const isTooltip = target.closest('.tooltip') !== null;
+document.addEventListener('click', function(e) {
+    const target = e.target as HTMLElement;
+    const isTooltip = target.closest('.tooltip') !== null;
+    const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
 
-        if (!isTooltip && 
-            !menu.options.contains(target as Node) && 
-            !menu.obutton.contains(target as Node) && 
-            !menu.cbutton.contains(target as Node) && 
-            !stopwatch.obutton.contains(target as Node) && 
-            !countdown.obutton.contains(target as Node) && 
-            !menu.options.classList.contains('menu-options-fade') && 
-            !menu.options.classList.contains('menu-options-initial')) {
-            toggleMenuVisibility(false);
-        }
-    });
+    const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
+                          !menu.options.classList.contains('menu-options-initial');
+
+    if (!isTooltip && !isCardOverlay && isMenuVisible &&
+        !menu.options.contains(target as Node) && 
+        !menu.obutton.contains(target as Node) && 
+        !menu.cbutton.contains(target as Node) && 
+        !stopwatch.obutton.contains(target as Node) && 
+        !countdown.obutton.contains(target as Node)) {
+        toggleMenuVisibility(false);
+    }
 });
 
 // Esc down to close menu
@@ -531,7 +496,9 @@ document.addEventListener('keydown', function(e) {
     const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
                           !menu.options.classList.contains('menu-options-initial');
 
-    if (e.key === 'Escape' && isMenuVisible) {
+    const isCardOverlayVisible = document.querySelector('[data-overlay="card-overlay"]') !== null;
+
+    if (e.key === 'Escape' && isMenuVisible && !isCardOverlayVisible) {
         toggleMenuVisibility(false);
     }
 });
@@ -585,6 +552,10 @@ export function toggleFullscreen() {
     logConsole('Toggled fullscreen mode', 'info');
     showToast('Toggled fullscreen mode');
 }
+
+menu.fullscreenbtn.addEventListener('click', function() {
+    toggleFullscreen();
+});
 
 menu.panelvischeckbox.addEventListener('change', function(e) {
     const target = e.target as HTMLElement;

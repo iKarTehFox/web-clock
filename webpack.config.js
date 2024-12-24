@@ -3,7 +3,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV == 'production';
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
@@ -14,6 +13,7 @@ const config = {
         styles: './src/css/styles.ts',
         presets: './src/assets/presets.ts',
         icons: './src/icons/icons.ts',
+        images: './src/assets/images.ts',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -46,9 +46,15 @@ const config = {
         })
     ],
     devServer: {
-        open: false,
-        host: 'localhost',
-    },
+        static: {
+          directory: path.join(__dirname, 'public'),
+        },
+        hot: false,
+        liveReload: true,
+        compress: true,
+        host: '0.0.0.0',
+        port: 4000,
+      },
     module: {
         rules: [
             {

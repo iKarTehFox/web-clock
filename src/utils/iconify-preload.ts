@@ -9,7 +9,8 @@ const panelIcons = [
     'mdi:close',
     'mdi:timer',
     'mdi:timer-sand-complete',
-    'mdi:github'
+    'mdi:github',
+    'mdi:fullscreen'
 ];
 
 // Weather widget
@@ -44,11 +45,11 @@ export function preloadIcons(): Promise<void> {
 preloadIcons().then(() => {
     if (iconExists('mdi:menu')) {
         logConsole('mdi:menu exists. Loading icon...', 'debug');
-        menu.obutton.innerHTML = '<iconify-icon inline icon="mdi:menu"></iconify-icon> Menu';
+        menu.obutton.innerHTML = '<iconify-icon inline icon="mdi:menu" width="15" height="15" style="height: 15px;"></iconify-icon> Menu';
     }
     if (iconExists('mdi:close')) {
         logConsole('mdi:close exists. Loading icon...', 'debug');
-        menu.cbutton.innerHTML = '<iconify-icon inline icon="mdi:close"></iconify-icon> Close';
+        menu.cbutton.innerHTML = '<iconify-icon icon="mdi:close" width="19" height="19" style="height: 15px;"></iconify-icon> Close';
     }
     if (iconExists('mdi:github')) {
         logConsole('mdi:github exists. Loading icon...', 'debug');
@@ -61,5 +62,9 @@ preloadIcons().then(() => {
     if (iconExists('mdi:timer-sand-complete')) {
         logConsole('mdi:timer-sand-complete exists. Loading icon...', 'debug');
         countdown.obutton.innerHTML = '<iconify-icon inline icon="mdi:timer-sand-complete"></iconify-icon>';
+    }
+    if (iconExists('mdi:fullscreen')) {
+        logConsole('mdi:fullscreen exists. Loading icon...', 'debug');
+        menu.fullscreenbtn.innerHTML = '<iconify-icon icon="mdi:fullscreen" width="19" height="19" style="height: 15px;"></iconify-icon> Toggle View';
     }
 });

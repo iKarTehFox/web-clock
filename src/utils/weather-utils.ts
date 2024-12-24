@@ -74,50 +74,70 @@ function updateWeatherWidget(data: CurrentResponse, units: string) {
     weather.container.className = 'weather-container';
 }
 
-export function submitWeatherSettings(): void {
-    if (menu.weatherapiinput.value !== '' && menu.weatherlatinput.value!== '' && menu.weatherloninput.value!== '') {
-        // Get all values
-        const key = menu.weatherapiinput.value;
-        const lat = parseFloat(menu.weatherlatinput.value);
-        const lon = parseFloat(menu.weatherloninput.value);
-        const units = getFirstElement<HTMLElement>('input[name="weather-unit-radio"]:checked').id;
-        weatherMenuDisable(true);
+export function submitWeatherSettings(_key: string = undefined, _lat: number = undefined, _lon: number = undefined, _units: string = undefined): void {
+    let key: string;
+    let lat: number;
+    let lon: number;
+    let units: string;
 
-        // Initial fetch
+    // Check for passed parameters
+    if (_key !== undefined && _lat !== undefined && _lon !== undefined && (_units == 'imperial' || _units == 'metric')) {
+        key = _key;
+        lat = _lat;
+        lon = _lon;
+        units = _units;
+    } else if (menu.weatherapiinput.value !== '' && menu.weatherlatinput.value!== '' && menu.weatherloninput.value!== '') {
+        key = menu.weatherapiinput.value;
+        lat = parseFloat(menu.weatherlatinput.value);
+        lon = parseFloat(menu.weatherloninput.value);
+        units = getFirstElement<HTMLElement>('input[name="weather-unit-radio"]:checked').id;
+    } else {
+        logConsole('Not all weather settings were provided.', 'info');
+        return;
+    }
+
+    // Check for valid lat/lon
+    if (lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+        logConsole('Invalid latitude or longitude.', 'error');
+        return;
+    }
+
+    weatherMenuDisable(true);
+
+    // Initial fetch
+    fetchWeather(key, lat, lon, units)
+        .then(currentWeatherData => {
+            if (currentWeatherData.cod === 200) {
+                updateWeatherWidget(currentWeatherData, units);
+                logConsole('Weather data fetched successfully.', 'info');
+            } else {
+                stopWeather();
+                logConsole(`Failed fetching weather data: ${currentWeatherData.cod}`, 'error');
+                showToast(`Error fetching weather data: ${currentWeatherData.cod}`, 'normal', 'danger');
+            }
+        })
+        .catch(error => {
+            stopWeather();
+            logConsole(`Failed while handling weather data: ${error}`, 'error');
+        });
+
+    // Start 15m interval
+    interval = setInterval(() => {
         fetchWeather(key, lat, lon, units)
             .then(currentWeatherData => {
                 if (currentWeatherData.cod === 200) {
                     updateWeatherWidget(currentWeatherData, units);
-                    logConsole('Weather data fetched successfully.', 'info');
+                    logConsole('Updated weather data.', 'info');
                 } else {
                     stopWeather();
-                    logConsole(`Failed fetching weather data: ${currentWeatherData.cod}`, 'error');
-                    showToast(`Error fetching weather data: ${currentWeatherData.cod}`, 5000, 'danger');
+                    logConsole(`Failed to update weather data: ${currentWeatherData.cod}`, 'error');
                 }
             })
             .catch(error => {
                 stopWeather();
                 logConsole(`Failed while handling weather data: ${error}`, 'error');
             });
-
-        // Start 15m interval
-        interval = setInterval(() => {
-            fetchWeather(key, lat, lon, units)
-                .then(currentWeatherData => {
-                    if (currentWeatherData.cod === 200) {
-                        updateWeatherWidget(currentWeatherData, units);
-                        logConsole('Updated weather data.', 'info');
-                    } else {
-                        stopWeather();
-                        logConsole(`Failed to update weather data: ${currentWeatherData.cod}`, 'error');
-                    }
-                })
-                .catch(error => {
-                    stopWeather();
-                    logConsole(`Failed while handling weather data: ${error}`, 'error');
-                });
-        }, 900000);
-    }
+    }, 900000);
 }
 
 function deg2dir(degrees: number): string {
@@ -138,6 +158,7 @@ function weatherMenuDisable(disabled: boolean) {
     menu.weathersubmitbtn.disabled = disabled;
     menu.weathermovetoggle.disabled = !disabled;
     menu.weathermovereset.disabled = !disabled;
+    menu.weatherstopbtn.disabled = !disabled;
 }
 
 export function stopWeather() {
