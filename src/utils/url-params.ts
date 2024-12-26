@@ -1,8 +1,8 @@
 import { menu, weather } from '../global';
 import { presetLocalJSON } from '../importExport';
 import { logConsole, showToast } from './dom-utils';
-import { setDebug, setTimeRefresh } from './debug';
-import { initializeDebugUI } from './debugUI';
+import { setDebug, setTimeRefresh, setLocalStorageTesting } from './debug';
+import { initializeDebugUI, initializeloStUI } from './debugUI';
 import { submitWeatherSettings } from './weather-utils';
 
 export async function applyURLParams() {
@@ -14,6 +14,13 @@ export async function applyURLParams() {
         setDebug(true);
         initializeDebugUI();
         showToast('Debug mode enabled. DevTools memory will increase over time.', 'normal', 'warning');
+    }
+
+    // localStorage testing
+    if (urlParams.get('localStorageTesting') === 'true') {
+        setLocalStorageTesting(true);
+        initializeloStUI();
+        showToast('LocalStorage testing enabled.', 'normal', 'warning');
     }
 
     // Fast time refresh

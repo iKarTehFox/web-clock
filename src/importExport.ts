@@ -86,7 +86,7 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
     showToast(`Settings exported! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, 'long', 'success');
 }
 
-function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', startTime: luxon.DateTime = luxon.DateTime.now()) {
+function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr' | 'lost', startTime: luxon.DateTime = luxon.DateTime.now()) {
     const settingsJSON = JSON.stringify(settings);
     
     if (type === 'clipboard') {
@@ -113,17 +113,35 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', 
         });
         showToast(`Exported settings to QR code! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         return;
+    } else if (type === 'lost') {
+        if (settingsJSON.length < 5242880) { // Unsure if 5000000 or 5242880...
+            try {
+                localStorage.setItem('loStJSON', settingsJSON);
+                showToast(`Saved settings to localStorage! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
+            } catch (error) {
+                if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+                    logConsole('localStorage quota exceeded', 'error');
+                    showToast('Settings too large for localStorage. See console for details.', 'normal', 'danger');
+                } else {
+                    logConsole(`Failed to save to localStorage: ${error}`, 'error');
+                    showToast('Failed to save settings to localStorage. See console for details.', 'normal', 'danger');
+                }
+            }
+        } else {
+            logConsole(`Settings JSON too large. Max 5242880, got ${settingsJSON.length}`, 'error');
+            showToast('Settings too large for localStorage (>5MB)', 'normal', 'danger');
+        }
     }
     
     return new Blob([settingsJSON], { type: 'application/json' });
 }
 
-export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolean = false, toQRCode: boolean = false) {
+export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolean = false, toQRCode: boolean = false, toLocalStorage: boolean = false) {
     const startTime = luxon.DateTime.now();
     showToast('Exporting settings...');
 
     // Enforce single export type
-    if (!AMOne(toClipboard, toLog, toQRCode)) {
+    if (!AMOne(toClipboard, toLog, toQRCode, toLocalStorage)) {
         showToast('Multiple export types not allowed.', 'normal', 'error');
         return;
     }
@@ -148,6 +166,11 @@ export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolea
 
         if (toQRCode) {
             handleExport(settings, 'qr', startTime);
+            return;
+        }
+
+        if (toLocalStorage) {
+            handleExport(settings, 'lost', startTime);
             return;
         }
 
@@ -432,11 +455,15 @@ menu.jsonexportdownloadbtn.addEventListener('click', () => {
 });
 
 menu.jsonexportqrbtn.addEventListener('click', () => {
-    exportSettingsToJSON(undefined, undefined, true);
+    exportSettingsToJSON(false, false, true);
 });
 
 debug.jsonexportconsolebtn.addEventListener('click', () => {
     exportSettingsToJSON(false, true);
+});
+
+debug.jsonexportlostbtn.addEventListener('click', () => {
+    exportSettingsToJSON(false, false, false, true);
 });
 
 menu.jsonimportuploadbtn.addEventListener('click', () => {

@@ -40,3 +40,8 @@ export function initializeDebugUI(): void {
         });
     });
 }
+
+export function initializeloStUI(): void {
+    // Enable localStorage export section
+    debug.lostcontainer.style.display = '';
+}
