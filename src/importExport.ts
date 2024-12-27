@@ -184,7 +184,7 @@ export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolea
 }
 
 // Helper function to process JSON settings
-function processJSONSettings(jsonText: string, alertConfirmation: boolean = true) {
+export function processJSONSettings(jsonText: string, alertConfirmation: boolean = true) {
     try {
         const importedSettings = JSON.parse(jsonText);
 
@@ -462,16 +462,21 @@ debug.jsonexportconsolebtn.addEventListener('click', () => {
     exportSettingsToJSON(false, true);
 });
 
-debug.jsonexportlostbtn.addEventListener('click', () => {
-    exportSettingsToJSON(false, false, false, true);
+menu.jsonmanualimportbtn.addEventListener('click', () => {
+    manualJSONImport();
 });
 
 menu.jsonimportuploadbtn.addEventListener('click', () => {
     importSettingsFromJSON();
 });
 
-menu.jsonmanualimportbtn.addEventListener('click', () => {
-    manualJSONImport();
+// localStorage
+debug.jsonexportlostbtn.addEventListener('click', () => {
+    exportSettingsToJSON(false, false, false, true);
+});
+
+debug.jsonclearlostbtn.addEventListener('click', () => {
+    localStorage.removeItem('loStJSON');
 });
 
 debug.getbgimgbtn.addEventListener('click', () => {

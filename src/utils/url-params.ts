@@ -1,5 +1,5 @@
 import { menu, weather } from '../global';
-import { presetLocalJSON } from '../importExport';
+import { presetLocalJSON, processJSONSettings } from '../importExport';
 import { logConsole, showToast } from './dom-utils';
 import { setDebug, setTimeRefresh, setLocalStorageTesting } from './debug';
 import { initializeDebugUI, initializeloStUI } from './debugUI';
@@ -17,10 +17,16 @@ export async function applyURLParams() {
     }
 
     // localStorage testing
-    if (urlParams.get('localStorageTesting') === 'true') {
+    if (urlParams.get('localStorageTesting') === 'true' && urlParams.get('preset') === null) {
         setLocalStorageTesting(true);
         initializeloStUI();
         showToast('LocalStorage testing enabled.', 'normal', 'warning');
+
+        // Import if localStorage exists
+        if (localStorage.getItem('loStJSON') != null) {
+            const localStorageJSON = localStorage.getItem('loStJSON');
+            processJSONSettings(localStorageJSON as string, true);
+        }
     }
 
     // Fast time refresh

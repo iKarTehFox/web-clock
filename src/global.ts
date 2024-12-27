@@ -137,6 +137,7 @@ export const debug = {
     jsonexportconsolebtn:  getElement<HTMLButtonElement>('jsonExportConsoleBtn'),
     jsonexportlostbtn: getElement<HTMLButtonElement>('jsonExportLostBtn'),
     cardoverlaybtns: getElements<HTMLButtonElement>('button[name="debugCard"]'),
+    jsonclearlostbtn: getElement<HTMLButtonElement>('jsonClearLostBtn'),
 };
 
 // Define font sizes
