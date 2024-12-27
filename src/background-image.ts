@@ -59,3 +59,7 @@ menu.imageblurrange.addEventListener('input', () => {
     menu.imageblurlabel.textContent = `Image Blur: ${blurValue}px`;
     logConsole(`Image blur set to: ${blurValue}px`, 'info');
 });
+
+menu.imageuploadbutton.addEventListener('click', () => {
+    uploadBGImg();
+});
