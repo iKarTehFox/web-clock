@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getFirstElement, logConsole, showToast, AMOne, makeCardOverlay } from './utils/dom-utils';
+import { getFirstElement, logConsole, showToast, makeCardOverlay } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, font, debug } from './global';
 import { stopColorFade } from './background-color';
@@ -127,24 +127,20 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr' |
                     showToast('Failed to save settings to localStorage. See console for details.', 'normal', 'danger');
                 }
             }
+            return;
         } else {
             logConsole(`Settings JSON too large. Max 5242880, got ${settingsJSON.length}`, 'error');
             showToast('Settings too large for localStorage (>5MB)', 'normal', 'danger');
+            return;
         }
     }
     
     return new Blob([settingsJSON], { type: 'application/json' });
 }
 
-export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolean = false, toQRCode: boolean = false, toLocalStorage: boolean = false) {
+export function exportSettingsToJSON(toType: 'clipboard' | 'json' | 'log' | 'qr' | 'lost' = 'json') {
     const startTime = luxon.DateTime.now();
     showToast('Exporting settings...');
-
-    // Enforce single export type
-    if (!AMOne(toClipboard, toLog, toQRCode, toLocalStorage)) {
-        showToast('Multiple export types not allowed.', 'normal', 'error');
-        return;
-    }
 
     try {
         const settings = getSettings();
@@ -153,30 +149,14 @@ export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolea
         if (!(verifySettingsJSON(settings) === true)) {
             logConsole('Settings JSON may be invalid. If you have modified the settings manually, ignore this message.', 'warning');
         }
-        
-        if (toClipboard) {
-            handleExport(settings, 'clipboard', startTime);
-            return;
-        }
-        
-        if (toLog) {
-            handleExport(settings, 'log', startTime);
-            return;
-        }
 
-        if (toQRCode) {
-            handleExport(settings, 'qr', startTime);
-            return;
-        }
-
-        if (toLocalStorage) {
-            handleExport(settings, 'lost', startTime);
+        if (toType === 'json') {
+            handleExport(settings, toType, startTime);
             return;
         }
 
         const blob = handleExport(settings, 'json') as Blob;
         downloadSettingsFile(blob, startTime);
-        
     } catch (error) {
         logConsole(`Export failed: ${error}`, 'error');
         showToast('Error exporting settings! Check console for details.', 'normal', 'danger');
@@ -447,7 +427,7 @@ function verifySettingsJSON(jsonData: { version: any; clockConfig: any; fontConf
 
 // Surprise! More event listeners!
 menu.jsonexportclipbtn.addEventListener('click', () => {
-    exportSettingsToJSON(true);
+    exportSettingsToJSON('clipboard');
 });
 
 menu.jsonexportdownloadbtn.addEventListener('click', () => {
@@ -455,11 +435,11 @@ menu.jsonexportdownloadbtn.addEventListener('click', () => {
 });
 
 menu.jsonexportqrbtn.addEventListener('click', () => {
-    exportSettingsToJSON(false, false, true);
+    exportSettingsToJSON('qr');
 });
 
 debug.jsonexportconsolebtn.addEventListener('click', () => {
-    exportSettingsToJSON(false, true);
+    exportSettingsToJSON('log');
 });
 
 menu.jsonmanualimportbtn.addEventListener('click', () => {
@@ -472,7 +452,7 @@ menu.jsonimportuploadbtn.addEventListener('click', () => {
 
 // localStorage
 debug.jsonexportlostbtn.addEventListener('click', () => {
-    exportSettingsToJSON(false, false, false, true);
+    exportSettingsToJSON('lost');
 });
 
 debug.jsonclearlostbtn.addEventListener('click', () => {

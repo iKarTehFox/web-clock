@@ -97,12 +97,6 @@ export function showToast(message: string, duration: 'default' | 'normal' | 'lon
     }).showToast();
 }
 
-// At most one true value function
-export function AMOne(...values: boolean[]) {
-    const trueCount = values.filter(value => value === true).length;
-    return trueCount === 1 || trueCount === 0;
-}
-
 // Function to create an overlay card element
 export function makeCardOverlay(title: string, content: HTMLElement | string): void {
     // Create container
