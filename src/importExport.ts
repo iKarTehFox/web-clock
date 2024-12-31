@@ -150,7 +150,7 @@ export function exportSettingsToJSON(toType: 'clipboard' | 'json' | 'log' | 'qr'
             logConsole('Settings JSON may be invalid. If you have modified the settings manually, ignore this message.', 'warning');
         }
 
-        if (toType === 'json') {
+        if (toType != 'json') {
             handleExport(settings, toType, startTime);
             return;
         }
