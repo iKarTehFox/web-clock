@@ -160,7 +160,7 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
     if (typeof content === 'string') {
         contentContainer.textContent = content;
     } else {
-        if (content instanceof HTMLImageElement || content instanceof HTMLVideoElement || content instanceof HTMLCanvasElement) {
+        if (content instanceof HTMLElement && ['IMG', 'VIDEO', 'CANVAS'].includes(content.tagName)) {
             content.style.maxWidth = '100%';
             content.style.maxHeight = '80vh';
             content.style.objectFit = 'contain';
