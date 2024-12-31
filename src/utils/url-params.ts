@@ -1,8 +1,8 @@
 import { menu, weather } from '../global';
-import { presetLocalJSON, processJSONSettings } from '../importExport';
+import { presetLocalJSON } from '../importExport';
 import { logConsole, showToast } from './dom-utils';
-import { setDebug, setTimeRefresh, setLocalStorageTesting } from './debug';
-import { initializeDebugUI, initializeloStUI } from './debugUI';
+import { setDebug, setTimeRefresh } from './debug';
+import { initializeDebugUI } from './debugUI';
 import { submitWeatherSettings } from './weather-utils';
 
 export async function applyURLParams() {
@@ -14,19 +14,6 @@ export async function applyURLParams() {
         setDebug(true);
         initializeDebugUI();
         showToast('Debug mode enabled. DevTools memory will increase over time.', 'normal', 'warning');
-    }
-
-    // localStorage testing
-    if (urlParams.get('localStorageTesting') === 'true' && urlParams.get('preset') === null) {
-        setLocalStorageTesting(true);
-        initializeloStUI();
-        showToast('LocalStorage testing enabled.', 'normal', 'warning');
-
-        // Import if localStorage exists
-        if (localStorage.getItem('loStJSON') != null) {
-            const localStorageJSON = localStorage.getItem('loStJSON');
-            processJSONSettings(localStorageJSON as string, true);
-        }
     }
 
     // Fast time refresh
