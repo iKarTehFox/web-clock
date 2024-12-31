@@ -30,9 +30,9 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value === 'true';
-            console.log(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`);
+            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
         } else {
-            console.log(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`);
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
         }
     });
 
@@ -41,9 +41,9 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = parseFloat(value);
-            console.log(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`);
+            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
         } else {
-            console.log(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`);
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
         }
     });
 
@@ -52,9 +52,9 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value;
-            console.log(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`);
+            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
         } else {
-            console.log(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`);
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
         }
     });
 

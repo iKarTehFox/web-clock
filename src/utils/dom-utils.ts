@@ -21,18 +21,17 @@ export function getFirstElement<T extends Element>(selector: string): T {
 }
 
 // Custom console logging function
-export function logConsole(message: string, type: string = 'debug'):void {
+export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' | 'bypass' = 'debug'):void {
     if (debugMode && type === 'debug') {
         console.log(`DEBUG - ${message}`);
     } else if (type === 'error') {
         console.error(`ERROR - ${message}`);
     } else if (type === 'warning') {
         console.warn(`WARNING - ${message}`);
-    } else if (debugMode && type === 'info') {
+    } else if ((debugMode && type === 'info') || type === 'bypass') { // Allow bypass without debug mode
         console.info(`INFO - ${message}`);
     }
 }
-
 // Function to set toast theme
 function getThemeInfo(colorTheme: string = 'auto') {
     const theme = colorTheme === 'auto' ? menu.container.dataset.bsTheme : colorTheme;
