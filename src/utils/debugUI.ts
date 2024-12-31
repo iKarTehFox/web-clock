@@ -26,13 +26,6 @@ export function initializeDebugUI(): void {
             if (btn.dataset.dbgcardtype === 'image') {
                 const img = document.createElement('img');
                 img.src = content;
-                Object.assign(img.style, {
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    width: 'auto',
-                    height: 'auto',
-                    objectFit: 'contain'
-                });
                 makeCardOverlay(title, img);
             } else {
                 makeCardOverlay(title, content);

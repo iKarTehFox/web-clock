@@ -112,36 +112,59 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: '10'
+        zIndex: '10',
+        overflow: 'hidden'
     });
 
     // Create card
     const card = document.createElement('div');
     Object.assign(card.style, {
-        width: 'fit-content',
-        maxWidth: '95vw',
+        width: 'clamp(300px, 80%, 600px)',
         maxHeight: '90vh',
-        overflow: 'auto'
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
     });
     card.className = 'card';
 
     // Create card body
     const cardBody = document.createElement('div');
+    Object.assign(cardBody.style, {
+        overflowY: 'auto',
+        flexGrow: '1',
+        maxWidth: '100%'
+    });
     cardBody.className = 'card-body';
 
     // Create title
     const titleElement = document.createElement('h5');
-    titleElement.className = 'card-title text-center';
+    Object.assign(titleElement.style, {
+        margin: '0 0 8px 0',
+        textAlign: 'center',
+        fontSize: '1.5rem'
+    });
+    titleElement.className = 'card-title';
     titleElement.textContent = title;
 
     // Create horizontal rule
     const hr = document.createElement('hr');
+    Object.assign(hr.style, {
+        margin: '16px 0',
+        borderColor: '#ddd'
+    });
 
     // Create content container
     const contentContainer = document.createElement('div');
+    contentContainer.className = 'd-flex justify-content-center align-items-center';
+
     if (typeof content === 'string') {
         contentContainer.textContent = content;
     } else {
+        if (content instanceof HTMLImageElement || content instanceof HTMLVideoElement || content instanceof HTMLCanvasElement) {
+            content.style.maxWidth = '100%';
+            content.style.maxHeight = '80vh';
+            content.style.objectFit = 'contain';
+        }
         contentContainer.appendChild(content);
     }
 

@@ -438,12 +438,5 @@ debug.getbgimgbtn.addEventListener('click', () => {
     }
     const imgElement = document.createElement('img');
     imgElement.src = bgImageUrl;
-    Object.assign(imgElement.style, {
-        maxWidth: '90vw',
-        maxHeight: '80vh',
-        width: 'auto',
-        height: 'auto',
-        objectFit: 'contain'
-    });
     makeCardOverlay('Background Image', imgElement);
 });
