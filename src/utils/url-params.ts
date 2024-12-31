@@ -30,6 +30,9 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value === 'true';
+            console.log(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`);
+        } else {
+            console.log(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`);
         }
     });
 
@@ -38,14 +41,20 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = parseFloat(value);
+            console.log(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`);
+        } else {
+            console.log(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`);
         }
     });
 
     // String params
-    ['weatherApi', 'preset'].forEach(key => {
+    ['weatherApi', 'weatherUnits', 'preset'].forEach(key => {
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value;
+            console.log(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`);
+        } else {
+            console.log(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`);
         }
     });
 
@@ -99,13 +108,13 @@ export async function applyURLParams() {
     }
 
     // Panel visibility
-    if (!params.panelVis) {
+    if (params.panelVis === false) {
         menu.panelvischeckbox.checked = false;
         menu.panelvischeckbox.dispatchEvent(new Event('change'));
     }
 
     // Tab title
-    if (!params.tabTitle) {
+    if (params.tabTitle === false) {
         menu.titlevischeckbox.checked = false;
         menu.titlevischeckbox.dispatchEvent(new Event('change'));
     }
