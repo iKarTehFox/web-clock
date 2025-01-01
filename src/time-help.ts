@@ -75,9 +75,9 @@ export function getCountdown(target: luxon.DateTime | number): [string, string, 
     const diff = targetDateTime.diff(now, ['hours', 'minutes', 'seconds']);
     
     return [
-        `${Math.floor(diff.hours)}h`,
-        `${Math.floor(diff.minutes)}m`,
-        `${Math.floor(diff.seconds)}s`
+        `${Math.abs(Math.floor(diff.hours))}h`,
+        `${Math.abs(Math.floor(diff.minutes))}m`,
+        `${Math.abs(Math.floor(diff.seconds))}s`
     ];
 }
 

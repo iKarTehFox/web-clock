@@ -83,13 +83,16 @@ function updateTime(): void {
             octal: (value: string) => clock.toRadix(value, 8),
             words: clock.toWords,
             unixcountdown: () => clock.getCountdown(2147483647),
+            se_valentines: () => clock.getCountdown(luxon.DateTime.fromObject({
+                month: 2,
+                day: 14
+            })),
             se_christmas: () => clock.getCountdown(luxon.DateTime.fromObject({ 
-                year: 2025, 
                 month: 12, 
                 day: 25 
             })),
-            se_2026: () => clock.getCountdown(luxon.DateTime.fromObject({
-                year: 2026,
+            se_newyears: () => clock.getCountdown(luxon.DateTime.fromObject({
+                year: time.year + 1, // January 1st of the following year
                 month: 1,
                 day: 1
             }))
@@ -257,16 +260,19 @@ function startNewClock() {
             updatePageDuration();
             logConsole('Time and page duration updated...', 'info');
 
-            // Correct the interval drift
             const now = Date.now();
             const elapsed = now - lastUpdateTime;
             lastUpdateTime = now;
 
             const drift = elapsed - 1000;
+
+            // Add a maximum drift threshold, e.g. 1000ms
+            const cappedDrift = Math.max(Math.min(drift, 1000), -1000);
+
             if (Math.abs(drift) > 150) {
-                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.`, 'info');
+                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.${Math.abs(drift) > 1000 ? ` Capped to ${cappedDrift}ms` : ''}`, 'info');
                 clearInterval(clockInterval!);
-                setTimeout(startNewClock, 1000 - drift);
+                setTimeout(startNewClock, 1000 - cappedDrift);
             }
         }, 1000);
     }, timeToNextSecond);

@@ -353,7 +353,7 @@ function handleValidationFailure(errorDetails: ErrorDetails) {
 // Value constraints
 const valid = {
     CM: ['cmo12', 'cmo24'],
-    CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words', 'unixmillis', 'unixsec', 'unixcountdown', 'se_christmas', 'se_2026'],
+    CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words', 'unixmillis', 'unixsec', 'unixcountdown', 'se_valentines', 'se_christmas', 'se_2026'],
     SV: ['sviD', 'sviN'],
     DF: ['D', 'DD', 'DDD', 'DDDD', ''],
     DA: ['dpoL', 'dpoC', 'dpoR'],
