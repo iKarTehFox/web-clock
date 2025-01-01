@@ -1,3 +1,4 @@
+import * as luxon from 'ts-luxon';
 import { doc, menu, dtdisplay } from './global';
 import { numberToWords } from './numberToWords.min';
 import { logConsole } from './utils/dom-utils';
@@ -62,6 +63,22 @@ export function convertToRomanNumerals(number: string | number): string {
     while (i--)
         roman = (key[+digits.pop()! + (i * 10)] || '') + roman;
     return Array(+digits.join('') + 1).join('M') + roman;
+}
+
+// Countdown/time duration function
+export function getCountdown(target: luxon.DateTime | number): [string, string, string] {
+    const now = luxon.DateTime.now();
+    const targetDateTime = typeof target === 'number' 
+        ? luxon.DateTime.fromSeconds(target)
+        : target;
+    
+    const diff = targetDateTime.diff(now, ['hours', 'minutes', 'seconds']);
+    
+    return [
+        `${Math.floor(diff.hours)}h`,
+        `${Math.floor(diff.minutes)}m`,
+        `${Math.floor(diff.seconds)}s`
+    ];
 }
 
 // Element display

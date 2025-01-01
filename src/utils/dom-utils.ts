@@ -2,6 +2,8 @@ import Toastify from 'toastify-js';
 import { menu } from '../global';
 import { debugMode } from './debug';
 import * as luxon from 'ts-luxon';
+import { Html5Qrcode } from 'html5-qrcode';
+import { processJSONSettings } from '../importExport';
 
 // Element finding functions
 export function getElement<T extends HTMLElement>(id: string): T {
@@ -160,11 +162,9 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
     if (typeof content === 'string') {
         contentContainer.textContent = content;
     } else {
-        if (content instanceof HTMLElement && ['IMG', 'VIDEO', 'CANVAS'].includes(content.tagName)) {
-            content.style.maxWidth = '100%';
-            content.style.maxHeight = '80vh';
-            content.style.objectFit = 'contain';
-        }
+        content.style.maxWidth = '100%';
+        content.style.maxHeight = '80vh';
+        content.style.objectFit = 'contain';
         contentContainer.appendChild(content);
     }
 
@@ -230,4 +230,82 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
     document.addEventListener('keydown', escapeHandler);
 
     logConsole(`Overlay card container created with settings: (${title}, ${content})`, 'info');
+}
+
+// Function to create an scanner overlay card element
+export function createScannerOverlay() {
+    // Create container
+    const container = document.createElement('div');
+    container.dataset.overlay = 'scanner-overlay';
+    container.dataset.bsTheme = menu.container.dataset.bsTheme;
+    Object.assign(container.style, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: '10',
+        overflow: 'hidden'
+    });
+
+    // Create card
+    const card = document.createElement('div');
+    Object.assign(card.style, {
+        width: 'clamp(300px, 80%, 600px)',
+        maxHeight: '90vh',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
+    });
+    card.className = 'card';
+
+    // Create card body with padding
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body d-flex flex-column align-items-center gap-3';
+
+    // Create QR reader container
+    const qrVideo = document.createElement('div');
+    qrVideo.id = 'qr-reader';
+    qrVideo.style.width = '100%';
+
+    // Add elements to DOM
+    cardBody.appendChild(qrVideo);
+    card.appendChild(cardBody);
+    container.appendChild(card);
+    document.body.appendChild(container);
+
+    // Initialize QR scanner
+    const html5QrCode = new Html5Qrcode('qr-reader');
+    
+    const qrCodeSuccessCallback = (decodedText: string) => {
+        html5QrCode.stop();
+        container.remove();
+        processJSONSettings(decodedText);
+    };
+
+    html5QrCode.start(
+        { facingMode: 'environment' },
+        {
+            fps: 5,
+            qrbox: { width: 250, height: 250 }
+        },
+        qrCodeSuccessCallback,
+        () => {
+            /*        Ignore errors         */
+            /* Very mindful, very demure... */
+        }
+    ).then(() => {
+        const closeButton = document.createElement('button');
+        closeButton.className = 'btn btn-secondary';
+        closeButton.textContent = 'Close';
+        closeButton.onclick = () => {
+            html5QrCode.stop();
+            container.remove();
+        };
+        cardBody.appendChild(closeButton);
+    });
 }

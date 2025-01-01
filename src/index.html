@@ -52,10 +52,14 @@
                                         <option value="roman">Roman Numeral (XII:00)</option>
                                         <option value="words">Words (twelve:o'clock)</option>
                                     </optgroup>
-                                    <optgroup label="Experimental...">
-                                        <option value="unixmillis">Unix timestamp (Milliseconds)</option>
-                                        <option value="unixsec">Unix timestamp (Seconds)</option>
-                                        <option value="unixcountdown">Time until Y2K38 problem</option>
+                                    <optgroup label="Technical">
+                                        <option value="unixmillis">Unix timestamp (ms)</option>
+                                        <option value="unixsec">Unix timestamp (sec)</option>
+                                        <option value="unixcountdown">Time to Y2K38 problem</option>
+                                    </optgroup>
+                                    <optgroup label="Special events">
+                                        <option value="se_christmas">Time to Christmas 2025</option>
+                                        <option value="se_2026">Time to New Years 2026</option>
                                     </optgroup>
                                 </select>
                                 <h6 class="mb-1 mt-2">Seconds Display</h6>
@@ -492,7 +496,8 @@
                         <div id="collapseIE" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body">
                                 <h6 class="mb-1">Import settings</h6>
-                                <button type="button" class="btn btn-outline-primary" id="jsonImportUlBtn">Upload from JSON</button>
+                                <button type="button" class="btn btn-outline-primary mb-1" id="jsonImportUlBtn">Upload from JSON</button>
+                                <button type="button" class="btn btn-outline-primary mb-1" id="jsonImportQrBtn">Scan QR code</button>
                                 <p class="mb-1 mt-2">Or manually paste JSON settings instead:</p>
                                 <input class="form-control" type="text" placeholder="Paste in JSON here" data-bs-toggle="tooltip" aria-label="Manual JSON settings entry form" id="jsonImportTextarea">
                                 <div class="d-flex justify-content-end">

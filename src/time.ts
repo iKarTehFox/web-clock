@@ -73,11 +73,6 @@ function updateTime(): void {
     if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
         const unixTime = timeDisplayMethod === 'unixmillis' ? clock.toUnixMillis() : clock.toUnixSec();
         displayHour = String(unixTime);
-    } else if (timeDisplayMethod === 'unixcountdown') {
-        const secondsUntilY2K38 = 2147483647 - Math.floor(Date.now() / 1000);
-        displayHour = `${Math.floor(secondsUntilY2K38 / 3600)}h`;
-        displayMinute = `${Math.floor((secondsUntilY2K38 % 3600) / 60)}m`;
-        displaySecond = `${secondsUntilY2K38 % 60}s`;
     } else {
         const timeFunction = {
             binary: (value: string) => clock.toRadix(value, 2),
@@ -86,25 +81,43 @@ function updateTime(): void {
             hexa: (value: string) => clock.toRadix(value, 16),
             hexatri: (value: string) => clock.toRadix(value, 36),
             octal: (value: string) => clock.toRadix(value, 8),
-            words: clock.toWords
+            words: clock.toWords,
+            unixcountdown: () => clock.getCountdown(2147483647),
+            se_christmas: () => clock.getCountdown(luxon.DateTime.fromObject({ 
+                year: 2025, 
+                month: 12, 
+                day: 25 
+            })),
+            se_2026: () => clock.getCountdown(luxon.DateTime.fromObject({
+                year: 2026,
+                month: 1,
+                day: 1
+            }))
         }[timeDisplayMethod];
 
         if (timeFunction) {
-            displayHour = timeFunction(hrs);
-            displayMinute = timeDisplayMethod === 'words' ? formatMinutesForWordsDisplay(min) : timeFunction(min);
-            displaySecond = timeFunction(sec);
-            displayIndicator = ind;
+            const result = timeFunction(hrs);
+            if (Array.isArray(result)) {
+                // Handle getCountdown arrays
+                [displayHour, displayMinute, displaySecond] = result;
+                displayIndicator = '';
+            } else {
+                displayHour = result;
+                displayMinute = timeDisplayMethod === 'words' ? formatMinutesForWordsDisplay(min) : timeFunction(min) as string;
+                displaySecond = timeFunction(sec) as string;
+                displayIndicator = ind;
+            }
         } else {
             displayHour = hrs;
             displayMinute = min;
             displaySecond = sec;
             displayIndicator = ind;
         }
+        
     }
 
     setClockDisplay([displayHour, displayMinute, displaySecond, displayIndicator]);
 }
-
 
 // Clock DOM update
 function setClockDisplay([hour, minute, second, indicator]: [string, string, string, string]): void {

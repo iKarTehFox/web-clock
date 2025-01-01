@@ -35,6 +35,7 @@ export const menu = {
     jsonexportdownloadbtn: getElement<HTMLButtonElement>('jsonExportDlBtn'),
     jsonexportqrbtn: getElement<HTMLButtonElement>('jsonExportQrBtn'),
     jsonimportuploadbtn: getElement<HTMLButtonElement>('jsonImportUlBtn'),
+    jsonimportqrbtn: getElement<HTMLButtonElement>('jsonImportQrBtn'),
     jsonmanualimportbtn: getElement<HTMLButtonElement>('jsonImportTxtBtn'),
     legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
     manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
@@ -477,11 +478,12 @@ document.addEventListener('click', function(e) {
     const target = e.target as HTMLElement;
     const isTooltip = target.closest('.tooltip') !== null;
     const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
+    const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
 
     const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
                           !menu.options.classList.contains('menu-options-initial');
 
-    if (!isTooltip && !isCardOverlay && isMenuVisible &&
+    if (!isTooltip && !isCardOverlay && !isScannerOverlay && isMenuVisible &&
         !menu.options.contains(target as Node) && 
         !menu.obutton.contains(target as Node) && 
         !menu.cbutton.contains(target as Node) && 
@@ -497,8 +499,9 @@ document.addEventListener('keydown', function(e) {
                           !menu.options.classList.contains('menu-options-initial');
 
     const isCardOverlayVisible = document.querySelector('[data-overlay="card-overlay"]') !== null;
+    const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
 
-    if (e.key === 'Escape' && isMenuVisible && !isCardOverlayVisible) {
+    if (e.key === 'Escape' && isMenuVisible && !isCardOverlayVisible && !isScannerOverlayVisible) {
         toggleMenuVisibility(false);
     }
 });

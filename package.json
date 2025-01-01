@@ -48,6 +48,7 @@
     "@types/toastify-js": "^1.12.3",
     "axios": "^1.7.4",
     "bootstrap": "^5.3.3",
+    "html5-qrcode": "^2.3.8",
     "iconify-icon": "^2.1.0",
     "openweathermap-ts": "^1.2.10",
     "qrcode": "^1.5.4",

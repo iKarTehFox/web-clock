@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getFirstElement, logConsole, showToast, makeCardOverlay } from './utils/dom-utils';
+import { getFirstElement, logConsole, showToast, makeCardOverlay, createScannerOverlay } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, font, debug } from './global';
 import { stopColorFade } from './background-color';
@@ -30,7 +30,7 @@ function getSettings() {
         fontConfig: getFontConfig(),
         colorTheme: getColorThemeConfig(),
         exportTimestamp: luxon.DateTime.now().toFormat('FFFF'),
-        version: 7
+        version: 8
     };
 }
 
@@ -104,7 +104,7 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr' ,
             return;
         }
         QRCode.toCanvas(settingsJSON, {
-            errorCorrectionLevel: 'M',
+            errorCorrectionLevel: 'L',
             margin: 2,
             scale: 4,
             width: 400
@@ -353,7 +353,7 @@ function handleValidationFailure(errorDetails: ErrorDetails) {
 // Value constraints
 const valid = {
     CM: ['cmo12', 'cmo24'],
-    CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words'],
+    CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words', 'unixmillis', 'unixsec', 'unixcountdown', 'se_christmas', 'se_2026'],
     SV: ['sviD', 'sviN'],
     DF: ['D', 'DD', 'DDD', 'DDDD', ''],
     DA: ['dpoL', 'dpoC', 'dpoR'],
@@ -371,7 +371,7 @@ const valid = {
     TCM: ['tcovD', 'tcovO'],
     BIS: ['', 'auto', 'cover', 'stretch'],
     BIB: ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    Ver: [7]
+    Ver: [7, 8]
 };
 
 function verifySettingsJSON(jsonData: { version: any; clockConfig: any; fontConfig: any; colorTheme: any; }) {
@@ -428,6 +428,10 @@ menu.jsonmanualimportbtn.addEventListener('click', () => {
 
 menu.jsonimportuploadbtn.addEventListener('click', () => {
     importSettingsFromJSON();
+});
+
+menu.jsonimportqrbtn.addEventListener('click', () => {
+    createScannerOverlay();
 });
 
 debug.getbgimgbtn.addEventListener('click', () => {
