@@ -135,6 +135,7 @@ export const debug = {
     toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
     getbgimgbtn: getElement<HTMLButtonElement>('debugGetBGBtn'),
     jsonexportconsolebtn:  getElement<HTMLButtonElement>('jsonExportConsoleBtn'),
+    jsonexportcardbtn: getElement<HTMLButtonElement>('jsonExportCardBtn'),
     cardoverlaybtns: getElements<HTMLButtonElement>('button[name="debugCard"]'),
 };
 

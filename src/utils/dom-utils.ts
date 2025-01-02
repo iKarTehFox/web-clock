@@ -133,27 +133,34 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
     const cardBody = document.createElement('div');
     Object.assign(cardBody.style, {
         overflowY: 'auto',
+        overflowX: 'auto',
         flexGrow: '1',
-        maxWidth: '100%'
+        maxWidth: '100%',
+        width: '100%',
+        wordBreak: 'break-word',
+        overflowWrap: 'anywhere',
+        marginBottom: '0',
+        marginTop: '0',
+        paddingBottom: '0',
+        paddingTop: '0',
+        userSelect: 'text'
     });
     cardBody.className = 'card-body';
 
     // Create title
     const titleElement = document.createElement('h5');
     Object.assign(titleElement.style, {
-        margin: '0 0 8px 0',
         textAlign: 'center',
-        fontSize: '1.5rem'
+        fontSize: '1.5rem',
+        position: 'sticky',
+        top: '0',
+        backgroundColor: 'var(--bs-card-bg)',
+        padding: '1rem',
+        borderBottom: '1px solid #dddddd',
+        zIndex: '1'
     });
     titleElement.className = 'card-title';
     titleElement.textContent = title;
-
-    // Create horizontal rule
-    const hr = document.createElement('hr');
-    Object.assign(hr.style, {
-        margin: '16px 0',
-        borderColor: '#ddd'
-    });
 
     // Create content container
     const contentContainer = document.createElement('div');
@@ -170,7 +177,15 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
 
     // Create button container
     const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'mt-3 d-flex gap-2 justify-content-center';
+    buttonContainer.className = 'mb-0 d-flex gap-2 justify-content-center';
+    Object.assign(buttonContainer.style, {
+        marginTop: '8px',
+        position: 'sticky',
+        bottom: '0',
+        backgroundColor: 'var(--bs-body-bg)',
+        padding: '1rem',
+        borderTop: '1px solid #dddddd'
+    });
 
     // Create close button
     const closeButton = document.createElement('button');
@@ -219,7 +234,6 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
 
     // Append elements
     cardBody.appendChild(titleElement);
-    cardBody.appendChild(hr);
     cardBody.appendChild(contentContainer);
     cardBody.appendChild(buttonContainer);
     card.appendChild(cardBody);

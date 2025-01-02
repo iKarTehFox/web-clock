@@ -86,7 +86,7 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
     showToast(`Settings exported! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, 'long', 'success');
 }
 
-function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr' , startTime: luxon.DateTime = luxon.DateTime.now()) {
+function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr' | 'card' , startTime: luxon.DateTime = luxon.DateTime.now()) {
     const settingsJSON = JSON.stringify(settings);
     
     if (type === 'clipboard') {
@@ -96,6 +96,10 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr' ,
     } else if (type === 'log') {
         logConsole(`Settings JSON: ${settingsJSON}`, 'info');
         showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
+        return;
+    } else if (type === 'card') {
+        makeCardOverlay('Raw Settings JSON', settingsJSON);
+        showToast(`Exported settings to card! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         return;
     } else if (type === 'qr') {
         if (settingsJSON.length > 2953) {
@@ -118,7 +122,7 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr' ,
     return new Blob([settingsJSON], { type: 'application/json' });
 }
 
-export function exportSettingsToJSON(toType: 'clipboard' | 'json' | 'log' | 'qr' = 'json') {
+export function exportSettingsToJSON(toType: 'clipboard' | 'json' | 'log' | 'qr' | 'card' = 'json') {
     const startTime = luxon.DateTime.now();
     showToast('Exporting settings...');
 
@@ -127,7 +131,7 @@ export function exportSettingsToJSON(toType: 'clipboard' | 'json' | 'log' | 'qr'
 
         // Soft warning for exporting invalid settings
         if (!(verifySettingsJSON(settings) === true)) {
-            logConsole('Settings JSON may be invalid. If you have modified the settings manually, ignore this message.', 'warning');
+            logConsole('Settings JSON may be invalid and import verification will fail. If you have modified the settings manually, ignore this message.', 'warning');
         }
 
         if (toType != 'json') {
@@ -418,10 +422,6 @@ menu.jsonexportqrbtn.addEventListener('click', () => {
     exportSettingsToJSON('qr');
 });
 
-debug.jsonexportconsolebtn.addEventListener('click', () => {
-    exportSettingsToJSON('log');
-});
-
 menu.jsonmanualimportbtn.addEventListener('click', () => {
     manualJSONImport();
 });
@@ -432,6 +432,14 @@ menu.jsonimportuploadbtn.addEventListener('click', () => {
 
 menu.jsonimportqrbtn.addEventListener('click', () => {
     createScannerOverlay();
+});
+
+debug.jsonexportconsolebtn.addEventListener('click', () => {
+    exportSettingsToJSON('log');
+});
+
+debug.jsonexportcardbtn.addEventListener('click', () => {
+    exportSettingsToJSON('card');
 });
 
 debug.getbgimgbtn.addEventListener('click', () => {
