@@ -37,7 +37,7 @@ menu.textcolorinput.addEventListener('input', function() {
     dtdisplay.ccontainer.style.color = color;
     dtdisplay.secondsBar.style.backgroundColor = color;
     menu.textcolorlabel.textContent = `Text color: ${menu.textcolorinput.value}`;
-    logConsole(`Text color override: ${color}`, 'info');
+    logConsole(`Text color override: ${color}`, 'debug');
 });
 
 // Preset color buttons listener
@@ -66,7 +66,7 @@ function getLuminance(color: string): number {
 
     // Calculate the relative luminance using the sRGB color space formula
     const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    logConsole(`Luminance for ${color}: ${luminance}`, 'info');
+    logConsole(`Luminance for ${color}: ${luminance}`, 'debug');
 
     return luminance;
 }

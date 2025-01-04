@@ -197,14 +197,14 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
         if (e.key === 'Escape') {
             document.body.removeChild(container);
             document.removeEventListener('keydown', escapeHandler);
-            logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'info');
+            logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'debug');
         }
     }
 
     closeButton.onclick = () => {
         document.body.removeChild(container);
         document.removeEventListener('keydown', escapeHandler);
-        logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'info');
+        logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'debug');
     };
 
     // Create download button if content is downloadable media
@@ -243,7 +243,7 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
     document.body.appendChild(container);
     document.addEventListener('keydown', escapeHandler);
 
-    logConsole(`Overlay card container created with settings: (${title}, ${content})`, 'info');
+    logConsole(`Overlay card container created with settings: (${title}, ${content})`, 'debug');
 }
 
 // Function to create an scanner overlay card element

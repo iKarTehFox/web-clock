@@ -94,7 +94,7 @@ menu.secondsvisradio.forEach((radio) => {
         const value = radio.dataset.value;
         colonVisibility([true, (value == 'none' ? false : true)]);
         dtdisplay.secondSlot.style.display = value as string;
-        logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
+        logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'debug');
     });
 });
 
@@ -116,7 +116,7 @@ menu.secondsbarradio.forEach((radio) => {
             });
         }
         dtdisplay.secondsBar.style.display = value as string;
-        logConsole(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
+        logConsole(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'debug');
     });
 });
 
@@ -125,6 +125,6 @@ menu.datealignradio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = radio.dataset.value;
         dtdisplay.date.style.textAlign = value as string;
-        logConsole(`Date alignment set to: ${value}`, 'info');
+        logConsole(`Date alignment set to: ${value}`, 'debug');
     });
 });

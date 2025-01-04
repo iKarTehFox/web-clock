@@ -1,7 +1,7 @@
 import { logConsole } from './utils/dom-utils';
 
 function containsValue(array: string | any[], value: any) {
-    logConsole(`Checking if array ${array} contains value: ${value}`, 'info');
+    logConsole(`Checking if array ${array} contains value: ${value}`, 'debug');
     return array.includes(value);
 }
 

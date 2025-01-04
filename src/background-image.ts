@@ -38,15 +38,15 @@ menu.imagesizeselect.addEventListener('change', () => {
     match(value)
         .with('auto', () => {
             bodyElement.style.backgroundSize = value;
-            logConsole(`Image sizing set to: ${value}`, 'info');
+            logConsole(`Image sizing set to: ${value}`, 'debug');
         })
         .with('cover', () => {
             bodyElement.style.backgroundSize = value;
-            logConsole(`Image sizing set to: ${value}`, 'info');
+            logConsole(`Image sizing set to: ${value}`, 'debug');
         })
         .with('stretch', () => {
             bodyElement.style.backgroundSize = '100vw 100vh';
-            logConsole(`Image sizing set to: ${value}`, 'info');
+            logConsole(`Image sizing set to: ${value}`, 'debug');
         })
         .otherwise(() => {
             logConsole(`Unsupported background size value: ${value}`, 'error');
@@ -57,7 +57,7 @@ menu.imageblurrange.addEventListener('input', () => {
     const blurValue = menu.imageblurrange.value;
     doc.blurpanel.style.backdropFilter = (`blur(${blurValue}px)`);
     menu.imageblurlabel.textContent = `Image Blur: ${blurValue}px`;
-    logConsole(`Image blur set to: ${blurValue}px`, 'info');
+    logConsole(`Image blur set to: ${blurValue}px`, 'debug');
 });
 
 menu.imageuploadbutton.addEventListener('click', () => {

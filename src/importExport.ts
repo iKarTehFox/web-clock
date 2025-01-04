@@ -94,12 +94,11 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr' |
         showToast(`Copied settings to clipboard! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         return;
     } else if (type === 'log') {
-        logConsole(`Settings JSON: ${settingsJSON}`, 'info');
-        showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
+        logConsole(`Settings JSON: ${settingsJSON}`, 'debug');
         return;
     } else if (type === 'card') {
         makeCardOverlay('Raw Settings JSON', settingsJSON);
-        showToast(`Exported settings to card! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
+        showToast(`Exported raw JSON. Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         return;
     } else if (type === 'qr') {
         if (settingsJSON.length > 2953) {
@@ -225,7 +224,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
     // Fetch file using Axios and return Promise
     return axios.get(url)
         .then(response => {
-            logConsole(`Attempting to load settings from preset: '${sanitizedFilename}'...`, 'info');
+            logConsole(`Attempting to load settings from preset: '${sanitizedFilename}'...`, 'debug');
             processJSONSettings(JSON.stringify(response.data), alertConfirmation);
         })
         .catch(error => {
@@ -247,7 +246,7 @@ document.addEventListener('keydown', (e) => {
         const preset = getPresetByHotkey(key);
         if (preset) {
             presetLocalJSON(preset.filename);
-            logConsole(`Hotkey ${key} pressed - Loading preset: ${preset.displayName}`, 'info');
+            logConsole(`Hotkey ${key} pressed - Loading preset: ${preset.displayName}`, 'debug');
         }
     }
 });

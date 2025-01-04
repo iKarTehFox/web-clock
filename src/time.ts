@@ -26,7 +26,7 @@ menu.clockmoderadio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = String(radio.dataset.value);
         cMode = value;
-        logConsole(`Clock mode set to: ${value}`, 'info');
+        logConsole(`Clock mode set to: ${value}`, 'debug');
         updateTime();
     });
 });
@@ -146,7 +146,7 @@ function formatMinutesForWordsDisplay(min: string) {
 menu.timemethodselect.addEventListener('change', () => {
     const selectedValue = menu.timemethodselect.value as unknown as number;
     timeDisplayMethod = String(selectedValue);
-    logConsole(`Time display method set to: ${selectedValue}`, 'info');
+    logConsole(`Time display method set to: ${selectedValue}`, 'debug');
     updateTime();
 });
 
@@ -196,7 +196,7 @@ export function populateTimeZoneSelect() {
 
 menu.timezoneselect.addEventListener('change', function() {
     const timeZone = menu.timezoneselect.value;
-    logConsole(`Time zone set to: ${timeZone}`, 'info');
+    logConsole(`Time zone set to: ${timeZone}`, 'debug');
     luxon.Settings.defaultZoneLike = timeZone;
     updateTime();
     updateDate();
@@ -206,7 +206,7 @@ menu.timezoneselect.addEventListener('change', function() {
 // Date format selector listener
 menu.dateformselect.addEventListener('change', function() {
     dateFormat = menu.dateformselect.value;
-    logConsole(`Date format set to: ${menu.dateformselect.value}`, 'info');
+    logConsole(`Date format set to: ${menu.dateformselect.value}`, 'debug');
     updateDate();
 });
 
@@ -270,7 +270,7 @@ function startNewClock() {
             const cappedDrift = Math.max(Math.min(drift, 1000), -1000);
 
             if (Math.abs(drift) > 150) {
-                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.${Math.abs(drift) > 1000 ? ` Capped to ${cappedDrift}ms` : ''}`, 'info');
+                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.${Math.abs(drift) > 1000 ? ` Capped to ${cappedDrift}ms` : ''}`, 'debug');
                 clearInterval(clockInterval!);
                 setTimeout(startNewClock, 1000 - cappedDrift);
             }
