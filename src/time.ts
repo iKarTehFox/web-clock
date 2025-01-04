@@ -26,7 +26,7 @@ menu.clockmoderadio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = String(radio.dataset.value);
         cMode = value;
-        logConsole(`Clock mode set to: ${value}`, 'info');
+        logConsole(`Clock mode set to: ${value}`, 'debug');
         updateTime();
     });
 });
@@ -73,11 +73,6 @@ function updateTime(): void {
     if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
         const unixTime = timeDisplayMethod === 'unixmillis' ? clock.toUnixMillis() : clock.toUnixSec();
         displayHour = String(unixTime);
-    } else if (timeDisplayMethod === 'unixcountdown') {
-        const secondsUntilY2K38 = 2147483647 - Math.floor(Date.now() / 1000);
-        displayHour = `${Math.floor(secondsUntilY2K38 / 3600)}h`;
-        displayMinute = `${Math.floor((secondsUntilY2K38 % 3600) / 60)}m`;
-        displaySecond = `${secondsUntilY2K38 % 60}s`;
     } else {
         const timeFunction = {
             binary: (value: string) => clock.toRadix(value, 2),
@@ -86,25 +81,46 @@ function updateTime(): void {
             hexa: (value: string) => clock.toRadix(value, 16),
             hexatri: (value: string) => clock.toRadix(value, 36),
             octal: (value: string) => clock.toRadix(value, 8),
-            words: clock.toWords
+            words: clock.toWords,
+            unixcountdown: () => clock.getCountdown(2147483647),
+            se_valentines: () => clock.getCountdown(luxon.DateTime.fromObject({
+                month: 2,
+                day: 14
+            })),
+            se_christmas: () => clock.getCountdown(luxon.DateTime.fromObject({ 
+                month: 12, 
+                day: 25 
+            })),
+            se_newyears: () => clock.getCountdown(luxon.DateTime.fromObject({
+                year: time.year + 1, // January 1st of the following year
+                month: 1,
+                day: 1
+            }))
         }[timeDisplayMethod];
 
         if (timeFunction) {
-            displayHour = timeFunction(hrs);
-            displayMinute = timeDisplayMethod === 'words' ? formatMinutesForWordsDisplay(min) : timeFunction(min);
-            displaySecond = timeFunction(sec);
-            displayIndicator = ind;
+            const result = timeFunction(hrs);
+            if (Array.isArray(result)) {
+                // Handle getCountdown arrays
+                [displayHour, displayMinute, displaySecond] = result;
+                displayIndicator = '';
+            } else {
+                displayHour = result;
+                displayMinute = timeDisplayMethod === 'words' ? formatMinutesForWordsDisplay(min) : timeFunction(min) as string;
+                displaySecond = timeFunction(sec) as string;
+                displayIndicator = ind;
+            }
         } else {
             displayHour = hrs;
             displayMinute = min;
             displaySecond = sec;
             displayIndicator = ind;
         }
+        
     }
 
     setClockDisplay([displayHour, displayMinute, displaySecond, displayIndicator]);
 }
-
 
 // Clock DOM update
 function setClockDisplay([hour, minute, second, indicator]: [string, string, string, string]): void {
@@ -130,7 +146,7 @@ function formatMinutesForWordsDisplay(min: string) {
 menu.timemethodselect.addEventListener('change', () => {
     const selectedValue = menu.timemethodselect.value as unknown as number;
     timeDisplayMethod = String(selectedValue);
-    logConsole(`Time display method set to: ${selectedValue}`, 'info');
+    logConsole(`Time display method set to: ${selectedValue}`, 'debug');
     updateTime();
 });
 
@@ -180,7 +196,7 @@ export function populateTimeZoneSelect() {
 
 menu.timezoneselect.addEventListener('change', function() {
     const timeZone = menu.timezoneselect.value;
-    logConsole(`Time zone set to: ${timeZone}`, 'info');
+    logConsole(`Time zone set to: ${timeZone}`, 'debug');
     luxon.Settings.defaultZoneLike = timeZone;
     updateTime();
     updateDate();
@@ -190,7 +206,7 @@ menu.timezoneselect.addEventListener('change', function() {
 // Date format selector listener
 menu.dateformselect.addEventListener('change', function() {
     dateFormat = menu.dateformselect.value;
-    logConsole(`Date format set to: ${menu.dateformselect.value}`, 'info');
+    logConsole(`Date format set to: ${menu.dateformselect.value}`, 'debug');
     updateDate();
 });
 
@@ -244,16 +260,19 @@ function startNewClock() {
             updatePageDuration();
             logConsole('Time and page duration updated...', 'info');
 
-            // Correct the interval drift
             const now = Date.now();
             const elapsed = now - lastUpdateTime;
             lastUpdateTime = now;
 
             const drift = elapsed - 1000;
+
+            // Add a maximum drift threshold, e.g. 1000ms
+            const cappedDrift = Math.max(Math.min(drift, 1000), -1000);
+
             if (Math.abs(drift) > 150) {
-                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.`, 'info');
+                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.${Math.abs(drift) > 1000 ? ` Capped to ${cappedDrift}ms` : ''}`, 'debug');
                 clearInterval(clockInterval!);
-                setTimeout(startNewClock, 1000 - drift);
+                setTimeout(startNewClock, 1000 - cappedDrift);
             }
         }, 1000);
     }, timeToNextSecond);

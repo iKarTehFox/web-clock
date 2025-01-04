@@ -44,27 +44,27 @@ export function preloadIcons(): Promise<void> {
 // Load Iconify icons properly
 preloadIcons().then(() => {
     if (iconExists('mdi:menu')) {
-        logConsole('mdi:menu exists. Loading icon...', 'debug');
+        logConsole('mdi:menu exists. Loading icon...', 'info');
         menu.obutton.innerHTML = '<iconify-icon inline icon="mdi:menu" width="15" height="15" style="height: 15px;"></iconify-icon> Menu';
     }
     if (iconExists('mdi:close')) {
-        logConsole('mdi:close exists. Loading icon...', 'debug');
+        logConsole('mdi:close exists. Loading icon...', 'info');
         menu.cbutton.innerHTML = '<iconify-icon icon="mdi:close" width="19" height="19" style="height: 15px;"></iconify-icon> Close';
     }
     if (iconExists('mdi:github')) {
-        logConsole('mdi:github exists. Loading icon...', 'debug');
+        logConsole('mdi:github exists. Loading icon...', 'info');
         menu.githubbtn.innerHTML = '<p style="margin-top: -1.5px;"><iconify-icon inline icon="mdi:github"></iconify-icon></p>';
     }
     if (iconExists('mdi:timer')) {
-        logConsole('mdi:timer exists. Loading icon...', 'debug');
+        logConsole('mdi:timer exists. Loading icon...', 'info');
         stopwatch.obutton.innerHTML = '<iconify-icon inline icon="mdi:timer"></iconify-icon>';
     }
     if (iconExists('mdi:timer-sand-complete')) {
-        logConsole('mdi:timer-sand-complete exists. Loading icon...', 'debug');
+        logConsole('mdi:timer-sand-complete exists. Loading icon...', 'info');
         countdown.obutton.innerHTML = '<iconify-icon inline icon="mdi:timer-sand-complete"></iconify-icon>';
     }
     if (iconExists('mdi:fullscreen')) {
-        logConsole('mdi:fullscreen exists. Loading icon...', 'debug');
+        logConsole('mdi:fullscreen exists. Loading icon...', 'info');
         menu.fullscreenbtn.innerHTML = '<iconify-icon icon="mdi:fullscreen" width="19" height="19" style="height: 15px;"></iconify-icon> Toggle View';
     }
 });

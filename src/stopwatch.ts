@@ -158,8 +158,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const isStopwatchVisible = stopwatch.container.style.display !== 'none';
         const isTooltip = target.closest('.tooltip') !== null;
         const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
+        const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
 
-        if (!isMenuRelated && !isTooltip && !isCardOverlay && isStopwatchVisible) {
+        if (!isMenuRelated && !isTooltip && !isCardOverlay && !isScannerOverlay && isStopwatchVisible) {
             stopwatch.container.style.display = 'none';
             stopwatch.obutton.className = 'btn btn-secondary';
             logConsole('Stopwatch panel closed', 'info');
@@ -172,8 +173,9 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('keydown', function(e) {
     const isStopwatchVisible = stopwatch.container.style.display !== 'none';
     const isCardOverlayVisible = document.querySelector('[data-overlay="card-overlay"]') !== null;
+    const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
 
-    if (e.key === 'Escape' && isStopwatchVisible && !isCardOverlayVisible) {
+    if (e.key === 'Escape' && isStopwatchVisible && !isCardOverlayVisible && !isScannerOverlayVisible) {
         stopwatch.container.style.display = 'none';
         stopwatch.obutton.className = 'btn btn-secondary';
         logConsole('Stopwatch panel closed', 'info');

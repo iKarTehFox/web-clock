@@ -1,3 +1,4 @@
+import * as luxon from 'ts-luxon';
 import { doc, menu, dtdisplay } from './global';
 import { numberToWords } from './numberToWords.min';
 import { logConsole } from './utils/dom-utils';
@@ -64,6 +65,22 @@ export function convertToRomanNumerals(number: string | number): string {
     return Array(+digits.join('') + 1).join('M') + roman;
 }
 
+// Countdown/time duration function
+export function getCountdown(target: luxon.DateTime | number): [string, string, string] {
+    const now = luxon.DateTime.now();
+    const targetDateTime = typeof target === 'number' 
+        ? luxon.DateTime.fromSeconds(target)
+        : target;
+    
+    const diff = targetDateTime.diff(now, ['hours', 'minutes', 'seconds']);
+    
+    return [
+        `${Math.abs(Math.floor(diff.hours))}h`,
+        `${Math.abs(Math.floor(diff.minutes))}m`,
+        `${Math.abs(Math.floor(diff.seconds))}s`
+    ];
+}
+
 // Element display
 // Colon visibility function
 export function colonVisibility([c1Vis, c2Vis]: boolean[]): void {
@@ -77,7 +94,7 @@ menu.secondsvisradio.forEach((radio) => {
         const value = radio.dataset.value;
         colonVisibility([true, (value == 'none' ? false : true)]);
         dtdisplay.secondSlot.style.display = value as string;
-        logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
+        logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'debug');
     });
 });
 
@@ -99,7 +116,7 @@ menu.secondsbarradio.forEach((radio) => {
             });
         }
         dtdisplay.secondsBar.style.display = value as string;
-        logConsole(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'info');
+        logConsole(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'debug');
     });
 });
 
@@ -108,6 +125,6 @@ menu.datealignradio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = radio.dataset.value;
         dtdisplay.date.style.textAlign = value as string;
-        logConsole(`Date alignment set to: ${value}`, 'info');
+        logConsole(`Date alignment set to: ${value}`, 'debug');
     });
 });

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getFirstElement, logConsole, showToast, AMOne, makeCardOverlay } from './utils/dom-utils';
+import { getFirstElement, logConsole, showToast, makeCardOverlay, createScannerOverlay } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, font, debug } from './global';
 import { stopColorFade } from './background-color';
@@ -30,7 +30,7 @@ function getSettings() {
         fontConfig: getFontConfig(),
         colorTheme: getColorThemeConfig(),
         exportTimestamp: luxon.DateTime.now().toFormat('FFFF'),
-        version: 7
+        version: 8
     };
 }
 
@@ -86,7 +86,7 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
     showToast(`Settings exported! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, 'long', 'success');
 }
 
-function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', startTime: luxon.DateTime = luxon.DateTime.now()) {
+function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr' | 'card' , startTime: luxon.DateTime = luxon.DateTime.now()) {
     const settingsJSON = JSON.stringify(settings);
     
     if (type === 'clipboard') {
@@ -94,8 +94,11 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', 
         showToast(`Copied settings to clipboard! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         return;
     } else if (type === 'log') {
-        logConsole(`Settings JSON: ${settingsJSON}`, 'info');
-        showToast(`Logged settings to console! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
+        logConsole(`Settings JSON: ${settingsJSON}`, 'debug');
+        return;
+    } else if (type === 'card') {
+        makeCardOverlay('Raw Settings JSON', settingsJSON);
+        showToast(`Exported raw JSON. Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         return;
     } else if (type === 'qr') {
         if (settingsJSON.length > 2953) {
@@ -104,7 +107,7 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', 
             return;
         }
         QRCode.toCanvas(settingsJSON, {
-            errorCorrectionLevel: 'M',
+            errorCorrectionLevel: 'L',
             margin: 2,
             scale: 4,
             width: 400
@@ -118,42 +121,25 @@ function handleExport(settings: any, type: 'clipboard' | 'json' | 'log' | 'qr', 
     return new Blob([settingsJSON], { type: 'application/json' });
 }
 
-export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolean = false, toQRCode: boolean = false) {
+export function exportSettingsToJSON(toType: 'clipboard' | 'json' | 'log' | 'qr' | 'card' = 'json') {
     const startTime = luxon.DateTime.now();
     showToast('Exporting settings...');
-
-    // Enforce single export type
-    if (!AMOne(toClipboard, toLog, toQRCode)) {
-        showToast('Multiple export types not allowed.', 'normal', 'error');
-        return;
-    }
 
     try {
         const settings = getSettings();
 
         // Soft warning for exporting invalid settings
         if (!(verifySettingsJSON(settings) === true)) {
-            logConsole('Settings JSON may be invalid. If you have modified the settings manually, ignore this message.', 'warning');
-        }
-        
-        if (toClipboard) {
-            handleExport(settings, 'clipboard', startTime);
-            return;
-        }
-        
-        if (toLog) {
-            handleExport(settings, 'log', startTime);
-            return;
+            logConsole('Settings JSON may be invalid and import verification will fail. If you have modified the settings manually, ignore this message.', 'warning');
         }
 
-        if (toQRCode) {
-            handleExport(settings, 'qr', startTime);
+        if (toType != 'json') {
+            handleExport(settings, toType, startTime);
             return;
         }
 
         const blob = handleExport(settings, 'json') as Blob;
         downloadSettingsFile(blob, startTime);
-        
     } catch (error) {
         logConsole(`Export failed: ${error}`, 'error');
         showToast('Error exporting settings! Check console for details.', 'normal', 'danger');
@@ -161,7 +147,7 @@ export function exportSettingsToJSON(toClipboard: boolean = false, toLog: boolea
 }
 
 // Helper function to process JSON settings
-function processJSONSettings(jsonText: string, alertConfirmation: boolean = true) {
+export function processJSONSettings(jsonText: string, alertConfirmation: boolean = true) {
     try {
         const importedSettings = JSON.parse(jsonText);
 
@@ -238,7 +224,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
     // Fetch file using Axios and return Promise
     return axios.get(url)
         .then(response => {
-            logConsole(`Attempting to load settings from preset: '${sanitizedFilename}'...`, 'info');
+            logConsole(`Attempting to load settings from preset: '${sanitizedFilename}'...`, 'debug');
             processJSONSettings(JSON.stringify(response.data), alertConfirmation);
         })
         .catch(error => {
@@ -260,7 +246,7 @@ document.addEventListener('keydown', (e) => {
         const preset = getPresetByHotkey(key);
         if (preset) {
             presetLocalJSON(preset.filename);
-            logConsole(`Hotkey ${key} pressed - Loading preset: ${preset.displayName}`, 'info');
+            logConsole(`Hotkey ${key} pressed - Loading preset: ${preset.displayName}`, 'debug');
         }
     }
 });
@@ -370,7 +356,7 @@ function handleValidationFailure(errorDetails: ErrorDetails) {
 // Value constraints
 const valid = {
     CM: ['cmo12', 'cmo24'],
-    CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words'],
+    CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words', 'unixmillis', 'unixsec', 'unixcountdown', 'se_valentines', 'se_christmas', 'se_2026'],
     SV: ['sviD', 'sviN'],
     DF: ['D', 'DD', 'DDD', 'DDDD', ''],
     DA: ['dpoL', 'dpoC', 'dpoR'],
@@ -388,7 +374,7 @@ const valid = {
     TCM: ['tcovD', 'tcovO'],
     BIS: ['', 'auto', 'cover', 'stretch'],
     BIB: ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    Ver: [7]
+    Ver: [7, 8]
 };
 
 function verifySettingsJSON(jsonData: { version: any; clockConfig: any; fontConfig: any; colorTheme: any; }) {
@@ -424,7 +410,7 @@ function verifySettingsJSON(jsonData: { version: any; clockConfig: any; fontConf
 
 // Surprise! More event listeners!
 menu.jsonexportclipbtn.addEventListener('click', () => {
-    exportSettingsToJSON(true);
+    exportSettingsToJSON('clipboard');
 });
 
 menu.jsonexportdownloadbtn.addEventListener('click', () => {
@@ -432,19 +418,27 @@ menu.jsonexportdownloadbtn.addEventListener('click', () => {
 });
 
 menu.jsonexportqrbtn.addEventListener('click', () => {
-    exportSettingsToJSON(undefined, undefined, true);
+    exportSettingsToJSON('qr');
 });
 
-debug.jsonexportconsolebtn.addEventListener('click', () => {
-    exportSettingsToJSON(false, true);
+menu.jsonmanualimportbtn.addEventListener('click', () => {
+    manualJSONImport();
 });
 
 menu.jsonimportuploadbtn.addEventListener('click', () => {
     importSettingsFromJSON();
 });
 
-menu.jsonmanualimportbtn.addEventListener('click', () => {
-    manualJSONImport();
+menu.jsonimportqrbtn.addEventListener('click', () => {
+    createScannerOverlay();
+});
+
+debug.jsonexportconsolebtn.addEventListener('click', () => {
+    exportSettingsToJSON('log');
+});
+
+debug.jsonexportcardbtn.addEventListener('click', () => {
+    exportSettingsToJSON('card');
 });
 
 debug.getbgimgbtn.addEventListener('click', () => {
@@ -455,12 +449,5 @@ debug.getbgimgbtn.addEventListener('click', () => {
     }
     const imgElement = document.createElement('img');
     imgElement.src = bgImageUrl;
-    Object.assign(imgElement.style, {
-        maxWidth: '90vw',
-        maxHeight: '80vh',
-        width: 'auto',
-        height: 'auto',
-        objectFit: 'contain'
-    });
     makeCardOverlay('Background Image', imgElement);
 });

@@ -35,6 +35,7 @@ export const menu = {
     jsonexportdownloadbtn: getElement<HTMLButtonElement>('jsonExportDlBtn'),
     jsonexportqrbtn: getElement<HTMLButtonElement>('jsonExportQrBtn'),
     jsonimportuploadbtn: getElement<HTMLButtonElement>('jsonImportUlBtn'),
+    jsonimportqrbtn: getElement<HTMLButtonElement>('jsonImportQrBtn'),
     jsonmanualimportbtn: getElement<HTMLButtonElement>('jsonImportTxtBtn'),
     legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
     manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
@@ -134,6 +135,7 @@ export const debug = {
     toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
     getbgimgbtn: getElement<HTMLButtonElement>('debugGetBGBtn'),
     jsonexportconsolebtn:  getElement<HTMLButtonElement>('jsonExportConsoleBtn'),
+    jsonexportcardbtn: getElement<HTMLButtonElement>('jsonExportCardBtn'),
     cardoverlaybtns: getElements<HTMLButtonElement>('button[name="debugCard"]'),
 };
 
@@ -157,20 +159,20 @@ function modifyFontStyle(type: string, value: string) {
             dtdisplay.ccontainer.style.fontStyle = value;
             stopwatch.display.style.fontStyle = value;
             countdown.display.style.fontStyle = value;
-            logConsole(`Font style set to: ${value}`, 'info');
+            logConsole(`Font style set to: ${value}`, 'debug');
         })
         .with('weight', () => {
             dtdisplay.ccontainer.style.fontWeight = value;
             stopwatch.display.style.fontWeight = value;
             countdown.display.style.fontWeight = value;
-            logConsole(`Font weight set to: ${value}`, 'info');
+            logConsole(`Font weight set to: ${value}`, 'debug');
         })
         .with('size', () => {
             if (fontSize in fontSizeOptions) {
                 dtdisplay.ccontainer.style.fontSize = value;
                 dtdisplay.indicatorSlot.style.fontSize = fontSizeOptions[fontSize];
                 dtdisplay.date.style.fontSize = fontSizeOptions[fontSize];
-                logConsole(`Font sizing set to: ${value}`, 'info');
+                logConsole(`Font sizing set to: ${value}`, 'debug');
             } else {
                 logConsole(`Invalid font size: ${value}`, 'error');
             }
@@ -178,17 +180,17 @@ function modifyFontStyle(type: string, value: string) {
         .with('family', () => {
             dtdisplay.ccontainer.style.fontFamily = value;
             countdown.display.style.fontFamily = value;
-            logConsole(`Font family set to: ${value}`, 'info');
+            logConsole(`Font family set to: ${value}`, 'debug');
         })
         .with('strokewidth', () => {
             dtdisplay.ccontainer.style.webkitTextStrokeWidth = `${value}px`;
             font.strokerangelabel.textContent = `Stroke width: ${value}px`;
-            logConsole(`Font stroke width set to: ${value}px`, 'info');
+            logConsole(`Font stroke width set to: ${value}px`, 'debug');
         })
         .with('strokecolor', () => {
             dtdisplay.ccontainer.style.webkitTextStrokeColor = value;
             font.strokecolorlabel.textContent = `Stroke color: ${value}`;
-            logConsole(`Font stroke color set to: ${value}`, 'info');
+            logConsole(`Font stroke color set to: ${value}`, 'debug');
         })
         .otherwise(() => {
             logConsole(`Invalid font modification type: ${type}`, 'error');
@@ -257,7 +259,7 @@ font.shadowrange.addEventListener('input', function() {
     font.shadowlabel.textContent = `Drop shadow: ${strength}px`;
 
     dtdisplay.ccontainer.style.textShadow = value > 0 ? dropShadowValue : '';
-    logConsole(`Font text shadow set to: ${dropShadowValue}`, 'info');
+    logConsole(`Font text shadow set to: ${dropShadowValue}`, 'debug');
 });
 
 // Border type listener
@@ -273,7 +275,7 @@ menu.bordertyperadio.forEach((radio) => {
                 });
                 dtdisplay.tcontainer.style.borderStyle = value;
                 dtdisplay.tcontainer.style.borderBottomStyle = value;
-                logConsole(`Border type set to: ${value}`, 'info');
+                logConsole(`Border type set to: ${value}`, 'debug');
             })
             .with('regular', () => {
                 menu.secondsbarradio.forEach((btn) => {
@@ -285,7 +287,7 @@ menu.bordertyperadio.forEach((radio) => {
                 });
                 dtdisplay.tcontainer.style.borderBottomStyle = 'none';
                 dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
-                logConsole(`Border type set to: ${value}`, 'info');
+                logConsole(`Border type set to: ${value}`, 'debug');
             })
             .with('bottom', () => {
                 menu.secondsbarradio.forEach((btn) => {
@@ -297,7 +299,7 @@ menu.bordertyperadio.forEach((radio) => {
                 });
                 dtdisplay.tcontainer.style.borderStyle = 'none';
                 dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
-                logConsole(`Border type set to: ${value}`, 'info');
+                logConsole(`Border type set to: ${value}`, 'debug');
             })
             .otherwise(() => {
                 logConsole(`Invalid border type: ${value}`, 'error');
@@ -310,10 +312,10 @@ menu.borderstyleselect.addEventListener('change', () => {
     const value = menu.borderstyleselect.value;
     if (menu.bordertyperadio[1].checked) {
         dtdisplay.tcontainer.style.borderStyle = value;
-        logConsole(`Border style set to: ${value}`, 'info');
+        logConsole(`Border style set to: ${value}`, 'debug');
     } else if (menu.bordertyperadio[2].checked) {
         dtdisplay.tcontainer.style.borderBottomStyle = value;
-        logConsole(`Border style set to: ${value}`, 'info');
+        logConsole(`Border style set to: ${value}`, 'debug');
     }
 });
 
@@ -340,7 +342,7 @@ menu.weathergeobtn.addEventListener('click', async () => {
         const latlonArray = await getLocation();
         menu.weatherlatinput.value = latlonArray[0].toString();
         menu.weatherloninput.value = latlonArray[1].toString();
-        logConsole(`Retrieved geolocation: ${latlonArray}`, 'info');
+        logConsole(`Retrieved geolocation: ${latlonArray}`, 'debug');
     } catch (error) {
         logConsole(`Failed to get location: ${error}`, 'error');
     }
@@ -361,7 +363,7 @@ let isMoving: boolean = false;
 menu.weathermovetoggle.addEventListener('click', () => {
     isMoving = menu.weathermovetoggle.classList.contains('active');
     weather.container.style.cursor = isMoving ? 'grab' : 'default';
-    logConsole(`Weather moving toggle set to: ${isMoving}`, 'info');
+    logConsole(`Weather moving toggle set to: ${isMoving}`, 'debug');
 });
 
 weather.container.addEventListener('mousedown', (e) => {
@@ -378,7 +380,7 @@ weather.container.addEventListener('mousedown', (e) => {
 
         weather.container.style.left = `${posX}px`;
         weather.container.style.top = `${posY}px`;
-        logConsole(`Weather widget moving. PosX: ${posX}, PosY: ${posY}`, 'info');
+        logConsole(`Weather widget moving. PosX: ${posX}, PosY: ${posY}`, 'debug');
     }
 
     function onMouseUp() {
@@ -416,7 +418,7 @@ menu.themeradio.forEach((radio) => {
             countdown.container.dataset.bsTheme = 'light';
             countdown.container.style.backgroundColor = '#ffffff';
             countdown.container.style.color = '#212529';
-            logConsole(`Menu theme set to: ${radio.id}`, 'info');
+            logConsole(`Menu theme set to: ${radio.id}`, 'debug');
             showToast('Theme set to light mode ☀️');
         } else if (radio.id === 'darkthememode') {
             menu.container.dataset.bsTheme = 'dark';
@@ -433,7 +435,7 @@ menu.themeradio.forEach((radio) => {
             countdown.container.dataset.bsTheme = 'dark';
             countdown.container.style.backgroundColor = '#313539';
             countdown.container.style.color = '#fff';
-            logConsole(`Menu theme set to: ${radio.id}`, 'info');
+            logConsole(`Menu theme set to: ${radio.id}`, 'debug');
             showToast('Theme set to dark mode 🌙');
         }
     });
@@ -477,11 +479,12 @@ document.addEventListener('click', function(e) {
     const target = e.target as HTMLElement;
     const isTooltip = target.closest('.tooltip') !== null;
     const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
+    const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
 
     const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
                           !menu.options.classList.contains('menu-options-initial');
 
-    if (!isTooltip && !isCardOverlay && isMenuVisible &&
+    if (!isTooltip && !isCardOverlay && !isScannerOverlay && isMenuVisible &&
         !menu.options.contains(target as Node) && 
         !menu.obutton.contains(target as Node) && 
         !menu.cbutton.contains(target as Node) && 
@@ -497,8 +500,9 @@ document.addEventListener('keydown', function(e) {
                           !menu.options.classList.contains('menu-options-initial');
 
     const isCardOverlayVisible = document.querySelector('[data-overlay="card-overlay"]') !== null;
+    const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
 
-    if (e.key === 'Escape' && isMenuVisible && !isCardOverlayVisible) {
+    if (e.key === 'Escape' && isMenuVisible && !isCardOverlayVisible && !isScannerOverlayVisible) {
         toggleMenuVisibility(false);
     }
 });

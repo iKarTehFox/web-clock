@@ -173,7 +173,7 @@ body {
     transform: translate(-50%, -50%);
     background-color: white;
     padding: 20px;
-    width: fit-content;
+    min-width: 55vw;
     max-height: fit-content;
     box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
     z-index: 1;

@@ -2,6 +2,8 @@ import Toastify from 'toastify-js';
 import { menu } from '../global';
 import { debugMode } from './debug';
 import * as luxon from 'ts-luxon';
+import { Html5Qrcode } from 'html5-qrcode';
+import { processJSONSettings } from '../importExport';
 
 // Element finding functions
 export function getElement<T extends HTMLElement>(id: string): T {
@@ -21,18 +23,17 @@ export function getFirstElement<T extends Element>(selector: string): T {
 }
 
 // Custom console logging function
-export function logConsole(message: string, type: string = 'debug'):void {
+export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' | 'bypass' = 'debug'):void {
     if (debugMode && type === 'debug') {
         console.log(`DEBUG - ${message}`);
     } else if (type === 'error') {
         console.error(`ERROR - ${message}`);
     } else if (type === 'warning') {
         console.warn(`WARNING - ${message}`);
-    } else if (debugMode && type === 'info') {
+    } else if ((debugMode && type === 'info') || type === 'bypass') { // Allow bypass without debug mode
         console.info(`INFO - ${message}`);
     }
 }
-
 // Function to set toast theme
 function getThemeInfo(colorTheme: string = 'auto') {
     const theme = colorTheme === 'auto' ? menu.container.dataset.bsTheme : colorTheme;
@@ -97,12 +98,6 @@ export function showToast(message: string, duration: 'default' | 'normal' | 'lon
     }).showToast();
 }
 
-// At most one true value function
-export function AMOne(...values: boolean[]) {
-    const trueCount = values.filter(value => value === true).length;
-    return trueCount === 1 || trueCount === 0;
-}
-
 // Function to create an overlay card element
 export function makeCardOverlay(title: string, content: HTMLElement | string): void {
     // Create container
@@ -119,42 +114,78 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: '10'
+        zIndex: '10',
+        overflow: 'hidden'
     });
 
     // Create card
     const card = document.createElement('div');
     Object.assign(card.style, {
-        width: 'fit-content',
-        maxWidth: '95vw',
+        width: 'clamp(300px, 80%, 600px)',
         maxHeight: '90vh',
-        overflow: 'auto'
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
     });
     card.className = 'card';
 
     // Create card body
     const cardBody = document.createElement('div');
+    Object.assign(cardBody.style, {
+        overflowY: 'auto',
+        overflowX: 'auto',
+        flexGrow: '1',
+        maxWidth: '100%',
+        width: '100%',
+        wordBreak: 'break-word',
+        overflowWrap: 'anywhere',
+        marginBottom: '0',
+        marginTop: '0',
+        paddingBottom: '0',
+        paddingTop: '0',
+        userSelect: 'text'
+    });
     cardBody.className = 'card-body';
 
     // Create title
     const titleElement = document.createElement('h5');
-    titleElement.className = 'card-title text-center';
+    Object.assign(titleElement.style, {
+        textAlign: 'center',
+        fontSize: '1.5rem',
+        position: 'sticky',
+        top: '0',
+        backgroundColor: 'var(--bs-card-bg)',
+        padding: '1rem',
+        borderBottom: '1px solid #dddddd',
+        zIndex: '1'
+    });
+    titleElement.className = 'card-title';
     titleElement.textContent = title;
-
-    // Create horizontal rule
-    const hr = document.createElement('hr');
 
     // Create content container
     const contentContainer = document.createElement('div');
+    contentContainer.className = 'd-flex justify-content-center align-items-center';
+
     if (typeof content === 'string') {
         contentContainer.textContent = content;
     } else {
+        content.style.maxWidth = '100%';
+        content.style.maxHeight = '80vh';
+        content.style.objectFit = 'contain';
         contentContainer.appendChild(content);
     }
 
     // Create button container
     const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'mt-3 d-flex gap-2 justify-content-center';
+    buttonContainer.className = 'mb-0 d-flex gap-2 justify-content-center';
+    Object.assign(buttonContainer.style, {
+        marginTop: '8px',
+        position: 'sticky',
+        bottom: '0',
+        backgroundColor: 'var(--bs-body-bg)',
+        padding: '1rem',
+        borderTop: '1px solid #dddddd'
+    });
 
     // Create close button
     const closeButton = document.createElement('button');
@@ -166,14 +197,14 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
         if (e.key === 'Escape') {
             document.body.removeChild(container);
             document.removeEventListener('keydown', escapeHandler);
-            logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'info');
+            logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'debug');
         }
     }
 
     closeButton.onclick = () => {
         document.body.removeChild(container);
         document.removeEventListener('keydown', escapeHandler);
-        logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'info');
+        logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'debug');
     };
 
     // Create download button if content is downloadable media
@@ -203,7 +234,6 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
 
     // Append elements
     cardBody.appendChild(titleElement);
-    cardBody.appendChild(hr);
     cardBody.appendChild(contentContainer);
     cardBody.appendChild(buttonContainer);
     card.appendChild(cardBody);
@@ -213,5 +243,83 @@ export function makeCardOverlay(title: string, content: HTMLElement | string): v
     document.body.appendChild(container);
     document.addEventListener('keydown', escapeHandler);
 
-    logConsole(`Overlay card container created with settings: (${title}, ${content})`, 'info');
+    logConsole(`Overlay card container created with settings: (${title}, ${content})`, 'debug');
+}
+
+// Function to create an scanner overlay card element
+export function createScannerOverlay() {
+    // Create container
+    const container = document.createElement('div');
+    container.dataset.overlay = 'scanner-overlay';
+    container.dataset.bsTheme = menu.container.dataset.bsTheme;
+    Object.assign(container.style, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: '10',
+        overflow: 'hidden'
+    });
+
+    // Create card
+    const card = document.createElement('div');
+    Object.assign(card.style, {
+        width: 'clamp(300px, 80%, 600px)',
+        maxHeight: '90vh',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
+    });
+    card.className = 'card';
+
+    // Create card body with padding
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body d-flex flex-column align-items-center gap-3';
+
+    // Create QR reader container
+    const qrVideo = document.createElement('div');
+    qrVideo.id = 'qr-reader';
+    qrVideo.style.width = '100%';
+
+    // Add elements to DOM
+    cardBody.appendChild(qrVideo);
+    card.appendChild(cardBody);
+    container.appendChild(card);
+    document.body.appendChild(container);
+
+    // Initialize QR scanner
+    const html5QrCode = new Html5Qrcode('qr-reader');
+    
+    const qrCodeSuccessCallback = (decodedText: string) => {
+        html5QrCode.stop();
+        container.remove();
+        processJSONSettings(decodedText);
+    };
+
+    html5QrCode.start(
+        { facingMode: 'environment' },
+        {
+            fps: 5,
+            qrbox: { width: 250, height: 250 }
+        },
+        qrCodeSuccessCallback,
+        () => {
+            /*        Ignore errors         */
+            /* Very mindful, very demure... */
+        }
+    ).then(() => {
+        const closeButton = document.createElement('button');
+        closeButton.className = 'btn btn-secondary';
+        closeButton.textContent = 'Close';
+        closeButton.onclick = () => {
+            html5QrCode.stop();
+            container.remove();
+        };
+        cardBody.appendChild(closeButton);
+    });
 }

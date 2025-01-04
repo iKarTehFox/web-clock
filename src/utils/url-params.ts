@@ -5,34 +5,91 @@ import { setDebug, setTimeRefresh } from './debug';
 import { initializeDebugUI } from './debugUI';
 import { submitWeatherSettings } from './weather-utils';
 
+interface URLParamConfig {
+    debugMode?: boolean;
+    fastRefresh?: boolean;
+    darkMode?: boolean;
+    weatherApi?: string;
+    weatherLat?: number;
+    weatherLon?: number;
+    weatherUnits?: 'imperial' | 'metric';
+    weatherWidgetPosX?: number;
+    weatherWidgetPosY?: number;
+    panelVis?: boolean;
+    tabTitle?: boolean;
+    preset?: string;
+    autoRestart?: number;
+    lockSettings?: boolean;
+}
+
+function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfig> {
+    const params = {} as Partial<URLParamConfig>;
+    
+    // Boolean params
+    ['debugMode', 'fastRefresh', 'darkMode', 'panelVis', 'tabTitle', 'lockSettings'].forEach(key => {
+        const value = urlSearchParams.get(key);
+        if (value !== null) {
+            (params as any)[key] = value === 'true';
+            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
+        } else {
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
+        }
+    });
+
+    // Number params
+    ['weatherLat', 'weatherLon', 'weatherWidgetPosX', 'weatherWidgetPosY', 'autoRestart'].forEach(key => {
+        const value = urlSearchParams.get(key);
+        if (value !== null) {
+            (params as any)[key] = parseFloat(value);
+            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
+        } else {
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
+        }
+    });
+
+    // String params
+    ['weatherApi', 'weatherUnits', 'preset'].forEach(key => {
+        const value = urlSearchParams.get(key);
+        if (value !== null) {
+            (params as any)[key] = value;
+            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
+        } else {
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
+        }
+    });
+
+    return params;
+}
+
 export async function applyURLParams() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
+    const params = parseURLParams(urlParams);
 
     // Debug logging mode
-    if (urlParams.get('debugMode') === 'true') {
+    if (params.debugMode) {
         setDebug(true);
         initializeDebugUI();
         showToast('Debug mode enabled. DevTools memory will increase over time.', 'normal', 'warning');
     }
 
     // Fast time refresh
-    if (urlParams.get('fastRefresh') === 'true') {
+    if (params.fastRefresh) {
         setTimeRefresh(1);
     }
 
     // Menu theme
-    if (urlParams.get('darkMode') === 'true') {
+    if (params.darkMode) {
         menu.themeradio[1].checked = true;
         menu.themeradio[1].dispatchEvent(new Event('change'));
     }
 
     // Weather
-    if (urlParams.get('weatherApi') !== null && urlParams.get('weatherLat') !== null && urlParams.get('weatherLon') !== null && (urlParams.get('weatherUnits') == 'imperial' || urlParams.get('weatherUnits') == 'metric')) {
-        const weatherApi = urlParams.get('weatherApi') as string;
-        const weatherLat = parseFloat(urlParams.get('weatherLat') as string);
-        const weatherLon = parseFloat(urlParams.get('weatherLon') as string);
-        const weatherUnits = urlParams.get('weatherUnits') as string;
+    if (params.weatherApi !== undefined && params.weatherLat !== undefined && params.weatherLon !== undefined && (params.weatherUnits == 'imperial' || params.weatherUnits == 'metric')) {
+        const weatherApi = params.weatherApi;
+        const weatherLat = params.weatherLat;
+        const weatherLon = params.weatherLon;
+        const weatherUnits = params.weatherUnits;
 
         // Secondary check for valid numbers
         if (!isNaN(weatherLat) && !isNaN(weatherLon)) {
@@ -41,9 +98,9 @@ export async function applyURLParams() {
     }
 
     // Weather widget position
-    if (urlParams.get('weatherWidgetPosX') !== null && urlParams.get('weatherWidgetPosY') !== null) {
-        const posX = parseInt(urlParams.get('weatherWidgetPosX') as string);
-        const posY = parseInt(urlParams.get('weatherWidgetPosY') as string);
+    if (params.weatherWidgetPosX !== undefined && params.weatherWidgetPosY !== undefined) {
+        const posX = params.weatherWidgetPosX;
+        const posY = params.weatherWidgetPosY;
         if (!isNaN(posX) && !isNaN(posY)) {
             weather.container.style.left = `${posX}px`;
             weather.container.style.top = `${posY}px`;
@@ -51,28 +108,28 @@ export async function applyURLParams() {
     }
 
     // Panel visibility
-    if (urlParams.get('panelVis') === 'false') {
+    if (params.panelVis === false) {
         menu.panelvischeckbox.checked = false;
         menu.panelvischeckbox.dispatchEvent(new Event('change'));
     }
 
     // Tab title
-    if (urlParams.get('tabTitle') === 'false') {
+    if (params.tabTitle === false) {
         menu.titlevischeckbox.checked = false;
         menu.titlevischeckbox.dispatchEvent(new Event('change'));
     }
 
     // Presets
-    if (urlParams.get('preset') !== null) {
-        const preset = urlParams.get('preset') as string;
+    if (params.preset !== undefined) {
+        const preset = params.preset;
         await presetLocalJSON(preset, false);
     }
 
     // Auto-restart
-    if (urlParams.get('autoRestart') !== null) {
-        const autoRestartTime = parseInt(urlParams.get('autoRestart') as string);
+    if (params.autoRestart !== undefined) {
+        const autoRestartTime = params.autoRestart;
         if (!isNaN(autoRestartTime) && autoRestartTime >= 15 && autoRestartTime <= 86400) {
-            logConsole(`Set auto restart time for: ${autoRestartTime} seconds...`, 'info');
+            logConsole(`Set auto restart time for: ${autoRestartTime} seconds...`, 'debug');
             menu.autorestarttime.innerHTML = `Auto restart: <b>${autoRestartTime} sec</b>`;
             setTimeout(() => {
                 window.location.reload();
@@ -83,7 +140,7 @@ export async function applyURLParams() {
     }
     
     // Prevent end-user options modification by removing menu container entirely
-    if (urlParams.get('lockSettings') === 'true') {
+    if (params.lockSettings) {
         menu.container.remove();
         logConsole('Settings locked - Menu container removed...', 'info');
     }
