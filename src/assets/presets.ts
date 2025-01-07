@@ -29,7 +29,7 @@ export const presetList: PresetInfo[] = [
     {
         filename: 'onlinewebclock-minimallight-preset',
         displayName: 'Minimalist Light',
-        description: 'Go minimal with this black on white, simple theme!',
+        description: 'Go minimal with this simple, black on white theme!',
         hotkey: 3
     },
     {
@@ -37,6 +37,12 @@ export const presetList: PresetInfo[] = [
         displayName: 'Simple blue',
         description: 'A personal favorite from iKarTehFox... me! :)',
         hotkey: 4
+    },
+    {
+        filename: 'onlinewebclock-preset',
+        displayName: 'Red clouds',
+        description: 'The example clock configuration shown in the GitHub README. Shows how extensively the clock can be customized!',
+        hotkey: 5
     }
 ];
 
