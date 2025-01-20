@@ -100,7 +100,7 @@ function resetStopwatch() {
             start: false,
             pause: true,
             reset: true,
-            lap: false,
+            lap: true,
         });
 
         // Reset display
