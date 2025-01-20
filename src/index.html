@@ -372,13 +372,15 @@
                                 </span>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Location</h6>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="weatherLatTextArea" placeholder="Latitude">
-                                    <input type="text" class="form-control" id="weatherLonTextArea" placeholder="Longitude">
+                                <div class="input-group mb-1">
+                                    <input type="number" class="form-control" id="weatherLatTextArea" placeholder="Latitude">
+                                    <input type="number" class="form-control" id="weatherLonTextArea" placeholder="Longitude">
                                 </div>
-                                <button type="button" class="btn btn-outline-info" id="weatherGeoBtn">
-                                    <iconify-icon icon="mdi:location-searching" width="19" height="19" style="height: 15px;"></iconify-icon> Get location
-                                </button>
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-outline-info" id="weatherGeoBtn">
+                                        <iconify-icon icon="mdi:location-searching" width="19" height="19" style="height: 15px;"></iconify-icon> Get location
+                                    </button>
+                                </div>
                                 <h6 class="mb-1 mt-2">Units</h6>
                                 <div class="btn-group" role="group" aria-label="Weather unit radio group">
                                     <input type="radio" class="btn-check" name="weather-unit-radio" id="imperial" autocomplete="off" checked>
@@ -471,9 +473,9 @@
                                 </div>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Settings</h6>
-                                <button type="button" class="btn btn-outline-secondary mb-1" data-bs-toggle="tooltip" data-bs-title="Log JSON settings to console" id="jsonExportConsoleBtn">Log JSON</button>
-                                <button type="button" class="btn btn-outline-secondary mb-1" data-bs-toggle="tooltip" data-bs-title="View current JSON settings in card overlay" id="jsonExportCardBtn">View Raw JSON</button>
-                                <button type="button" class="btn btn-outline-secondary mb-1" data-bs-toggle="tooltip" data-bs-title="Extract and view current background image" id="debugGetBGBtn">Extract BG image</button>
+                                <button type="button" class="btn btn-outline-warning mb-1" data-bs-toggle="tooltip" data-bs-title="Log JSON settings to console" id="jsonExportConsoleBtn">Log JSON</button>
+                                <button type="button" class="btn btn-outline-warning mb-1" data-bs-toggle="tooltip" data-bs-title="View current JSON settings in card overlay" id="jsonExportCardBtn">View Raw JSON</button>
+                                <button type="button" class="btn btn-outline-warning mb-1" data-bs-toggle="tooltip" data-bs-title="Extract and view current background image" id="debugGetBGBtn">Extract BG image</button>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Toasts</h6>
                                 <button type="button" class="btn btn-dark mb-1" name="debugToast" data-dbgtoasttheme="dark">Dark</button>
@@ -501,18 +503,17 @@
                                 <button type="button" class="btn btn-outline-primary mb-1" id="jsonImportUlBtn">Upload from JSON</button>
                                 <button type="button" class="btn btn-outline-primary mb-1" id="jsonImportQrBtn">Scan QR code</button>
                                 <p class="mb-1 mt-2">Or manually paste JSON settings instead:</p>
-                                <input class="form-control" type="text" placeholder="Paste in JSON here" data-bs-toggle="tooltip" aria-label="Manual JSON settings entry form" id="jsonImportTextarea">
+                                <input class="form-control mb-1" type="text" placeholder="Paste in JSON here" data-bs-toggle="tooltip" aria-label="Manual JSON settings entry form" id="jsonImportTextarea">
                                 <div class="d-flex justify-content-end">
                                     <button type="button" class="btn btn-outline-warning" id="jsonImportTxtBtn">Load settings</button>
                                 </div>
                                 <hr>
                                 <h6 class="mb-1">Built-in presets</h6>
-                                <p class="mb-1 mt-2">Import from preset settings:</p>
                                 <div id="jsonPresetsContainer"></div>
                                 <p class="mb-1 mt-2" id="subtext-light">Note: You can press the corresponding number on your keyboard to use these presets at any time!</p>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Export settings</h6>
-                                <button type="button" class="btn btn-outline-secondary mb-1" id="jsonExportDlBtn">Download JSON file</button>
+                                <button type="button" class="btn btn-outline-warning mb-1" id="jsonExportDlBtn">Download JSON file</button>
                                 <button type="button" class="btn btn-outline-warning mb-1" id="jsonExportClipBtn">Copy to clipboard</button>
                                 <button type="button" class="btn btn-outline-warning" id="jsonExportQrBtn">Generate QR code</button>
                                 <p class="mb-1 mt-2" id="subtext-light">Note: Display Options and custom font settings will not be exported.</p>
