@@ -1,5 +1,5 @@
 import { menu, debug, dtdisplay } from './global';
-import { logConsole } from './utils/dom-utils';
+import { logConsole, setMetaColor } from './utils/dom-utils';
 
 let fadeIntervalID: NodeJS.Timeout;
 const bodyElement = document.body;
@@ -33,12 +33,14 @@ function startColorFade() {
         const currentColor = colors[colorNames[currentIndex]];
         bodyElement.style.backgroundColor = currentColor;
         menu.colorbadge.textContent = currentColor;
+        setMetaColor('color', currentColor);
         logConsole(`Fade background color to: ${currentColor}`, 'debug');
     }, 3000);
 }
 
 export function stopColorFade() {
     clearInterval(fadeIntervalID);
+    setMetaColor('color', '#FFFFFF'); // Reset to white
     logConsole('Color fade stopped', 'info');
 }
 
@@ -145,6 +147,7 @@ menu.presetcolors.forEach((radio) => {
         const selectedColor = String(radio.getAttribute('data-color'));
         bodyElement.style.backgroundColor = selectedColor;
         menu.colorbadge.textContent = selectedColor;
+        setMetaColor('color', selectedColor);
         logConsole(`Preset color changed to: ${selectedColor}`, 'debug');
     });
 });

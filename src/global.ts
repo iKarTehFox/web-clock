@@ -1,10 +1,11 @@
 import { match } from 'ts-pattern';
-import { getElement, getElements, logConsole, showToast } from './utils/dom-utils';
+import { getElement, getElements, logConsole, setMetaColor, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
 
 export const doc = {
     blurpanel: getElement<HTMLDivElement>('blur-panel'),
-    favicon: getElement<HTMLLinkElement>('favicon')
+    favicon: getElement<HTMLLinkElement>('favicon'),
+    themecolormeta: getElement<HTMLMetaElement>('theme-color-meta'),
 };
 
 export const menu = {
@@ -418,6 +419,8 @@ menu.themeradio.forEach((radio) => {
             countdown.container.dataset.bsTheme = 'light';
             countdown.container.style.backgroundColor = '#ffffff';
             countdown.container.style.color = '#212529';
+            // Browser meta
+            setMetaColor('theme', 'light');
             logConsole(`Menu theme set to: ${radio.id}`, 'debug');
             showToast('Theme set to light mode ☀️');
         } else if (radio.id === 'darkthememode') {
@@ -435,6 +438,8 @@ menu.themeradio.forEach((radio) => {
             countdown.container.dataset.bsTheme = 'dark';
             countdown.container.style.backgroundColor = '#313539';
             countdown.container.style.color = '#fff';
+            // Browser meta
+            setMetaColor('theme', 'dark');
             logConsole(`Menu theme set to: ${radio.id}`, 'debug');
             showToast('Theme set to dark mode 🌙');
         }
