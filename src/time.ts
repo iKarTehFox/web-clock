@@ -4,6 +4,7 @@ import * as luxon from 'ts-luxon';
 import { logConsole } from './utils/dom-utils';
 import * as clock from './time-help';
 import { timeRefresh } from './utils/debug';
+import { match, P } from 'ts-pattern';
 
 // Default modes
 export let cMode = '0';
@@ -134,13 +135,11 @@ function setClockDisplay([hour, minute, second, indicator]: [string, string, str
 function formatMinutesForWordsDisplay(min: string) {
     const parsedMinutes = parseInt(min, 10);
 
-    if (parsedMinutes === 0) {
-        return 'o\'clock';
-    } else if (parsedMinutes < 10) {
-        return `oh ${numberToWords.toWords(parsedMinutes)}`;
-    } else {
-        return numberToWords.toWords(parsedMinutes);
-    }
+    return match(parsedMinutes)
+        .returnType<string>()
+        .with(0, () => 'o\'clock')
+        .with(P.number.lt(10), () => `oh ${numberToWords.toWords(parsedMinutes)}`)
+        .otherwise(() => numberToWords.toWords(parsedMinutes));
 }
 
 menu.timemethodselect.addEventListener('change', () => {
@@ -156,7 +155,7 @@ function getTimeZonesByRegion() {
     const timeZones = (Intl as any).supportedValuesOf('timeZone');
     const timeZoneGroups: { [key: string]: string[] } = {};
   
-    timeZones.forEach((timeZone) => {
+    timeZones.forEach((timeZone: string) => {
         const [region] = timeZone.split('/');
       
         if (!timeZoneGroups[region]) {

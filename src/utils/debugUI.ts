@@ -1,3 +1,4 @@
+import { match } from 'ts-pattern';
 import { debug } from '../global';
 import { showToast, makeCardOverlay } from './dom-utils';
 
@@ -22,14 +23,16 @@ export function initializeDebugUI(): void {
         btn.addEventListener('click', () => {
             const title = btn.dataset.dbgcardtitle || '';
             const content = btn.dataset.dbgcardcontent || '';
-            
-            if (btn.dataset.dbgcardtype === 'image') {
-                const img = document.createElement('img');
-                img.src = content;
-                makeCardOverlay(title, img);
-            } else {
-                makeCardOverlay(title, content);
-            }
+
+            match(btn.dataset.dbgcardtype)
+                .with('image', () => {
+                    const img = document.createElement('img');
+                    img.src = content;
+                    makeCardOverlay(title, img);
+                })
+                .otherwise(() => {
+                    makeCardOverlay(title, content);
+                });
         });
     });
 }

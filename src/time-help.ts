@@ -2,6 +2,7 @@ import * as luxon from 'ts-luxon';
 import { doc, menu, dtdisplay } from './global';
 import { numberToWords } from './numberToWords.min';
 import { logConsole } from './utils/dom-utils';
+import { match } from 'ts-pattern';
 
 // Change tab favicon function
 export function updateFavicon(hour: string) {
@@ -102,21 +103,28 @@ menu.secondsvisradio.forEach((radio) => {
 menu.secondsbarradio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = radio.dataset.value;
-        if (value === 'block') {
-            menu.bordertyperadio.forEach((btn) => {
-                btn.disabled = true;
-                if (btn.id === 'btyD') {
-                    btn.checked = true;
-                    btn.dispatchEvent(new Event('change'));
-                }
+        match(value)
+            .with('block', () => {
+                menu.bordertyperadio.forEach((btn) => {
+                    btn.disabled = true;
+                    if (btn.id === 'btyD') {
+                        btn.checked = true;
+                        btn.dispatchEvent(new Event('change'));
+                    }
+                });
+            })
+            .with('none', () => {
+                menu.bordertyperadio.forEach((btn) => {
+                    btn.disabled = false;
+                });
+            })
+            .otherwise(() => {
+                logConsole(`Invalid value for seconds bar visibility: ${value}`, 'error');
+                return;
             });
-        } else {
-            menu.bordertyperadio.forEach((btn) => {
-                btn.disabled = false;
-            });
-        }
+
         dtdisplay.secondsBar.style.display = value as string;
-        logConsole(`Seconds bar visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'debug');
+        logConsole(`Seconds bar visibility set to: ${value}`, 'debug');
     });
 });
 

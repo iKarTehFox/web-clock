@@ -404,45 +404,50 @@ menu.weathermovereset.addEventListener('click', () => {
 // Menu theme listener
 menu.themeradio.forEach((radio) => {
     radio.addEventListener('change', () => {
-        if (radio.id === 'lightthememode') {
-            menu.container.dataset.bsTheme = 'light';
-            menu.options.style.backgroundColor = '#ffffff';
-            menu.options.style.color = '#212529';
-            // Weather container
-            weather.container.dataset.bsTheme = 'light';
-            weather.container.style.color = '#212529';
-            // Stopwatch container
-            stopwatch.container.dataset.bsTheme = 'light';
-            stopwatch.container.style.backgroundColor = '#ffffff';
-            stopwatch.container.style.color = '#212529';
-            // Countdown container
-            countdown.container.dataset.bsTheme = 'light';
-            countdown.container.style.backgroundColor = '#ffffff';
-            countdown.container.style.color = '#212529';
-            // Browser meta
-            setMetaColor('theme', 'light');
-            logConsole(`Menu theme set to: ${radio.id}`, 'debug');
-            showToast('Theme set to light mode ☀️');
-        } else if (radio.id === 'darkthememode') {
-            menu.container.dataset.bsTheme = 'dark';
-            menu.options.style.backgroundColor = '#313539';
-            menu.options.style.color = '#fff';
-            // Weather container
-            weather.container.dataset.bsTheme = 'dark';
-            weather.container.style.color = '#fff';
-            // Stopwatch container
-            stopwatch.container.dataset.bsTheme = 'dark';
-            stopwatch.container.style.backgroundColor = '#313539';
-            stopwatch.container.style.color = '#fff';
-            // Countdown container
-            countdown.container.dataset.bsTheme = 'dark';
-            countdown.container.style.backgroundColor = '#313539';
-            countdown.container.style.color = '#fff';
-            // Browser meta
-            setMetaColor('theme', 'dark');
-            logConsole(`Menu theme set to: ${radio.id}`, 'debug');
-            showToast('Theme set to dark mode 🌙');
-        }
+        match(radio.id)
+            .with('lightthememode', () => {
+                menu.container.dataset.bsTheme = 'light';
+                menu.options.style.backgroundColor = '#ffffff';
+                menu.options.style.color = '#212529';
+                // Weather container
+                weather.container.dataset.bsTheme = 'light';
+                weather.container.style.color = '#212529';
+                // Stopwatch container
+                stopwatch.container.dataset.bsTheme = 'light';
+                stopwatch.container.style.backgroundColor = '#ffffff';
+                stopwatch.container.style.color = '#212529';
+                // Countdown container
+                countdown.container.dataset.bsTheme = 'light';
+                countdown.container.style.backgroundColor = '#ffffff';
+                countdown.container.style.color = '#212529';
+                // Browser meta
+                setMetaColor('theme', 'light');
+                logConsole(`Menu theme set to: ${radio.id}`, 'debug');
+                showToast('Theme set to light mode ☀️');
+            })
+            .with('darkthememode', () => {
+                menu.container.dataset.bsTheme = 'dark';
+                menu.options.style.backgroundColor = '#313539';
+                menu.options.style.color = '#fff';
+                // Weather container
+                weather.container.dataset.bsTheme = 'dark';
+                weather.container.style.color = '#fff';
+                // Stopwatch container
+                stopwatch.container.dataset.bsTheme = 'dark';
+                stopwatch.container.style.backgroundColor = '#313539';
+                stopwatch.container.style.color = '#fff';
+                // Countdown container
+                countdown.container.dataset.bsTheme = 'dark';
+                countdown.container.style.backgroundColor = '#313539';
+                countdown.container.style.color = '#fff';
+                // Browser meta
+                setMetaColor('theme', 'dark');
+                logConsole(`Menu theme set to: ${radio.id}`, 'debug');
+                showToast('Theme set to dark mode 🌙');
+            })
+            .otherwise(() => {
+                logConsole(`Invalid theme mode: ${radio.id}`, 'error');
+            });
     });
 });
 

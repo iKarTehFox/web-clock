@@ -1,3 +1,4 @@
+import { match } from 'ts-pattern';
 import { menu, debug, dtdisplay } from './global';
 import { logConsole, setMetaColor } from './utils/dom-utils';
 
@@ -23,7 +24,9 @@ function startColorFade() {
     const colorNames = Object.keys(colors);
     let currentIndex = 0;
 
+    // Initial color update
     bodyElement.style.backgroundColor = colors[colorNames[currentIndex]];
+
     const fadetime = menu.fadetransrange.value; // Get fade transition length value when restarted
     bodyElement.style.transition = `background-color ${fadetime}s ease-in-out`;
     menu.colorbadge.textContent = colors[colorNames[currentIndex]]; // Initial color badge update
@@ -52,78 +55,84 @@ menu.colormoderadio.forEach(radio => {
         dtdisplay.secondsBar.style.backgroundColor = '#212529';
         const colorMode = radio.id;
         
-        if (colorMode === 'fademode') {
-            startColorFade();
-            logConsole(`Color mode set to: ${colorMode}`, 'debug');
-            menu.presetcolors.forEach((radio) => {
-                radio.disabled = true;
-                radio.checked = false;
-            });
-            menu.textcoloroverrideradio.forEach((radio) => {
-                radio.disabled = true;
-                if (radio.id === 'tcovD') {
-                    radio.checked = true;
-                    radio.dispatchEvent(new Event('change'));
-                }
-            });
-            menu.imageuploadbutton.disabled = true;
-            menu.imagesizeselect.disabled = true;
-            bodyElement.style.backgroundImage = '';
-            // Set groups display
-            menu.colorbadgelabel.style.display = 'block';
-            menu.fadegroup.style.display = 'block';
-            menu.presetgroup.style.display = 'none';
-            debug.devcolorscontainer.style.display = 'none';
-            menu.textcolorgroup.style.display = 'none';
-            menu.imagegroup.style.display = 'none';
-        } else if (colorMode === 'solidmode') {
-            stopColorFade();
-            logConsole(`Color mode set to: ${colorMode}`, 'debug');
-            menu.presetcolors.forEach((radio) => {
-                radio.disabled = false;
-            });
-            menu.textcoloroverrideradio.forEach((radio) => {
-                radio.disabled = false;
-            });
-            menu.imageuploadbutton.disabled = true;
-            menu.imagesizeselect.disabled = true;
-            bodyElement.style.backgroundImage = '';
-            // Set groups display
-            menu.colorbadgelabel.style.display = 'block';
-            menu.fadegroup.style.display = 'block';
-            menu.presetgroup.style.display = '';
-            debug.devcolorscontainer.style.display = '';
-            menu.textcolorgroup.style.display = '';
-            menu.imagegroup.style.display = 'none';
-        } else if (colorMode === 'imgmode') {
-            stopColorFade();
-            logConsole(`Color mode set to: ${colorMode}`, 'debug');
-            menu.presetcolors.forEach((radio) => {
-                radio.disabled = true;
-                radio.checked = false;
-            });
-            // Reset background color to black
-            document.body.style.backgroundColor = '#000000';
-            menu.colorbadge.textContent = '#000000'; // Just for looks. Will appear when switching back to solidmode.
-            menu.textcoloroverrideradio.forEach((radio) => {
-                if (radio.id === 'tcovO') {
-                    radio.disabled = false;
-                    radio.checked = true;
-                    radio.dispatchEvent(new Event('change'));
-                } else {
+        match(colorMode)
+            .with('fademode', () => {
+                startColorFade();
+                logConsole(`Color mode set to: ${colorMode}`, 'debug');
+                menu.presetcolors.forEach((radio) => {
                     radio.disabled = true;
-                }
+                    radio.checked = false;
+                });
+                menu.textcoloroverrideradio.forEach((radio) => {
+                    radio.disabled = true;
+                    if (radio.id === 'tcovD') {
+                        radio.checked = true;
+                        radio.dispatchEvent(new Event('change'));
+                    }
+                });
+                menu.imageuploadbutton.disabled = true;
+                menu.imagesizeselect.disabled = true;
+                bodyElement.style.backgroundImage = '';
+                // Set groups display
+                menu.colorbadgelabel.style.display = 'block';
+                menu.fadegroup.style.display = 'block';
+                menu.presetgroup.style.display = 'none';
+                debug.devcolorscontainer.style.display = 'none';
+                menu.textcolorgroup.style.display = 'none';
+                menu.imagegroup.style.display = 'none';
+            })
+            .with('solidmode', () => {
+                stopColorFade();
+                logConsole(`Color mode set to: ${colorMode}`, 'debug');
+                menu.presetcolors.forEach((radio) => {
+                    radio.disabled = false;
+                });
+                menu.textcoloroverrideradio.forEach((radio) => {
+                    radio.disabled = false;
+                });
+                menu.imageuploadbutton.disabled = true;
+                menu.imagesizeselect.disabled = true;
+                bodyElement.style.backgroundImage = '';
+                // Set groups display
+                menu.colorbadgelabel.style.display = 'block';
+                menu.fadegroup.style.display = 'block';
+                menu.presetgroup.style.display = '';
+                debug.devcolorscontainer.style.display = '';
+                menu.textcolorgroup.style.display = '';
+                menu.imagegroup.style.display = 'none';
+            })
+            .with('imgmode', () => {
+                stopColorFade();
+                logConsole(`Color mode set to: ${colorMode}`, 'debug');
+                menu.presetcolors.forEach((radio) => {
+                    radio.disabled = true;
+                    radio.checked = false;
+                });
+                // Reset background color to black
+                document.body.style.backgroundColor = '#000000';
+                menu.colorbadge.textContent = '#000000'; // Just for looks. Will appear when switching back to solidmode.
+                menu.textcoloroverrideradio.forEach((radio) => {
+                    if (radio.id === 'tcovO') {
+                        radio.disabled = false;
+                        radio.checked = true;
+                        radio.dispatchEvent(new Event('change'));
+                    } else {
+                        radio.disabled = true;
+                    }
+                });
+                menu.imageuploadbutton.disabled = false;
+                menu.imagesizeselect.disabled = false;
+                // Set groups display
+                menu.colorbadgelabel.style.display = 'none';
+                menu.fadegroup.style.display = 'none';
+                menu.presetgroup.style.display = 'none';
+                debug.devcolorscontainer.style.display = 'none';
+                menu.textcolorgroup.style.display = '';
+                menu.imagegroup.style.display = '';
+            })
+            .otherwise(() => {
+                logConsole('Invalid color mode selected', 'error');
             });
-            menu.imageuploadbutton.disabled = false;
-            menu.imagesizeselect.disabled = false;
-            // Set groups display
-            menu.colorbadgelabel.style.display = 'none';
-            menu.fadegroup.style.display = 'none';
-            menu.presetgroup.style.display = 'none';
-            debug.devcolorscontainer.style.display = 'none';
-            menu.textcolorgroup.style.display = '';
-            menu.imagegroup.style.display = '';
-        }
     });
 });
 

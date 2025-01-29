@@ -1,34 +1,37 @@
+import { match } from 'ts-pattern';
 import { menu, dtdisplay } from './global';
 import { getFirstElement, logConsole } from './utils/dom-utils';
 
 // Text color override listener
-let tcoO = 0;
+let isTextColorOverride = 0;
 menu.textcoloroverrideradio.forEach((radio) => {
     radio.addEventListener('change', () => {
-        if (radio.id === 'tcovD') {
-            tcoO = 0;
-            menu.textcolorinput.disabled = true;
-            if (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id === 'solidmode') {
-                try {
-                    getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
-                } catch (error) {
+        match(radio.id)
+            .with('tcovD', () => {
+                isTextColorOverride = 0;
+                menu.textcolorinput.disabled = true;
+                if (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id === 'solidmode') {
+                    try {
+                        getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
+                    } catch (error) {
                     // Catch if none are selected (switching from imgmode to solidmode)
-                    if (document.body.style.backgroundColor === 'rgb(0, 0, 0)') {
-                        dtdisplay.ccontainer.style.color = '#FFFFFF';
-                        dtdisplay.secondsBar.style.backgroundColor = '#FFFFFF';
-                    } else {
-                        dtdisplay.ccontainer.style.color = '#212529';
-                        dtdisplay.secondsBar.style.backgroundColor = '#212529';
+                        if (document.body.style.backgroundColor === 'rgb(0, 0, 0)') {
+                            dtdisplay.ccontainer.style.color = '#FFFFFF';
+                            dtdisplay.secondsBar.style.backgroundColor = '#FFFFFF';
+                        } else {
+                            dtdisplay.ccontainer.style.color = '#212529';
+                            dtdisplay.secondsBar.style.backgroundColor = '#212529';
+                        }
                     }
                 }
-            }
-            logConsole('Text color override disabled', 'info');
-        } else {
-            tcoO = 1;
-            menu.textcolorinput.disabled = false;
-            menu.textcolorinput.dispatchEvent(new Event('input'));
-            logConsole('Text color override enabled', 'info');
-        }
+                logConsole('Text color override disabled', 'info');
+            })
+            .otherwise(() => {
+                isTextColorOverride = 1;
+                menu.textcolorinput.disabled = false;
+                menu.textcolorinput.dispatchEvent(new Event('input'));
+                logConsole('Text color override enabled', 'info');
+            });
     });
 });
 
@@ -48,10 +51,10 @@ menu.presetcolors.forEach((radio) => {
         const luminance = getLuminance(color as string);
 
         // Set the text color based on the background luminance
-        if (luminance > 0.62 && tcoO === 0) {
+        if (luminance > 0.62 && isTextColorOverride === 0) {
             dtdisplay.ccontainer.style.color = '#212529'; // Set black text color
             dtdisplay.secondsBar.style.backgroundColor = '#212529';
-        } else if (tcoO === 0) {
+        } else if (isTextColorOverride === 0) {
             dtdisplay.ccontainer.style.color = '#FFF'; // Set white text color
             dtdisplay.secondsBar.style.backgroundColor = '#FFF';
         }
