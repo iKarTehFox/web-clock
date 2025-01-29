@@ -7,6 +7,7 @@
         <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.iconify.design https://api.unisvg.com https://cloudflareinsights.com/cdn-cgi/rum https://api.openweathermap.org/data/2.5/weather https://api.simplesvg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com/beacon.min.js;">
         <title>Online Web Clock</title>
         <meta name="description" content="Online clock web app on steroids, built with customization in mind! Made by iKarTehFox.">
+        <meta name="theme-color" media="(prefers-color-scheme: light)" id="theme-color-meta">
         <!-- Favicon -->
         <link rel="icon" type="image/svg+xml" id="favicon" href="./icons/clock-time-3.svg">
     </head>
@@ -61,6 +62,11 @@
                                         <option value="se_valentines">Time to Valentine's Day</option>
                                         <option value="se_christmas">Time to Christmas</option>
                                         <option value="se_newyears">Time to New Year's Day</option>
+                                    </optgroup>
+                                    <optgroup label="Is it...">
+                                        <option value="ii_christmas">...Christmas?</option>
+                                        <option value="ii_weekend">...the weekend?</option>
+                                        <option value="ii_leapyear">...a leap year?</option>
                                     </optgroup>
                                 </select>
                                 <h6 class="mb-1 mt-2">Seconds Display</h6>
@@ -532,7 +538,7 @@
                         <p style="margin-top: -1.5px;">🐙</p>
                     </a>
                     <p class="mb-1 mt-2">Review the <a href="/privacy.html">Privacy Policy</a>.</p>
-                    <p class="mb-1 mt-2" id="version">Version: <b>v1.5.2</b></p>
+                    <p class="mb-1 mt-2" id="version">Version: <b>v1.5.3</b></p>
                 </div>
             </div>
         </div>

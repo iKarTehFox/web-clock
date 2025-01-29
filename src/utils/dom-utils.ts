@@ -1,9 +1,10 @@
 import Toastify from 'toastify-js';
-import { menu } from '../global';
+import { doc, menu } from '../global';
 import { debugMode } from './debug';
 import * as luxon from 'ts-luxon';
 import { Html5Qrcode } from 'html5-qrcode';
 import { processJSONSettings } from '../importExport';
+import { match } from 'ts-pattern';
 
 // Element finding functions
 export function getElement<T extends HTMLElement>(id: string): T {
@@ -96,6 +97,19 @@ export function showToast(message: string, duration: 'default' | 'normal' | 'lon
         position: 'right',
         stopOnFocus: true
     }).showToast();
+}
+
+// Set browser theme color
+export function setMetaColor(type: 'color' | 'theme', value: string): void {
+    match(type)
+        .with('color', () => {
+            doc.themecolormeta.setAttribute('content', value);
+            logConsole(`Meta color set to: ${value}`, 'debug');
+        })
+        .with('theme', () => {
+            doc.themecolormeta.setAttribute('media', `(prefers-color-scheme: ${value})`);
+            logConsole(`Meta theme set to: ${value}`, 'debug');
+        });
 }
 
 // Function to create an overlay card element

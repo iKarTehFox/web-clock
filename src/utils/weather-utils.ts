@@ -18,12 +18,14 @@ export function getLocation(): Promise<[number, number]> {
                     resolve([latitude, longitude]);
                 },
                 (error) => {
+                    showToast(`Error getting location: ${error.message}`, 'default', 'danger');
                     reject(error);
                 },
                 { enableHighAccuracy: true }
             );
         });
     } else {
+        showToast('Geolocation is not supported by this browser.', 'long', 'danger');
         throw new Error('Geolocation is not supported by this browser.');
     }
 }

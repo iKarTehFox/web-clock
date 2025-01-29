@@ -66,7 +66,7 @@ body {
     right: 0;
     background-color: #ffffff;
     padding: 10px;
-    max-height: 75vh;
+    max-height: calc(75vh - 40px);
     overflow: auto;
     max-width: 15vw;
     min-width: 260px;
@@ -83,7 +83,7 @@ body {
     right: 0;
     background-color: #ffffff;
     padding: 10px;
-    max-height: 75vh;
+    max-height: calc(75vh - 40px);
     overflow: auto;
     max-width: 15vw;
     min-width: 260px;

@@ -4,6 +4,7 @@ import * as luxon from 'ts-luxon';
 import { logConsole } from './utils/dom-utils';
 import * as clock from './time-help';
 import { timeRefresh } from './utils/debug';
+import { match, P } from 'ts-pattern';
 
 // Default modes
 export let cMode = '0';
@@ -95,8 +96,15 @@ function updateTime(): void {
                 year: time.year + 1, // January 1st of the following year
                 month: 1,
                 day: 1
-            }))
+            })),
+            ii_christmas: () => clock.isItDate('christmas'),
+            ii_weekend: () => clock.isItDate('weekend'),
+            ii_leapyear: () => clock.isItDate('leapyear'),
         }[timeDisplayMethod];
+
+        // timeDisplayMethod types
+        // Will improve in the future...
+        const tdmIsIt: boolean = timeDisplayMethod?.startsWith('ii_');
 
         if (timeFunction) {
             const result = timeFunction(hrs);
@@ -104,17 +112,20 @@ function updateTime(): void {
                 // Handle getCountdown arrays
                 [displayHour, displayMinute, displaySecond] = result;
                 displayIndicator = '';
+                if (tdmIsIt) clock.colonVisibility([false, undefined]);
             } else {
                 displayHour = result;
                 displayMinute = timeDisplayMethod === 'words' ? formatMinutesForWordsDisplay(min) : timeFunction(min) as string;
                 displaySecond = timeFunction(sec) as string;
                 displayIndicator = ind;
+                clock.colonVisibility([true, undefined]);
             }
         } else {
             displayHour = hrs;
             displayMinute = min;
             displaySecond = sec;
             displayIndicator = ind;
+            clock.colonVisibility([true, undefined]);
         }
         
     }
@@ -134,13 +145,11 @@ function setClockDisplay([hour, minute, second, indicator]: [string, string, str
 function formatMinutesForWordsDisplay(min: string) {
     const parsedMinutes = parseInt(min, 10);
 
-    if (parsedMinutes === 0) {
-        return 'o\'clock';
-    } else if (parsedMinutes < 10) {
-        return `oh ${numberToWords.toWords(parsedMinutes)}`;
-    } else {
-        return numberToWords.toWords(parsedMinutes);
-    }
+    return match(parsedMinutes)
+        .returnType<string>()
+        .with(0, () => 'o\'clock')
+        .with(P.number.lt(10), () => `oh ${numberToWords.toWords(parsedMinutes)}`)
+        .otherwise(() => numberToWords.toWords(parsedMinutes));
 }
 
 menu.timemethodselect.addEventListener('change', () => {
@@ -156,7 +165,7 @@ function getTimeZonesByRegion() {
     const timeZones = (Intl as any).supportedValuesOf('timeZone');
     const timeZoneGroups: { [key: string]: string[] } = {};
   
-    timeZones.forEach((timeZone) => {
+    timeZones.forEach((timeZone: string) => {
         const [region] = timeZone.split('/');
       
         if (!timeZoneGroups[region]) {
