@@ -3,7 +3,7 @@ import { logConsole } from './utils/dom-utils';
 // Value constraints
 const valid = {
     CM: ['cmo12', 'cmo24'],
-    CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words', 'unixmillis', 'unixsec', 'unixcountdown', 'se_valentines', 'se_christmas', 'se_2026'],
+    CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words', 'unixmillis', 'unixsec', 'unixcountdown', 'se_valentines', 'se_christmas', 'se_newyears', 'ii_christmas', 'ii_weekend', 'ii_leapyear'],
     SV: ['sviD', 'sviN'],
     DF: ['D', 'DD', 'DDD', 'DDDD', ''],
     DA: ['dpoL', 'dpoC', 'dpoR'],
@@ -21,7 +21,7 @@ const valid = {
     TCM: ['tcovD', 'tcovO'],
     BIS: ['', 'auto', 'cover', 'stretch'],
     BIB: ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    Ver: [7, 8]
+    Ver: [7, 8, 9]
 };
 
 // Error handling
