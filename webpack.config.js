@@ -100,6 +100,7 @@ module.exports = () => {
         config.plugins.push(new MiniCssExtractPlugin());
     } else {
         config.mode = 'development';
+        config.devtool = 'source-map';
     }
     return config;
 };
