@@ -82,11 +82,31 @@ export function getCountdown(target: luxon.DateTime | number): [string, string, 
     ];
 }
 
+export function isItDate(dateType: 'christmas' | 'weekend' | 'leapyear'): [string, string, string] {
+    const now = luxon.DateTime.now();
+    let isMatch = false;
+    
+    return match(dateType)
+        .returnType<[string, string, string]>()
+        .with('christmas', () => {
+            isMatch = now.month === 12 && now.day === 25;
+            return ['', isMatch ? 'It\'s Christmas!' : 'Not Christmas', ''];
+        })
+        .with('weekend', () => {
+            isMatch = now.weekday >= 6; // 6 = Saturday, 7 = Sunday
+            return ['', isMatch ? 'It\'s the weekend!' : 'Not the weekend', ''];
+        })
+        .with('leapyear', () => {
+            isMatch = now.isInLeapYear;
+            return ['', isMatch ? 'It\'s a leap year!' : 'Not a leap year', ''];
+        })
+        .exhaustive();
+}
 // Element display
 // Colon visibility function
-export function colonVisibility([c1Vis, c2Vis]: boolean[]): void {
-    dtdisplay.colon1.style.display = c1Vis ? '' : 'none';
-    dtdisplay.colon2.style.display = c2Vis ? '' : 'none';
+export function colonVisibility([c1Vis, c2Vis]: (boolean | undefined)[]): void {
+    if (c1Vis !== undefined) dtdisplay.colon1.style.display = c1Vis ? '' : 'none';
+    if (c2Vis !== undefined) dtdisplay.colon2.style.display = c2Vis ? '' : 'none';
 }
 
 // Seconds visibility listener

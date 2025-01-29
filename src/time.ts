@@ -96,8 +96,15 @@ function updateTime(): void {
                 year: time.year + 1, // January 1st of the following year
                 month: 1,
                 day: 1
-            }))
+            })),
+            ii_christmas: () => clock.isItDate('christmas'),
+            ii_weekend: () => clock.isItDate('weekend'),
+            ii_leapyear: () => clock.isItDate('leapyear'),
         }[timeDisplayMethod];
+
+        // timeDisplayMethod types
+        // Will improve in the future...
+        const tdmIsIt: boolean = timeDisplayMethod?.startsWith('ii_');
 
         if (timeFunction) {
             const result = timeFunction(hrs);
@@ -105,17 +112,20 @@ function updateTime(): void {
                 // Handle getCountdown arrays
                 [displayHour, displayMinute, displaySecond] = result;
                 displayIndicator = '';
+                if (tdmIsIt) clock.colonVisibility([false, undefined]);
             } else {
                 displayHour = result;
                 displayMinute = timeDisplayMethod === 'words' ? formatMinutesForWordsDisplay(min) : timeFunction(min) as string;
                 displaySecond = timeFunction(sec) as string;
                 displayIndicator = ind;
+                clock.colonVisibility([true, undefined]);
             }
         } else {
             displayHour = hrs;
             displayMinute = min;
             displaySecond = sec;
             displayIndicator = ind;
+            clock.colonVisibility([true, undefined]);
         }
         
     }
