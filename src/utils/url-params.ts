@@ -31,7 +31,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value === 'true';
-            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'bypass');
         } else {
             logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
         }
@@ -42,7 +42,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = parseFloat(value);
-            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'bypass');
         } else {
             logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
         }
@@ -53,7 +53,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value;
-            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'bypass');
         } else {
             logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
         }
@@ -142,7 +142,7 @@ export async function applyURLParams() {
                 window.location.reload();
             }, autoRestartTime * 1000);
         } else {
-            console.warn('Invalid autoRestart value. It should be an integer between 15 and 86400 inclusive.');
+            logConsole('Invalid autoRestart value. It should be an integer between 15 and 86400 inclusive.', 'warning');
         }
     }
     
