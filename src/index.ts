@@ -3,7 +3,6 @@ import 'iconify-icon';
 import './utils/iconify-preload';
 import * as bootstrap from 'bootstrap';
 import './global';
-import * as ieJSON from './importExport';
 import './background-image';
 import './background-color';
 import './numberToWords.min';
@@ -14,22 +13,11 @@ import './countdown';
 import './utils/debugUI';
 import { applyURLParams } from './utils/url-params';
 import { populateTimeZoneSelect } from './time';
-import { generatePresetButtons } from './assets/presets';
-
-// Export some functions globally for HTML
-declare global {
-    interface Window {
-        ieJSON: any;
-    }
-}
-
-window.ieJSON = ieJSON;
 
 // Functions to run when DOM has loaded
 window.addEventListener('DOMContentLoaded', () => {
     applyURLParams();
     populateTimeZoneSelect(); // This might be performance hungry...
-    generatePresetButtons();
 
     // Initialize Bootstrap tooltips
     const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));

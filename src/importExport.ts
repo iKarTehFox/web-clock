@@ -4,7 +4,7 @@ import * as luxon from 'ts-luxon';
 import { menu, debug } from './utils/dom-elements';
 import { ErrorDetails, handleValidationFailure, verifySettingsJSON } from './importValidation';
 import { getClockConfig, getFontConfig, getColorThemeConfig, setClockConfig, setFontConfig, setColorThemeConfig } from './utils/clock-settings';
-import { getPresetByHotkey } from './assets/presets';
+import { getPresetByHotkey, presetList } from './assets/presets';
 import axios from 'axios';
 import QRCode from 'qrcode';
 import { match } from 'ts-pattern';
@@ -210,6 +210,24 @@ function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: a
     const colorTheme = importedSettings.colorTheme;
     setColorThemeConfig(colorTheme, true);
 }
+
+// Preset buttons
+export function generatePresetButtons(): void {
+    presetList.forEach(preset => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-outline-info mb-1';
+        button.setAttribute('data-bs-toggle', 'tooltip');
+        button.setAttribute('data-bs-title', preset.description || '');
+        button.addEventListener('click', () => {
+            presetLocalJSON(preset.filename);
+        });
+        button.textContent = `[${preset.hotkey}] ${preset.displayName}`;
+        menu.jsonpresetsgroup.appendChild(button);
+    });
+}
+
+generatePresetButtons();
 
 // Surprise! More event listeners!
 menu.jsonexportclipbtn.addEventListener('click', () => {

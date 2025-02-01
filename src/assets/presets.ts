@@ -1,5 +1,4 @@
 // Presets (JSON) Imports
-import { menu } from '../utils/dom-elements';
 import './onlinewebclock-amoled-preset.json';
 import './onlinewebclock-devfavorite-preset.json';
 import './onlinewebclock-digitsbinary-preset.json';
@@ -49,17 +48,4 @@ export const presetList: PresetInfo[] = [
 
 export function getPresetByHotkey(key: number): PresetInfo | undefined {
     return presetList.find(preset => preset.hotkey === key);
-}
-
-export function generatePresetButtons(): void {
-    presetList.forEach(preset => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'btn btn-outline-info mb-1';
-        button.setAttribute('data-bs-toggle', 'tooltip');
-        button.setAttribute('data-bs-title', preset.description || '');
-        button.setAttribute('onClick', `ieJSON.presetLocalJSON('${preset.filename}')`);
-        button.textContent = `[${preset.hotkey}] ${preset.displayName}`;
-        menu.jsonpresetsgroup.appendChild(button);
-    });
 }
