@@ -175,6 +175,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
         .catch(error => {
             logConsole(`Error fetching local settings file: ${error}`, 'error');
             showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 'normal', 'danger');
+            return Promise.reject(error);
         });
 }
 

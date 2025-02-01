@@ -5,7 +5,7 @@ import { logConsole, setMetaColor } from './utils/dom-utils';
 let fadeIntervalID: NodeJS.Timeout;
 const bodyElement = document.body;
 
-function startColorFade() {
+export function startColorFade() {
     logConsole('Color fade started', 'info');
     const colors = {
         'Pink': '#FFC0CB',
@@ -160,6 +160,3 @@ menu.presetcolors.forEach((radio) => {
         logConsole(`Preset color changed to: ${selectedColor}`, 'debug');
     });
 });
-
-// Start color fade on page load
-startColorFade();
