@@ -1,4 +1,5 @@
 // Presets (JSON) Imports
+import { menu } from '../utils/dom-elements';
 import './onlinewebclock-amoled-preset.json';
 import './onlinewebclock-devfavorite-preset.json';
 import './onlinewebclock-digitsbinary-preset.json';
@@ -51,21 +52,14 @@ export function getPresetByHotkey(key: number): PresetInfo | undefined {
 }
 
 export function generatePresetButtons(): void {
-    // Get container where preset buttons should go
-    // Use getElementById here instead of menu from global.ts to avoid initialization issue.
-    const presetContainer = document.getElementById('jsonPresetsContainer');
-
-    // Generate new buttons from presetList
-    if (presetContainer) {
-        presetList.forEach(preset => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'btn btn-outline-info mb-1';
-            button.setAttribute('data-bs-toggle', 'tooltip');
-            button.setAttribute('data-bs-title', preset.description || '');
-            button.setAttribute('onClick', `ieJSON.presetLocalJSON('${preset.filename}')`);
-            button.textContent = `[${preset.hotkey}] ${preset.displayName}`;
-            presetContainer.appendChild(button);
-        });
-    }
+    presetList.forEach(preset => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-outline-info mb-1';
+        button.setAttribute('data-bs-toggle', 'tooltip');
+        button.setAttribute('data-bs-title', preset.description || '');
+        button.setAttribute('onClick', `ieJSON.presetLocalJSON('${preset.filename}')`);
+        button.textContent = `[${preset.hotkey}] ${preset.displayName}`;
+        menu.jsonpresetsgroup.appendChild(button);
+    });
 }

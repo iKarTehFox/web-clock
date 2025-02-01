@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { menu, stopwatch } from './global';
+import { menu, stopwatch } from './utils/dom-elements';
 import { logConsole } from './utils/dom-utils';
 
 let timeInterval: NodeJS.Timeout;

@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { debug } from '../global';
+import { debug } from './dom-elements';
 import { showToast, makeCardOverlay } from './dom-utils';
 
 export function initializeDebugUI(): void {

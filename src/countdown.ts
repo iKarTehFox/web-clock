@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { menu, countdown } from './global';
+import { menu, countdown } from './utils/dom-elements';
 import { logConsole, showToast } from './utils/dom-utils';
 
 

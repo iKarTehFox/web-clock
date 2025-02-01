@@ -1,6 +1,6 @@
 import { loadIcons, iconExists } from 'iconify-icon';
 import { logConsole } from './dom-utils';
-import { countdown, menu, stopwatch } from '../global';
+import { countdown, menu, stopwatch } from './dom-elements';
 
 // Preload needed Iconify MDI icons
 // Panel

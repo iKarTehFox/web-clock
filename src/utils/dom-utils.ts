@@ -1,5 +1,5 @@
 import Toastify from 'toastify-js';
-import { doc, menu } from '../global';
+import { doc, menu } from './dom-elements';
 import { debugMode } from './debug';
 import * as luxon from 'ts-luxon';
 import { Html5Qrcode } from 'html5-qrcode';
@@ -35,6 +35,7 @@ export function logConsole(message: string, type: 'debug' | 'error' | 'warning' 
         console.info(`INFO - ${message}`);
     }
 }
+
 // Function to set toast theme
 function getThemeInfo(colorTheme: string = 'auto') {
     const theme = colorTheme === 'auto' ? menu.container.dataset.bsTheme : colorTheme;

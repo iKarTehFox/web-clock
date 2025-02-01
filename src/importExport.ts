@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { logConsole, showToast, makeCardOverlay, createScannerOverlay } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
-import { menu, debug } from './global';
+import { menu, debug } from './utils/dom-elements';
 import { ErrorDetails, handleValidationFailure, verifySettingsJSON } from './importValidation';
 import { getClockConfig, getFontConfig, getColorThemeConfig, setClockConfig, setFontConfig, setColorThemeConfig } from './utils/clock-settings';
 import { getPresetByHotkey } from './assets/presets';

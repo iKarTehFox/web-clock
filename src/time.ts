@@ -1,4 +1,4 @@
-import { doc, menu, dtdisplay } from './global';
+import { doc, menu, dtdisplay } from './utils/dom-elements';
 import { numberToWords } from './numberToWords.min';
 import * as luxon from 'ts-luxon';
 import { logConsole } from './utils/dom-utils';

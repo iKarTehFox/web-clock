@@ -1,4 +1,4 @@
-import { menu, weather } from '../global';
+import { menu, weather } from './dom-elements';
 import { presetLocalJSON } from '../importExport';
 import { logConsole, showToast } from './dom-utils';
 import { setDebug, setTimeRefresh } from './debug';

@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { menu, debug, dtdisplay } from './global';
+import { menu, debug, dtdisplay } from './utils/dom-elements';
 import { logConsole, setMetaColor } from './utils/dom-utils';
 
 let fadeIntervalID: NodeJS.Timeout;

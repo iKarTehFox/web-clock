@@ -2,8 +2,9 @@
 import 'iconify-icon';
 import './utils/iconify-preload';
 import * as bootstrap from 'bootstrap';
+import './global';
 import * as ieJSON from './importExport';
-import * as wcGlobal from './global';
+import * as wcGlobal from './utils/dom-elements';
 import * as bgImg from './background-image';
 import './background-color';
 import './numberToWords.min';

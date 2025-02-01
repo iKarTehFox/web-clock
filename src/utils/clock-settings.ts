@@ -1,5 +1,5 @@
 import { stopColorFade } from '../background-color';
-import { menu, font } from '../global';
+import { menu, font } from './dom-elements';
 import { getFirstElement } from '../utils/dom-utils';
 
 // Interfaces

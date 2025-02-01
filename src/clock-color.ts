@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { menu, dtdisplay } from './global';
+import { menu, dtdisplay } from './utils/dom-elements';
 import { getFirstElement, logConsole } from './utils/dom-utils';
 
 // Text color override listener
