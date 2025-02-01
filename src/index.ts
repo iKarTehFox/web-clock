@@ -4,8 +4,7 @@ import './utils/iconify-preload';
 import * as bootstrap from 'bootstrap';
 import './global';
 import * as ieJSON from './importExport';
-import * as wcGlobal from './utils/dom-elements';
-import * as bgImg from './background-image';
+import './background-image';
 import './background-color';
 import './numberToWords.min';
 import './time';
@@ -21,14 +20,10 @@ import { generatePresetButtons } from './assets/presets';
 declare global {
     interface Window {
         ieJSON: any;
-        bgImg: any;
-        wcGlobal: any;
     }
 }
 
 window.ieJSON = ieJSON;
-window.bgImg = bgImg;
-window.wcGlobal = wcGlobal;
 
 // Functions to run when DOM has loaded
 window.addEventListener('DOMContentLoaded', () => {
