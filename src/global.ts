@@ -7,12 +7,12 @@ import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather
 type FontSizeKey = '6vw' | '8vw' | '10vw' | '12vw' | '14vw' | '18vw';
 
 const fontSizeOptions: Record<FontSizeKey, string> = {
-    '6vw': '1vw',
-    '8vw': '1.25vw',
-    '10vw': '1.5vw',
-    '12vw': '2vw',
-    '14vw': '2.25vw',
-    '18vw': '3vw'
+    '6vw': '1.09vw',
+    '8vw': '1.45vw',
+    '10vw': '1.82vw',
+    '12vw': '2.18vw',
+    '14vw': '2.55vw',
+    '18vw': '3.27vw'
 };
 
 // Font style handler function
