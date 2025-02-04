@@ -4,6 +4,7 @@ import './onlinewebclock-devfavorite-preset.json';
 import './onlinewebclock-digitsbinary-preset.json';
 import './onlinewebclock-minimallight-preset.json';
 import './onlinewebclock-preset.json';
+import './onlinewebclock-defaults.json';
 
 export interface PresetInfo {
     filename: string;

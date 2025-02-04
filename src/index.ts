@@ -11,6 +11,7 @@ import './clock-color';
 import './stopwatch';
 import './countdown';
 import './utils/debugUI';
+import './utils/kbd-shortcuts';
 import { applyURLParams } from './utils/url-params';
 import { populateTimeZoneSelect } from './time';
 

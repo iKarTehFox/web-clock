@@ -186,6 +186,16 @@ document.addEventListener('keydown', (e) => {
         return;
     }
 
+    // Skip if overlays visible
+    if (document.querySelector('[data-overlay="card-overlay"]') || document.querySelector('[data-overlay="scanner-overlay"]')) {
+        return;
+    }
+
+    // Debouncing/ignore system shortcuts
+    if (e.repeat || e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) {
+        return;
+    }
+
     // Only handle number keys 1-9
     const key = parseInt(e.key);
     if (key >= 1 && key <= 9) {

@@ -1,0 +1,31 @@
+{
+	"clockConfig": {
+		"clockMode": "cmo12",
+		"clockDisplay": "decimal",
+		"secondsVis": "sviD",
+		"dateFormat": "D",
+		"dateAlign": "dpoL",
+		"borderMode": "btyD",
+		"borderStyle": "solid",
+		"secondsBarVis": "sbaN"
+	},
+	"fontConfig": {
+		"fontFamily": "",
+		"fontStyle": "fstR",
+		"fontWeight": "fweN",
+		"fontSize": "10vw",
+		"dropShadow": "0",
+		"strokeWidth": "0",
+		"strokeColor": ""
+	},
+	"colorTheme": {
+		"colorMode": "fademode",
+		"solidColor": "",
+		"textColorMode": "tcovD",
+		"textColorValue": "",
+		"bgImage": "",
+		"bgImageSize": "",
+		"bgImageBlur": ""
+	},
+	"version": 9
+}
