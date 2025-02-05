@@ -129,12 +129,13 @@ export const countdown = {
 };
 
 export const debug = {
-    container: getElement<HTMLDivElement>('debuggingContainer'),
-    uastring: getElement<HTMLParagraphElement>('debugUAString'),
-    devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
-    toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
-    getbgimgbtn: getElement<HTMLButtonElement>('debugGetBGBtn'),
-    jsonexportconsolebtn:  getElement<HTMLButtonElement>('jsonExportConsoleBtn'),
-    jsonexportcardbtn: getElement<HTMLButtonElement>('jsonExportCardBtn'),
     cardoverlaybtns: getElements<HTMLButtonElement>('button[name="debugCard"]'),
+    container: getElement<HTMLDivElement>('debuggingContainer'),
+    devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
+    getbgimgbtn: getElement<HTMLButtonElement>('debugGetBGBtn'),
+    jsonexportcardbtn: getElement<HTMLButtonElement>('jsonExportCardBtn'),
+    jsonexportconsolebtn:  getElement<HTMLButtonElement>('jsonExportConsoleBtn'),
+    toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
+    uastring: getElement<HTMLParagraphElement>('debugUAString'),
+    localstring: getElement<HTMLParagraphElement>('debugLocString'),
 };

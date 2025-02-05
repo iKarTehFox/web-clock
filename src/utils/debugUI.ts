@@ -8,6 +8,7 @@ export function initializeDebugUI(): void {
 
     // Fill debug info
     debug.uastring.textContent = navigator.userAgent;
+    debug.localstring.textContent = navigator.language;
 
     // Event listeners
     debug.toastbtns.forEach(btn => {
