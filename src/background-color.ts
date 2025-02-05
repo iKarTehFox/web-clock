@@ -52,7 +52,7 @@ menu.colormoderadio.forEach(radio => {
     radio.addEventListener('change', () => {
         // Reset color to "black" first
         dtdisplay.ccontainer.style.color = '#212529';
-        dtdisplay.secondsBar.style.backgroundColor = '#212529';
+        dtdisplay.timeBar.style.backgroundColor = '#212529';
         const colorMode = radio.id;
         
         match(colorMode)

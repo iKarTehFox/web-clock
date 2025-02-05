@@ -112,13 +112,14 @@
                                     <option value="dotted">Dotted</option>
                                     <option value="double">Double</option>
                                 </select>
-                                <h6 class="mb-1 mt-2">Seconds Bar Visibility</h6>
-                                <div class="btn-group" role="group" aria-label="Seconds bar visibility button group">
-                                    <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="block" id="sbaB" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="sbaB">Show</label>
-                                    <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="none" id="sbaN" autocomplete="off" checked>
-                                    <label class="btn btn-outline-primary" for="sbaN">Hide</label>
-                                </div>
+                                <h6 class="mb-1 mt-2">Time Bar</h6>
+                                <select class="form-select" id="timeBarSelect">
+                                    <option value="tbarWkday">Week progress (Mon-Sun)</option>
+                                    <option value="tbarDay">Day progress</option>
+                                    <option value="tbarHr">Hour progress</option>
+                                    <option value="tbarSec">Seconds</option>
+                                    <option value="tbarNone" selected>Off</option>
+                                </select>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Time Refresh Method</h6>
                                 <div class="form-check">
@@ -546,7 +547,7 @@
         <div id="clock-container">
             <div id="time-container">
                 <span class="clock-part" id="hour-slot">00</span><span class="colon" id="colon1">:</span><span class="clock-part" id="minute-slot">00</span><span class="colon" id="colon2">:</span><span class="clock-part" id="second-slot">00</span><span id="indicator"></span>
-                <div id="seconds-progress-bar"></div>
+                <div id="time-progress-bar"></div>
             </div>
             <p id="date"><noscript>JavaScript is disabled!</noscript></p>
         </div>

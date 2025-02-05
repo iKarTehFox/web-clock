@@ -119,34 +119,45 @@ menu.secondsvisradio.forEach((radio) => {
     });
 });
 
-// Seconds bar visibility listener
-menu.secondsbarradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
-        match(value)
-            .with('block', () => {
-                menu.bordertyperadio.forEach((btn) => {
-                    btn.disabled = true;
-                    if (btn.id === 'btyD') {
-                        btn.checked = true;
-                        btn.dispatchEvent(new Event('change'));
-                    }
-                });
-            })
-            .with('none', () => {
-                menu.bordertyperadio.forEach((btn) => {
-                    btn.disabled = false;
-                });
-            })
-            .otherwise(() => {
-                logConsole(`Invalid value for seconds bar visibility: ${value}`, 'error');
-                return;
-            });
-
-        dtdisplay.secondsBar.style.display = value as string;
-        logConsole(`Seconds bar visibility set to: ${value}`, 'debug');
-    });
+// Time bar
+menu.timebarselect.addEventListener('change', () => {
+    if (menu.timebarselect.value === 'tbarNone') {
+        dtdisplay.timeBar.style.display = 'none';
+        menu.bordertyperadio.forEach((btn) => {
+            btn.disabled = false;
+        });
+        logConsole('Time bar hidden', 'debug');
+    } else {
+        dtdisplay.timeBar.style.display = 'block';
+        menu.bordertyperadio.forEach((btn) => {
+            btn.disabled = true;
+            if (btn.id === 'btyD') {
+                btn.checked = true;
+                btn.dispatchEvent(new Event('change'));
+            }
+        });
+        logConsole(`Time bar set to: ${menu.timebarselect.value}`, 'debug');
+    }
 });
+
+export function timeBarUtil(type: string, time: luxon.DateTime) {
+    match(type)
+        .with('tbarWkday', () => {
+            dtdisplay.timeBar.style.width = (time.weekday / 7) * 100 + '%';
+        })
+        .with('tbarDay', () => {
+            dtdisplay.timeBar.style.width = (time.day / time.daysInMonth) * 100 + '%';
+        })
+        .with('tbarHr', () => {
+            dtdisplay.timeBar.style.width = (time.minute / 59) * 100 + '%';
+        })
+        .with('tbarSec', () => {
+            dtdisplay.timeBar.style.width = (time.second / 59) * 100 + '%';
+        })
+        .otherwise(() => {
+            logConsole('Invalid time bar type', 'error');
+        });
+}
 
 // Date alignment listener
 menu.datealignradio.forEach((radio) => {

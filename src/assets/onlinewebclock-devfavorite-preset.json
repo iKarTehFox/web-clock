@@ -7,7 +7,7 @@
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",
-		"secondsBarVis": "sbaB"
+		"timeBar": "tbarSec"
 	},
 	"fontConfig": {
 		"fontFamily": "Montserrat",
@@ -15,7 +15,8 @@
 		"fontWeight": "fweB",
 		"fontSize": "10vw",
 		"dropShadow": "2",
-		"strokeWidth": "0"
+		"strokeWidth": "0",
+		"strokeColor": ""
 	},
 	"colorTheme": {
 		"colorMode": "solidmode",
@@ -27,5 +28,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "This is my favorite way to theme the clock, especially when testing and debugging! It's become a habit. -iKarTehFox",
-	"version": 7
+	"version": 10
 }

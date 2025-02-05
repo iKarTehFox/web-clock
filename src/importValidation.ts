@@ -9,7 +9,7 @@ const valid = {
     DA: ['dpoL', 'dpoC', 'dpoR'],
     BM: ['btyD', 'btyR', 'btyB'],
     BS: ['solid', 'dashed', 'dotted', 'double'],
-    SB: ['', 'sbaB', 'sbaN'],
+    TB: ['tbarWkday', 'tbarDay', 'tbarHr', 'tbarSec', 'tbarNone'],
     FF: ['', 'Lato', 'Montserrat', 'Open Sans', 'Oswald', 'Poppins', 'Roboto', 'Tektur', 'Ubuntu', 'Ubuntu Mono', 'Dancing Script', 'Merriweather', 'Nanum Brush Script', 'Pangolin'],
     FS: ['fstR', 'fstI'],
     FW: ['fweL', 'fweN', 'fweB'],
@@ -21,7 +21,7 @@ const valid = {
     TCM: ['tcovD', 'tcovO'],
     BIS: ['', 'auto', 'cover', 'stretch'],
     BIB: ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    Ver: [7, 8, 9]
+    Ver: [10]
 };
 
 // Error handling
@@ -142,7 +142,7 @@ export function validateClockConfig(clockConfig: any, valid: any) {
         { key: 'dateAlign', validValues: valid.DA },
         { key: 'borderMode', validValues: valid.BM },
         { key: 'borderStyle', validValues: valid.BS },
-        { key: 'secondsBarVis', validValues: valid.SB },
+        { key: 'timeBar', validValues: valid.TB },
     ];
 
     for (const { key, validValues } of keys) {
@@ -156,11 +156,11 @@ export function validateClockConfig(clockConfig: any, valid: any) {
         }
     }
 
-    if ((clockConfig.borderMode === 'btyB' || clockConfig.borderMode === 'btyR') && clockConfig.secondsBarVis === 'sbaB') {
+    if ((clockConfig.borderMode === 'btyB' || clockConfig.borderMode === 'btyR') && clockConfig.timeBar !== 'tbarNone') {
         return {
-            type: 'invalid',
-            subkey: 'borderMode, secondsBarVis',
-            value: `${clockConfig.borderMode}, ${clockConfig.secondsBarVis}`
+            type: 'incomp',
+            subkey: 'borderMode, timeBar',
+            value: `${clockConfig.borderMode}, ${clockConfig.timeBar}`
         };
     }
 

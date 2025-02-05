@@ -134,33 +134,23 @@ menu.bordertyperadio.forEach((radio) => {
 
         match(value)
             .with('none', () => {
-                menu.secondsbarradio.forEach((btn) => {
-                    btn.disabled = false;
-                });
+                menu.timebarselect.disabled = false;
                 dtdisplay.tcontainer.style.borderStyle = value;
                 dtdisplay.tcontainer.style.borderBottomStyle = value;
                 logConsole(`Border type set to: ${value}`, 'debug');
             })
             .with('regular', () => {
-                menu.secondsbarradio.forEach((btn) => {
-                    btn.disabled = true;
-                    if (btn.id === 'sbaN') {
-                        btn.checked = true;
-                        btn.dispatchEvent(new Event('change'));
-                    }
-                });
+                menu.timebarselect.disabled = true;
+                menu.timebarselect.value = 'tbarNone';
+                menu.timebarselect.dispatchEvent(new Event('change'));
                 dtdisplay.tcontainer.style.borderBottomStyle = 'none';
                 dtdisplay.tcontainer.style.borderStyle = menu.borderstyleselect.value;
                 logConsole(`Border type set to: ${value}`, 'debug');
             })
             .with('bottom', () => {
-                menu.secondsbarradio.forEach((btn) => {
-                    btn.disabled = true;
-                    if (btn.id === 'sbaN') {
-                        btn.checked = true;
-                        btn.dispatchEvent(new Event('change'));
-                    }
-                });
+                menu.timebarselect.disabled = true;
+                menu.timebarselect.value = 'tbarNone';
+                menu.timebarselect.dispatchEvent(new Event('change'));
                 dtdisplay.tcontainer.style.borderStyle = 'none';
                 dtdisplay.tcontainer.style.borderBottomStyle = menu.borderstyleselect.value;
                 logConsole(`Border type set to: ${value}`, 'debug');

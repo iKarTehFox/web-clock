@@ -7,7 +7,7 @@
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",
-		"secondsBarVis": "sbaB"
+		"timeBar": "tbarSec"
 	},
 	"fontConfig": {
 		"fontFamily": "Tektur",
@@ -15,7 +15,8 @@
 		"fontWeight": "fweB",
 		"fontSize": "10vw",
 		"dropShadow": "0",
-		"strokeWidth": "0"
+		"strokeWidth": "0",
+		"strokeColor": ""
 	},
 	"colorTheme": {
 		"colorMode": "solidmode",
@@ -27,5 +28,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "01010100 01001000 01000001 01001110 01001011 00100000 01011001 01001111 01010101 00100001",
-	"version": 7
+	"version": 10
 }

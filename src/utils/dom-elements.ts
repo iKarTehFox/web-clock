@@ -44,7 +44,7 @@ export const menu = {
     options: getElement<HTMLDivElement>('menu-options'),
     presetcolors: getElements<HTMLInputElement>('input[name="preset-color-radio"]'),
     presetgroup: getElement<HTMLDivElement>('presetColorGroup'),
-    secondsbarradio: getElements<HTMLInputElement>('input[name="seconds-bar-radio"]'),
+    timebarselect: getElement<HTMLInputElement>('timeBarSelect'),
     secondsvisradio: getElements<HTMLInputElement>('input[name="seconds-vis-radio"]'),
     textcolorinput: getElement<HTMLInputElement>('textColorInput'),
     textcolorgroup: getElement<HTMLDivElement>('textColorGroup'),
@@ -89,7 +89,7 @@ export const dtdisplay = {
     indicatorSlot: getElement<HTMLSpanElement>('indicator'),
     minuteSlot: getElement<HTMLSpanElement>('minute-slot'),
     secondSlot: getElement<HTMLSpanElement>('second-slot'),
-    secondsBar: getElement<HTMLDivElement>('seconds-progress-bar'),
+    timeBar: getElement<HTMLDivElement>('time-progress-bar'),
     tcontainer: getElement<HTMLDivElement>('time-container')
 };
 

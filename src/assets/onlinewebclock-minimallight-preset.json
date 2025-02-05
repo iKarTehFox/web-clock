@@ -7,7 +7,7 @@
 		"dateAlign": "dpoC",
 		"borderMode": "btyB",
 		"borderStyle": "solid",
-		"secondsBarVis": "sbaN"
+		"timeBar": "tbarNone"
 	},
 	"fontConfig": {
 		"fontFamily": "Oswald",
@@ -15,7 +15,8 @@
 		"fontWeight": "fweL",
 		"fontSize": "14vw",
 		"dropShadow": "0",
-		"strokeWidth": "0"
+		"strokeWidth": "0",
+		"strokeColor": ""
 	},
 	"colorTheme": {
 		"colorMode": "solidmode",
@@ -27,5 +28,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "Minimalism or maximalism? I choose optimism!",
-	"version": 7
+	"version": 10
 }

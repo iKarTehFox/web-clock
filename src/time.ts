@@ -58,12 +58,11 @@ function updateTime(): void {
         logConsole('Title and favicon reset...', 'info');
     }
 
-    // Handle seconds progress bar
-    if (menu.secondsbarradio[0].checked) {
-        const secBarWidth = (Number(sec) / 59) * 100;
-        dtdisplay.secondsBar.style.width = `${secBarWidth}%`;
+    // Handle time bar
+    if (menu.timebarselect.value !== 'tbarNone') {
+        clock.timeBarUtil(menu.timebarselect.value, time);
     } else {
-        dtdisplay.secondsBar.style.width = '0%';
+        dtdisplay.timeBar.style.width = '0%';
     }
 
     let displayHour = '';

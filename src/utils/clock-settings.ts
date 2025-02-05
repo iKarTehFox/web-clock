@@ -11,7 +11,7 @@ interface ClockConfig {
     dateAlign: string;
     borderMode: string;
     borderStyle: string;
-    secondsBarVis: string;
+    timeBar: string;
 }
 
 interface FontConfig {
@@ -45,7 +45,7 @@ export function getClockConfig(): ClockConfig {
         dateAlign: getDateAlign(),
         borderMode: getBorderMode(),
         borderStyle: getBorderStyle(),
-        secondsBarVis: getSecondsBarVis()
+        timeBar: getTimeBar()
     };
 }
 
@@ -77,8 +77,8 @@ export function getBorderStyle(): string {
     return menu.borderstyleselect.value;
 }
 
-export function getSecondsBarVis(): string {
-    return getFirstElement<HTMLInputElement>('input[name="seconds-bar-radio"]:checked').id;
+export function getTimeBar(): string {
+    return menu.timebarselect.value;
 }
 
 // Font config
@@ -180,7 +180,7 @@ export function setClockConfig(config: ClockConfig, trigger: boolean = false): v
     setDateAlign(config.dateAlign, trigger);
     setBorderMode(config.borderMode, trigger);
     setBorderStyle(config.borderStyle, trigger);
-    setSecondsBarVis(config.secondsBarVis, trigger);
+    setTimeBar(config.timeBar, trigger);
 }
 
 export function setClockMode(mode: string, trigger: boolean = false): void {
@@ -222,10 +222,9 @@ export function setBorderStyle(style: string, trigger = false): void {
     if (trigger) menu.borderstyleselect.dispatchEvent(new Event('change'));
 }
 
-export function setSecondsBarVis(mode: string, trigger = false): void {
-    const element = getFirstElement<HTMLInputElement>(`input[name="seconds-bar-radio"][id="${mode}"]`);
-    element.checked = true;
-    if (trigger) element.dispatchEvent(new Event('change'));
+export function setTimeBar(mode: string, trigger = false): void {
+    menu.timebarselect.value = mode;
+    if (trigger) menu.timebarselect.dispatchEvent(new Event('change'));
 }
 
 // Font config

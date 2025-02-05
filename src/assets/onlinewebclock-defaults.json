@@ -7,7 +7,7 @@
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",
-		"secondsBarVis": "sbaN"
+		"timeBar": "tbarNone"
 	},
 	"fontConfig": {
 		"fontFamily": "",
@@ -27,5 +27,5 @@
 		"bgImageSize": "",
 		"bgImageBlur": ""
 	},
-	"version": 9
+	"version": 10
 }

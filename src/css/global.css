@@ -110,7 +110,7 @@ body {
 }
 
 /* Seconds progress bar */
-#seconds-progress-bar {
+#time-progress-bar {
   position: absolute;
   bottom: 1;
   height: 5px;
