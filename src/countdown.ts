@@ -1,6 +1,7 @@
 import { match } from 'ts-pattern';
 import { menu, countdown } from './utils/dom-elements';
-import { logConsole, showToast } from './utils/dom-utils';
+import { logConsole, requestNotificationPermission, showToast } from './utils/dom-utils';
+import * as luxon from 'ts-luxon';
 
 
 let countdownInterval: NodeJS.Timeout;
@@ -52,13 +53,20 @@ function startCountdown() {
             if (totalSeconds === 0 || totalSeconds < 1) {
                 clearInterval(countdownInterval);
                 running = false;
-                showToast('Countdown finished!', 'verylong', 'success');
                 inputsState(false);
                 btnState({
                     start: false,
                     pause: true,
                     reset: true,
                 });
+                if (countdown.notifcheckbox.checked && Notification.permission === 'granted') {
+                    new Notification('Countdown finished!', {
+                        body: `Your timer has elapsed. It is now ${luxon.DateTime.now().toFormat('tt')}`,
+                    });
+                    showToast('Countdown finished!', 'normal');
+                } else {
+                    showToast('Countdown finished!', 'verylong');
+                }
             }
         }, 1000);
         logConsole('Countdown started...', 'info');
@@ -181,6 +189,26 @@ document.addEventListener('keydown', function(e) {
 // Event listeners for buttons
 countdown.pausebtn.addEventListener('click', pauseCountdown);
 countdown.resetbtn.addEventListener('click', resetCountdown);
+
+// Notification functionality
+countdown.notifcheckbox.addEventListener('change', async function() {
+    if (this.checked && Notification.permission !== 'granted') {
+        await requestNotificationPermission()
+            .then(permission => {
+                if (permission !== 'granted') {
+                    countdown.notifcheckbox.checked = false;
+                    showToast('Notification permission denied.', 'normal', 'danger');
+                }
+            })
+            .catch(() => {
+                countdown.notifcheckbox.checked = false;
+            });
+    }
+});
+
+if (Notification.permission === 'granted') { // Enable if already granted
+    countdown.notifcheckbox.checked = true;
+}
 
 // Prevent close if running
 window.addEventListener('beforeunload', function(e) {

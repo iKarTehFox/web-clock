@@ -113,6 +113,17 @@ export function setMetaColor(type: 'color' | 'theme', value: string): void {
         });
 }
 
+export async function requestNotificationPermission(): Promise<NotificationPermission> {
+    if (!('Notification' in window)) {
+        showToast('Notifications are not supported in this browser.', 'long', 'danger');
+        return Promise.reject('Notifications not supported');
+    }
+
+    const permission = await Notification.requestPermission();
+    logConsole(`Notification permission: ${permission}`, 'debug');
+    return permission;
+}
+
 // Function to create an overlay card element
 export function makeCardOverlay(title: string, content: HTMLElement | string): void {
     // Create container

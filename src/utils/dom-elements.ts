@@ -125,7 +125,8 @@ export const countdown = {
     resetbtn: getElement<HTMLButtonElement>('countdown-reset'),
     hrsinput: getElement<HTMLInputElement>('countdown-hours'),
     mininput: getElement<HTMLInputElement>('countdown-minutes'),
-    secinput: getElement<HTMLInputElement>('countdown-seconds')
+    secinput: getElement<HTMLInputElement>('countdown-seconds'),
+    notifcheckbox: getElement<HTMLInputElement>('countdown-notif-checkbox'),
 };
 
 export const debug = {
