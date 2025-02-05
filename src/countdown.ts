@@ -63,6 +63,7 @@ function startCountdown() {
                     showToast('Countdown finished!', 'normal');
                     new Notification('Countdown finished!', {
                         body: `Your timer has elapsed. It is now ${luxon.DateTime.now().toFormat('tt')}`,
+                        silent: false
                     });
                 } else {
                     showToast('Countdown finished!', 'verylong');
