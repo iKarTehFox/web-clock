@@ -60,10 +60,10 @@ function startCountdown() {
                     reset: true,
                 });
                 if (countdown.notifcheckbox.checked && Notification.permission === 'granted') {
+                    showToast('Countdown finished!', 'normal');
                     new Notification('Countdown finished!', {
                         body: `Your timer has elapsed. It is now ${luxon.DateTime.now().toFormat('tt')}`,
                     });
-                    showToast('Countdown finished!', 'normal');
                 } else {
                     showToast('Countdown finished!', 'verylong');
                 }
