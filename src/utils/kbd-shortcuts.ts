@@ -14,6 +14,7 @@ function generateShortcutsHelp(): HTMLDivElement {
         'r': 'Reset settings to defaults',
         's': 'Show/hide stopwatch',
         't': 'Switch light/dark theme',
+        'v': 'Toggle panel visibility',
     };
 
     const div = document.createElement('div');
@@ -89,6 +90,12 @@ document.addEventListener('keydown', (e) => {
             } else {
                 menu.themeradio[0].click();
             }
+        })
+        .with('v', () => { // Toggle panel visibility
+            if (menu.obutton.style.display === 'none' && (menu.options.classList.contains('menu-options-fade') || menu.options.classList.contains('menu-options-initial'))) {
+                menu.obutton.style.display = '';
+            }
+            menu.panelvischeckbox.click();
         })
         .otherwise(() => {});
 });
