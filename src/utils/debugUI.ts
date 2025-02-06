@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { debug } from './dom-elements';
+import { debug, dtdisplay } from './dom-elements';
 import { showToast, makeCardOverlay } from './dom-utils';
 
 export function initializeDebugUI(): void {
@@ -15,7 +15,6 @@ export function initializeDebugUI(): void {
         btn.addEventListener('click', () => {
             const theme = btn.dataset.dbgtoasttheme;
             const length = btn.dataset.dbgtoastlength as 'default' | 'normal' | 'long' | 'verylong' | undefined;
-
             showToast(`Test toast. Theme "${theme}"`, length, theme);
         });
     });
@@ -35,5 +34,9 @@ export function initializeDebugUI(): void {
                     makeCardOverlay(title, content);
                 });
         });
+    });
+
+    debug.rmclockbtn.addEventListener('click', () => {
+        dtdisplay.ccontainer.remove();
     });
 }

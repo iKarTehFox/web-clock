@@ -139,4 +139,5 @@ export const debug = {
     toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
     uastring: getElement<HTMLParagraphElement>('debugUAString'),
     localstring: getElement<HTMLParagraphElement>('debugLocString'),
+    rmclockbtn: getElement<HTMLButtonElement>('debugRmClock'),
 };
