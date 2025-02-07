@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { logConsole, showToast, makeCardOverlay, createScannerOverlay } from './utils/dom-utils';
+import { logConsole, showToast, createBsModal, createScannerOverlay } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, debug } from './utils/dom-elements';
 import { ErrorDetails, handleValidationFailure, verifySettingsJSON } from './importValidation';
@@ -46,7 +46,7 @@ function handleExport(settings: any, type: 'clipboard' | 'download' | 'log' | 'q
             logConsole(`Settings JSON: ${settingsJSON}`, 'debug');
         })
         .with('card', () => {
-            makeCardOverlay('Raw Settings JSON', settingsJSON);
+            createBsModal('Raw Settings JSON', settingsJSON);
             showToast(`Exported raw JSON. Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         })
         .with('qr', () => {
@@ -61,7 +61,7 @@ function handleExport(settings: any, type: 'clipboard' | 'download' | 'log' | 'q
                 scale: 4,
                 width: 400
             }).then(canvas => {
-                makeCardOverlay('QR Code', canvas);
+                createBsModal('QR Code', canvas);
             });
             showToast(`Exported settings to QR code! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
         })
@@ -280,5 +280,5 @@ debug.getbgimgbtn.addEventListener('click', () => {
     }
     const imgElement = document.createElement('img');
     imgElement.src = bgImageUrl;
-    makeCardOverlay('Background Image', imgElement);
+    createBsModal('Background Image', imgElement);
 });

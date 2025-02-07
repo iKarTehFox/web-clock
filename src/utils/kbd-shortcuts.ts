@@ -1,7 +1,7 @@
 import { match } from 'ts-pattern';
 import { toggleFullscreen } from '../global';
 import { menu, countdown, stopwatch } from './dom-elements';
-import { makeCardOverlay } from './dom-utils';
+import { createBsModal } from './dom-utils';
 import { presetLocalJSON } from '../importExport';
 
 function generateShortcutsHelp(): HTMLDivElement {
@@ -59,7 +59,7 @@ document.addEventListener('keydown', (e) => {
             toggleFullscreen();
         })
         .with('h', () => { // Show help
-            makeCardOverlay('Keyboard shortcuts', generateShortcutsHelp());
+            createBsModal('Keyboard shortcuts', generateShortcutsHelp());
         })
         .with('m', () => { // Toggle menu
             if (menu.options.classList.contains('menu-options-show')) {

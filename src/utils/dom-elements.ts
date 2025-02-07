@@ -8,8 +8,8 @@ export const doc = {
 
 export const menu = {
     autorestarttime: getElement<HTMLSpanElement>('autorestart-time'),
-    bordertyperadio: getElements<HTMLInputElement>('input[name="border-type-radio"]'),
     borderstyleselect: getElement<HTMLSelectElement>('borderStyleSelect'),
+    bordertyperadio: getElements<HTMLInputElement>('input[name="border-type-radio"]'),
     cbutton: getElement<HTMLButtonElement>('close-button'),
     clockmoderadio: getElements<HTMLInputElement>('input[name="clock-mode-radio"]'),
     colorbadge: getElement<HTMLParagraphElement>('currentColorBadge'),
@@ -25,32 +25,32 @@ export const menu = {
     fadetransrangelabel: getElement<HTMLLabelElement>('fadeTransitionRangeLabel'),
     fullscreenbtn: getElement<HTMLButtonElement>('fs-toggle'),
     githubbtn: getElement<HTMLButtonElement>('github-btn'),
-    imageblurrange: getElement<HTMLInputElement>('bgImgBlurRange'),
     imageblurlabel: getElement<HTMLLabelElement>('bgImgBlurRangeLabel'),
+    imageblurrange: getElement<HTMLInputElement>('bgImgBlurRange'),
     imagegroup: getElement<HTMLDivElement>('bgImgGroup'),
-    imageuploadbutton: getElement<HTMLButtonElement>('bgImageUploadBtn'),
     imagesizeselect: getElement<HTMLSelectElement>('bgImageSizeSelect'),
+    imageuploadbutton: getElement<HTMLButtonElement>('bgImageUploadBtn'),
     jsonexportclipbtn: getElement<HTMLButtonElement>('jsonExportClipBtn'),
     jsonexportdownloadbtn: getElement<HTMLButtonElement>('jsonExportDlBtn'),
     jsonexportqrbtn: getElement<HTMLButtonElement>('jsonExportQrBtn'),
-    jsonimportuploadbtn: getElement<HTMLButtonElement>('jsonImportUlBtn'),
     jsonimportqrbtn: getElement<HTMLButtonElement>('jsonImportQrBtn'),
+    jsonimportuploadbtn: getElement<HTMLButtonElement>('jsonImportUlBtn'),
     jsonmanualimportbtn: getElement<HTMLButtonElement>('jsonImportTxtBtn'),
     jsonpresetsgroup: getElement<HTMLDivElement>('jsonPresetsContainer'),
     legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
     manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
-    panelvischeckbox: getElement<HTMLInputElement>('panelVisible'),
     obutton: getElement<HTMLButtonElement>('open-button'),
     options: getElement<HTMLDivElement>('menu-options'),
+    panelvischeckbox: getElement<HTMLInputElement>('panelVisible'),
     presetcolors: getElements<HTMLInputElement>('input[name="preset-color-radio"]'),
     presetgroup: getElement<HTMLDivElement>('presetColorGroup'),
-    timebarselect: getElement<HTMLInputElement>('timeBarSelect'),
     secondsvisradio: getElements<HTMLInputElement>('input[name="seconds-vis-radio"]'),
-    textcolorinput: getElement<HTMLInputElement>('textColorInput'),
     textcolorgroup: getElement<HTMLDivElement>('textColorGroup'),
+    textcolorinput: getElement<HTMLInputElement>('textColorInput'),
     textcolorlabel: getElement<HTMLLabelElement>('textColorLabel'),
     textcoloroverrideradio: getElements<HTMLInputElement>('input[name="text-color-override-radio"]'),
     themeradio: getElements<HTMLInputElement>('input[name="menu-theme-radio"]'),
+    timebarselect: getElement<HTMLInputElement>('timeBarSelect'),
     timemethodselect: getElement<HTMLSelectElement>('timeMethodSelect'),
     timezoneselect: getElement<HTMLSelectElement>('timeZoneSelect'),
     titlevischeckbox: getElement<HTMLInputElement>('menuTabTitleVisible'),
@@ -58,11 +58,11 @@ export const menu = {
     weathergeobtn: getElement<HTMLButtonElement>('weatherGeoBtn'),
     weatherlatinput: getElement<HTMLInputElement>('weatherLatTextArea'),
     weatherloninput: getElement<HTMLInputElement>('weatherLonTextArea'),
-    weathersubmitbtn: getElement<HTMLButtonElement>('weatherSubmitBtn'),
-    weatherstopbtn: getElement<HTMLButtonElement>('weatherStopBtn'),
-    weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]'),
-    weathermovetoggle: getElement<HTMLInputElement>('weatherMoveToggle'),
     weathermovereset: getElement<HTMLButtonElement>('weatherMoveReset'),
+    weathermovetoggle: getElement<HTMLInputElement>('weatherMoveToggle'),
+    weatherstopbtn: getElement<HTMLButtonElement>('weatherStopBtn'),
+    weathersubmitbtn: getElement<HTMLButtonElement>('weatherSubmitBtn'),
+    weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]'),
 };
 
 export const font = {
@@ -72,12 +72,12 @@ export const font = {
     shadowlabel: getElement<HTMLLabelElement>('dropShadowRangeLabel'),
     shadowrange: getElement<HTMLInputElement>('dropShadowRange'),
     sizesel: getElement<HTMLSelectElement>('sizeSelect'),
-    styleradio: getElements<HTMLInputElement>('input[name="font-style-radio"]'),
     strokecolor: getElement<HTMLInputElement>('textStrokeColor'),
     strokecolorlabel: getElement<HTMLLabelElement>('textStrokeColorLabel'),
     strokerange: getElement<HTMLInputElement>('textStrokeRange'),
     strokerangelabel: getElement<HTMLLabelElement>('textStrokeRangeLabel'),
-    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]')
+    styleradio: getElements<HTMLInputElement>('input[name="font-style-radio"]'),
+    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]'),
 };
 
 export const dtdisplay = {
@@ -89,8 +89,8 @@ export const dtdisplay = {
     indicatorSlot: getElement<HTMLSpanElement>('indicator'),
     minuteSlot: getElement<HTMLSpanElement>('minute-slot'),
     secondSlot: getElement<HTMLSpanElement>('second-slot'),
+    tcontainer: getElement<HTMLDivElement>('time-container'),
     timeBar: getElement<HTMLDivElement>('time-progress-bar'),
-    tcontainer: getElement<HTMLDivElement>('time-container')
 };
 
 export const weather = {
@@ -107,37 +107,36 @@ export const weather = {
 
 export const stopwatch = {
     container: getElement<HTMLDivElement>('stopwatch-container'),
-    obutton: getElement<HTMLButtonElement>('stopwatch-button'),
     display: getElement<HTMLHeadingElement>('stopwatch-display'),
-    startbtn: getElement<HTMLButtonElement>('stopwatch-start'),
+    lapbtn: getElement<HTMLButtonElement>('stopwatch-lap'),
+    lapfield: getElement<HTMLButtonElement>('stopwatch-lapfield'),
+    obutton: getElement<HTMLButtonElement>('stopwatch-button'),
     pausebtn: getElement<HTMLButtonElement>('stopwatch-pause'),
     resetbtn: getElement<HTMLButtonElement>('stopwatch-reset'),
-    lapbtn: getElement<HTMLButtonElement>('stopwatch-lap'),
-    lapfield: getElement<HTMLButtonElement>('stopwatch-lapfield')
+    startbtn: getElement<HTMLButtonElement>('stopwatch-start'),
 };
 
 export const countdown = {
     container: getElement<HTMLDivElement>('countdown-container'),
-    obutton: getElement<HTMLButtonElement>('countdown-button'),
     display: getElement<HTMLHeadingElement>('countdown-display'),
-    startbtn: getElement<HTMLButtonElement>('countdown-start'),
-    pausebtn: getElement<HTMLButtonElement>('countdown-pause'),
-    resetbtn: getElement<HTMLButtonElement>('countdown-reset'),
     hrsinput: getElement<HTMLInputElement>('countdown-hours'),
     mininput: getElement<HTMLInputElement>('countdown-minutes'),
-    secinput: getElement<HTMLInputElement>('countdown-seconds'),
     notifcheckbox: getElement<HTMLInputElement>('countdown-notif-checkbox'),
+    obutton: getElement<HTMLButtonElement>('countdown-button'),
+    pausebtn: getElement<HTMLButtonElement>('countdown-pause'),
+    resetbtn: getElement<HTMLButtonElement>('countdown-reset'),
+    secinput: getElement<HTMLInputElement>('countdown-seconds'),
+    startbtn: getElement<HTMLButtonElement>('countdown-start'),
 };
 
 export const debug = {
-    cardoverlaybtns: getElements<HTMLButtonElement>('button[name="debugCard"]'),
     container: getElement<HTMLDivElement>('debuggingContainer'),
     devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
     getbgimgbtn: getElement<HTMLButtonElement>('debugGetBGBtn'),
     jsonexportcardbtn: getElement<HTMLButtonElement>('jsonExportCardBtn'),
     jsonexportconsolebtn:  getElement<HTMLButtonElement>('jsonExportConsoleBtn'),
-    toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
-    uastring: getElement<HTMLParagraphElement>('debugUAString'),
     localstring: getElement<HTMLParagraphElement>('debugLocString'),
     rmclockbtn: getElement<HTMLButtonElement>('debugRmClock'),
+    toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
+    uastring: getElement<HTMLParagraphElement>('debugUAString'),
 };

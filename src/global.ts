@@ -341,13 +341,13 @@ menu.cbutton.addEventListener('click', function() {
 document.addEventListener('click', function(e) {
     const target = e.target as HTMLElement;
     const isTooltip = target.closest('.tooltip') !== null;
-    const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
+    const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
     const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
 
     const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
                           !menu.options.classList.contains('menu-options-initial');
 
-    if (!isTooltip && !isCardOverlay && !isScannerOverlay && isMenuVisible &&
+    if (!isTooltip && !isBsModal && !isScannerOverlay && isMenuVisible &&
         !menu.options.contains(target as Node) && 
         !menu.obutton.contains(target as Node) && 
         !menu.cbutton.contains(target as Node) && 
@@ -362,10 +362,10 @@ document.addEventListener('keydown', function(e) {
     const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
                           !menu.options.classList.contains('menu-options-initial');
 
-    const isCardOverlayVisible = document.querySelector('[data-overlay="card-overlay"]') !== null;
+    const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
     const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
 
-    if (e.key === 'Escape' && isMenuVisible && !isCardOverlayVisible && !isScannerOverlayVisible) {
+    if (e.key === 'Escape' && isMenuVisible && !isBsModalVisible && !isScannerOverlayVisible) {
         toggleMenuVisibility(false);
     }
 });

@@ -163,10 +163,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                    countdown.obutton.contains(target);
         const isCountdownVisible = countdown.container.style.display !== 'none';
         const isTooltip = target.closest('.tooltip') !== null;
-        const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
+        const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
         const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
 
-        if (!isMenuRelated && !isTooltip && !isCardOverlay && !isScannerOverlay && isCountdownVisible) {
+        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isCountdownVisible) {
             countdown.container.style.display = 'none';
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');
@@ -177,10 +177,10 @@ document.addEventListener('DOMContentLoaded', function() {
 // Esc down to close countdown
 document.addEventListener('keydown', function(e) {
     const isCountdownVisible = countdown.container.style.display !== 'none';
-    const isCardOverlayVisible = document.querySelector('[data-overlay="card-overlay"]') !== null;
+    const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
     const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
 
-    if (e.key === 'Escape' && isCountdownVisible && !isCardOverlayVisible && !isScannerOverlayVisible) {
+    if (e.key === 'Escape' && isCountdownVisible && !isBsModalVisible && !isScannerOverlayVisible) {
         countdown.container.style.display = 'none';
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');

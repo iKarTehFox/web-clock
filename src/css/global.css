@@ -179,3 +179,8 @@ body {
     z-index: 1;
     border-radius: 10px;
 }
+
+[data-bs-theme="dark"] .modal-content {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
