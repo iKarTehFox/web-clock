@@ -1,8 +1,10 @@
-import { match } from 'ts-pattern';
+import { match, P } from 'ts-pattern';
 import { toggleFullscreen } from '../global';
 import { menu, countdown, stopwatch } from './dom-elements';
 import { createBsModal } from './dom-utils';
 import { presetLocalJSON } from '../importExport';
+import { lockSettings } from './debug';
+import { getPresetByHotkey } from '../assets/presets';
 
 function generateShortcutsHelp(): HTMLDivElement {
     const shortcuts = {
@@ -40,7 +42,12 @@ document.addEventListener('keydown', (e) => {
     }
 
     // Skip if overlays visible
-    if (document.querySelector('[data-overlay="card-overlay"]') || document.querySelector('[data-overlay="scanner-overlay"]')) {
+    if (document.querySelector('[data-overlay="bs-modal-overlay"]') || document.querySelector('[data-overlay="scanner-overlay"]')) {
+        return;
+    }
+
+    // Skip if settings locked
+    if (lockSettings) {
         return;
     }
 
@@ -52,6 +59,10 @@ document.addEventListener('keydown', (e) => {
     // Check key
     const key = e.key.toLowerCase();
     match(key)
+        .with(P.when(k => /^[1-9]$/.test(k)), (k) => {
+            const preset = getPresetByHotkey(parseInt(k));
+            if (preset) presetLocalJSON(preset.filename);
+        })
         .with('c', () => { // Show/hide countdown
             countdown.obutton.click();
         })

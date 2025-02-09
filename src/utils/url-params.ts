@@ -1,7 +1,7 @@
 import { menu, weather } from './dom-elements';
 import { presetLocalJSON } from '../importExport';
 import { logConsole, showToast } from './dom-utils';
-import { setDebug, setTimeRefresh } from './debug';
+import { setDebug, setLockSettings, setTimeRefresh } from './debug';
 import { initializeDebugUI } from './debugUI';
 import { submitWeatherSettings } from './weather-utils';
 import { startColorFade } from '../background-color';
@@ -148,6 +148,7 @@ export async function applyURLParams() {
     
     // Prevent end-user options modification by removing menu container entirely
     if (params.lockSettings) {
+        setLockSettings(true);
         menu.container.remove();
         logConsole('Settings locked - Menu container removed...', 'info');
     }

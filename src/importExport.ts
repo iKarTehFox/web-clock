@@ -4,7 +4,7 @@ import * as luxon from 'ts-luxon';
 import { menu, debug } from './utils/dom-elements';
 import { ErrorDetails, handleValidationFailure, verifySettingsJSON } from './importValidation';
 import { getClockConfig, getFontConfig, getColorThemeConfig, setClockConfig, setFontConfig, setColorThemeConfig } from './utils/clock-settings';
-import { getPresetByHotkey, presetList } from './assets/presets';
+import { presetList } from './assets/presets';
 import axios from 'axios';
 import QRCode from 'qrcode';
 import { match } from 'ts-pattern';
@@ -178,34 +178,6 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
             return Promise.reject(error);
         });
 }
-
-// Preset hotkey functionality
-document.addEventListener('keydown', (e) => {
-    // Skip if text input is focused
-    if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') {
-        return;
-    }
-
-    // Skip if overlays visible
-    if (document.querySelector('[data-overlay="card-overlay"]') || document.querySelector('[data-overlay="scanner-overlay"]')) {
-        return;
-    }
-
-    // Debouncing/ignore system shortcuts
-    if (e.repeat || e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) {
-        return;
-    }
-
-    // Only handle number keys 1-9
-    const key = parseInt(e.key);
-    if (key >= 1 && key <= 9) {
-        const preset = getPresetByHotkey(key);
-        if (preset) {
-            presetLocalJSON(preset.filename);
-            logConsole(`Hotkey ${key} pressed - Loading preset: ${preset.displayName}`, 'debug');
-        }
-    }
-});
 
 function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: any; colorTheme: any; }) {
     // Set clockConfig settings
