@@ -125,6 +125,7 @@ export async function applyURLParams() {
         const preset = params.preset;
         try {
             await presetLocalJSON(preset, false);
+            document.body.style.transition = 'background-color 2.8s ease-in-out';
         } catch {
             startColorFade();
         }

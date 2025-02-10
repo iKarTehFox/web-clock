@@ -4,6 +4,7 @@ export const doc = {
     blurpanel: getElement<HTMLDivElement>('blur-panel'),
     favicon: getElement<HTMLLinkElement>('favicon'),
     themecolormeta: getElement<HTMLMetaElement>('theme-color-meta'),
+    cnote: getElement<HTMLParagraphElement>('custom-note'),
 };
 
 export const menu = {
@@ -16,6 +17,8 @@ export const menu = {
     colorbadgelabel: getElement<HTMLDivElement>('currentColorLabel'),
     colormoderadio: getElements<HTMLInputElement>('input[name="color-mode-radio"]'),
     container: getElement<HTMLDivElement>('menu-container'),
+    cnoteinput: getElement<HTMLInputElement>('cnote-input'),
+    cnotealignradio: getElements<HTMLInputElement>('input[name="note-alignment-radio"]'),
     datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
     dateformselect: getElement<HTMLSelectElement>('dateFormatSelect'),
     durationdisplay: getElement<HTMLParagraphElement>('time-duration'),

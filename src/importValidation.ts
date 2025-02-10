@@ -10,6 +10,7 @@ const valid = {
     BM: ['btyD', 'btyR', 'btyB'],
     BS: ['solid', 'dashed', 'dotted', 'double'],
     TB: ['tbarWkday', 'tbarDay', 'tbarHr', 'tbarSec', 'tbarNone'],
+    CNA: ['nalT', 'nalB'],
     FF: ['', 'Lato', 'Montserrat', 'Open Sans', 'Oswald', 'Poppins', 'Roboto', 'Tektur', 'Ubuntu', 'Ubuntu Mono', 'Dancing Script', 'Merriweather', 'Nanum Brush Script', 'Pangolin'],
     FS: ['fstR', 'fstI'],
     FW: ['fweL', 'fweN', 'fweB'],
@@ -109,7 +110,7 @@ export function validateRequiredKeys(jsonData: { [key: string]: any }, requiredK
     }
 
     const keysInJson = Object.keys(jsonData);
-    const unexpectedKeys = keysInJson.filter(key => !requiredKeys.includes(key) && key !== 'exportTimestamp' && key !== 'displaySettings'); // displaySettings exception for version 5 files.
+    const unexpectedKeys = keysInJson.filter(key => !requiredKeys.includes(key) && key !== 'exportTimestamp');
 
     if (unexpectedKeys.length > 0) {
         return {
@@ -143,6 +144,7 @@ export function validateClockConfig(clockConfig: any, valid: any) {
         { key: 'borderMode', validValues: valid.BM },
         { key: 'borderStyle', validValues: valid.BS },
         { key: 'timeBar', validValues: valid.TB },
+        { key: 'customNoteAlign', validValues: valid.CNA },
     ];
 
     for (const { key, validValues } of keys) {
@@ -156,11 +158,22 @@ export function validateClockConfig(clockConfig: any, valid: any) {
         }
     }
 
+    // Check borderMode and timeBar incompatibility
     if ((clockConfig.borderMode === 'btyB' || clockConfig.borderMode === 'btyR') && clockConfig.timeBar !== 'tbarNone') {
         return {
             type: 'incomp',
             subkey: 'borderMode, timeBar',
             value: `${clockConfig.borderMode}, ${clockConfig.timeBar}`
+        };
+    }
+
+    // Check customNote length
+    if (clockConfig.customNote && clockConfig.customNote.length >= 75) {
+        return {
+            type: 'invalid',
+            subkey: 'customNote',
+            value: `${clockConfig.customNote.length} characters`,
+            expected: 'Maximum 75 characters'
         };
     }
 
@@ -201,6 +214,7 @@ export function validateColorTheme(colorTheme: any, valid: any) {
         };
     }
 
+    // Check colorMode and solidColor incompatibility
     if (colorTheme.colorMode === 'solidmode' && !containsValue(valid.SC, colorTheme.solidColor)) {
         return {
             type: 'invalid',
@@ -219,6 +233,7 @@ export function validateColorTheme(colorTheme: any, valid: any) {
         };
     }
 
+    // Check colorMode and textColorMode incompatibility
     if ((colorTheme.colorMode === 'fademode' && colorTheme.textColorMode === 'tcovO') ||
         (colorTheme.colorMode === 'imgmode' && colorTheme.textColorMode === 'tcovD')) {
         return {
@@ -244,6 +259,7 @@ export function validateColorTheme(colorTheme: any, valid: any) {
         }
     }
 
+    // Check bgImage safety
     if (colorTheme.bgImage) {
         const bgImageValidationError = validateBgImageType(colorTheme.bgImage);
         if (bgImageValidationError) {

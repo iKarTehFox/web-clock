@@ -1,6 +1,6 @@
 import { stopColorFade } from '../background-color';
 import { menu, font } from './dom-elements';
-import { getFirstElement } from '../utils/dom-utils';
+import { getFirstElement, logConsole } from '../utils/dom-utils';
 
 // Interfaces
 interface ClockConfig {
@@ -12,6 +12,8 @@ interface ClockConfig {
     borderMode: string;
     borderStyle: string;
     timeBar: string;
+    customNote: string;
+    customNoteAlign: string;
 }
 
 interface FontConfig {
@@ -45,7 +47,9 @@ export function getClockConfig(): ClockConfig {
         dateAlign: getDateAlign(),
         borderMode: getBorderMode(),
         borderStyle: getBorderStyle(),
-        timeBar: getTimeBar()
+        timeBar: getTimeBar(),
+        customNote: getCustomNote(),
+        customNoteAlign: getCustomNoteAlign()
     };
 }
 
@@ -79,6 +83,14 @@ export function getBorderStyle(): string {
 
 export function getTimeBar(): string {
     return menu.timebarselect.value;
+}
+
+export function getCustomNote(): string {
+    return menu.cnoteinput.value;
+}
+
+export function getCustomNoteAlign(): string {
+    return getFirstElement<HTMLInputElement>('input[name="note-alignment-radio"]:checked').id;
 }
 
 // Font config
@@ -181,6 +193,8 @@ export function setClockConfig(config: ClockConfig, trigger: boolean = false): v
     setBorderMode(config.borderMode, trigger);
     setBorderStyle(config.borderStyle, trigger);
     setTimeBar(config.timeBar, trigger);
+    setCustomNote(config.customNote, trigger);
+    setCustomNoteAlign(config.customNoteAlign, trigger);
 }
 
 export function setClockMode(mode: string, trigger: boolean = false): void {
@@ -225,6 +239,20 @@ export function setBorderStyle(style: string, trigger = false): void {
 export function setTimeBar(mode: string, trigger = false): void {
     menu.timebarselect.value = mode;
     if (trigger) menu.timebarselect.dispatchEvent(new Event('change'));
+}
+
+export function setCustomNote(note: string, trigger = false): void {
+    if (note !== '' && note != undefined && note != null) {
+        menu.cnoteinput.value = note;
+        logConsole(`Note was set to ${note}`);
+        if (trigger) menu.cnoteinput.dispatchEvent(new Event('input'));
+    }
+}
+
+export function setCustomNoteAlign(align: string, trigger = false): void {
+    const element = getFirstElement<HTMLInputElement>(`input[name="note-alignment-radio"][id="${align}"]`);
+    element.checked = true;
+    if (trigger) element.dispatchEvent(new Event('change'));
 }
 
 // Font config

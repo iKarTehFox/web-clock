@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { menu, font, dtdisplay, stopwatch, countdown, weather } from './utils/dom-elements';
+import { menu, font, dtdisplay, stopwatch, countdown, weather, doc } from './utils/dom-elements';
 import { logConsole, setMetaColor, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
 
@@ -21,6 +21,7 @@ function modifyFontStyle(type: string, value: string) {
     match(type)
         .with('style', () => {
             dtdisplay.ccontainer.style.fontStyle = value;
+            doc.cnote.style.fontStyle = value;
             stopwatch.display.style.fontStyle = value;
             countdown.display.style.fontStyle = value;
             logConsole(`Font style set to: ${value}`, 'debug');
@@ -43,6 +44,7 @@ function modifyFontStyle(type: string, value: string) {
         })
         .with('family', () => {
             dtdisplay.ccontainer.style.fontFamily = value;
+            doc.cnote.style.fontFamily = value;
             countdown.display.style.fontFamily = value;
             logConsole(`Font family set to: ${value}`, 'debug');
         })
@@ -422,6 +424,28 @@ export function toggleFullscreen() {
 
 menu.fullscreenbtn.addEventListener('click', function() {
     toggleFullscreen();
+});
+
+menu.cnoteinput.oninput = () => {
+    const text = menu.cnoteinput.value;
+    doc.cnote.textContent = text;
+    doc.cnote.style.whiteSpace = 'pre-wrap';
+};
+
+menu.cnotealignradio.forEach(radio => {
+    radio.addEventListener('change', () => {
+        const align = radio.dataset.value;
+        match(align)
+            .with('top', () => {
+                doc.cnote.style.bottom = '';
+                doc.cnote.style.top = '20px';
+            })
+            .with('bottom', () => {
+                doc.cnote.style.top = '';
+                doc.cnote.style.bottom = '20px';
+            })
+            .otherwise(() => {});
+    });
 });
 
 menu.panelvischeckbox.addEventListener('change', function(e) {

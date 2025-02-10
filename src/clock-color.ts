@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { menu, dtdisplay } from './utils/dom-elements';
+import { menu, dtdisplay, doc } from './utils/dom-elements';
 import { getFirstElement, logConsole } from './utils/dom-utils';
 
 // Text color override listener
@@ -18,9 +18,11 @@ menu.textcoloroverrideradio.forEach((radio) => {
                         if (document.body.style.backgroundColor === 'rgb(0, 0, 0)') {
                             dtdisplay.ccontainer.style.color = '#FFFFFF';
                             dtdisplay.timeBar.style.backgroundColor = '#FFFFFF';
+                            doc.cnote.style.color = '#FFFFFF';
                         } else {
                             dtdisplay.ccontainer.style.color = '#212529';
                             dtdisplay.timeBar.style.backgroundColor = '#212529';
+                            doc.cnote.style.color = '#212529';
                         }
                     }
                 }
@@ -39,6 +41,7 @@ menu.textcolorinput.addEventListener('input', function() {
     const color = menu.textcolorinput.value;
     dtdisplay.ccontainer.style.color = color;
     dtdisplay.timeBar.style.backgroundColor = color;
+    doc.cnote.style.color = color;
     menu.textcolorlabel.textContent = `Text color: ${menu.textcolorinput.value}`;
     logConsole(`Text color override: ${color}`, 'debug');
 });
@@ -54,9 +57,11 @@ menu.presetcolors.forEach((radio) => {
         if (luminance > 0.62 && isTextColorOverride === 0) {
             dtdisplay.ccontainer.style.color = '#212529'; // Set black text color
             dtdisplay.timeBar.style.backgroundColor = '#212529';
+            doc.cnote.style.color = '#212529';
         } else if (isTextColorOverride === 0) {
             dtdisplay.ccontainer.style.color = '#FFF'; // Set white text color
             dtdisplay.timeBar.style.backgroundColor = '#FFF';
+            doc.cnote.style.color = '#FFF';
         }
     });
 });
