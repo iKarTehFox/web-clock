@@ -42,7 +42,7 @@ body {
     transform: translateX(-50%);
     z-index: 1;
     text-align: center;
-    max-width: 100%;
+    width: 80vw;
     word-wrap: break-word;
 }
 
