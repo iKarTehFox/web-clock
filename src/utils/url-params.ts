@@ -134,6 +134,7 @@ export async function applyURLParams() {
             setTimeout(() => {
                 window.location.reload();
             }, autoRestartTime * 1000);
+            showToast(`Auto restart set to ${autoRestartTime} seconds.`, 'normal', 'warning');
         } else {
             logConsole('Invalid autoRestart value. It should be an integer between 15 and 86400 inclusive.', 'warning');
         }
