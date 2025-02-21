@@ -439,10 +439,12 @@ menu.cnotealignradio.forEach(radio => {
             .with('top', () => {
                 doc.cnote.style.bottom = '';
                 doc.cnote.style.top = '20px';
+                logConsole('Set note alignment to top', 'info');
             })
             .with('bottom', () => {
                 doc.cnote.style.top = '';
                 doc.cnote.style.bottom = '20px';
+                logConsole('Set note alignment to bottom', 'info');
             })
             .otherwise(() => {});
     });
