@@ -4,7 +4,6 @@ import { logConsole, showToast } from './dom-utils';
 import { setDebug, setLockSettings, setTimeRefresh } from './debug';
 import { initializeDebugUI } from './debugUI';
 import { submitWeatherSettings } from './weather-utils';
-import { startColorFade } from '../background-color';
 
 interface URLParamConfig {
     debugMode?: boolean;
@@ -123,14 +122,7 @@ export async function applyURLParams() {
     // Presets
     if (params.preset !== undefined) {
         const preset = params.preset;
-        try {
-            await presetLocalJSON(preset, false);
-            document.body.style.transition = 'background-color 2.8s ease-in-out';
-        } catch {
-            startColorFade();
-        }
-    } else {
-        startColorFade();
+        await presetLocalJSON(preset, false);
     }
 
     // Auto-restart

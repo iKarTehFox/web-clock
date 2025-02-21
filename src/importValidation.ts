@@ -9,7 +9,7 @@ const valid = {
     DA: ['dpoL', 'dpoC', 'dpoR'],
     BM: ['btyD', 'btyR', 'btyB'],
     BS: ['solid', 'dashed', 'dotted', 'double'],
-    TB: ['tbarWkday', 'tbarDay', 'tbarHr', 'tbarSec', 'tbarNone'],
+    TB: ['tbarWeekday', 'tbarMonth','tbarDay', 'tbarHour', 'tbarSec', 'tbarNone'],
     CNA: ['nalT', 'nalB'],
     FF: ['', 'Lato', 'Montserrat', 'Open Sans', 'Oswald', 'Poppins', 'Roboto', 'Tektur', 'Ubuntu', 'Ubuntu Mono', 'Dancing Script', 'Merriweather', 'Nanum Brush Script', 'Pangolin'],
     FS: ['fstR', 'fstI'],

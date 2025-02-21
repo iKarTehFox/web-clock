@@ -142,21 +142,22 @@ menu.timebarselect.addEventListener('change', () => {
 
 export function timeBarUtil(type: string, time: luxon.DateTime) {
     match(type)
-        .with('tbarWkday', () => {
+        .with('tbarWeekday', () => { // Week progress
             dtdisplay.timeBar.style.width = (time.weekday / 7) * 100 + '%';
         })
-        .with('tbarDay', () => {
+        .with('tbarMonth', () => { // Month progress
             dtdisplay.timeBar.style.width = (time.day / time.daysInMonth) * 100 + '%';
         })
-        .with('tbarHr', () => {
+        .with('tbarDay', () => { // Day progress
+            dtdisplay.timeBar.style.width = (time.hour / 23) * 100 + '%';
+        })
+        .with('tbarHour', () => { // Hour progress
             dtdisplay.timeBar.style.width = (time.minute / 59) * 100 + '%';
         })
-        .with('tbarSec', () => {
+        .with('tbarSec', () => { // Minute progress
             dtdisplay.timeBar.style.width = (time.second / 59) * 100 + '%';
         })
-        .otherwise(() => {
-            logConsole('Invalid time bar type', 'error');
-        });
+        .otherwise(() => {});
 }
 
 // Date alignment listener

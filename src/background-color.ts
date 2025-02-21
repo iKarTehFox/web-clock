@@ -161,3 +161,5 @@ menu.presetcolors.forEach((radio) => {
         logConsole(`Preset color changed to: ${selectedColor}`, 'debug');
     });
 });
+
+startColorFade();
