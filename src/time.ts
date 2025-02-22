@@ -37,7 +37,16 @@ function updatePageDuration(): void {
     const currentTime = getLuxNow('obj') as luxon.DateTime;
     const duration = currentTime.diff(luxon.DateTime.fromSeconds(pageLoadTime as number), ['hours', 'minutes', 'seconds']);
     
-    menu.durationdisplay.textContent = `${Math.floor(duration.hours)}h, ${Math.floor(duration.minutes)}m, and ${Math.floor(duration.seconds)}s`;
+    const hours = Math.floor(duration.hours);
+    const minutes = Math.floor(duration.minutes);
+    const seconds = Math.floor(duration.seconds);
+    
+    // Easter egg for negative time
+    const durationText = hours < 0 || minutes < 0 || seconds < 0
+        ? 'Negative time?! 🤔'
+        : `${hours}h, ${minutes}m, and ${seconds}s`;
+    
+    menu.durationdisplay.textContent = durationText;
 }
 
 // Main update time

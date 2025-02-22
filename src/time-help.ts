@@ -149,7 +149,8 @@ export function timeBarUtil(type: string, time: luxon.DateTime) {
             dtdisplay.timeBar.style.width = (time.day / time.daysInMonth) * 100 + '%';
         })
         .with('tbarDay', () => { // Day progress
-            dtdisplay.timeBar.style.width = (time.hour / 23) * 100 + '%';
+            const minInDay = (time.hour * 60) + time.minute;
+            dtdisplay.timeBar.style.width = (minInDay / 1439) * 100 + '%';
         })
         .with('tbarHour', () => { // Hour progress
             dtdisplay.timeBar.style.width = (time.minute / 59) * 100 + '%';
