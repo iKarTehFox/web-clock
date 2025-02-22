@@ -174,10 +174,12 @@
                                     </optgroup>
                                 </select>
                                 <h6 class="mb-1 mt-2">Custom Font</h6>
-                                <input class="form-control" type="text" placeholder="Enter font name" data-bs-toggle="tooltip" data-bs-title="Enter the name of a font installed on your system" aria-label="Custom font input form" id="customFontInputForm">
-                                <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-outline-primary" id="applyCustomFontButton">Submit</button>
-                                </div>
+                                <form class="mb-1" id="customFontForm" onsubmit="event.preventDefault();">
+                                    <input class="form-control mb-1" type="text" placeholder="Enter font name" data-bs-toggle="tooltip" data-bs-title="Enter the name of a font installed on your system" aria-label="Custom font input form" id="customFontInputForm">
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-outline-primary" id="applyCustomFontButton">Submit</button>
+                                    </div>
+                                </form>                                
                                 <h6 class="mb-1 mt-1">Font Style</h6>
                                     <div class="btn-group" role="group" aria-label="Font style button group" id="font-style-group">
                                         <input type="radio" class="btn-check" name="font-style-radio" data-value="normal" id="fstR" autocomplete="off" checked>

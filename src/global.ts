@@ -70,29 +70,13 @@ font.familysel.addEventListener('change', function() {
     font.customfontinput.value = '';
 });
 
-// Custom font input listeners and button status function
-let fontButtonStatusID: NodeJS.Timeout;
-
 font.applyfontinput.addEventListener('click', function() {
     const customFont = font.customfontinput.value;
-
     if (customFont.length > 0) {
-        clearTimeout(fontButtonStatusID);
         font.familysel.value = '';
         modifyFontStyle('family', customFont);
-        applyFontStatus('success', 'Applied!');
     }
 });
-
-function applyFontStatus(status: string, text: string) {
-    font.applyfontinput.className = `btn btn-outline-${status}`;
-    font.applyfontinput.textContent = text;
-
-    fontButtonStatusID = setTimeout(function() {
-        font.applyfontinput.className = ('btn btn-outline-primary');
-        font.applyfontinput.textContent = 'Submit';
-    }, 2500);
-}
 
 // Font style listener
 font.styleradio.forEach((radio) => {
