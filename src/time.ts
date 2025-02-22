@@ -35,16 +35,25 @@ menu.clockmoderadio.forEach((radio) => {
 // Page duration
 function updatePageDuration(): void {
     const currentTime = getLuxNow('obj') as luxon.DateTime;
-    const duration = currentTime.diff(luxon.DateTime.fromSeconds(pageLoadTime as number), ['hours', 'minutes', 'seconds']);
+    const duration = currentTime.diff(luxon.DateTime.fromSeconds(pageLoadTime as number), ['days', 'hours', 'minutes', 'seconds']);
     
+    const days = Math.floor(duration.days);
     const hours = Math.floor(duration.hours);
     const minutes = Math.floor(duration.minutes);
     const seconds = Math.floor(duration.seconds);
-    
-    // Easter egg for negative time
-    const durationText = hours < 0 || minutes < 0 || seconds < 0
-        ? 'Negative time?! 🤔'
-        : `${hours}h, ${minutes}m, and ${seconds}s`;
+
+    let durationText: string;
+    if (days < 0 || hours < 0 || minutes < 0 || seconds < 0) {
+        durationText = 'Negative time?? 🤔';
+    } else if (days > 0) { // Day counter
+        durationText = `${days}d, ${hours}h, and ${minutes}m`;
+    } else if (hours > 0) { // Hour counter
+        durationText = `${hours}h, ${minutes}m, and ${seconds}s`;
+    } else if (minutes > 0) { // Minute counter
+        durationText = `${minutes} min, and ${seconds} sec`;
+    } else { // Second counter
+        durationText = `${seconds} seconds`;
+    }
     
     menu.durationdisplay.textContent = durationText;
 }
