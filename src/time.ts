@@ -148,6 +148,7 @@ function updateTime(): void {
     }
 
     setClockDisplay([displayHour, displayMinute, displaySecond, displayIndicator]);
+    updateDate();
 }
 
 // Clock DOM update
@@ -284,7 +285,7 @@ function startNewClock() {
         clockInterval = setInterval(() => {
             updateTime();
             updatePageDuration();
-            logConsole('Time and page duration updated...', 'info');
+            logConsole('Time, date, and page duration updated...', 'info');
 
             const now = Date.now();
             const elapsed = now - lastUpdateTime;
@@ -309,7 +310,7 @@ function startOldClock() {
     clockInterval = setInterval(() => {
         updateTime();
         updatePageDuration();
-        logConsole('Time and page duration updated (Legacy method)...', 'info');
+        logConsole('Time, date, and page duration updated (Legacy method)...', 'info');
     }, timeRefresh) as unknown as NodeJS.Timeout;
 }
 
@@ -317,8 +318,3 @@ function startOldClock() {
 menu.legacyrefreshcheckbox.addEventListener('change', startClock);
 
 startClock();
-
-setInterval(function() {
-    updateDate();
-    logConsole('Date updated...', 'info');
-}, 15000);
