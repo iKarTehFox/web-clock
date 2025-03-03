@@ -7,7 +7,6 @@ import { getClockConfig, getFontConfig, getColorThemeConfig, setClockConfig, set
 import { presetList } from './assets/presets';
 import axios from 'axios';
 import QRCode from 'qrcode';
-import { match } from 'ts-pattern';
 
 function getSettings() {
     return {
@@ -34,24 +33,29 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
     showToast(`Settings exported! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, 'long', 'success');
 }
 
-function handleExport(settings: any, type: 'clipboard' | 'download' | 'log' | 'qr' | 'card' , startTime: luxon.DateTime = luxon.DateTime.now()) {
+type ExportType = 'clipboard' | 'download' | 'log' | 'qr' | 'card';
+
+function getElapsedTime(startTime: luxon.DateTime): number {
+    return luxon.DateTime.now().toMillis() - startTime.toMillis();
+}
+
+function handleExport(settings: any, type: ExportType, startTime: luxon.DateTime): void {
     const settingsJSON = JSON.stringify(settings);
 
-    match(type)
-        .with('clipboard', () => {
+    const exportActions = {
+        clipboard: () => {
             navigator.clipboard.writeText(settingsJSON);
-            showToast(`Copied settings to clipboard! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
-        })
-        .with('log', () => {
-            logConsole(`Settings JSON: ${settingsJSON}`, 'debug');
-        })
-        .with('card', () => {
+            showToast(`Copied settings to clipboard! Took ${getElapsedTime(startTime)}ms`);
+        },
+        log: () => logConsole(`Settings JSON: ${settingsJSON}`, 'debug'),
+        card: () => {
             createBsModal('Raw Settings JSON', settingsJSON);
-            showToast(`Exported raw JSON. Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
-        })
-        .with('qr', () => {
-            if (settingsJSON.length > 2953) {
-                logConsole(`Settings JSON too large. Max 2953, got ${settingsJSON.length}`, 'error');
+            showToast(`Exported raw JSON. Took ${getElapsedTime(startTime)}ms`);
+        },
+        qr: () => {
+            const blob = new Blob([settingsJSON], { type: 'application/json' });
+            if (blob.size > 2953) {
+                logConsole(`Settings JSON too large. Max 2953 bytes, got ${blob.size} bytes`, 'error');
                 showToast('Settings too large for QR code. See console for details.', 'normal', 'danger');
                 return;
             }
@@ -60,19 +64,19 @@ function handleExport(settings: any, type: 'clipboard' | 'download' | 'log' | 'q
                 margin: 2,
                 scale: 4,
                 width: 400
-            }).then(canvas => {
-                createBsModal('QR Code', canvas);
-            });
-            showToast(`Exported settings to QR code! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
-        })
-        .with('download', () => {
+            }).then(canvas => createBsModal('QR Code', canvas));
+            showToast(`Exported settings to QR code! Took ${getElapsedTime(startTime)}ms`);
+        },
+        download: () => {
             const blob = new Blob([settingsJSON], { type: 'application/json' });
             downloadSettingsFile(blob, startTime);
-        })
-        .exhaustive();
+        }
+    };
+
+    exportActions[type]();
 }
 
-export function exportSettings(toType: 'clipboard' | 'download' | 'log' | 'qr' | 'card' = 'download') {
+export function exportSettings(toType: ExportType = 'download'): void {
     const startTime = luxon.DateTime.now();
     showToast('Exporting settings...');
 

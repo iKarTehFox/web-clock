@@ -318,5 +318,12 @@ export function createScannerOverlay() {
             container.remove();
         };
         cardBody.appendChild(closeButton);
+    }).catch((error) => {
+        logConsole(error, 'error');
+        showToast(`QR scanner failed: ${error}`, 'long', 'danger');
+        if (html5QrCode.isScanning) {
+            html5QrCode.stop();
+        }
+        container.remove();
     });
 }
