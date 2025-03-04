@@ -10,6 +10,8 @@ import { match, P } from 'ts-pattern';
 export let cMode = '0';
 export let dateFormat = 'D';
 export let timeDisplayMethod: string;
+let lastTime: Array<string>;
+let lastDate: string;
 const pageLoadTime = getLuxNow('sec');
 type TimeFormat = 'sec' | 'millis' | 'obj';
 
@@ -91,6 +93,17 @@ function updateTime(): void {
     if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
         const unixTime = timeDisplayMethod === 'unixmillis' ? clock.toUnixMillis() : clock.toUnixSec();
         displayHour = String(unixTime);
+        // Set colon visibility
+        clock.colonVisibility([false, undefined]);
+        menu.secondsvisradio.forEach((radio) => {
+            if (radio.id === 'sviN') {
+                radio.checked = true;
+            } else {
+                radio.checked = false;
+            }
+            radio.dispatchEvent(new Event('change'));
+            radio.disabled = true;
+        });
     } else {
         const timeFunction = {
             binary: (value: string) => clock.toRadix(value, 2),
@@ -119,9 +132,25 @@ function updateTime(): void {
             ii_leapyear: () => clock.isItDate('leapyear'),
         }[timeDisplayMethod];
 
-        // timeDisplayMethod types
-        // Will improve in the future...
-        const tdmIsIt: boolean = timeDisplayMethod?.startsWith('ii_');
+        // Handle colon visibility
+        const tdmNoColon: boolean = ['ii_christmas','ii_weekend','ii_leapyear'].includes(timeDisplayMethod);
+        if (tdmNoColon) {
+            clock.colonVisibility([false, undefined]);
+            menu.secondsvisradio.forEach((radio) => {
+                if (radio.id === 'sviN') {
+                    radio.checked = true;
+                } else {
+                    radio.checked = false;
+                }
+                radio.dispatchEvent(new Event('change'));
+                radio.disabled = true;
+            });
+        } else {
+            clock.colonVisibility([true, undefined]);
+            menu.secondsvisradio.forEach((radio) => {
+                radio.disabled = false;
+            });
+        }
 
         if (timeFunction) {
             const result = timeFunction(hrs);
@@ -129,20 +158,17 @@ function updateTime(): void {
                 // Handle getCountdown arrays
                 [displayHour, displayMinute, displaySecond] = result;
                 displayIndicator = '';
-                if (tdmIsIt) clock.colonVisibility([false, undefined]);
             } else {
                 displayHour = result;
                 displayMinute = timeDisplayMethod === 'words' ? formatMinutesForWordsDisplay(min) : timeFunction(min) as string;
                 displaySecond = timeFunction(sec) as string;
                 displayIndicator = ind;
-                clock.colonVisibility([true, undefined]);
             }
         } else {
             displayHour = hrs;
             displayMinute = min;
             displaySecond = sec;
             displayIndicator = ind;
-            clock.colonVisibility([true, undefined]);
         }
         
     }
@@ -153,12 +179,22 @@ function updateTime(): void {
 
 // Clock DOM update
 function setClockDisplay([hour, minute, second, indicator]: [string, string, string, string]): void {
+    // Prevent unnecessary updates
+    if (lastTime && 
+        hour === lastTime[0] && 
+        minute === lastTime[1] && 
+        second === lastTime[2] && 
+        indicator === lastTime[3]) {
+        return;
+    }
+
     dtdisplay.hourSlot.textContent = hour;
     dtdisplay.minuteSlot.textContent = minute;
     dtdisplay.secondSlot.textContent = second;
     dtdisplay.indicatorSlot.textContent = indicator;
-}
 
+    lastTime = [hour, minute, second, indicator];
+}
 // Helper function for time display method 'words'
 function formatMinutesForWordsDisplay(min: string) {
     const parsedMinutes = parseInt(min, 10);
@@ -239,7 +275,11 @@ menu.dateformselect.addEventListener('change', function() {
 
 export function updateDate() {
     const time = getLuxNow('obj') as luxon.DateTime;
-    dtdisplay.date.textContent = time.toFormat(dateFormat);
+    const newDate = time.toFormat(dateFormat);
+    if (lastDate === newDate) return;
+
+    dtdisplay.date.textContent = newDate;
+    lastDate = newDate;
 
     Array.from(menu.dateformselect.children).forEach((child: Element) => {
         if (child instanceof HTMLOptionElement && child.value !== '') {
@@ -247,7 +287,6 @@ export function updateDate() {
         }
     });
 }
-
 // Initial update, then start intervals
 const time = getLuxNow('obj') as luxon.DateTime;
 updateTime();

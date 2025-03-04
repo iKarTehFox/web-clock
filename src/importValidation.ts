@@ -158,8 +158,18 @@ export function validateClockConfig(clockConfig: any, valid: any) {
         }
     }
 
+    // Check for timeDisplay and secondsVis compatibility
+    if (['unixmillis', 'unixsec', 'ii_christmas', 'ii_weekend', 'ii_leapyear'].includes(clockConfig.clockDisplay) && clockConfig.secondsVis === 'sviD') {
+        return {
+            type: 'incomp',
+            subkey: 'clockDisplay, secondsVis',
+            value: `${clockConfig.clockDisplay}, ${clockConfig.secondsVis}`
+        };
+    }
+    
+
     // Check borderMode and timeBar incompatibility
-    if ((clockConfig.borderMode === 'btyB' || clockConfig.borderMode === 'btyR') && clockConfig.timeBar !== 'tbarNone') {
+    if (['btyB', 'btyR'].includes(clockConfig.borderMode) && clockConfig.timeBar !== 'tbarNone') {
         return {
             type: 'incomp',
             subkey: 'borderMode, timeBar',
@@ -168,7 +178,7 @@ export function validateClockConfig(clockConfig: any, valid: any) {
     }
 
     // Check customNote length
-    if (clockConfig.customNote && clockConfig.customNote.length >= 75) {
+    if (clockConfig.customNote && clockConfig.customNote.length > 75) {
         return {
             type: 'invalid',
             subkey: 'customNote',

@@ -113,7 +113,7 @@ export function colonVisibility([c1Vis, c2Vis]: (boolean | undefined)[]): void {
 menu.secondsvisradio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const value = radio.dataset.value;
-        colonVisibility([true, (value == 'none' ? false : true)]);
+        colonVisibility([undefined, (value == 'none' ? false : true)]);
         dtdisplay.secondSlot.style.display = value as string;
         logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'debug');
     });
