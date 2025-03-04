@@ -1,6 +1,6 @@
 import { match, P } from 'ts-pattern';
 import { toggleFullscreen } from '../global';
-import { menu, countdown, stopwatch } from './dom-elements';
+import { menu, countdown, stopwatch, panel } from './dom-elements';
 import { createBsModal } from './dom-utils';
 import { presetLocalJSON } from '../importExport';
 import { lockSettings } from './debug';
@@ -73,11 +73,7 @@ document.addEventListener('keydown', (e) => {
             createBsModal('Keyboard shortcuts', generateShortcutsHelp());
         })
         .with('m', () => { // Toggle menu
-            if (menu.options.classList.contains('menu-options-show')) {
-                menu.cbutton.click();
-            } else {
-                menu.obutton.click();
-            }
+            panel.menubutton.click();
         })
         .with('r', () => {
             if (window.confirm('Reset all clock settings to defaults?')) {
@@ -85,9 +81,6 @@ document.addEventListener('keydown', (e) => {
                 menu.themeradio[0].click(); // Light theme
                 menu.panelvischeckbox.checked = true;
                 menu.panelvischeckbox.dispatchEvent(new Event('change'));
-                if (menu.obutton.style.display === 'none' && menu.options.classList.contains('menu-options-fade')) {
-                    menu.obutton.style.display = '';
-                }
                 if (menu.weatherstopbtn.disabled === false) menu.weatherstopbtn.click();
                 menu.titlevischeckbox.checked = true;
             }
@@ -103,9 +96,6 @@ document.addEventListener('keydown', (e) => {
             }
         })
         .with('v', () => { // Toggle panel visibility
-            if (menu.obutton.style.display === 'none' && (menu.options.classList.contains('menu-options-fade') || menu.options.classList.contains('menu-options-initial'))) {
-                menu.obutton.style.display = '';
-            }
             menu.panelvischeckbox.click();
         })
         .otherwise(() => {});

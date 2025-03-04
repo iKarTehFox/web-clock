@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { menu, countdown } from './utils/dom-elements';
+import { countdown, menu, panel } from './utils/dom-elements';
 import { logConsole, requestNotificationPermission, showToast } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 
@@ -156,17 +156,17 @@ countdown.obutton.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
         const target = e.target as HTMLElement;
-        const isMenuRelated = menu.options.contains(target) || 
-                                   menu.obutton.contains(target) || 
-                                   menu.cbutton.contains(target) || 
+        const isMenuRelated = menu.container.contains(target) || 
+                                   panel.menubutton.contains(target) || 
                                    countdown.container.contains(target) || 
                                    countdown.obutton.contains(target);
         const isCountdownVisible = countdown.container.style.display !== 'none';
         const isTooltip = target.closest('.tooltip') !== null;
         const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
         const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
+        const isOffcanvasBackdrop = target.closest('.offcanvas-backdrop') !== null;
 
-        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isCountdownVisible) {
+        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isCountdownVisible && !isOffcanvasBackdrop) {
             countdown.container.style.display = 'none';
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');
@@ -179,8 +179,9 @@ document.addEventListener('keydown', function(e) {
     const isCountdownVisible = countdown.container.style.display !== 'none';
     const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
     const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
+    const isOffcanvasVisible = document.querySelector('.offcanvas.show, .offcanvas.showing') !== null;
 
-    if (e.key === 'Escape' && isCountdownVisible && !isBsModalVisible && !isScannerOverlayVisible) {
+    if (e.key === 'Escape' && isCountdownVisible && !isBsModalVisible && !isScannerOverlayVisible && !isOffcanvasVisible) {
         countdown.container.style.display = 'none';
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');

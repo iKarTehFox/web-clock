@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { menu, font, dtdisplay, stopwatch, countdown, weather, doc } from './utils/dom-elements';
+import { menu, font, dtdisplay, stopwatch, countdown, weather, doc, panel } from './utils/dom-elements';
 import { logConsole, setMetaColor, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
 
@@ -246,8 +246,6 @@ menu.themeradio.forEach((radio) => {
         match(radio.id)
             .with('lightthememode', () => {
                 menu.container.dataset.bsTheme = 'light';
-                menu.options.style.backgroundColor = '#ffffff';
-                menu.options.style.color = '#212529';
                 // Weather container
                 weather.container.dataset.bsTheme = 'light';
                 weather.container.style.color = '#212529';
@@ -266,8 +264,6 @@ menu.themeradio.forEach((radio) => {
             })
             .with('darkthememode', () => {
                 menu.container.dataset.bsTheme = 'dark';
-                menu.options.style.backgroundColor = '#313539';
-                menu.options.style.color = '#fff';
                 // Weather container
                 weather.container.dataset.bsTheme = 'dark';
                 weather.container.style.color = '#fff';
@@ -295,79 +291,15 @@ export function elementDisplay(htmlobj: HTMLElement, isVisible: boolean) {
     htmlobj.style.display = isVisible ? 'block' : 'none';
 }
 
-function toggleMenuVisibility(show: boolean) {
-    if (show) {
-        menu.options.className = 'menu-options-show';
-        elementDisplay(menu.cbutton, true);
-        elementDisplay(menu.obutton, false);
-        logConsole('Menu panel opened', 'info');
-    } else {
-        menu.options.className = 'menu-options-fade';
-        elementDisplay(menu.cbutton, false);
-        if (menu.panelvischeckbox.checked) {
-            elementDisplay(menu.obutton, true);
-        } else {
-            elementDisplay(menu.obutton, false);
-        }
-        logConsole('Menu panel closed', 'info');
-    }
-}
-
-// Menu button listener
-menu.obutton.addEventListener('click', function() {
-    toggleMenuVisibility(true);
-});
-
-// Close button listener
-menu.cbutton.addEventListener('click', function() {
-    toggleMenuVisibility(false);
-});
-
-// Click outside to close menu
-document.addEventListener('click', function(e) {
-    const target = e.target as HTMLElement;
-    const isTooltip = target.closest('.tooltip') !== null;
-    const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
-    const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
-
-    const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
-                          !menu.options.classList.contains('menu-options-initial');
-
-    if (!isTooltip && !isBsModal && !isScannerOverlay && isMenuVisible &&
-        !menu.options.contains(target as Node) && 
-        !menu.obutton.contains(target as Node) && 
-        !menu.cbutton.contains(target as Node) && 
-        !stopwatch.obutton.contains(target as Node) && 
-        !countdown.obutton.contains(target as Node)) {
-        toggleMenuVisibility(false);
-    }
-});
-
-// Esc down to close menu
-document.addEventListener('keydown', function(e) {
-    const isMenuVisible = !menu.options.classList.contains('menu-options-fade') && 
-                          !menu.options.classList.contains('menu-options-initial');
-
-    const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
-    const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
-
-    if (e.key === 'Escape' && isMenuVisible && !isBsModalVisible && !isScannerOverlayVisible) {
-        toggleMenuVisibility(false);
-    }
-});
-
 // Menu button visibility on double click
 document.addEventListener('dblclick', function(e) {
     const target = e.target as HTMLElement;
-    const isMenuRelated = menu.options.contains(target) || 
-                          menu.obutton.contains(target) || 
-                          menu.cbutton.contains(target);
+    const isMenuRelated = menu.container.contains(target) || 
+                          panel.menubutton.contains(target);
 
     if (!isMenuRelated) {
-        elementDisplay(menu.obutton, true);
         menu.panelvischeckbox.checked = true;
-        elementDisplay(stopwatch.obutton, true);
-        elementDisplay(countdown.obutton, true);
+        menu.panelvischeckbox.dispatchEvent(new Event('change'));
     }
 });
 
@@ -434,21 +366,10 @@ menu.cnotealignradio.forEach(radio => {
     });
 });
 
-menu.panelvischeckbox.addEventListener('change', function(e) {
-    const target = e.target as HTMLElement;
-    const isMenuRelated = menu.options.contains(target) || 
-                          menu.obutton.contains(target) || 
-                          menu.cbutton.contains(target);
-
+menu.panelvischeckbox.addEventListener('change', () => {
     if (menu.panelvischeckbox.checked) {
-        if (!isMenuRelated) {
-            menu.obutton.style.display = 'block';
-        }
-        elementDisplay(stopwatch.obutton, true);
-        elementDisplay(countdown.obutton, true);
+        panel.container.style.display = '';
     } else {
-        menu.obutton.style.display = 'none';
-        elementDisplay(stopwatch.obutton, false);
-        elementDisplay(countdown.obutton, false);
+        panel.container.style.display = 'none';
     }
 });

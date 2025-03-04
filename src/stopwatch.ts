@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { menu, stopwatch } from './utils/dom-elements';
+import { menu, panel, stopwatch } from './utils/dom-elements';
 import { logConsole } from './utils/dom-utils';
 
 let timeInterval: NodeJS.Timeout;
@@ -150,17 +150,17 @@ stopwatch.obutton.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
         const target = e.target as HTMLElement;
-        const isMenuRelated = menu.options.contains(target) || 
-                                   menu.obutton.contains(target) || 
-                                   menu.cbutton.contains(target) || 
+        const isMenuRelated = menu.container.contains(target) || 
+                                   panel.menubutton.contains(target) || 
                                    stopwatch.container.contains(target) || 
                                    stopwatch.obutton.contains(target);
         const isStopwatchVisible = stopwatch.container.style.display !== 'none';
         const isTooltip = target.closest('.tooltip') !== null;
         const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
         const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
+        const isOffcanvasBackdrop = target.closest('.offcanvas-backdrop') !== null;
 
-        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isStopwatchVisible) {
+        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isStopwatchVisible && !isOffcanvasBackdrop) {
             stopwatch.container.style.display = 'none';
             stopwatch.obutton.className = 'btn btn-secondary';
             logConsole('Stopwatch panel closed', 'info');
@@ -174,8 +174,9 @@ document.addEventListener('keydown', function(e) {
     const isStopwatchVisible = stopwatch.container.style.display !== 'none';
     const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
     const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
+    const isOffcanvasVisible = document.querySelector('.offcanvas.show, .offcanvas.showing') !== null;
 
-    if (e.key === 'Escape' && isStopwatchVisible && !isBsModalVisible && !isScannerOverlayVisible) {
+    if (e.key === 'Escape' && isStopwatchVisible && !isBsModalVisible && !isScannerOverlayVisible && !isOffcanvasVisible) {
         stopwatch.container.style.display = 'none';
         stopwatch.obutton.className = 'btn btn-secondary';
         logConsole('Stopwatch panel closed', 'info');
@@ -193,9 +194,6 @@ stopwatch.lapbtn.addEventListener('click', lapStopwatch);
 window.addEventListener('beforeunload', function(e) {
     if (running) {
         e.preventDefault();
-
-        // DEPRECATED: For compatibility only.
-        e.returnValue = true;
     }
 });
 

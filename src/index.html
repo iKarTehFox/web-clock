@@ -13,13 +13,18 @@
     </head>
     <body>
         <div id="blur-panel"></div>
+        <div id="panel-container">
+            <button id="countdown-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Countdown">⏳</button>
+            <button id="stopwatch-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Stopwatch">⏱️</button>
+            <button id="menu-button" class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#menu-offcanvas" role="button" aria-controls="menu-offcanvas" style="width: 100px;">☰ Menu</button>
+        </div>
         <!-- Menu -->
-        <div id="menu-container" data-bs-theme="light">
-            <button id="countdown-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Countdown" style="position: absolute; top: 0px; right: 152px;">⏳</button>
-            <button id="stopwatch-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Stopwatch" style="position: absolute; top: 0px; right: 105px;">⏱️</button>
-            <button id="open-button" class="btn btn-secondary" style="width: 100px;">☰ Menu</button>
-            <button id="close-button" class="btn btn-danger" style="display: none; position: absolute; top: 0px; right: 0px; width: 100px;">❌ Close</button>
-            <div id="menu-options" class="menu-options-initial">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="menu-offcanvas" aria-labelledby="menu-offcanvas-label">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="menu-offcanvas-label">Menu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" id="menu-body">
                 <div class="accordion" id="menuAccordion">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
@@ -99,10 +104,10 @@
                                 <div class="btn-group mb-2" role="group" aria-label="Clock border radio button group">
                                     <input type="radio" class="btn-check" name="border-type-radio" data-value="none" id="btyD" autocomplete="off" checked>
                                     <label class="btn btn-outline-primary" for="btyD">None</label>
-
+    
                                     <input type="radio" class="btn-check" name="border-type-radio" data-value="regular" id="btyR" autocomplete="off">
                                     <label class="btn btn-outline-primary" for="btyR">Box</label>
-
+    
                                     <input type="radio" class="btn-check" name="border-type-radio" data-value="bottom" id="btyB" autocomplete="off">
                                     <label class="btn btn-outline-primary" for="btyB">Bottom</label>
                                 </div>
@@ -128,7 +133,7 @@
                                 <div class="btn-group mb-2" role="group" aria-label="Note alignment button group">
                                     <input type="radio" class="btn-check" name="note-alignment-radio" data-value="top" id="nalT" autocomplete="off">
                                     <label class="btn btn-outline-primary" for="nalT">Top</label>
-
+    
                                     <input type="radio" class="btn-check" name="note-alignment-radio" data-value="bottom" id="nalB" autocomplete="off" checked>
                                     <label class="btn btn-outline-primary" for="nalB">Bottom</label>
                                 </div>
@@ -366,7 +371,7 @@
                                     <div class="btn-group" role="group" aria-label="Text color override button group">
                                         <input type="radio" class="btn-check" name="text-color-override-radio" id="tcovD" autocomplete="off" checked>
                                         <label class="btn btn-outline-primary" for="tcovD">Disabled</label>
-
+    
                                         <input type="radio" class="btn-check" name="text-color-override-radio" id="tcovO" autocomplete="off">
                                         <label class="btn btn-outline-primary" for="tcovO">Enable</label>
                                     </div>
@@ -380,9 +385,9 @@
                     </div>
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWe" aria-expanded="false" aria-controls="collapseWe">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWe" aria-expanded="false" aria-controls="collapseWe">
                             Weather
-                          </button>
+                            </button>
                         </h2>
                         <div id="collapseWe" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body">
@@ -495,9 +500,9 @@
                                 </div>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Settings</h6>
-                                <button type="button" class="btn btn-outline-warning mb-1" data-bs-toggle="tooltip" data-bs-title="Log JSON settings to console" id="jsonExportConsoleBtn">Log JSON</button>
-                                <button type="button" class="btn btn-outline-warning mb-1" data-bs-toggle="tooltip" data-bs-title="View current JSON settings in card overlay" id="jsonExportCardBtn">View Raw JSON</button>
-                                <button type="button" class="btn btn-outline-warning mb-1" data-bs-toggle="tooltip" data-bs-title="Extract and view current background image" id="debugGetBGBtn">Extract BG image</button>
+                                <button type="button" class="btn btn-outline-warning mb-1 d-block" data-bs-toggle="tooltip" data-bs-title="Log JSON settings to console" id="jsonExportConsoleBtn">Log JSON</button>
+                                <button type="button" class="btn btn-outline-warning mb-1 d-block" data-bs-toggle="tooltip" data-bs-title="View current JSON settings in card overlay" id="jsonExportCardBtn">View Raw JSON</button>
+                                <button type="button" class="btn btn-outline-warning mb-1 d-block" data-bs-toggle="tooltip" data-bs-title="Extract and view current background image" id="debugGetBGBtn">Extract BG image</button>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Toasts</h6>
                                 <button type="button" class="btn btn-dark mb-1" name="debugToast" data-dbgtoasttheme="dark">Dark</button>

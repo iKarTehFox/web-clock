@@ -7,16 +7,21 @@ export const doc = {
     cnote: getElement<HTMLParagraphElement>('custom-note'),
 };
 
+export const panel = {
+    container: getElement<HTMLDivElement>('panel-container'),
+    menubutton: getElement<HTMLButtonElement>('menu-button'),
+    menubody: getElement<HTMLDivElement>('menu-body'),
+};
+
 export const menu = {
     autorestarttime: getElement<HTMLSpanElement>('autorestart-time'),
     borderstyleselect: getElement<HTMLSelectElement>('borderStyleSelect'),
     bordertyperadio: getElements<HTMLInputElement>('input[name="border-type-radio"]'),
-    cbutton: getElement<HTMLButtonElement>('close-button'),
     clockmoderadio: getElements<HTMLInputElement>('input[name="clock-mode-radio"]'),
     colorbadge: getElement<HTMLParagraphElement>('currentColorBadge'),
     colorbadgelabel: getElement<HTMLDivElement>('currentColorLabel'),
     colormoderadio: getElements<HTMLInputElement>('input[name="color-mode-radio"]'),
-    container: getElement<HTMLDivElement>('menu-container'),
+    container: getElement<HTMLDivElement>('menu-offcanvas'),
     cnoteinput: getElement<HTMLInputElement>('cnote-input'),
     cnotealignradio: getElements<HTMLInputElement>('input[name="note-alignment-radio"]'),
     datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
@@ -42,8 +47,6 @@ export const menu = {
     jsonpresetsgroup: getElement<HTMLDivElement>('jsonPresetsContainer'),
     legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
     manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
-    obutton: getElement<HTMLButtonElement>('open-button'),
-    options: getElement<HTMLDivElement>('menu-options'),
     panelvischeckbox: getElement<HTMLInputElement>('panelVisible'),
     presetcolors: getElements<HTMLInputElement>('input[name="preset-color-radio"]'),
     presetgroup: getElement<HTMLDivElement>('presetColorGroup'),

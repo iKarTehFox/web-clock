@@ -202,7 +202,7 @@ export function generatePresetButtons(): void {
     presetList.forEach(preset => {
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = 'btn btn-outline-info mb-1';
+        button.className = 'btn btn-outline-info mb-1 d-block';
         button.setAttribute('data-bs-toggle', 'tooltip');
         button.setAttribute('data-bs-title', preset.description || '');
         button.addEventListener('click', () => {

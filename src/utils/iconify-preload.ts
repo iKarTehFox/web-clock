@@ -1,6 +1,6 @@
 import { loadIcons, iconExists } from 'iconify-icon';
 import { logConsole } from './dom-utils';
-import { countdown, menu, stopwatch } from './dom-elements';
+import { countdown, menu, panel, stopwatch } from './dom-elements';
 
 // Preload needed Iconify MDI icons
 // Panel
@@ -45,11 +45,7 @@ export function preloadIcons(): Promise<void> {
 preloadIcons().then(() => {
     if (iconExists('mdi:menu')) {
         logConsole('mdi:menu exists. Loading icon...', 'info');
-        menu.obutton.innerHTML = '<iconify-icon inline icon="mdi:menu" width="15" height="15" style="height: 15px;"></iconify-icon> Menu';
-    }
-    if (iconExists('mdi:close')) {
-        logConsole('mdi:close exists. Loading icon...', 'info');
-        menu.cbutton.innerHTML = '<iconify-icon icon="mdi:close" width="19" height="19" style="height: 15px;"></iconify-icon> Close';
+        panel.menubutton.innerHTML = '<iconify-icon inline icon="mdi:menu" width="15" height="15" style="height: 15px;"></iconify-icon> Menu';
     }
     if (iconExists('mdi:github')) {
         logConsole('mdi:github exists. Loading icon...', 'info');
