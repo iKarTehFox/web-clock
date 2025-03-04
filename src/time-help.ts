@@ -67,38 +67,41 @@ export function convertToRomanNumerals(number: string | number): string {
 }
 
 // Countdown/time duration function
-export function getCountdown(target: luxon.DateTime | number): [string, string, string] {
+export function getCountdown(target: luxon.DateTime | number, eventName: string): [string, string, string, string] {
     const now = luxon.DateTime.now();
     const targetDateTime = typeof target === 'number' 
         ? luxon.DateTime.fromSeconds(target)
         : target;
     
-    const diff = targetDateTime.diff(now, ['hours', 'minutes', 'seconds']);
+    const diff = targetDateTime.diff(now, ['days', 'hours', 'minutes', 'seconds']);
+    const dayhour = Math.abs(Math.floor(diff.days)) > 0 ? `${Math.abs(Math.floor(diff.days))}d:${Math.abs(Math.floor(diff.hours))}h` : `${Math.abs(Math.floor(diff.hours))}h`;
+    const isPast = now > targetDateTime ? `since ${eventName}` : `until ${eventName}`;
     
     return [
-        `${Math.abs(Math.floor(diff.hours))}h`,
+        dayhour,
         `${Math.abs(Math.floor(diff.minutes))}m`,
-        `${Math.abs(Math.floor(diff.seconds))}s`
+        `${Math.abs(Math.floor(diff.seconds))}s`,
+        isPast 
     ];
 }
 
-export function isItDate(dateType: 'christmas' | 'weekend' | 'leapyear'): [string, string, string] {
+export function isItDate(dateType: 'christmas' | 'weekend' | 'leapyear'): [string, string, string, string] {
     const now = luxon.DateTime.now();
     let isMatch = false;
     
     return match(dateType)
-        .returnType<[string, string, string]>()
+        .returnType<[string, string, string, string]>()
         .with('christmas', () => {
             isMatch = now.month === 12 && now.day === 25;
-            return ['', isMatch ? 'It\'s Christmas!' : 'Not Christmas', ''];
+            return ['', isMatch ? 'It\'s Christmas!' : 'Not Christmas', '', ''];
         })
         .with('weekend', () => {
             isMatch = now.weekday >= 6; // 6 = Saturday, 7 = Sunday
-            return ['', isMatch ? 'It\'s the weekend!' : 'Not the weekend', ''];
+            return ['', isMatch ? 'It\'s the weekend!' : 'Not the weekend', '', ''];
         })
         .with('leapyear', () => {
             isMatch = now.isInLeapYear;
-            return ['', isMatch ? 'It\'s a leap year!' : 'Not a leap year', ''];
+            return ['', isMatch ? 'It\'s a leap year!' : 'Not a leap year', '', ''];
         })
         .exhaustive();
 }
