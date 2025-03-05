@@ -1,4 +1,4 @@
-import { doc, menu, dtdisplay } from './utils/dom-elements';
+import { doc, menu, dtdisplay, panel } from './utils/dom-elements';
 import { numberToWords } from './numberToWords.min';
 import * as luxon from 'ts-luxon';
 import { logConsole } from './utils/dom-utils';
@@ -23,16 +23,6 @@ function getLuxNow(format: TimeFormat = 'sec'): number | luxon.DateTime {
         'obj': () => now
     }[format]();
 }
-
-// Clock mode radio
-menu.clockmoderadio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = String(radio.dataset.value);
-        cMode = value;
-        logConsole(`Clock mode set to: ${value}`, 'debug');
-        updateTime();
-    });
-});
 
 // Page duration
 function updatePageDuration(): void {
@@ -205,13 +195,6 @@ function formatMinutesForWordsDisplay(min: string) {
         .otherwise(() => numberToWords.toWords(parsedMinutes));
 }
 
-menu.timemethodselect.addEventListener('change', () => {
-    const selectedValue = menu.timemethodselect.value as unknown as number;
-    timeDisplayMethod = String(selectedValue);
-    logConsole(`Time display method set to: ${selectedValue}`, 'debug');
-    updateTime();
-});
-
 // Timezone
 // Function to get the list of time zones and group them by region
 function getTimeZonesByRegion() {
@@ -255,22 +238,6 @@ export function populateTimeZoneSelect() {
         menu.timezoneselect.appendChild(optGroupElement);
     });
 }
-
-menu.timezoneselect.addEventListener('change', function() {
-    const timeZone = menu.timezoneselect.value;
-    logConsole(`Time zone set to: ${timeZone}`, 'debug');
-    luxon.Settings.defaultZoneLike = timeZone;
-    updateTime();
-    updateDate();
-});
-
-// Date
-// Date format selector listener
-menu.dateformselect.addEventListener('change', function() {
-    dateFormat = menu.dateformselect.value;
-    logConsole(`Date format set to: ${menu.dateformselect.value}`, 'debug');
-    updateDate();
-});
 
 export function updateDate() {
     const time = getLuxNow('obj') as luxon.DateTime;
@@ -352,7 +319,47 @@ function startOldClock() {
     }, timeRefresh) as unknown as NodeJS.Timeout;
 }
 
-// Listener for the legacy refresh checkbox
-menu.legacyrefreshcheckbox.addEventListener('change', startClock);
+// DT listener
+panel.section.dt.addEventListener('change', (e) => {
+    const target = e.target as HTMLElement;
+    
+    match(target.tagName)
+        .with('SELECT', () => {
+            const selectelement = target as HTMLSelectElement;
+            match(selectelement.id)
+                .with('timeMethodSelect', () => {
+                    const selectedValue = selectelement.value as unknown as number;
+                    timeDisplayMethod = String(selectedValue);
+                    logConsole(`Time display method set to: ${selectedValue}`, 'debug');
+                    updateTime();
+                })
+                .with('timeZoneSelect', () => {
+                    luxon.Settings.defaultZoneLike = selectelement.value;
+                    logConsole(`Time zone set to: ${selectelement.value}`, 'debug');
+                    updateTime();
+                    updateDate();
+                })
+                .with('dateFormatSelect', () => {
+                    dateFormat = selectelement.value;
+                    logConsole(`Date format set to: ${selectelement.value}`, 'debug');
+                    updateDate();
+                })
+                .otherwise(() => {});
+        })
+        .with('INPUT', () => {
+            const inputelement = target as HTMLInputElement;
+            match([inputelement.type, inputelement.name])
+                .with(['radio', 'clock-mode-radio'], () => {
+                    cMode = String(inputelement.dataset.value);
+                    logConsole(`Clock mode set to: ${inputelement.dataset.value}`, 'debug');
+                    updateTime();
+                })
+                .with(['checkbox', 'legacy-refresh'], () => {
+                    startClock();
+                })
+                .otherwise(() => {});
+        })
+        .otherwise(() => {});
+});
 
 startClock();

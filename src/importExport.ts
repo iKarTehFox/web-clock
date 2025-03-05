@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { logConsole, showToast, createBsModal, createScannerOverlay } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
-import { menu, debug } from './utils/dom-elements';
+import { menu, panel } from './utils/dom-elements';
 import { ErrorDetails, handleValidationFailure, verifySettingsJSON } from './importValidation';
 import { getClockConfig, getFontConfig, getColorThemeConfig, setClockConfig, setFontConfig, setColorThemeConfig } from './utils/clock-settings';
 import { presetList } from './assets/presets';
 import axios from 'axios';
 import QRCode from 'qrcode';
+import { match } from 'ts-pattern';
 
 function getSettings() {
     return {
@@ -215,46 +216,38 @@ export function generatePresetButtons(): void {
 
 generatePresetButtons();
 
-// Surprise! More event listeners!
-menu.jsonexportclipbtn.addEventListener('click', () => {
-    exportSettings('clipboard');
-});
-
-menu.jsonexportdownloadbtn.addEventListener('click', () => {
-    exportSettings();
-});
-
-menu.jsonexportqrbtn.addEventListener('click', () => {
-    exportSettings('qr');
-});
-
-menu.jsonmanualimportbtn.addEventListener('click', () => {
-    manualJSONImport();
-});
-
-menu.jsonimportuploadbtn.addEventListener('click', () => {
-    importSettingsFromJSON();
-});
-
-menu.jsonimportqrbtn.addEventListener('click', () => {
-    createScannerOverlay();
-});
-
-debug.jsonexportconsolebtn.addEventListener('click', () => {
-    exportSettings('log');
-});
-
-debug.jsonexportcardbtn.addEventListener('click', () => {
-    exportSettings('card');
-});
-
-debug.getbgimgbtn.addEventListener('click', () => {
-    const bgImageUrl = document.body.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
-    if (!bgImageUrl) {
-        showToast('No background image to extract.');
-        return;
+// IE listener
+panel.section.ie.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'BUTTON') {
+        match(target.id)
+            .with('jsonExportClipBtn', () => exportSettings('clipboard'))
+            .with('jsonExportDlBtn', () => exportSettings())
+            .with('jsonExportQrBtn', () => exportSettings('qr'))
+            .with('jsonImportQrBtn', () => createScannerOverlay())
+            .with('jsonImportTxtBtn', () => manualJSONImport())
+            .with('jsonImportUlBtn', () => importSettingsFromJSON())
+            .otherwise(() => {});
     }
-    const imgElement = document.createElement('img');
-    imgElement.src = bgImageUrl;
-    createBsModal('Background Image', imgElement);
+});
+
+// Dbg listener
+panel.section.dbg.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'BUTTON') {
+        match(target.id)
+            .with('jsonExportConsoleBtn', () => exportSettings('log'))
+            .with('jsonExportCardBtn', () => exportSettings('card'))
+            .with('debugGetBGBtn', () => {
+                const bgImageUrl = document.body.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
+                if (!bgImageUrl) {
+                    showToast('No background image to extract.');
+                    return;
+                }
+                const imgElement = document.createElement('img');
+                imgElement.src = bgImageUrl;
+                createBsModal('Background Image', imgElement);
+            })
+            .otherwise(() => {});
+    }
 });

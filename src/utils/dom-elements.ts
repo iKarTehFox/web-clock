@@ -11,6 +11,16 @@ export const panel = {
     container: getElement<HTMLDivElement>('panel-container'),
     menubutton: getElement<HTMLButtonElement>('menu-button'),
     menubody: getElement<HTMLDivElement>('menu-body'),
+    // Settings sections
+    section: {
+        dt: getElement<HTMLDivElement>('panel-section-dt'),
+        fc: getElement<HTMLDivElement>('panel-section-fc'),
+        bt: getElement<HTMLDivElement>('panel-section-bt'),
+        dbg: getElement<HTMLDivElement>('panel-section-dbg'),
+        we: getElement<HTMLDivElement>('panel-section-we'),
+        do: getElement<HTMLDivElement>('panel-section-do'),
+        ie: getElement<HTMLDivElement>('panel-section-ie')
+    }
 };
 
 export const menu = {
@@ -38,12 +48,6 @@ export const menu = {
     imagegroup: getElement<HTMLDivElement>('bgImgGroup'),
     imagesizeselect: getElement<HTMLSelectElement>('bgImageSizeSelect'),
     imageuploadbutton: getElement<HTMLButtonElement>('bgImageUploadBtn'),
-    jsonexportclipbtn: getElement<HTMLButtonElement>('jsonExportClipBtn'),
-    jsonexportdownloadbtn: getElement<HTMLButtonElement>('jsonExportDlBtn'),
-    jsonexportqrbtn: getElement<HTMLButtonElement>('jsonExportQrBtn'),
-    jsonimportqrbtn: getElement<HTMLButtonElement>('jsonImportQrBtn'),
-    jsonimportuploadbtn: getElement<HTMLButtonElement>('jsonImportUlBtn'),
-    jsonmanualimportbtn: getElement<HTMLButtonElement>('jsonImportTxtBtn'),
     jsonpresetsgroup: getElement<HTMLDivElement>('jsonPresetsContainer'),
     legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
     manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
@@ -138,9 +142,6 @@ export const countdown = {
 export const debug = {
     container: getElement<HTMLDivElement>('debuggingContainer'),
     devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
-    getbgimgbtn: getElement<HTMLButtonElement>('debugGetBGBtn'),
-    jsonexportcardbtn: getElement<HTMLButtonElement>('jsonExportCardBtn'),
-    jsonexportconsolebtn:  getElement<HTMLButtonElement>('jsonExportConsoleBtn'),
     localstring: getElement<HTMLParagraphElement>('debugLocString'),
     rmclockbtn: getElement<HTMLButtonElement>('debugRmClock'),
     toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),

@@ -63,54 +63,68 @@ function modifyFontStyle(type: string, value: string) {
         });
 }
 
-// Font family listener
-font.familysel.addEventListener('change', function() {
-    const value = font.familysel.value;
-    modifyFontStyle('family', value);
-    font.customfontinput.value = '';
-});
+panel.section.fc.addEventListener('change', handleFontEvents);
+panel.section.fc.addEventListener('input', handleFontEvents);
+panel.section.fc.addEventListener('click', handleFontEvents);
 
-font.applyfontinput.addEventListener('click', function() {
-    const customFont = font.customfontinput.value;
-    if (customFont.length > 0) {
-        font.familysel.value = '';
-        modifyFontStyle('family', customFont);
-    }
-});
-
-// Font style listener
-font.styleradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = String(radio.dataset.value);
-        modifyFontStyle('style',value);
-    });
-});
-
-// Font weight listener
-font.weightradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = String(radio.dataset.value);
-        modifyFontStyle('weight',value);
-    });
-});
-
-// Font size listener
-font.sizesel.addEventListener('change', () => {
-    const value = font.sizesel.value;
-    modifyFontStyle('size', value);
-});
-
-// Font text shadow listener
-font.shadowrange.addEventListener('input', function() {
-    const value = Number(this.value);
-    const opacity = value / 5;
-    const strength = value * 3;
-    const dropShadowValue = `5px 5px ${strength}px rgba(0, 0, 0, ${opacity})`;
-    font.shadowlabel.textContent = `Drop shadow: ${strength}px`;
-
-    dtdisplay.ccontainer.style.textShadow = value > 0 ? dropShadowValue : '';
-    logConsole(`Font text shadow set to: ${dropShadowValue}`, 'debug');
-});
+function handleFontEvents(e: Event) {
+    const target = e.target as HTMLElement;
+    
+    match(target.tagName)
+        .with('SELECT', () => {
+            const selectElement = target as HTMLSelectElement;
+            match(selectElement.id)
+                .with('fontFamilySelect', () => {
+                    modifyFontStyle('family', selectElement.value);
+                    font.customfontinput.value = '';
+                })
+                .with('sizeSelect', () => {
+                    modifyFontStyle('size', selectElement.value);
+                })
+                .otherwise(() => {});
+        })
+        .with('INPUT', () => {
+            const inputElement = target as HTMLInputElement;
+            match([inputElement.type, inputElement.name || inputElement.id])
+                .with(['radio', 'font-style-radio'], () => {
+                    modifyFontStyle('style', String(inputElement.dataset.value));
+                })
+                .with(['radio', 'font-weight-radio'], () => {
+                    modifyFontStyle('weight', String(inputElement.dataset.value));
+                })
+                .with(['range', 'dropShadowRange'], () => {
+                    const value = Number(inputElement.value);
+                    const opacity = value / 5;
+                    const strength = value * 3;
+                    const dropShadowValue = `5px 5px ${strength}px rgba(0, 0, 0, ${opacity})`;
+                    font.shadowlabel.textContent = `Drop shadow: ${strength}px`;
+                    dtdisplay.ccontainer.style.textShadow = value > 0 ? dropShadowValue : '';
+                    logConsole(`Font text shadow set to: ${dropShadowValue}`, 'debug');
+                })
+                .with(['range', 'textStrokeRange'], () => {
+                    const size = inputElement.value;
+                    font.strokecolor.disabled = parseInt(size) <= 0;
+                    modifyFontStyle('strokewidth', size);
+                })
+                .with(['color', 'textStrokeColor'], () => {
+                    modifyFontStyle('strokecolor', inputElement.value);
+                })
+                .otherwise(() => {});
+        })
+        .with('BUTTON', () => {
+            const buttonElement = target as HTMLButtonElement;
+            match(buttonElement.id)
+                .with('applyFontInput', () => {
+                    const customFont = font.customfontinput.value;
+                    if (customFont.length > 0) {
+                        font.familysel.value = '';
+                        modifyFontStyle('family', customFont);
+                    }
+                })
+                .otherwise(() => {});
+        })
+        .otherwise(() => {});
+}
 
 // Border type listener
 menu.bordertyperadio.forEach((radio) => {
@@ -159,51 +173,45 @@ menu.borderstyleselect.addEventListener('change', () => {
     }
 });
 
-// Text stroke range listener
-font.strokerange.addEventListener('input', function() {
-    const size = this.value;
-    if (parseInt(size) > 0) {
-        font.strokecolor.disabled = false;
-    } else {
-        font.strokecolor.disabled = true;
-    }
-    modifyFontStyle('strokewidth', size);
-});
-
-// Text stroke color listener
-font.strokecolor.addEventListener('input', function() {
-    const value = this.value;
-    modifyFontStyle('strokecolor', value);
-});
-
-// Weather geo button listener
-menu.weathergeobtn.addEventListener('click', async () => {
-    try {
-        const latlonArray = await getLocation();
-        menu.weatherlatinput.value = latlonArray[0].toString();
-        menu.weatherloninput.value = latlonArray[1].toString();
-        logConsole(`Retrieved geolocation: ${latlonArray}`, 'debug');
-    } catch (error) {
-        logConsole(`Failed to get location: ${error}`, 'error');
-    }
-});
-
-// Weather submit button listener
-menu.weathersubmitbtn.addEventListener('click', () => {
-    submitWeatherSettings();
-});
-
-menu.weatherstopbtn.addEventListener('click', () => {
-    stopWeather();
-});
-
 // Weather move toggle listener
 let isMoving: boolean = false;
 
-menu.weathermovetoggle.addEventListener('click', () => {
-    isMoving = menu.weathermovetoggle.classList.contains('active');
-    weather.container.style.cursor = isMoving ? 'grab' : 'default';
-    logConsole(`Weather moving toggle set to: ${isMoving}`, 'debug');
+panel.section.we.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    
+    match(target.tagName)
+        .with('BUTTON', () => {
+            const buttonElement = target as HTMLButtonElement;
+            match(buttonElement.id)
+                .with('weatherGeoBtn', async () => {
+                    try {
+                        const latlonArray = await getLocation();
+                        menu.weatherlatinput.value = latlonArray[0].toString();
+                        menu.weatherloninput.value = latlonArray[1].toString();
+                        logConsole(`Retrieved geolocation: ${latlonArray}`, 'debug');
+                    } catch (error) {
+                        logConsole(`Failed to get location: ${error}`, 'error');
+                    }
+                })
+                .with('weatherSubmitBtn', () => {
+                    submitWeatherSettings();
+                })
+                .with('weatherStopBtn', () => {
+                    stopWeather();
+                })
+                .with('weatherMoveToggle', () => {
+                    isMoving = buttonElement.classList.contains('active');
+                    weather.container.style.cursor = isMoving ? 'grab' : 'default';
+                    logConsole(`Weather moving toggle set to: ${isMoving}`, 'debug');
+                })                
+                .with('weatherMoveReset', () => {
+                    weather.container.style.left = '';
+                    weather.container.style.top = '';
+                    logConsole('Weather widget position reset...', 'info');
+                })
+                .otherwise(() => {});
+        })
+        .otherwise(() => {});
 });
 
 weather.container.addEventListener('mousedown', (e) => {
@@ -232,12 +240,6 @@ weather.container.addEventListener('mousedown', (e) => {
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-});
-
-menu.weathermovereset.addEventListener('click', () => {
-    weather.container.style.left = '';
-    weather.container.style.top = '';
-    logConsole('Weather widget position reset...', 'info');
 });
 
 // Menu theme listener

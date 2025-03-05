@@ -200,29 +200,29 @@ export function setClockConfig(config: ClockConfig, trigger: boolean = false): v
 export function setClockMode(mode: string, trigger: boolean = false): void {
     const element = getFirstElement<HTMLInputElement>(`input[name="clock-mode-radio"][id="${mode}"]`);
     element.checked = true;
-    if (trigger) element.dispatchEvent(new Event('change'));
+    if (trigger) element.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 export function setClockDisplay(value: string, trigger = false): void {
     menu.timemethodselect.value = value;
-    if (trigger) menu.timemethodselect.dispatchEvent(new Event('change'));
+    if (trigger) menu.timemethodselect.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 export function setSecondsVis(mode: string, trigger = false): void {
     const element = getFirstElement<HTMLInputElement>(`input[name="seconds-vis-radio"][id="${mode}"]`);
     element.checked = true;
-    if (trigger) element.dispatchEvent(new Event('change'));
+    if (trigger) element.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 export function setDateFormat(format: string, trigger = false): void {
     menu.dateformselect.value = format;
-    if (trigger) menu.dateformselect.dispatchEvent(new Event('change'));
+    if (trigger) menu.dateformselect.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 export function setDateAlign(align: string, trigger = false): void {
     const element = getFirstElement<HTMLInputElement>(`input[name="date-position-radio"][id="${align}"]`);
     element.checked = true;
-    if (trigger) element.dispatchEvent(new Event('change'));
+    if (trigger) element.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 export function setBorderMode(mode: string, trigger = false): void {
@@ -238,7 +238,7 @@ export function setBorderStyle(style: string, trigger = false): void {
 
 export function setTimeBar(mode: string, trigger = false): void {
     menu.timebarselect.value = mode;
-    if (trigger) menu.timebarselect.dispatchEvent(new Event('change'));
+    if (trigger) menu.timebarselect.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 export function setCustomNote(note: string, trigger = false): void {
@@ -267,39 +267,39 @@ export function setFontConfig(config: FontConfig, trigger: boolean = false): voi
 
 export function setFontFamily(value: string, trigger = false): void {
     font.familysel.value = value;
-    if (trigger) font.familysel.dispatchEvent(new Event('change'));
+    if (trigger) font.familysel.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 export function setFontStyle(style: string, trigger = false): void {
     const element = getFirstElement<HTMLInputElement>(`input[name="font-style-radio"][id="${style}"]`);
     element.checked = true;
-    if (trigger) element.dispatchEvent(new Event('change'));
+    if (trigger) element.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 export function setFontWeight(weight: string, trigger = false): void {
     const element = getFirstElement<HTMLInputElement>(`input[name="font-weight-radio"][id="${weight}"]`);
     element.checked = true;
-    if (trigger) element.dispatchEvent(new Event('change'));
+    if (trigger) element.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 export function setFontSize(size: string, trigger = false): void {
     font.sizesel.value = size;
-    if (trigger) font.sizesel.dispatchEvent(new Event('change'));
+    if (trigger) font.sizesel.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 export function setDropShadow(value: string, trigger = false): void {
     font.shadowrange.value = value;
-    if (trigger) font.shadowrange.dispatchEvent(new Event('input'));
+    if (trigger) font.shadowrange.dispatchEvent(new Event('input', {bubbles: true}));
 }
 
 export function setStrokeWidth(width: string, trigger = false): void {
     font.strokerange.value = width;
-    if (trigger) font.strokerange.dispatchEvent(new Event('input'));
+    if (trigger) font.strokerange.dispatchEvent(new Event('input', {bubbles: true}));
 }
 
 export function setStrokeColor(color: string, trigger = false): void {
     font.strokecolor.value = color;
-    if (trigger) font.strokecolor.dispatchEvent(new Event('input'));
+    if (trigger) font.strokecolor.dispatchEvent(new Event('input', {bubbles: true}));
 }
 
 // Color theme config
