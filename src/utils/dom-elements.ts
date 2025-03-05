@@ -142,8 +142,7 @@ export const countdown = {
 export const debug = {
     container: getElement<HTMLDivElement>('debuggingContainer'),
     devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
-    localstring: getElement<HTMLParagraphElement>('debugLocString'),
+    info:  getElement<HTMLParagraphElement>('debugInfo'),
     rmclockbtn: getElement<HTMLButtonElement>('debugRmClock'),
     toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
-    uastring: getElement<HTMLParagraphElement>('debugUAString'),
 };
