@@ -91,7 +91,7 @@ function updateTime(): void {
             } else {
                 radio.checked = false;
             }
-            radio.dispatchEvent(new Event('change'));
+            radio.dispatchEvent(new Event('change', { bubbles: true }));
             radio.disabled = true;
         });
     } else {
