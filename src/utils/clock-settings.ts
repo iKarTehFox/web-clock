@@ -4,7 +4,6 @@ import { getFirstElement, logConsole } from '../utils/dom-utils';
 
 // Interfaces
 interface ClockConfig {
-    clockMode: string;
     clockDisplay: string; 
     secondsVis: string;
     dateFormat: string;
@@ -40,7 +39,6 @@ interface ColorThemeConfig {
 // Clock config
 export function getClockConfig(): ClockConfig {
     return {
-        clockMode: getClockMode(),
         clockDisplay: getClockDisplay(),
         secondsVis: getSecondsVis(),
         dateFormat: getDateFormat(),
@@ -51,10 +49,6 @@ export function getClockConfig(): ClockConfig {
         customNote: getCustomNote(),
         customNoteAlign: getCustomNoteAlign()
     };
-}
-
-export function getClockMode(): string {
-    return getFirstElement<HTMLInputElement>('input[name="clock-mode-radio"]:checked').id;
 }
 
 export function getClockDisplay(): string {
@@ -185,7 +179,6 @@ export function getBGImageBlur(): string {
 // Setter functions
 // Clock config
 export function setClockConfig(config: ClockConfig, trigger: boolean = false): void {
-    setClockMode(config.clockMode, trigger);
     setClockDisplay(config.clockDisplay, trigger);
     setSecondsVis(config.secondsVis, trigger);
     setDateFormat(config.dateFormat, trigger);
@@ -195,12 +188,6 @@ export function setClockConfig(config: ClockConfig, trigger: boolean = false): v
     setTimeBar(config.timeBar, trigger);
     setCustomNote(config.customNote, trigger);
     setCustomNoteAlign(config.customNoteAlign, trigger);
-}
-
-export function setClockMode(mode: string, trigger: boolean = false): void {
-    const element = getFirstElement<HTMLInputElement>(`input[name="clock-mode-radio"][id="${mode}"]`);
-    element.checked = true;
-    if (trigger) element.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
 export function setClockDisplay(value: string, trigger = false): void {

@@ -2,7 +2,6 @@ import { logConsole } from './utils/dom-utils';
 
 // Value constraints
 const valid = {
-    CM: ['cmo12', 'cmo24'],
     CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words', 'unixmillis', 'unixsec', 'unixcountdown', 'se_valentines', 'se_christmas', 'se_newyears', 'ii_christmas', 'ii_weekend', 'ii_leapyear'],
     SV: ['sviD', 'sviN'],
     DF: ['D', 'DD', 'DDD', 'DDDD', ''],
@@ -136,7 +135,6 @@ export function validateVersion(version: any, validVersions: any[]) {
 
 export function validateClockConfig(clockConfig: any, valid: any) {
     const keys = [
-        { key: 'clockMode', validValues: valid.CM },
         { key: 'clockDisplay', validValues: valid.CD },
         { key: 'secondsVis', validValues: valid.SV },
         { key: 'dateFormat', validValues: valid.DF },
