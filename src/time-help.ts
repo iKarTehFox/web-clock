@@ -4,6 +4,19 @@ import { numberToWords } from './numberToWords.min';
 import { logConsole } from './utils/dom-utils';
 import { match } from 'ts-pattern';
 
+// Get 12/24 hour pref
+export function setClockMode(): void {
+    const is24Hour = !/AM|PM/.test(luxon.DateTime.local().toFormat('t'));
+
+    // Set menu radio button
+    menu.clockmoderadio.forEach((btn) => {
+        if (btn.id === (is24Hour ? 'cmo24' : 'cmo12')) {
+            btn.checked = true;
+            btn.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+}
+
 // Change tab favicon function
 export function updateFavicon(hour: string) {
     doc.favicon.href = `./icons/clock-time-${hour}.svg`;
