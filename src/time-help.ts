@@ -1,6 +1,6 @@
 import * as luxon from 'ts-luxon';
 import { doc, menu, dtdisplay, panel } from './utils/dom-elements';
-import { numberToWords } from './numberToWords.min';
+import * as numberToWords from 'number-to-words';
 import { logConsole } from './utils/dom-utils';
 import { match } from 'ts-pattern';
 
