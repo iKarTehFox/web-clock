@@ -84,6 +84,14 @@ export async function applyURLParams() {
 
     // Menu theme
     match(params.menuTheme)
+        .with('light', () => {
+            menu.themeradio[0].checked = true;
+            menu.themeradio[0].dispatchEvent(new Event('change', { bubbles: true }));
+        })
+        .with('dark', () => {
+            menu.themeradio[1].checked = true;
+            menu.themeradio[1].dispatchEvent(new Event('change', { bubbles: true }));
+        })
         .with(undefined, () => {
             // Get system theme instead
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -93,14 +101,6 @@ export async function applyURLParams() {
                 menu.themeradio[0].checked = true;
                 menu.themeradio[0].dispatchEvent(new Event('change', { bubbles: true }));
             }
-        })
-        .with('light', () => {
-            menu.themeradio[0].checked = true;
-            menu.themeradio[0].dispatchEvent(new Event('change', { bubbles: true }));
-        })
-        .with('dark', () => {
-            menu.themeradio[1].checked = true;
-            menu.themeradio[1].dispatchEvent(new Event('change', { bubbles: true }));
         })
         .exhaustive();
     
