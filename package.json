@@ -3,6 +3,7 @@
   "version": "1.6.0",
   "description": "Online digital clock web app with customizability in mind!",
   "main": "./src/index.ts",
+  "type": "module",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,6 +15,7 @@
   "author": "iKarTehFox",
   "license": "MPL-2.0",
   "devDependencies": {
+    "@eslint/js": "^9.22.0",
     "@types/bootstrap": "^5.2.10",
     "@types/luxon": "^3.4.2",
     "@types/number-to-words": "^1.2.3",
