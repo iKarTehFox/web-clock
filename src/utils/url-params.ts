@@ -86,16 +86,16 @@ export async function applyURLParams() {
     match(params.menuTheme)
         .with('light', () => {
             menu.themeradio[0].checked = true;
-            menu.themeradio[0].dispatchEvent(new Event('change', { bubbles: true }));
+            menu.themeradio[0].dispatchEvent(new Event('change'));
         })
         .with('dark', () => {
             menu.themeradio[1].checked = true;
-            menu.themeradio[1].dispatchEvent(new Event('change', { bubbles: true }));
+            menu.themeradio[1].dispatchEvent(new Event('change'));
         })
         .with(undefined, () => {
             const index = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
             menu.themeradio[index].checked = true;
-            menu.themeradio[index].dispatchEvent(new Event('change', { bubbles: true }));
+            menu.themeradio[index].dispatchEvent(new Event('change'));
         })
         .exhaustive();
     
