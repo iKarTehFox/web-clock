@@ -284,21 +284,19 @@ function startNewClock() {
         updateTime();
         updatePageDuration();
 
-        // Start the regular interval updates
-        let lastUpdateTime = Date.now();
+        // Set initial reference point
+        const startTime = performance.now();
+        let expectedTime = startTime + 1000; // Next expected tick
 
         clockInterval = setInterval(() => {
+            const currentTime = performance.now();
+            const drift = currentTime - expectedTime;
+
             updateTime();
             updatePageDuration();
             logConsole('Time, date, and page duration updated...', 'info');
 
-            const now = Date.now();
-            const elapsed = now - lastUpdateTime;
-            lastUpdateTime = now;
-
-            const drift = elapsed - 1000;
-
-            // Add a maximum drift threshold, e.g. 1000ms
+            // Cap drift at ±1000ms
             const cappedDrift = Math.max(Math.min(drift, 1000), -1000);
 
             if (Math.abs(drift) > 150) {
@@ -306,6 +304,8 @@ function startNewClock() {
                 clearInterval(clockInterval!);
                 setTimeout(startNewClock, 1000 - cappedDrift);
             }
+
+            expectedTime += 1000; // Update expected time for next tick
         }, 1000);
     }, timeToNextSecond);
 }
