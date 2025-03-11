@@ -22,7 +22,6 @@ window.addEventListener('DOMContentLoaded', () => {
     // Initialize Bootstrap tooltips
     const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     const tooltipTriggerElArray = Array.from(tooltipTriggerList);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const tooltipList = tooltipTriggerElArray.map(tooltipTriggerEl => {
         return new bootstrap.Tooltip(tooltipTriggerEl); 
     });
