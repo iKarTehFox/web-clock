@@ -30,9 +30,9 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value === 'true';
-            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);;
         } else {
-            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug', true);
         }
     });
 
@@ -41,9 +41,9 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = parseFloat(value);
-            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);
         } else {
-            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug', true);
         }
     });
 
@@ -52,9 +52,9 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value;
-            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);
         } else {
-            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug', true);
         }
     });
 

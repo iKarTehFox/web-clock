@@ -25,14 +25,14 @@ export function getFirstElement<T extends Element>(selector: string): T {
 }
 
 // Custom console logging function
-export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' | 'bypass' = 'debug'):void {
-    if (debugMode && type === 'debug') {
+export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' = 'debug', bypass: boolean = false): void {
+    if ((debugMode || bypass) && type === 'debug') {
         console.log(`DEBUG - ${message}`);
     } else if (type === 'error') {
         console.error(`ERROR - ${message}`);
     } else if (type === 'warning') {
         console.warn(`WARNING - ${message}`);
-    } else if ((debugMode && type === 'info') || type === 'bypass') { // Allow bypass without debug mode
+    } else if ((debugMode || bypass) && type === 'info') {
         console.info(`INFO - ${message}`);
     }
 }
