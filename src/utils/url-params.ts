@@ -93,14 +93,9 @@ export async function applyURLParams() {
             menu.themeradio[1].dispatchEvent(new Event('change', { bubbles: true }));
         })
         .with(undefined, () => {
-            // Get system theme instead
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                menu.themeradio[1].checked = true;
-                menu.themeradio[1].dispatchEvent(new Event('change', { bubbles: true }));
-            } else {
-                menu.themeradio[0].checked = true;
-                menu.themeradio[0].dispatchEvent(new Event('change', { bubbles: true }));
-            }
+            const index = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
+            menu.themeradio[index].checked = true;
+            menu.themeradio[index].dispatchEvent(new Event('change', { bubbles: true }));
         })
         .exhaustive();
     
