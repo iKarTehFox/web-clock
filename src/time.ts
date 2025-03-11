@@ -354,7 +354,7 @@ panel.section.dt.addEventListener('change', (e) => {
                     logConsole(`Clock mode set to: ${inputelement.dataset.value}`, 'debug');
                     updateTime();
                 })
-                .with(['checkbox', 'legacy-refresh'], () => {
+                .with(['checkbox', 'legacy-refresh-checkbox'], () => {
                     startClock();
                 })
                 .otherwise(() => {});
