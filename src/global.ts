@@ -288,11 +288,6 @@ menu.themeradio.forEach((radio) => {
     });
 });
 
-// Utility function for toggling element visibility
-export function elementDisplay(htmlobj: HTMLElement, isVisible: boolean) {
-    htmlobj.style.display = isVisible ? 'block' : 'none';
-}
-
 // Menu button visibility on double click
 document.addEventListener('dblclick', function(e) {
     const target = e.target as HTMLElement;
