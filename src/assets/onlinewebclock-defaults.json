@@ -1,6 +1,5 @@
 {
 	"clockConfig": {
-		"clockMode": "cmo12",
 		"clockDisplay": "decimal",
 		"secondsVis": "sviD",
 		"dateFormat": "D",
