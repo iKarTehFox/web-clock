@@ -12,6 +12,9 @@ Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri**
 # Install guide and features
 The documentation for Online Web Clock has moved! You can find it in the [Docs](https://online-clock-docs.pages.dev/)!  
 There, you can find [installation instructions](https://online-clock-docs.pages.dev/docs/installation) and a [list of all features](https://online-clock-docs.pages.dev/docs).
+
+#### Firefox notice
+Firefox and other non-Chromium browsers may experience inconsistent clock update behavior. This is due to inaccuracies with intervals in the browser's JavaScript engine. Read this [section in the docs](https://online-clock-docs.pages.dev/docs/datetime#time-refresh-method) for more info on the workaround.
  
 # Gallery
 ### Preview of the clock  
