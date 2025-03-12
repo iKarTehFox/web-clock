@@ -362,11 +362,4 @@ panel.section.dt.addEventListener('change', (e) => {
         .otherwise(() => {});
 });
 
-// Ensure Firefox uses legacy refresh method by default
-// Non-Chromium browsers tend to have inaccurate intervals
-// This code is here as a temporary QoL change until a better solution is found
-if (/firefox/i.test(navigator.userAgent)) {
-    menu.legacyrefreshcheckbox.checked = true;
-}
-
 startClock();
