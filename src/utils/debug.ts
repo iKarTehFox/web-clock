@@ -1,6 +1,6 @@
 // This file sets global debug flags. Flags must be exported and imported from this file.
 export let debugMode: boolean = false;
-export let timeRefresh: number = 250;
+export let timeRefresh: number = 100;
 export let lockSettings: boolean = false;
 
 export function setDebug(value: boolean): void {
