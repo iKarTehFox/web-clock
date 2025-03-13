@@ -15,8 +15,7 @@ const config = {
         main: './src/index.ts',
         styles: './src/css/styles.ts',
         presets: './src/assets/presets.ts',
-        icons: './src/icons/icons.ts',
-        images: './src/assets/images.ts',
+        icons: './src/icons/icons.ts'
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
