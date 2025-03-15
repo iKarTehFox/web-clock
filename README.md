@@ -27,32 +27,32 @@ Firefox and other non-Chromium browsers may experience inconsistent clock update
 ![A screenshot of the main web clock page with many customizations applied, such as custom font, background image, date format, and weather widget.](/src/assets/images/customizable.png)
  
 # Acknowledgements (OSS)
-- **Axios**  ([GitHub](https://github.com/axios/axios)): Licensed under MIT License  
+- **Axios**  ([GitHub](https://github.com/axios/axios)): Licensed under MIT License
   - Copyright (c) 2014-present Matt Zabriskie & Collaborators
-- **Bootstrap** ([Link](https://getbootstrap.com/)): Licensed under MIT License  
+- **Bootstrap** ([Link](https://getbootstrap.com/)): Licensed under MIT License
   - Copyright (c) 2011-2025 The Bootstrap Authors
-- **html5-qrcode** ([GitHub](https://github.com/mebjas/html5-qrcode)): Licensed under MIT License  
+- **html5-qrcode** ([GitHub](https://github.com/mebjas/html5-qrcode)): Licensed under MIT License
   - Copyright [2020] [MINHAZ <minhazav@gmail.com>]
-- **Iconify** ([Link](https://iconify.design)): Licensed under MIT License  
+- **Iconify** ([Link](https://iconify.design)): Licensed under MIT License
   - Copyright (c) 2021-PRESENT Vjacheslav Trushkin
-- **Material Design Icons by Pictogrammers** ([GitHub](https://github.com/Templarian/MaterialDesign)): Icons licensed under Apache License 2.0
 - **Luxon** ([GitHub](https://github.com/moment/luxon)): Licensed under MIT License  
   - Copyright 2019 JS Foundation and other contributors
-- **number-to-words** ([GitHub](https://github.com/marlun78/number-to-words)): Licensed under MIT License  
-  - Copyright (c) 2015 Martin Eneqvist
-- **openweathermap-ts** ([GitHub](https://github.com/Endunry/openweathermap-ts)): Licensed under MIT License  
-  - Copyright (c) 2020 Phillip Shim
-- **node-qrcode** ([GitHub](https://github.com/soldair/node-qrcode)): Licensed under MIT License  
+- **Material Design Icons by Pictogrammers** ([GitHub](https://github.com/Templarian/MaterialDesign)): Icons licensed under Apache License 2.0
+- **node-qrcode** ([GitHub](https://github.com/soldair/node-qrcode)): Licensed under MIT License
   - Copyright (c) 2012 Ryan Day
-- **Social Buttons for Bootstrap** ([GitHub](https://github.com/lipis/bootstrap-social)): Licensed under MIT License  
+- **number-to-words** ([GitHub](https://github.com/marlun78/number-to-words)): Licensed under MIT License
+  - Copyright (c) 2015 Martin Eneqvist
+- **openweathermap-ts** ([GitHub](https://github.com/Endunry/openweathermap-ts)): Licensed under MIT License
+  - Copyright (c) 2020 Phillip Shim
+- **Social Buttons for Bootstrap** ([GitHub](https://github.com/lipis/bootstrap-social)): Licensed under MIT License
   - Copyright (c) 2013-2016 Panayiotis Lipiridis
-- **Toastify**  ([GitHub](https://github.com/apvarun/toastify-js)): Licensed under MIT License  
+- **Toastify**  ([GitHub](https://github.com/apvarun/toastify-js)): Licensed under MIT License
   - Copyright (c) 2018 apvarun
-- **ts-luxon** ([Link](https://www.npmjs.com/package/ts-luxon)): Licensed under MIT License  
+- **ts-luxon** ([Link](https://www.npmjs.com/package/ts-luxon)): Licensed under MIT License
   - Copyright (c) 2023 Tony Samperi and other contributors
-- **ts-pattern** ([Link](https://www.npmjs.com/package/ts-pattern)): Licensed under MIT License  
+- **ts-pattern** ([Link](https://www.npmjs.com/package/ts-pattern)): Licensed under MIT License
   - Copyright (c) 2021 Gabriel Vergnaud
-- **Webpack** ([Link](https://webpack.js.org/)): Licensed under MIT License  
+- **Webpack** ([Link](https://webpack.js.org/)): Licensed under MIT License
   - Copyright JS Foundation and other contributors  
 
 Each license can be found in the code's respective files or website.
