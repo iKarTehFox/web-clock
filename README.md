@@ -3,9 +3,11 @@
 
 # Online Web Clock
 > **An online, digital clock web app built with Bootstrap 5.3.3, focused on customizability.  
-Inspired by [online-clock](https://github.com/tmasri/online-clock) by tmasri**
+Inspired by [online-clock](https://github.com/tmasri/online-clock) by [Tareq Al-Masri](https://github.com/tmasri).**
 
 **Website:** [View in your browser!](https://online-clock.pages.dev)
+
+**Want to test out features early?** [Check out the preview branch](https://github.com/iKarTehFox/web-clock/tree/preview)!
 
 **Need compatibility with older browsers?** [Check out the compatibility repository](https://github.com/iKarTehFox/web-clock-compatibility)!
 
