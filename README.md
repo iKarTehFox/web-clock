@@ -7,9 +7,9 @@ Inspired by [online-clock](https://github.com/tmasri/online-clock) by [Tareq Al-
 
 **Website:** [View in your browser!](https://online-clock.pages.dev)
 
-**Want to test out features early?** [Check out the preview branch](https://github.com/iKarTehFox/web-clock/tree/preview)!
+**Want to test out features early?** [Check out the preview branch!](https://github.com/iKarTehFox/web-clock/tree/preview)
 
-**Need compatibility with older browsers?** [Check out the compatibility repository](https://github.com/iKarTehFox/web-clock-compatibility)!
+**Need compatibility with older browsers?** [Check out the compatibility repository!](https://github.com/iKarTehFox/web-clock-compatibility)
 
 # Install guide and features
 The documentation for Online Web Clock has moved! You can find it in the [Docs](https://online-clock-docs.pages.dev/)!  
