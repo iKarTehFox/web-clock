@@ -259,7 +259,7 @@ export function createScannerOverlay() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: '10',
+        zIndex: '1060', // Same as Bootstrap modal
         overflow: 'hidden'
     });
 
