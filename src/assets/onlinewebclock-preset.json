@@ -1,13 +1,13 @@
 {
 	"clockConfig": {
-		"clockMode": "cmo12",
 		"clockDisplay": "words",
 		"secondsVis": "sviN",
 		"dateFormat": "DDDD",
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",
-		"secondsBarVis": "sbaB"
+		"timeBar": "tbarSec",
+		"customNoteAlign": "nalB"
 	},
 	"fontConfig": {
 		"fontFamily": "Montserrat",
@@ -15,7 +15,8 @@
 		"fontWeight": "fweB",
 		"fontSize": "10vw",
 		"dropShadow": "2",
-		"strokeWidth": "0"
+		"strokeWidth": "0",
+		"strokeColor": ""
 	},
 	"colorTheme": {
 		"colorMode": "imgmode",
@@ -27,5 +28,5 @@
 		"bgImageBlur": "5"
 	},
 	"exportTimestamp": "Thanks for trying out my personal config! -iKarTehFox",
-	"version": 7
+	"version": 10
 }

@@ -1,60 +1,64 @@
-import { menu, weather } from '../global';
+import { menu, weather } from './dom-elements';
 import { presetLocalJSON } from '../importExport';
 import { logConsole, showToast } from './dom-utils';
-import { setDebug, setTimeRefresh } from './debug';
+import { setDebug, setLockSettings, setTimeRefresh } from './debug';
 import { initializeDebugUI } from './debugUI';
 import { submitWeatherSettings } from './weather-utils';
+import { match } from 'ts-pattern';
 
 interface URLParamConfig {
+    // Booleans
     debugMode?: boolean;
     fastRefresh?: boolean;
-    darkMode?: boolean;
-    weatherApi?: string;
-    weatherLat?: number;
-    weatherLon?: number;
-    weatherUnits?: 'imperial' | 'metric';
-    weatherWidgetPosX?: number;
-    weatherWidgetPosY?: number;
+    lockSettings?: boolean;
     panelVis?: boolean;
     tabTitle?: boolean;
-    preset?: string;
+    // Numbers
     autoRestart?: number;
-    lockSettings?: boolean;
+    weatherLat?: number;
+    weatherLon?: number;
+    weatherWidgetPosX?: number;
+    weatherWidgetPosY?: number;
+    // Strings
+    menuTheme?: 'light' | 'dark';
+    preset?: string;
+    weatherApi?: string;
+    weatherUnits?: 'imperial' | 'metric';
 }
 
 function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfig> {
     const params = {} as Partial<URLParamConfig>;
     
     // Boolean params
-    ['debugMode', 'fastRefresh', 'darkMode', 'panelVis', 'tabTitle', 'lockSettings'].forEach(key => {
+    ['debugMode', 'fastRefresh', 'lockSettings', 'panelVis', 'tabTitle'].forEach(key => {
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value === 'true';
-            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);;
         } else {
-            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug', true);
         }
     });
 
     // Number params
-    ['weatherLat', 'weatherLon', 'weatherWidgetPosX', 'weatherWidgetPosY', 'autoRestart'].forEach(key => {
+    ['autoRestart', 'weatherLat', 'weatherLon', 'weatherWidgetPosX', 'weatherWidgetPosY'].forEach(key => {
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = parseFloat(value);
-            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);
         } else {
-            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug', true);
         }
     });
 
     // String params
-    ['weatherApi', 'weatherUnits', 'preset'].forEach(key => {
+    ['menuTheme', 'preset', 'weatherApi', 'weatherUnits'].forEach(key => {
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value;
-            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);
         } else {
-            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'bypass');
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug', true);
         }
     });
 
@@ -79,11 +83,22 @@ export async function applyURLParams() {
     }
 
     // Menu theme
-    if (params.darkMode) {
-        menu.themeradio[1].checked = true;
-        menu.themeradio[1].dispatchEvent(new Event('change'));
-    }
-
+    match(params.menuTheme)
+        .with('light', () => {
+            menu.themeradio[0].checked = true;
+            menu.themeradio[0].dispatchEvent(new Event('change'));
+        })
+        .with('dark', () => {
+            menu.themeradio[1].checked = true;
+            menu.themeradio[1].dispatchEvent(new Event('change'));
+        })
+        .with(undefined, () => {
+            const index = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
+            menu.themeradio[index].checked = true;
+            menu.themeradio[index].dispatchEvent(new Event('change'));
+        })
+        .exhaustive();
+    
     // Weather
     if (params.weatherApi !== undefined && params.weatherLat !== undefined && params.weatherLon !== undefined && (params.weatherUnits == 'imperial' || params.weatherUnits == 'metric')) {
         const weatherApi = params.weatherApi;
@@ -134,13 +149,15 @@ export async function applyURLParams() {
             setTimeout(() => {
                 window.location.reload();
             }, autoRestartTime * 1000);
+            showToast(`Auto restart set to ${autoRestartTime} seconds.`, 'normal', 'warning');
         } else {
-            console.warn('Invalid autoRestart value. It should be an integer between 15 and 86400 inclusive.');
+            logConsole('Invalid autoRestart value. It should be an integer between 15 and 86400 inclusive.', 'warning');
         }
     }
     
     // Prevent end-user options modification by removing menu container entirely
     if (params.lockSettings) {
+        setLockSettings(true);
         menu.container.remove();
         logConsole('Settings locked - Menu container removed...', 'info');
     }

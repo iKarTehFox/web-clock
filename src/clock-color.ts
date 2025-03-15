@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { menu, dtdisplay } from './global';
+import { menu, dtdisplay, doc } from './utils/dom-elements';
 import { getFirstElement, logConsole } from './utils/dom-utils';
 
 // Text color override listener
@@ -17,10 +17,12 @@ menu.textcoloroverrideradio.forEach((radio) => {
                     // Catch if none are selected (switching from imgmode to solidmode)
                         if (document.body.style.backgroundColor === 'rgb(0, 0, 0)') {
                             dtdisplay.ccontainer.style.color = '#FFFFFF';
-                            dtdisplay.secondsBar.style.backgroundColor = '#FFFFFF';
+                            dtdisplay.timeBar.style.backgroundColor = '#FFFFFF';
+                            doc.cnote.style.color = '#FFFFFF';
                         } else {
                             dtdisplay.ccontainer.style.color = '#212529';
-                            dtdisplay.secondsBar.style.backgroundColor = '#212529';
+                            dtdisplay.timeBar.style.backgroundColor = '#212529';
+                            doc.cnote.style.color = '#212529';
                         }
                     }
                 }
@@ -38,7 +40,8 @@ menu.textcoloroverrideradio.forEach((radio) => {
 menu.textcolorinput.addEventListener('input', function() {
     const color = menu.textcolorinput.value;
     dtdisplay.ccontainer.style.color = color;
-    dtdisplay.secondsBar.style.backgroundColor = color;
+    dtdisplay.timeBar.style.backgroundColor = color;
+    doc.cnote.style.color = color;
     menu.textcolorlabel.textContent = `Text color: ${menu.textcolorinput.value}`;
     logConsole(`Text color override: ${color}`, 'debug');
 });
@@ -53,10 +56,12 @@ menu.presetcolors.forEach((radio) => {
         // Set the text color based on the background luminance
         if (luminance > 0.62 && isTextColorOverride === 0) {
             dtdisplay.ccontainer.style.color = '#212529'; // Set black text color
-            dtdisplay.secondsBar.style.backgroundColor = '#212529';
+            dtdisplay.timeBar.style.backgroundColor = '#212529';
+            doc.cnote.style.color = '#212529';
         } else if (isTextColorOverride === 0) {
             dtdisplay.ccontainer.style.color = '#FFF'; // Set white text color
-            dtdisplay.secondsBar.style.backgroundColor = '#FFF';
+            dtdisplay.timeBar.style.backgroundColor = '#FFF';
+            doc.cnote.style.color = '#FFF';
         }
     });
 });

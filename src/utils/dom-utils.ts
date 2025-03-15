@@ -1,10 +1,11 @@
 import Toastify from 'toastify-js';
-import { doc, menu } from '../global';
+import { doc, menu } from './dom-elements';
 import { debugMode } from './debug';
-import * as luxon from 'ts-luxon';
 import { Html5Qrcode } from 'html5-qrcode';
 import { processJSONSettings } from '../importExport';
 import { match } from 'ts-pattern';
+import * as bs from 'bootstrap';
+import * as luxon from 'ts-luxon';
 
 // Element finding functions
 export function getElement<T extends HTMLElement>(id: string): T {
@@ -24,17 +25,18 @@ export function getFirstElement<T extends Element>(selector: string): T {
 }
 
 // Custom console logging function
-export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' | 'bypass' = 'debug'):void {
-    if (debugMode && type === 'debug') {
+export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' = 'debug', bypass: boolean = false): void {
+    if ((debugMode || bypass) && type === 'debug') {
         console.log(`DEBUG - ${message}`);
     } else if (type === 'error') {
         console.error(`ERROR - ${message}`);
     } else if (type === 'warning') {
         console.warn(`WARNING - ${message}`);
-    } else if ((debugMode && type === 'info') || type === 'bypass') { // Allow bypass without debug mode
+    } else if ((debugMode || bypass) && type === 'info') {
         console.info(`INFO - ${message}`);
     }
 }
+
 // Function to set toast theme
 function getThemeInfo(colorTheme: string = 'auto') {
     const theme = colorTheme === 'auto' ? menu.container.dataset.bsTheme : colorTheme;
@@ -99,6 +101,124 @@ export function showToast(message: string, duration: 'default' | 'normal' | 'lon
     }).showToast();
 }
 
+interface ModalButton {
+    label: string;
+    className?: string;
+    value?: any;
+}
+
+export function createBsModal(title: string, content: HTMLElement | string, buttons: ModalButton[] = []) {
+    return new Promise((resolve) => {
+        const modal = document.createElement('div');
+        modal.className = 'modal fade';
+        modal.setAttribute('tabindex', '-1');
+        modal.dataset.overlay = 'bs-modal-overlay';
+        modal.style.wordBreak = 'break-word';
+        modal.style.overflowWrap = 'anywhere';
+
+        modal.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-center">
+                        <h5 class="modal-title">${title}</h5>
+                    </div>
+                    <div class="modal-body">
+                        ${content instanceof HTMLElement ? '' : `<p>${content}</p>`}
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Theme
+        modal.dataset.bsTheme = menu.container.dataset.bsTheme;
+
+        if (content instanceof HTMLElement) {
+            content.style.maxWidth = '100%';
+            content.style.height = 'auto';
+            content.style.objectFit = 'contain';
+            
+            // For images specifically
+            if (content instanceof HTMLImageElement) {
+                content.style.width = '100%';
+                content.className = 'img-fluid'; // Bootstrap's responsive image class
+            }
+            
+            const modalBody = modal.querySelector('.modal-body') as HTMLElement;
+            if (modalBody) {
+                modalBody.className = 'modal-body d-flex justify-content-center align-items-center';
+                modalBody.style.overflow = 'auto';
+                modalBody.style.maxHeight = '80vh';
+                modalBody.appendChild(content);
+            }
+        } else {
+            modal.querySelector('.modal-body')!.innerHTML = `<p>${content}</p>`;
+        }
+
+        // Define buttons automatically
+        if (buttons.length === 0) {
+            if (content instanceof HTMLImageElement || 
+                content instanceof HTMLCanvasElement || 
+                content instanceof HTMLVideoElement) {
+                buttons = [
+                    { label: 'Download', className: 'btn btn-primary', value: 'download' },
+                    { label: 'Close', className: 'btn btn-secondary', value: 'close' }
+                ];
+            } else if (typeof content === 'string') {
+                buttons = [
+                    { label: 'Copy', className: 'btn btn-primary', value: 'copy' },
+                    { label: 'Close', className: 'btn btn-secondary', value: 'close' }
+                ];
+            } else {
+                buttons = [
+                    { label: 'Close', className: 'btn btn-secondary', value: 'close' }
+                ];
+            }
+        }
+
+        const footer = modal.querySelector('.modal-footer')!;
+        const bootstrapModal = new bs.Modal(modal);
+
+        buttons.forEach(btn => {
+            const button = document.createElement('button');
+            button.className = btn.className || 'btn btn-secondary';
+            button.textContent = btn.label;
+            button.onclick = () => {
+                if (btn.value === 'download') {
+                    const dlTime = luxon.DateTime.now().toFormat('X');
+                    const link = document.createElement('a');
+                    // Set filename based on content type
+                    const extension = content instanceof HTMLVideoElement ? '.mp4' : '.png';
+                    link.download = `${title}_${dlTime}${extension}`;
+                    
+                    // Get appropriate data URL based on content type
+                    link.href = content instanceof HTMLCanvasElement ? 
+                        content.toDataURL('image/png') : 
+                        (content as HTMLImageElement | HTMLVideoElement).src;
+                        
+                    link.click();
+                } else if (btn.value === 'copy') {
+                    navigator.clipboard.writeText(content as string);
+                    showToast('Text copied to clipboard!', 'default', 'success');
+                }
+                bootstrapModal.hide();
+                resolve(btn.value);
+            };
+            footer.appendChild(button);
+        });
+
+        modal.addEventListener('hidden.bs.modal', () => {
+            modal.remove();
+            resolve('Dismissed.');
+        });
+
+        document.body.appendChild(modal);
+        bootstrapModal.show();
+        bootstrapModal.handleUpdate();
+    });
+}
+
 // Set browser theme color
 export function setMetaColor(type: 'color' | 'theme', value: string): void {
     match(type)
@@ -112,152 +232,15 @@ export function setMetaColor(type: 'color' | 'theme', value: string): void {
         });
 }
 
-// Function to create an overlay card element
-export function makeCardOverlay(title: string, content: HTMLElement | string): void {
-    // Create container
-    const container = document.createElement('div');
-    container.dataset.overlay = 'card-overlay';
-    container.dataset.bsTheme = menu.container.dataset.bsTheme;
-    Object.assign(container.style, {
-        position: 'fixed',
-        top: '0',
-        left: '0',
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: '10',
-        overflow: 'hidden'
-    });
-
-    // Create card
-    const card = document.createElement('div');
-    Object.assign(card.style, {
-        width: 'clamp(300px, 80%, 600px)',
-        maxHeight: '90vh',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column'
-    });
-    card.className = 'card';
-
-    // Create card body
-    const cardBody = document.createElement('div');
-    Object.assign(cardBody.style, {
-        overflowY: 'auto',
-        overflowX: 'auto',
-        flexGrow: '1',
-        maxWidth: '100%',
-        width: '100%',
-        wordBreak: 'break-word',
-        overflowWrap: 'anywhere',
-        marginBottom: '0',
-        marginTop: '0',
-        paddingBottom: '0',
-        paddingTop: '0',
-        userSelect: 'text'
-    });
-    cardBody.className = 'card-body';
-
-    // Create title
-    const titleElement = document.createElement('h5');
-    Object.assign(titleElement.style, {
-        textAlign: 'center',
-        fontSize: '1.5rem',
-        position: 'sticky',
-        top: '0',
-        backgroundColor: 'var(--bs-card-bg)',
-        padding: '1rem',
-        borderBottom: '1px solid #dddddd',
-        zIndex: '1'
-    });
-    titleElement.className = 'card-title';
-    titleElement.textContent = title;
-
-    // Create content container
-    const contentContainer = document.createElement('div');
-    contentContainer.className = 'd-flex justify-content-center align-items-center';
-
-    if (typeof content === 'string') {
-        contentContainer.textContent = content;
-    } else {
-        content.style.maxWidth = '100%';
-        content.style.maxHeight = '80vh';
-        content.style.objectFit = 'contain';
-        contentContainer.appendChild(content);
+export async function requestNotificationPermission(): Promise<NotificationPermission> {
+    if (!('Notification' in window)) {
+        showToast('Notifications are not supported in this browser.', 'long', 'danger');
+        return Promise.reject('Notifications not supported');
     }
 
-    // Create button container
-    const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'mb-0 d-flex gap-2 justify-content-center';
-    Object.assign(buttonContainer.style, {
-        marginTop: '8px',
-        position: 'sticky',
-        bottom: '0',
-        backgroundColor: 'var(--bs-body-bg)',
-        padding: '1rem',
-        borderTop: '1px solid #dddddd'
-    });
-
-    // Create close button
-    const closeButton = document.createElement('button');
-    closeButton.className = 'btn btn-secondary';
-    closeButton.textContent = 'Close';
-
-    // Create escape key handler
-    function escapeHandler(e: KeyboardEvent) {
-        if (e.key === 'Escape') {
-            document.body.removeChild(container);
-            document.removeEventListener('keydown', escapeHandler);
-            logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'debug');
-        }
-    }
-
-    closeButton.onclick = () => {
-        document.body.removeChild(container);
-        document.removeEventListener('keydown', escapeHandler);
-        logConsole(`Overlay card container with settings (${title}, ${content}) removed`, 'debug');
-    };
-
-    // Create download button if content is downloadable media
-    if (content instanceof HTMLCanvasElement || content instanceof HTMLImageElement || content instanceof HTMLVideoElement) {
-        const downloadButton = document.createElement('button');
-        downloadButton.className = 'btn btn-primary';
-        downloadButton.textContent = 'Download';
-        downloadButton.onclick = () => {
-            const dlTime = luxon.DateTime.now().toFormat('X');
-            const link = document.createElement('a');
-            // Set filename based on content type
-            const extension = content instanceof HTMLVideoElement ? '.mp4' : '.png';
-            link.download = `${title}_${dlTime}${extension}`;
-            
-            // Get appropriate data URL based on content type
-            link.href = content instanceof HTMLCanvasElement ? 
-                content.toDataURL('image/png') : 
-                content.src;
-                
-            link.click();
-        };
-        buttonContainer.appendChild(downloadButton);
-    }
-
-    // Append buttons
-    buttonContainer.appendChild(closeButton);
-
-    // Append elements
-    cardBody.appendChild(titleElement);
-    cardBody.appendChild(contentContainer);
-    cardBody.appendChild(buttonContainer);
-    card.appendChild(cardBody);
-    container.appendChild(card);
-
-    // Add to document
-    document.body.appendChild(container);
-    document.addEventListener('keydown', escapeHandler);
-
-    logConsole(`Overlay card container created with settings: (${title}, ${content})`, 'debug');
+    const permission = await Notification.requestPermission();
+    logConsole(`Notification permission: ${permission}`, 'debug');
+    return permission;
 }
 
 // Function to create an scanner overlay card element
@@ -276,7 +259,7 @@ export function createScannerOverlay() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: '10',
+        zIndex: '1055', // Same as Bootstrap modal
         overflow: 'hidden'
     });
 
@@ -335,5 +318,12 @@ export function createScannerOverlay() {
             container.remove();
         };
         cardBody.appendChild(closeButton);
+    }).catch((error) => {
+        logConsole(error, 'error');
+        showToast(`QR scanner failed: ${error}`, 'long', 'danger');
+        if (html5QrCode.isScanning) {
+            html5QrCode.stop();
+        }
+        container.remove();
     });
 }

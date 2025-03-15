@@ -1,0 +1,148 @@
+import { getElement, getElements } from './dom-utils';
+
+export const doc = {
+    blurpanel: getElement<HTMLDivElement>('blur-panel'),
+    favicon: getElement<HTMLLinkElement>('favicon'),
+    themecolormeta: getElement<HTMLMetaElement>('theme-color-meta'),
+    cnote: getElement<HTMLParagraphElement>('custom-note'),
+};
+
+export const panel = {
+    container: getElement<HTMLDivElement>('panel-container'),
+    menubutton: getElement<HTMLButtonElement>('menu-button'),
+    menubody: getElement<HTMLDivElement>('menu-body'),
+    // Settings sections
+    section: {
+        dt: getElement<HTMLDivElement>('panel-section-dt'),
+        fc: getElement<HTMLDivElement>('panel-section-fc'),
+        bt: getElement<HTMLDivElement>('panel-section-bt'),
+        dbg: getElement<HTMLDivElement>('panel-section-dbg'),
+        we: getElement<HTMLDivElement>('panel-section-we'),
+        do: getElement<HTMLDivElement>('panel-section-do'),
+        ie: getElement<HTMLDivElement>('panel-section-ie')
+    }
+};
+
+export const menu = {
+    autorestarttime: getElement<HTMLSpanElement>('autorestart-time'),
+    borderstyleselect: getElement<HTMLSelectElement>('borderStyleSelect'),
+    bordertyperadio: getElements<HTMLInputElement>('input[name="border-type-radio"]'),
+    clockmoderadio: getElements<HTMLInputElement>('input[name="clock-mode-radio"]'),
+    colorbadge: getElement<HTMLParagraphElement>('currentColorBadge'),
+    colorbadgelabel: getElement<HTMLDivElement>('currentColorLabel'),
+    colormoderadio: getElements<HTMLInputElement>('input[name="color-mode-radio"]'),
+    container: getElement<HTMLDivElement>('menu-offcanvas'),
+    cnoteinput: getElement<HTMLInputElement>('cnote-input'),
+    cnotealignradio: getElements<HTMLInputElement>('input[name="note-alignment-radio"]'),
+    datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
+    dateformselect: getElement<HTMLSelectElement>('dateFormatSelect'),
+    durationdisplay: getElement<HTMLParagraphElement>('time-duration'),
+    fadegroup: getElement<HTMLDivElement>('fadeGroup'),
+    faderesetbutton: getElement<HTMLButtonElement>('fadeTransitionResetBtn'),
+    fadetransrange: getElement<HTMLInputElement>('fadeTransitionRange'),
+    fadetransrangelabel: getElement<HTMLLabelElement>('fadeTransitionRangeLabel'),
+    fullscreenbtn: getElement<HTMLButtonElement>('fs-toggle'),
+    githubbtn: getElement<HTMLButtonElement>('github-btn'),
+    imageblurlabel: getElement<HTMLLabelElement>('bgImgBlurRangeLabel'),
+    imageblurrange: getElement<HTMLInputElement>('bgImgBlurRange'),
+    imagegroup: getElement<HTMLDivElement>('bgImgGroup'),
+    imagesizeselect: getElement<HTMLSelectElement>('bgImageSizeSelect'),
+    imageuploadbutton: getElement<HTMLButtonElement>('bgImageUploadBtn'),
+    jsonpresetsgroup: getElement<HTMLDivElement>('jsonPresetsContainer'),
+    legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
+    manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
+    panelvischeckbox: getElement<HTMLInputElement>('panelVisible'),
+    presetcolors: getElements<HTMLInputElement>('input[name="preset-color-radio"]'),
+    presetgroup: getElement<HTMLDivElement>('presetColorGroup'),
+    secondsvisradio: getElements<HTMLInputElement>('input[name="seconds-vis-radio"]'),
+    textcolorgroup: getElement<HTMLDivElement>('textColorGroup'),
+    textcolorinput: getElement<HTMLInputElement>('textColorInput'),
+    textcolorlabel: getElement<HTMLLabelElement>('textColorLabel'),
+    textcoloroverrideradio: getElements<HTMLInputElement>('input[name="text-color-override-radio"]'),
+    themeradio: getElements<HTMLInputElement>('input[name="menu-theme-radio"]'),
+    timebarselect: getElement<HTMLInputElement>('timeBarSelect'),
+    timemethodselect: getElement<HTMLSelectElement>('timeMethodSelect'),
+    timezoneselect: getElement<HTMLSelectElement>('timeZoneSelect'),
+    titlevischeckbox: getElement<HTMLInputElement>('menuTabTitleVisible'),
+    weatherapiinput: getElement<HTMLInputElement>('weatherAppIDTextArea'),
+    weathergeobtn: getElement<HTMLButtonElement>('weatherGeoBtn'),
+    weatherlatinput: getElement<HTMLInputElement>('weatherLatTextArea'),
+    weatherloninput: getElement<HTMLInputElement>('weatherLonTextArea'),
+    weathermovereset: getElement<HTMLButtonElement>('weatherMoveReset'),
+    weathermovetoggle: getElement<HTMLInputElement>('weatherMoveToggle'),
+    weatherstopbtn: getElement<HTMLButtonElement>('weatherStopBtn'),
+    weathersubmitbtn: getElement<HTMLButtonElement>('weatherSubmitBtn'),
+    weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]'),
+};
+
+export const font = {
+    applyfontinput: getElement<HTMLButtonElement>('applyCustomFontButton'),
+    customfontinput: getElement<HTMLInputElement>('customFontInputForm'),
+    familysel: getElement<HTMLSelectElement>('fontFamilySelect'),
+    shadowlabel: getElement<HTMLLabelElement>('dropShadowRangeLabel'),
+    shadowrange: getElement<HTMLInputElement>('dropShadowRange'),
+    sizesel: getElement<HTMLSelectElement>('sizeSelect'),
+    strokecolor: getElement<HTMLInputElement>('textStrokeColor'),
+    strokecolorlabel: getElement<HTMLLabelElement>('textStrokeColorLabel'),
+    strokerange: getElement<HTMLInputElement>('textStrokeRange'),
+    strokerangelabel: getElement<HTMLLabelElement>('textStrokeRangeLabel'),
+    styleradio: getElements<HTMLInputElement>('input[name="font-style-radio"]'),
+    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]'),
+};
+
+export const dtdisplay = {
+    ccontainer: getElement<HTMLDivElement>('clock-container'),
+    colon1: getElement<HTMLSpanElement>('colon1'),
+    colon2: getElement<HTMLSpanElement>('colon2'),
+    date: getElement<HTMLParagraphElement>('date'),
+    hourSlot: getElement<HTMLSpanElement>('hour-slot'),
+    indicatorSlot: getElement<HTMLSpanElement>('indicator'),
+    minuteSlot: getElement<HTMLSpanElement>('minute-slot'),
+    secondSlot: getElement<HTMLSpanElement>('second-slot'),
+    tcontainer: getElement<HTMLDivElement>('time-container'),
+    timeBar: getElement<HTMLDivElement>('time-progress-bar'),
+};
+
+export const weather = {
+    condition: getElement<HTMLParagraphElement>('weather-condition'),
+    container: getElement<HTMLDivElement>('weather-widget'),
+    feelslike: getElement<HTMLParagraphElement>('weather-feelslike'),
+    icon: document.getElementById('weather-icon'),
+    maxtemp: getElement<HTMLParagraphElement>('weather-max'),
+    mintemp: getElement<HTMLParagraphElement>('weather-min'),
+    name: getElement<HTMLParagraphElement>('weather-name'),
+    temp: getElement<HTMLParagraphElement>('weather-temp'),
+    wind: getElement<HTMLParagraphElement>('weather-wind')
+};
+
+export const stopwatch = {
+    container: getElement<HTMLDivElement>('stopwatch-container'),
+    display: getElement<HTMLHeadingElement>('stopwatch-display'),
+    lapbtn: getElement<HTMLButtonElement>('stopwatch-lap'),
+    lapfield: getElement<HTMLButtonElement>('stopwatch-lapfield'),
+    obutton: getElement<HTMLButtonElement>('stopwatch-button'),
+    pausebtn: getElement<HTMLButtonElement>('stopwatch-pause'),
+    resetbtn: getElement<HTMLButtonElement>('stopwatch-reset'),
+    startbtn: getElement<HTMLButtonElement>('stopwatch-start'),
+};
+
+export const countdown = {
+    container: getElement<HTMLDivElement>('countdown-container'),
+    display: getElement<HTMLHeadingElement>('countdown-display'),
+    hrsinput: getElement<HTMLInputElement>('countdown-hours'),
+    mininput: getElement<HTMLInputElement>('countdown-minutes'),
+    notifcheckbox: getElement<HTMLInputElement>('countdown-notif-checkbox'),
+    obutton: getElement<HTMLButtonElement>('countdown-button'),
+    pausebtn: getElement<HTMLButtonElement>('countdown-pause'),
+    resetbtn: getElement<HTMLButtonElement>('countdown-reset'),
+    secinput: getElement<HTMLInputElement>('countdown-seconds'),
+    startbtn: getElement<HTMLButtonElement>('countdown-start'),
+};
+
+export const debug = {
+    container: getElement<HTMLDivElement>('debuggingContainer'),
+    devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
+    info:  getElement<HTMLParagraphElement>('debugInfo'),
+    rmclockbtn: getElement<HTMLButtonElement>('debugRmClock'),
+    toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
+};

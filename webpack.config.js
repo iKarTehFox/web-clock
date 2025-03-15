@@ -1,8 +1,11 @@
-// Generated using webpack-cli https://github.com/webpack/webpack-cli
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const isProduction = process.env.NODE_ENV == 'production';
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
@@ -12,8 +15,7 @@ const config = {
         main: './src/index.ts',
         styles: './src/css/styles.ts',
         presets: './src/assets/presets.ts',
-        icons: './src/icons/icons.ts',
-        images: './src/assets/images.ts',
+        icons: './src/icons/icons.ts'
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -24,7 +26,7 @@ const config = {
     plugins: [
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
-            filename: 'css/[name].css', // This pattern names the output CSS files
+            filename: 'css/[name].css',
         }),
         new HtmlWebpackPlugin({
             template: './src/index.html',
@@ -54,7 +56,7 @@ const config = {
         compress: true,
         host: '0.0.0.0',
         port: 4000,
-      },
+    },
     module: {
         rules: [
             {
@@ -64,27 +66,27 @@ const config = {
             },
             {
                 test: /\.css$/i,
-                use: [stylesHandler, 'css-loader'], // Processes CSS files
+                use: [stylesHandler, 'css-loader'],
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
                 type: 'asset/resource',
                 generator: {
-                    filename: 'fonts/[name][ext][query]'  // This places font files in a `fonts` folder
+                    filename: 'fonts/[name][ext][query]'
                 }
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
                 type: 'asset/resource',
                 generator: {
-                    filename: 'icons/[name][ext][query]'  // This places image files in an `images` folder
+                    filename: 'icons/[name][ext][query]'
                 }
             },
             {
                 test: /\.json$/i,
                 type: 'asset/resource',
                 generator: {
-                    filename: 'assets/[name][ext][query]' // This places JSON presets files in an `assets` folder
+                    filename: 'assets/[name][ext][query]'
                 }
             }
         ],
@@ -94,7 +96,7 @@ const config = {
     },
 };
 
-module.exports = () => {
+export default () => {
     if (isProduction) {
         config.mode = 'production';
         config.plugins.push(new MiniCssExtractPlugin());

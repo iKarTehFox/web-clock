@@ -13,22 +13,27 @@
     </head>
     <body>
         <div id="blur-panel"></div>
+        <div id="panel-container">
+            <button id="countdown-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Countdown">⏳</button>
+            <button id="stopwatch-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Stopwatch">⏱️</button>
+            <button id="menu-button" class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#menu-offcanvas" role="button" aria-controls="menu-offcanvas" style="width: 100px;">☰ Menu</button>
+        </div>
         <!-- Menu -->
-        <div id="menu-container" data-bs-theme="light">
-            <button id="countdown-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Countdown" style="position: absolute; top: 0px; right: 152px;">⏳</button>
-            <button id="stopwatch-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Stopwatch" style="position: absolute; top: 0px; right: 105px;">⏱️</button>
-            <button id="open-button" class="btn btn-secondary" style="width: 100px;">☰ Menu</button>
-            <button id="close-button" class="btn btn-danger" style="display: none; position: absolute; top: 0px; right: 0px; width: 100px;">❌ Close</button>
-            <div id="menu-options" class="menu-options-initial">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="menu-offcanvas" aria-labelledby="menu-offcanvas-label">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="menu-offcanvas-label">Menu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" id="menu-body">
                 <div class="accordion" id="menuAccordion">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCO" aria-expanded="true" aria-controls="collapseCO">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDT" aria-expanded="true" aria-controls="collapseDT">
                             Date and Time
                             </button>
                         </h2>
-                        <div id="collapseCO" class="accordion-collapse collapse show" data-bs-parent="#menuAccordion">
-                            <div class="accordion-body">
+                        <div id="collapseDT" class="accordion-collapse collapse show" data-bs-parent="#menuAccordion">
+                            <div class="accordion-body" id="panel-section-dt">
                                 <h6 class="mb-1">Clock Mode</h6>
                                 <div class="btn-group" role="group" aria-label="Clock mode button group" id="clock-mode-group">
                                     <input type="radio" class="btn-check" name="clock-mode-radio" data-value="0" id="cmo12" autocomplete="off" checked>
@@ -76,6 +81,15 @@
                                     <input type="radio" class="btn-check" name="seconds-vis-radio" data-value="none" id="sviN" autocomplete="off">
                                     <label class="btn btn-outline-primary" for="sviN">Hide</label>
                                 </div>
+                                <h6 class="mb-1 mt-2">Time Bar</h6>
+                                <select class="form-select" id="timeBarSelect">
+                                    <option value="tbarWeekday">Week progress (Mon-Sun)</option>
+                                    <option value="tbarMonth">Month progress</option>
+                                    <option value="tbarDay">Day progress</option>
+                                    <option value="tbarHour">Hour progress</option>
+                                    <option value="tbarSec">Seconds</option>
+                                    <option value="tbarNone" selected>Off</option>
+                                </select>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Date Display</h6>
                                 <select class="form-select" id="dateFormatSelect">
@@ -99,10 +113,10 @@
                                 <div class="btn-group mb-2" role="group" aria-label="Clock border radio button group">
                                     <input type="radio" class="btn-check" name="border-type-radio" data-value="none" id="btyD" autocomplete="off" checked>
                                     <label class="btn btn-outline-primary" for="btyD">None</label>
-
+    
                                     <input type="radio" class="btn-check" name="border-type-radio" data-value="regular" id="btyR" autocomplete="off">
                                     <label class="btn btn-outline-primary" for="btyR">Box</label>
-
+    
                                     <input type="radio" class="btn-check" name="border-type-radio" data-value="bottom" id="btyB" autocomplete="off">
                                     <label class="btn btn-outline-primary" for="btyB">Bottom</label>
                                 </div>
@@ -112,20 +126,24 @@
                                     <option value="dotted">Dotted</option>
                                     <option value="double">Double</option>
                                 </select>
-                                <h6 class="mb-1 mt-2">Seconds Bar Visibility</h6>
-                                <div class="btn-group" role="group" aria-label="Seconds bar visibility button group">
-                                    <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="block" id="sbaB" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="sbaB">Show</label>
-                                    <input type="radio" class="btn-check" name="seconds-bar-radio" data-value="none" id="sbaN" autocomplete="off" checked>
-                                    <label class="btn btn-outline-primary" for="sbaN">Hide</label>
+                                <hr>
+                                <h6 class="mb-1 mt-2">Custom Note</h6>
+                                <textarea class="form-control" id="cnote-input" maxlength="75" placeholder="Enter text here" rows="2"></textarea>
+                                <h6 class="mb-1 mt-2">Note Alignment</h6>
+                                <div class="btn-group mb-2" role="group" aria-label="Note alignment button group">
+                                    <input type="radio" class="btn-check" name="note-alignment-radio" data-value="top" id="nalT" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="nalT">Top</label>
+    
+                                    <input type="radio" class="btn-check" name="note-alignment-radio" data-value="bottom" id="nalB" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="nalB">Bottom</label>
                                 </div>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Time Refresh Method</h6>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="legacyRefreshMethod">
+                                    <input class="form-check-input" type="checkbox" name="legacy-refresh-checkbox" id="legacyRefreshMethod">
                                     <label class="form-check-label" for="legacyRefreshMethod">Use legacy refresh method</label>
                                 </div>
-                                <p id="subtext-light">Enable if you encounter clock instability on Firefox or non-Chromium-based browsers (refreshes clock every 250ms).</p>
+                                <p id="subtext-light">Enable if you encounter clock instability on Firefox or non-Chromium-based browsers (refreshes clock every 100ms).</p>
                             </div>
                         </div>
                     </div>
@@ -136,7 +154,7 @@
                             </button>
                         </h2>
                         <div id="collapseFC" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
-                            <div class="accordion-body">
+                            <div class="accordion-body" id="panel-section-fc">
                                 <h6 class="mb-1">Font Family</h6>
                                 <select class="form-select" id="fontFamilySelect">
                                     <option value="" selected>System default</option>
@@ -161,10 +179,12 @@
                                     </optgroup>
                                 </select>
                                 <h6 class="mb-1 mt-2">Custom Font</h6>
-                                <input class="form-control" type="text" placeholder="Enter font name" data-bs-toggle="tooltip" data-bs-title="Enter the name of a font installed on your system" aria-label="Custom font input form" id="customFontInputForm">
-                                <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-outline-primary" id="applyCustomFontButton">Submit</button>
-                                </div>
+                                <form class="mb-1" id="customFontForm" onsubmit="event.preventDefault();">
+                                    <input class="form-control mb-1" type="text" placeholder="Enter font name" data-bs-toggle="tooltip" data-bs-title="Enter the name of a font installed on your system" aria-label="Custom font input form" id="customFontInputForm">
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-outline-primary" id="applyCustomFontButton">Submit</button>
+                                    </div>
+                                </form>                                
                                 <h6 class="mb-1 mt-1">Font Style</h6>
                                     <div class="btn-group" role="group" aria-label="Font style button group" id="font-style-group">
                                         <input type="radio" class="btn-check" name="font-style-radio" data-value="normal" id="fstR" autocomplete="off" checked>
@@ -203,12 +223,12 @@
                     </div>
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCoO" aria-expanded="false" aria-controls="collapseCoO">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBT" aria-expanded="false" aria-controls="collapseBT">
                             Background Theme
                             </button>
                         </h2>
-                        <div id="collapseCoO" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
-                            <div class="accordion-body">
+                        <div id="collapseBT" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
+                            <div class="accordion-body" id="panel-section-bt">
                                 <h6 class="mb-1">Background Color Mode</h6>
                                 <div class="form-group">
                                     <div class="btn-group" role="group" aria-label="Color mode button group">
@@ -216,10 +236,8 @@
                                         <label class="btn btn-outline-primary" for="fademode">Color Fade</label>
                                         <input type="radio" class="btn-check" name="color-mode-radio" id="solidmode" autocomplete="off">
                                         <label class="btn btn-outline-primary" for="solidmode">Solid</label>
-                                    </div>
-                                    <div class="btn-group" role="group" aria-label="Color mode button group">
                                         <input type="radio" class="btn-check" name="color-mode-radio" id="imgmode" autocomplete="off">
-                                        <label class="btn btn-outline-primary" for="imgmode">Use Custom Image</label>
+                                        <label class="btn btn-outline-primary" for="imgmode">Image</label>
                                     </div>
                                     <div id="currentColorLabel">
                                         <p class="mt-2 mb-0">Current color: <span class="badge text-bg-secondary" id="currentColorBadge">#000000</span></p>
@@ -342,7 +360,7 @@
                                         <option value="stretch">Stretch</option>
                                     </select>
                                     <label for="bgImgBlurRange" class="form-label mt-2" id="bgImgBlurRangeLabel">Image Blur: 0px</label>
-                                    <input type="range" id="bgImgBlurRange" min="0" max="10" step="1" value="0">
+                                    <input type="range" id="bgImgBlurRange" class="d-block" min="0" max="10" step="1" value="0">
                                     <p><b>Note: May use more power when active</b></p>
                                 </div>
                                 <div class="form-group mt-2" id="textColorGroup" style="display: none;">
@@ -351,7 +369,7 @@
                                     <div class="btn-group" role="group" aria-label="Text color override button group">
                                         <input type="radio" class="btn-check" name="text-color-override-radio" id="tcovD" autocomplete="off" checked>
                                         <label class="btn btn-outline-primary" for="tcovD">Disabled</label>
-
+    
                                         <input type="radio" class="btn-check" name="text-color-override-radio" id="tcovO" autocomplete="off">
                                         <label class="btn btn-outline-primary" for="tcovO">Enable</label>
                                     </div>
@@ -365,12 +383,12 @@
                     </div>
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWe" aria-expanded="false" aria-controls="collapseWe">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWe" aria-expanded="false" aria-controls="collapseWe">
                             Weather
-                          </button>
+                            </button>
                         </h2>
                         <div id="collapseWe" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
-                            <div class="accordion-body">
+                            <div class="accordion-body" id="panel-section-we">
                                 <h6 class="mb-1">OpenWeatherMap AppID</h6>
                                 <input type="text" class="form-control" id="weatherAppIDTextArea" aria-describedby="weatherAppIDHelp" placeholder="API key">
                                 <span id="weatherAppIDHelp" class="form-text">
@@ -409,12 +427,12 @@
                     </div>
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMV" aria-expanded="false" aria-controls="collapseMV">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDO" aria-expanded="false" aria-controls="collapseDO">
                             Display Options
                             </button>
                         </h2>
-                        <div id="collapseMV" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
-                            <div class="accordion-body">
+                        <div id="collapseDO" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
+                            <div class="accordion-body" id="panel-section-do">
                                 <h6 class="mb-1">Menu Theme</h6>
                                 <div class="btn-group" role="group" aria-label="Menu theme button group">
                                     <input type="radio" class="btn-check" name="menu-theme-radio" id="lightthememode" autocomplete="off" checked>
@@ -447,9 +465,9 @@
                             </button>
                         </h2>
                         <div id="collapseDbg" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
-                            <div class="accordion-body">
-                                <h6 class="mb-1">Debug info</h6>
-                                <p>User Agent: <span id="debugUAString"></span></p>
+                            <div class="accordion-body" id="panel-section-dbg">
+                                <h6 class="mb-1">Debug Info</h6>
+                                <div id="debugInfo"></div>
                                 <div id="devColorsContainer" style="display: none;">
                                     <hr>
                                     <h6 class="mb-1 mt-2">Dev Colors</h6>
@@ -479,9 +497,9 @@
                                 </div>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Settings</h6>
-                                <button type="button" class="btn btn-outline-warning mb-1" data-bs-toggle="tooltip" data-bs-title="Log JSON settings to console" id="jsonExportConsoleBtn">Log JSON</button>
-                                <button type="button" class="btn btn-outline-warning mb-1" data-bs-toggle="tooltip" data-bs-title="View current JSON settings in card overlay" id="jsonExportCardBtn">View Raw JSON</button>
-                                <button type="button" class="btn btn-outline-warning mb-1" data-bs-toggle="tooltip" data-bs-title="Extract and view current background image" id="debugGetBGBtn">Extract BG image</button>
+                                <button type="button" class="btn btn-outline-warning mb-1 d-block" data-bs-toggle="tooltip" data-bs-title="Log JSON settings to console" id="jsonExportConsoleBtn">Log JSON</button>
+                                <button type="button" class="btn btn-outline-warning mb-1 d-block" data-bs-toggle="tooltip" data-bs-title="View current JSON settings in card overlay" id="jsonExportCardBtn">View Raw JSON</button>
+                                <button type="button" class="btn btn-outline-warning mb-1 d-block" data-bs-toggle="tooltip" data-bs-title="Extract and view current background image" id="debugGetBGBtn">Extract BG image</button>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Toasts</h6>
                                 <button type="button" class="btn btn-dark mb-1" name="debugToast" data-dbgtoasttheme="dark">Dark</button>
@@ -490,10 +508,8 @@
                                 <button type="button" class="btn btn-success mb-1" name="debugToast" data-dbgtoasttheme="success">Success</button>
                                 <button type="button" class="btn btn-warning mb-1" name="debugToast" data-dbgtoasttheme="warning">Warning</button>
                                 <hr>
-                                <h6 class="mb-1 mt-2">Card Overlay</h6>
-                                <button type="button" class="btn btn-primary mb-1" name="debugCard" data-dbgcardtitle="Overlay example" data-dbgcardcontent="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vestibulum, tortor sed ullamcorper condimentum, lorem lacus rutrum leo, sed tristique eros tellus quis sapien. Phasellus.">Text Card Overlay</button>
-                                <button type="button" class="btn btn-primary mb-1" name="debugCard" 
-                                data-dbgcardtitle="Overlay example" data-dbgcardcontent="/icons/customizable.png" data-dbgcardtype="image">Image Card Overlay</button>
+                                <h6 class="mb-1 mt-2">UI</h6>
+                                <button type="button" class="btn btn-outline-warning mb-1" id="debugRmClock">Remove clock container</button>
                             </div>
                         </div>
                     </div>
@@ -504,7 +520,7 @@
                             </button>
                         </h2>
                         <div id="collapseIE" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
-                            <div class="accordion-body">
+                            <div class="accordion-body" id="panel-section-ie">
                                 <h6 class="mb-1">Import settings</h6>
                                 <button type="button" class="btn btn-outline-primary mb-1" id="jsonImportUlBtn">Upload from JSON</button>
                                 <button type="button" class="btn btn-outline-primary mb-1" id="jsonImportQrBtn">Scan QR code</button>
@@ -516,7 +532,7 @@
                                 <hr>
                                 <h6 class="mb-1">Built-in presets</h6>
                                 <div id="jsonPresetsContainer"></div>
-                                <p class="mb-1 mt-2" id="subtext-light">Note: You can press the corresponding number on your keyboard to use these presets at any time!</p>
+                                <p class="mb-1 mt-2" id="subtext-light">Note: Press <kbd>h</kbd> to view keyboard shortcuts.</p>
                                 <hr>
                                 <h6 class="mb-1 mt-2">Export settings</h6>
                                 <button type="button" class="btn btn-outline-warning mb-1" id="jsonExportDlBtn">Download JSON file</button>
@@ -531,14 +547,15 @@
                     <p class="mb-0" id="autorestart-time"></p>
                     <hr>
                     <span id="credit">
-                        Developed by iKarTehFox. Made possible with other open-source projects.<br>This app is licenced under the <a href="https://github.com/iKarTehFox/web-clock/blob/main/LICENSE" target="_blank">Mozilla Public License 2.0 (MPL-2.0)</a>.
+                        Developed by iKarTehFox. Made possible with other open-source projects.<br>This app is licenced under the <a href="https://github.com/iKarTehFox/web-clock/blob/prod/LICENSE" target="_blank">Mozilla Public License 2.0 (MPL-2.0)</a>.
                     </span>
                     <br>
-                    <a type="button" class="btn btn-primary btn-social-icon btn-github" data-bs-toggle="tooltip" data-bs-custom-class="secondary-tooltip" data-bs-title="View on GitHub" href="https://github.com/ikartehfox/web-clock" target="_blank" id="github-btn">
+                    <a type="button" class="btn btn-primary btn-social-icon btn-github" data-bs-toggle="tooltip" data-bs-custom-class="secondary-tooltip" data-bs-title="View source on GitHub" href="https://github.com/ikartehfox/web-clock" target="_blank" id="github-btn">
                         <p style="margin-top: -1.5px;">🐙</p>
                     </a>
+                    <a type="button" class="btn btn-github ms-1" href="https://online-clock-docs.pages.dev/" data-bs-toggle="tooltip" data-bs-title="View the Online Web Clock documentation">Read the Docs</a>
                     <p class="mb-1 mt-2">Review the <a href="/privacy.html">Privacy Policy</a>.</p>
-                    <p class="mb-1 mt-2" id="version">Version: <b>v1.5.3</b></p>
+                    <p class="mb-1 mt-2" id="version">Version: <b>v1.6.0</b></p>
                 </div>
             </div>
         </div>
@@ -546,7 +563,7 @@
         <div id="clock-container">
             <div id="time-container">
                 <span class="clock-part" id="hour-slot">00</span><span class="colon" id="colon1">:</span><span class="clock-part" id="minute-slot">00</span><span class="colon" id="colon2">:</span><span class="clock-part" id="second-slot">00</span><span id="indicator"></span>
-                <div id="seconds-progress-bar"></div>
+                <div id="time-progress-bar"></div>
             </div>
             <p id="date"><noscript>JavaScript is disabled!</noscript></p>
         </div>
@@ -600,16 +617,22 @@
                                 <input type="number" class="form-control" id="countdown-minutes" placeholder="Minutes" min="0" max="59">
                                 <input type="number" class="form-control" id="countdown-seconds" placeholder="Seconds" min="0" max="59">
                             </div>
-                            <div class="btn-group" role="group" aria-label="Countdown controls">
+                            <div class="btn-group mb-3" role="group" aria-label="Countdown controls">
                                 <button type="button" class="btn btn-primary" id="countdown-start">Start</button>
                                 <button type="button" class="btn btn-warning" id="countdown-pause" disabled>Pause</button>
                                 <button type="button" class="btn btn-danger" id="countdown-reset" disabled>Reset</button>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="countdown-notif-checkbox">
+                                <label for="countdown-notif-checkbox">Enable notification on finish</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Custom text -->
+        <div id="custom-note"></div>
     </body>
 </html>
 

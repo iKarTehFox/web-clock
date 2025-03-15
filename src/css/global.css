@@ -34,63 +34,25 @@ body {
     padding-top: 5px;
 }
 
+#custom-note {
+    font-size: 2vw;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    text-align: center;
+    width: 80vw;
+    word-wrap: break-word;
+}
+
 /* Menu CSS */
-#menu-container {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 2;
-    display: block;
-}
-
-.menu-options-initial {
-    border-radius: 10px;
-    position: absolute;
-    top: 40px;
+#panel-container {
+    position: fixed;
+    top: 0;
     right: 0;
-    background-color: #ffffff;
     padding: 10px;
-    max-height: 75vh;
-    overflow: auto;
-    max-width: 15vw;
-    min-width: 260px;
-    box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    visibility: hidden;
-}
-
-.menu-options-fade {
-    border-radius: 10px;
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background-color: #ffffff;
-    padding: 10px;
-    max-height: calc(75vh - 40px);
-    overflow: auto;
-    max-width: 15vw;
-    min-width: 260px;
-    box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-}
-
-.menu-options-show {
-    border-radius: 10px;
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background-color: #ffffff;
-    padding: 10px;
-    max-height: calc(75vh - 40px);
-    overflow: auto;
-    max-width: 15vw;
-    min-width: 260px;
-    box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
+    z-index: 10;
 }
 
 .color-block {
@@ -110,7 +72,7 @@ body {
 }
 
 /* Seconds progress bar */
-#seconds-progress-bar {
+#time-progress-bar {
   position: absolute;
   bottom: 1;
   height: 5px;
@@ -127,6 +89,7 @@ body {
     left: 10px;
     bottom: 10px;
     cursor: default;
+    z-index: 2;
 }
 
 .weather-hidden {
@@ -149,7 +112,7 @@ body {
     width: fit-content;
     max-height: fit-content;
     box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    z-index: 3;
     border-radius: 10px;
 }
 
@@ -176,6 +139,16 @@ body {
     min-width: 55vw;
     max-height: fit-content;
     box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    z-index: 3;
     border-radius: 10px;
+}
+
+[data-bs-theme="dark"] .modal-content {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
+
+/* Miscellaneous */
+.offcanvas-backdrop.show {
+    opacity: 0.2 !important;
 }

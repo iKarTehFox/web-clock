@@ -2,14 +2,14 @@ import { logConsole } from './utils/dom-utils';
 
 // Value constraints
 const valid = {
-    CM: ['cmo12', 'cmo24'],
     CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words', 'unixmillis', 'unixsec', 'unixcountdown', 'se_valentines', 'se_christmas', 'se_newyears', 'ii_christmas', 'ii_weekend', 'ii_leapyear'],
     SV: ['sviD', 'sviN'],
     DF: ['D', 'DD', 'DDD', 'DDDD', ''],
     DA: ['dpoL', 'dpoC', 'dpoR'],
     BM: ['btyD', 'btyR', 'btyB'],
     BS: ['solid', 'dashed', 'dotted', 'double'],
-    SB: ['', 'sbaB', 'sbaN'],
+    TB: ['tbarWeekday', 'tbarMonth','tbarDay', 'tbarHour', 'tbarSec', 'tbarNone'],
+    CNA: ['nalT', 'nalB'],
     FF: ['', 'Lato', 'Montserrat', 'Open Sans', 'Oswald', 'Poppins', 'Roboto', 'Tektur', 'Ubuntu', 'Ubuntu Mono', 'Dancing Script', 'Merriweather', 'Nanum Brush Script', 'Pangolin'],
     FS: ['fstR', 'fstI'],
     FW: ['fweL', 'fweN', 'fweB'],
@@ -21,7 +21,7 @@ const valid = {
     TCM: ['tcovD', 'tcovO'],
     BIS: ['', 'auto', 'cover', 'stretch'],
     BIB: ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    Ver: [7, 8, 9]
+    Ver: [10]
 };
 
 // Error handling
@@ -109,7 +109,7 @@ export function validateRequiredKeys(jsonData: { [key: string]: any }, requiredK
     }
 
     const keysInJson = Object.keys(jsonData);
-    const unexpectedKeys = keysInJson.filter(key => !requiredKeys.includes(key) && key !== 'exportTimestamp' && key !== 'displaySettings'); // displaySettings exception for version 5 files.
+    const unexpectedKeys = keysInJson.filter(key => !requiredKeys.includes(key) && key !== 'exportTimestamp');
 
     if (unexpectedKeys.length > 0) {
         return {
@@ -135,14 +135,14 @@ export function validateVersion(version: any, validVersions: any[]) {
 
 export function validateClockConfig(clockConfig: any, valid: any) {
     const keys = [
-        { key: 'clockMode', validValues: valid.CM },
         { key: 'clockDisplay', validValues: valid.CD },
         { key: 'secondsVis', validValues: valid.SV },
         { key: 'dateFormat', validValues: valid.DF },
         { key: 'dateAlign', validValues: valid.DA },
         { key: 'borderMode', validValues: valid.BM },
         { key: 'borderStyle', validValues: valid.BS },
-        { key: 'secondsBarVis', validValues: valid.SB },
+        { key: 'timeBar', validValues: valid.TB },
+        { key: 'customNoteAlign', validValues: valid.CNA },
     ];
 
     for (const { key, validValues } of keys) {
@@ -156,11 +156,32 @@ export function validateClockConfig(clockConfig: any, valid: any) {
         }
     }
 
-    if ((clockConfig.borderMode === 'btyB' || clockConfig.borderMode === 'btyR') && clockConfig.secondsBarVis === 'sbaB') {
+    // Check for timeDisplay and secondsVis compatibility
+    if (['unixmillis', 'unixsec', 'ii_christmas', 'ii_weekend', 'ii_leapyear'].includes(clockConfig.clockDisplay) && clockConfig.secondsVis === 'sviD') {
+        return {
+            type: 'incomp',
+            subkey: 'clockDisplay, secondsVis',
+            value: `${clockConfig.clockDisplay}, ${clockConfig.secondsVis}`
+        };
+    }
+    
+
+    // Check borderMode and timeBar incompatibility
+    if (['btyB', 'btyR'].includes(clockConfig.borderMode) && clockConfig.timeBar !== 'tbarNone') {
+        return {
+            type: 'incomp',
+            subkey: 'borderMode, timeBar',
+            value: `${clockConfig.borderMode}, ${clockConfig.timeBar}`
+        };
+    }
+
+    // Check customNote length
+    if (clockConfig.customNote && clockConfig.customNote.length > 75) {
         return {
             type: 'invalid',
-            subkey: 'borderMode, secondsBarVis',
-            value: `${clockConfig.borderMode}, ${clockConfig.secondsBarVis}`
+            subkey: 'customNote',
+            value: `${clockConfig.customNote.length} characters`,
+            expected: 'Maximum 75 characters'
         };
     }
 
@@ -201,6 +222,7 @@ export function validateColorTheme(colorTheme: any, valid: any) {
         };
     }
 
+    // Check colorMode and solidColor incompatibility
     if (colorTheme.colorMode === 'solidmode' && !containsValue(valid.SC, colorTheme.solidColor)) {
         return {
             type: 'invalid',
@@ -219,6 +241,7 @@ export function validateColorTheme(colorTheme: any, valid: any) {
         };
     }
 
+    // Check colorMode and textColorMode incompatibility
     if ((colorTheme.colorMode === 'fademode' && colorTheme.textColorMode === 'tcovO') ||
         (colorTheme.colorMode === 'imgmode' && colorTheme.textColorMode === 'tcovD')) {
         return {
@@ -244,6 +267,7 @@ export function validateColorTheme(colorTheme: any, valid: any) {
         }
     }
 
+    // Check bgImage safety
     if (colorTheme.bgImage) {
         const bgImageValidationError = validateBgImageType(colorTheme.bgImage);
         if (bgImageValidationError) {

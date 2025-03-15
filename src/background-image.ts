@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { doc, menu } from './global';
+import { doc, menu } from './utils/dom-elements';
 import { logConsole } from './utils/dom-utils';
 
 export function uploadBGImg() {

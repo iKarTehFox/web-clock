@@ -1,11 +1,11 @@
 import { match } from 'ts-pattern';
-import { menu, debug, dtdisplay } from './global';
+import { menu, debug, dtdisplay, doc } from './utils/dom-elements';
 import { logConsole, setMetaColor } from './utils/dom-utils';
 
 let fadeIntervalID: NodeJS.Timeout;
 const bodyElement = document.body;
 
-function startColorFade() {
+export function startColorFade() {
     logConsole('Color fade started', 'info');
     const colors = {
         'Pink': '#FFC0CB',
@@ -52,7 +52,8 @@ menu.colormoderadio.forEach(radio => {
     radio.addEventListener('change', () => {
         // Reset color to "black" first
         dtdisplay.ccontainer.style.color = '#212529';
-        dtdisplay.secondsBar.style.backgroundColor = '#212529';
+        dtdisplay.timeBar.style.backgroundColor = '#212529';
+        doc.cnote.style.color = '#212529';
         const colorMode = radio.id;
         
         match(colorMode)
@@ -161,5 +162,4 @@ menu.presetcolors.forEach((radio) => {
     });
 });
 
-// Start color fade on page load
 startColorFade();

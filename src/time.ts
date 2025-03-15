@@ -1,5 +1,5 @@
-import { doc, menu, dtdisplay } from './global';
-import { numberToWords } from './numberToWords.min';
+import { doc, menu, dtdisplay, panel } from './utils/dom-elements';
+import * as numberToWords from 'number-to-words';
 import * as luxon from 'ts-luxon';
 import { logConsole } from './utils/dom-utils';
 import * as clock from './time-help';
@@ -10,6 +10,8 @@ import { match, P } from 'ts-pattern';
 export let cMode = '0';
 export let dateFormat = 'D';
 export let timeDisplayMethod: string;
+let lastTime: Array<string>;
+let lastDate: string;
 const pageLoadTime = getLuxNow('sec');
 type TimeFormat = 'sec' | 'millis' | 'obj';
 
@@ -22,22 +24,30 @@ function getLuxNow(format: TimeFormat = 'sec'): number | luxon.DateTime {
     }[format]();
 }
 
-// Clock mode radio
-menu.clockmoderadio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = String(radio.dataset.value);
-        cMode = value;
-        logConsole(`Clock mode set to: ${value}`, 'debug');
-        updateTime();
-    });
-});
-
 // Page duration
 function updatePageDuration(): void {
     const currentTime = getLuxNow('obj') as luxon.DateTime;
-    const duration = currentTime.diff(luxon.DateTime.fromSeconds(pageLoadTime as number), ['hours', 'minutes', 'seconds']);
+    const duration = currentTime.diff(luxon.DateTime.fromSeconds(pageLoadTime as number), ['days', 'hours', 'minutes', 'seconds']);
     
-    menu.durationdisplay.textContent = `${Math.floor(duration.hours)}h, ${Math.floor(duration.minutes)}m, and ${Math.floor(duration.seconds)}s`;
+    const days = Math.floor(duration.days);
+    const hours = Math.floor(duration.hours);
+    const minutes = Math.floor(duration.minutes);
+    const seconds = Math.floor(duration.seconds);
+
+    let durationText: string;
+    if (days < 0 || hours < 0 || minutes < 0 || seconds < 0) {
+        durationText = 'Negative time?? 🤔';
+    } else if (days > 0) { // Day counter
+        durationText = `${days}d, ${hours}h, and ${minutes}m`;
+    } else if (hours > 0) { // Hour counter
+        durationText = `${hours}h, ${minutes}m, and ${seconds}s`;
+    } else if (minutes > 0) { // Minute counter
+        durationText = `${minutes} min, and ${seconds} sec`;
+    } else { // Second counter
+        durationText = `${seconds} seconds`;
+    }
+    
+    menu.durationdisplay.textContent = durationText;
 }
 
 // Main update time
@@ -58,12 +68,11 @@ function updateTime(): void {
         logConsole('Title and favicon reset...', 'info');
     }
 
-    // Handle seconds progress bar
-    if (menu.secondsbarradio[0].checked) {
-        const secBarWidth = (Number(sec) / 59) * 100;
-        dtdisplay.secondsBar.style.width = `${secBarWidth}%`;
+    // Handle time bar
+    if (menu.timebarselect.value !== 'tbarNone') {
+        clock.timeBarUtil(menu.timebarselect.value, time);
     } else {
-        dtdisplay.secondsBar.style.width = '0%';
+        dtdisplay.timeBar.style.width = '0%';
     }
 
     let displayHour = '';
@@ -74,6 +83,17 @@ function updateTime(): void {
     if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
         const unixTime = timeDisplayMethod === 'unixmillis' ? clock.toUnixMillis() : clock.toUnixSec();
         displayHour = String(unixTime);
+        // Set colon visibility
+        clock.colonVisibility([false, undefined]);
+        menu.secondsvisradio.forEach((radio) => {
+            if (radio.id === 'sviN') {
+                radio.checked = true;
+            } else {
+                radio.checked = false;
+            }
+            radio.dispatchEvent(new Event('change', { bubbles: true }));
+            radio.disabled = true;
+        });
     } else {
         const timeFunction = {
             binary: (value: string) => clock.toRadix(value, 2),
@@ -83,64 +103,87 @@ function updateTime(): void {
             hexatri: (value: string) => clock.toRadix(value, 36),
             octal: (value: string) => clock.toRadix(value, 8),
             words: clock.toWords,
-            unixcountdown: () => clock.getCountdown(2147483647),
+            unixcountdown: () => clock.getCountdown(2147483647, '32-bit limit'),
             se_valentines: () => clock.getCountdown(luxon.DateTime.fromObject({
                 month: 2,
                 day: 14
-            })),
+            }), 'Valentine\'s'),
             se_christmas: () => clock.getCountdown(luxon.DateTime.fromObject({ 
                 month: 12, 
                 day: 25 
-            })),
+            }), 'Christmas'),
             se_newyears: () => clock.getCountdown(luxon.DateTime.fromObject({
                 year: time.year + 1, // January 1st of the following year
                 month: 1,
                 day: 1
-            })),
+            }), 'New Year\'s'),
             ii_christmas: () => clock.isItDate('christmas'),
             ii_weekend: () => clock.isItDate('weekend'),
             ii_leapyear: () => clock.isItDate('leapyear'),
         }[timeDisplayMethod];
 
-        // timeDisplayMethod types
-        // Will improve in the future...
-        const tdmIsIt: boolean = timeDisplayMethod?.startsWith('ii_');
+        // Handle colon visibility
+        const tdmNoColon: boolean = ['ii_christmas','ii_weekend','ii_leapyear'].includes(timeDisplayMethod);
+        if (tdmNoColon) {
+            clock.colonVisibility([false, undefined]);
+            menu.secondsvisradio.forEach((radio) => {
+                if (radio.id === 'sviN') {
+                    radio.checked = true;
+                } else {
+                    radio.checked = false;
+                }
+                radio.dispatchEvent(new Event('change'));
+                radio.disabled = true;
+            });
+        } else {
+            clock.colonVisibility([true, undefined]);
+            menu.secondsvisradio.forEach((radio) => {
+                radio.disabled = false;
+            });
+        }
 
         if (timeFunction) {
             const result = timeFunction(hrs);
             if (Array.isArray(result)) {
                 // Handle getCountdown arrays
-                [displayHour, displayMinute, displaySecond] = result;
-                displayIndicator = '';
-                if (tdmIsIt) clock.colonVisibility([false, undefined]);
+                [displayHour, displayMinute, displaySecond, displayIndicator] = result;
             } else {
                 displayHour = result;
                 displayMinute = timeDisplayMethod === 'words' ? formatMinutesForWordsDisplay(min) : timeFunction(min) as string;
                 displaySecond = timeFunction(sec) as string;
                 displayIndicator = ind;
-                clock.colonVisibility([true, undefined]);
             }
         } else {
             displayHour = hrs;
             displayMinute = min;
             displaySecond = sec;
             displayIndicator = ind;
-            clock.colonVisibility([true, undefined]);
         }
         
     }
 
     setClockDisplay([displayHour, displayMinute, displaySecond, displayIndicator]);
+    updateDate();
 }
 
 // Clock DOM update
 function setClockDisplay([hour, minute, second, indicator]: [string, string, string, string]): void {
+    // Prevent unnecessary updates
+    if (lastTime && 
+        hour === lastTime[0] && 
+        minute === lastTime[1] && 
+        second === lastTime[2] && 
+        indicator === lastTime[3]) {
+        return;
+    }
+
     dtdisplay.hourSlot.textContent = hour;
     dtdisplay.minuteSlot.textContent = minute;
     dtdisplay.secondSlot.textContent = second;
     dtdisplay.indicatorSlot.textContent = indicator;
-}
 
+    lastTime = [hour, minute, second, indicator];
+}
 // Helper function for time display method 'words'
 function formatMinutesForWordsDisplay(min: string) {
     const parsedMinutes = parseInt(min, 10);
@@ -151,13 +194,6 @@ function formatMinutesForWordsDisplay(min: string) {
         .with(P.number.lt(10), () => `oh ${numberToWords.toWords(parsedMinutes)}`)
         .otherwise(() => numberToWords.toWords(parsedMinutes));
 }
-
-menu.timemethodselect.addEventListener('change', () => {
-    const selectedValue = menu.timemethodselect.value as unknown as number;
-    timeDisplayMethod = String(selectedValue);
-    logConsole(`Time display method set to: ${selectedValue}`, 'debug');
-    updateTime();
-});
 
 // Timezone
 // Function to get the list of time zones and group them by region
@@ -203,25 +239,13 @@ export function populateTimeZoneSelect() {
     });
 }
 
-menu.timezoneselect.addEventListener('change', function() {
-    const timeZone = menu.timezoneselect.value;
-    logConsole(`Time zone set to: ${timeZone}`, 'debug');
-    luxon.Settings.defaultZoneLike = timeZone;
-    updateTime();
-    updateDate();
-});
-
-// Date
-// Date format selector listener
-menu.dateformselect.addEventListener('change', function() {
-    dateFormat = menu.dateformselect.value;
-    logConsole(`Date format set to: ${menu.dateformselect.value}`, 'debug');
-    updateDate();
-});
-
 export function updateDate() {
     const time = getLuxNow('obj') as luxon.DateTime;
-    dtdisplay.date.textContent = time.toFormat(dateFormat);
+    const newDate = time.toFormat(dateFormat);
+    if (lastDate === newDate) return;
+
+    dtdisplay.date.textContent = newDate;
+    lastDate = newDate;
 
     Array.from(menu.dateformselect.children).forEach((child: Element) => {
         if (child instanceof HTMLOptionElement && child.value !== '') {
@@ -229,7 +253,6 @@ export function updateDate() {
         }
     });
 }
-
 // Initial update, then start intervals
 const time = getLuxNow('obj') as luxon.DateTime;
 updateTime();
@@ -261,21 +284,19 @@ function startNewClock() {
         updateTime();
         updatePageDuration();
 
-        // Start the regular interval updates
-        let lastUpdateTime = Date.now();
+        // Set initial reference point
+        const startTime = performance.now();
+        let expectedTime = startTime + 1000; // Next expected tick
 
         clockInterval = setInterval(() => {
+            const currentTime = performance.now();
+            const drift = currentTime - expectedTime;
+
             updateTime();
             updatePageDuration();
-            logConsole('Time and page duration updated...', 'info');
+            logConsole('Time, date, and page duration updated...', 'info');
 
-            const now = Date.now();
-            const elapsed = now - lastUpdateTime;
-            lastUpdateTime = now;
-
-            const drift = elapsed - 1000;
-
-            // Add a maximum drift threshold, e.g. 1000ms
+            // Cap drift at ±1000ms
             const cappedDrift = Math.max(Math.min(drift, 1000), -1000);
 
             if (Math.abs(drift) > 150) {
@@ -283,6 +304,8 @@ function startNewClock() {
                 clearInterval(clockInterval!);
                 setTimeout(startNewClock, 1000 - cappedDrift);
             }
+
+            expectedTime += 1000; // Update expected time for next tick
         }, 1000);
     }, timeToNextSecond);
 }
@@ -292,16 +315,51 @@ function startOldClock() {
     clockInterval = setInterval(() => {
         updateTime();
         updatePageDuration();
-        logConsole('Time and page duration updated (Legacy method)...', 'info');
+        logConsole('Time, date, and page duration updated (Legacy method)...', 'info');
     }, timeRefresh) as unknown as NodeJS.Timeout;
 }
 
-// Listener for the legacy refresh checkbox
-menu.legacyrefreshcheckbox.addEventListener('change', startClock);
+// DT listener
+panel.section.dt.addEventListener('change', (e) => {
+    const target = e.target as HTMLElement;
+    
+    match(target.tagName)
+        .with('SELECT', () => {
+            const selectelement = target as HTMLSelectElement;
+            match(selectelement.id)
+                .with('timeMethodSelect', () => {
+                    const selectedValue = selectelement.value as unknown as number;
+                    timeDisplayMethod = String(selectedValue);
+                    logConsole(`Time display method set to: ${selectedValue}`, 'debug');
+                    updateTime();
+                })
+                .with('timeZoneSelect', () => {
+                    luxon.Settings.defaultZoneLike = selectelement.value;
+                    logConsole(`Time zone set to: ${selectelement.value}`, 'debug');
+                    updateTime();
+                    updateDate();
+                })
+                .with('dateFormatSelect', () => {
+                    dateFormat = selectelement.value;
+                    logConsole(`Date format set to: ${selectelement.value}`, 'debug');
+                    updateDate();
+                })
+                .otherwise(() => {});
+        })
+        .with('INPUT', () => {
+            const inputelement = target as HTMLInputElement;
+            match([inputelement.type, inputelement.name])
+                .with(['radio', 'clock-mode-radio'], () => {
+                    cMode = String(inputelement.dataset.value);
+                    logConsole(`Clock mode set to: ${inputelement.dataset.value}`, 'debug');
+                    updateTime();
+                })
+                .with(['checkbox', 'legacy-refresh-checkbox'], () => {
+                    startClock();
+                })
+                .otherwise(() => {});
+        })
+        .otherwise(() => {});
+});
 
 startClock();
-
-setInterval(function() {
-    updateDate();
-    logConsole('Date updated...', 'info');
-}, 15000);

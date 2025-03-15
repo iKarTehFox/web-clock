@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { logConsole, showToast, makeCardOverlay, createScannerOverlay } from './utils/dom-utils';
+import { logConsole, showToast, createBsModal, createScannerOverlay } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
-import { menu, debug } from './global';
+import { menu, panel } from './utils/dom-elements';
 import { ErrorDetails, handleValidationFailure, verifySettingsJSON } from './importValidation';
 import { getClockConfig, getFontConfig, getColorThemeConfig, setClockConfig, setFontConfig, setColorThemeConfig } from './utils/clock-settings';
-import { getPresetByHotkey } from './assets/presets';
+import { presetList } from './assets/presets';
 import axios from 'axios';
 import QRCode from 'qrcode';
 import { match } from 'ts-pattern';
@@ -15,7 +15,7 @@ function getSettings() {
         fontConfig: getFontConfig(),
         colorTheme: getColorThemeConfig(),
         exportTimestamp: luxon.DateTime.now().toFormat('FFFF'),
-        version: 9
+        version: 10
     };
 }
 
@@ -34,24 +34,29 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
     showToast(`Settings exported! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`, 'long', 'success');
 }
 
-function handleExport(settings: any, type: 'clipboard' | 'download' | 'log' | 'qr' | 'card' , startTime: luxon.DateTime = luxon.DateTime.now()) {
+type ExportType = 'clipboard' | 'download' | 'log' | 'qr' | 'card';
+
+function getElapsedTime(startTime: luxon.DateTime): number {
+    return luxon.DateTime.now().toMillis() - startTime.toMillis();
+}
+
+function handleExport(settings: any, type: ExportType, startTime: luxon.DateTime): void {
     const settingsJSON = JSON.stringify(settings);
 
-    match(type)
-        .with('clipboard', () => {
+    const exportActions = {
+        clipboard: () => {
             navigator.clipboard.writeText(settingsJSON);
-            showToast(`Copied settings to clipboard! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
-        })
-        .with('log', () => {
-            logConsole(`Settings JSON: ${settingsJSON}`, 'debug');
-        })
-        .with('card', () => {
-            makeCardOverlay('Raw Settings JSON', settingsJSON);
-            showToast(`Exported raw JSON. Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
-        })
-        .with('qr', () => {
-            if (settingsJSON.length > 2953) {
-                logConsole(`Settings JSON too large. Max 2953, got ${settingsJSON.length}`, 'error');
+            showToast(`Copied settings to clipboard! Took ${getElapsedTime(startTime)}ms`);
+        },
+        log: () => logConsole(`Settings JSON: ${settingsJSON}`, 'debug'),
+        card: () => {
+            createBsModal('Raw Settings JSON', settingsJSON);
+            showToast(`Exported raw JSON. Took ${getElapsedTime(startTime)}ms`);
+        },
+        qr: () => {
+            const blob = new Blob([settingsJSON], { type: 'application/json' });
+            if (blob.size > 2953) {
+                logConsole(`Settings JSON too large. Max 2953 bytes, got ${blob.size} bytes`, 'error');
                 showToast('Settings too large for QR code. See console for details.', 'normal', 'danger');
                 return;
             }
@@ -60,19 +65,19 @@ function handleExport(settings: any, type: 'clipboard' | 'download' | 'log' | 'q
                 margin: 2,
                 scale: 4,
                 width: 400
-            }).then(canvas => {
-                makeCardOverlay('QR Code', canvas);
-            });
-            showToast(`Exported settings to QR code! Took ${luxon.DateTime.now().toMillis() - startTime.toMillis()}ms`);
-        })
-        .with('download', () => {
+            }).then(canvas => createBsModal('QR Code', canvas));
+            showToast(`Exported settings to QR code! Took ${getElapsedTime(startTime)}ms`);
+        },
+        download: () => {
             const blob = new Blob([settingsJSON], { type: 'application/json' });
             downloadSettingsFile(blob, startTime);
-        })
-        .exhaustive();
+        }
+    };
+
+    exportActions[type]();
 }
 
-export function exportSettings(toType: 'clipboard' | 'download' | 'log' | 'qr' | 'card' = 'download') {
+export function exportSettings(toType: ExportType = 'download'): void {
     const startTime = luxon.DateTime.now();
     showToast('Exporting settings...');
 
@@ -175,26 +180,9 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
         .catch(error => {
             logConsole(`Error fetching local settings file: ${error}`, 'error');
             showToast('Could not fetch local settings file. Please check the filename and ensure the file exists.', 'normal', 'danger');
+            return Promise.reject(error);
         });
 }
-
-// Preset hotkey functionality
-document.addEventListener('keydown', (e) => {
-    // Skip if text input is focused
-    if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') {
-        return;
-    }
-
-    // Only handle number keys 1-9
-    const key = parseInt(e.key);
-    if (key >= 1 && key <= 9) {
-        const preset = getPresetByHotkey(key);
-        if (preset) {
-            presetLocalJSON(preset.filename);
-            logConsole(`Hotkey ${key} pressed - Loading preset: ${preset.displayName}`, 'debug');
-        }
-    }
-});
 
 function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: any; colorTheme: any; }) {
     // Set clockConfig settings
@@ -210,46 +198,56 @@ function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: a
     setColorThemeConfig(colorTheme, true);
 }
 
-// Surprise! More event listeners!
-menu.jsonexportclipbtn.addEventListener('click', () => {
-    exportSettings('clipboard');
-});
+// Preset buttons
+export function generatePresetButtons(): void {
+    presetList.forEach(preset => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-outline-info mb-1 d-block';
+        button.setAttribute('data-bs-toggle', 'tooltip');
+        button.setAttribute('data-bs-title', preset.description || '');
+        button.addEventListener('click', () => {
+            presetLocalJSON(preset.filename);
+        });
+        button.textContent = `[${preset.hotkey}] ${preset.displayName}`;
+        menu.jsonpresetsgroup.appendChild(button);
+    });
+}
 
-menu.jsonexportdownloadbtn.addEventListener('click', () => {
-    exportSettings();
-});
+generatePresetButtons();
 
-menu.jsonexportqrbtn.addEventListener('click', () => {
-    exportSettings('qr');
-});
-
-menu.jsonmanualimportbtn.addEventListener('click', () => {
-    manualJSONImport();
-});
-
-menu.jsonimportuploadbtn.addEventListener('click', () => {
-    importSettingsFromJSON();
-});
-
-menu.jsonimportqrbtn.addEventListener('click', () => {
-    createScannerOverlay();
-});
-
-debug.jsonexportconsolebtn.addEventListener('click', () => {
-    exportSettings('log');
-});
-
-debug.jsonexportcardbtn.addEventListener('click', () => {
-    exportSettings('card');
-});
-
-debug.getbgimgbtn.addEventListener('click', () => {
-    const bgImageUrl = document.body.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
-    if (!bgImageUrl) {
-        showToast('No background image to extract.');
-        return;
+// IE listener
+panel.section.ie.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'BUTTON') {
+        match(target.id)
+            .with('jsonExportClipBtn', () => exportSettings('clipboard'))
+            .with('jsonExportDlBtn', () => exportSettings())
+            .with('jsonExportQrBtn', () => exportSettings('qr'))
+            .with('jsonImportQrBtn', () => createScannerOverlay())
+            .with('jsonImportTxtBtn', () => manualJSONImport())
+            .with('jsonImportUlBtn', () => importSettingsFromJSON())
+            .otherwise(() => {});
     }
-    const imgElement = document.createElement('img');
-    imgElement.src = bgImageUrl;
-    makeCardOverlay('Background Image', imgElement);
+});
+
+// Dbg listener
+panel.section.dbg.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'BUTTON') {
+        match(target.id)
+            .with('jsonExportConsoleBtn', () => exportSettings('log'))
+            .with('jsonExportCardBtn', () => exportSettings('card'))
+            .with('debugGetBGBtn', () => {
+                const bgImageUrl = document.body.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
+                if (!bgImageUrl) {
+                    showToast('No background image to extract.');
+                    return;
+                }
+                const imgElement = document.createElement('img');
+                imgElement.src = bgImageUrl;
+                createBsModal('Background Image', imgElement);
+            })
+            .otherwise(() => {});
+    }
 });

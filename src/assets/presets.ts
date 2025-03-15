@@ -4,6 +4,7 @@ import './onlinewebclock-devfavorite-preset.json';
 import './onlinewebclock-digitsbinary-preset.json';
 import './onlinewebclock-minimallight-preset.json';
 import './onlinewebclock-preset.json';
+import './onlinewebclock-defaults.json';
 
 export interface PresetInfo {
     filename: string;
@@ -48,24 +49,4 @@ export const presetList: PresetInfo[] = [
 
 export function getPresetByHotkey(key: number): PresetInfo | undefined {
     return presetList.find(preset => preset.hotkey === key);
-}
-
-export function generatePresetButtons(): void {
-    // Get container where preset buttons should go
-    // Use getElementById here instead of menu from global.ts to avoid initialization issue.
-    const presetContainer = document.getElementById('jsonPresetsContainer');
-
-    // Generate new buttons from presetList
-    if (presetContainer) {
-        presetList.forEach(preset => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'btn btn-outline-info mb-1';
-            button.setAttribute('data-bs-toggle', 'tooltip');
-            button.setAttribute('data-bs-title', preset.description || '');
-            button.setAttribute('onClick', `ieJSON.presetLocalJSON('${preset.filename}')`);
-            button.textContent = `[${preset.hotkey}] ${preset.displayName}`;
-            presetContainer.appendChild(button);
-        });
-    }
 }

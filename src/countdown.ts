@@ -1,6 +1,7 @@
 import { match } from 'ts-pattern';
-import { menu, countdown } from './global';
-import { logConsole, showToast } from './utils/dom-utils';
+import { countdown, menu, panel } from './utils/dom-elements';
+import { logConsole, requestNotificationPermission, showToast } from './utils/dom-utils';
+import * as luxon from 'ts-luxon';
 
 
 let countdownInterval: NodeJS.Timeout;
@@ -52,13 +53,21 @@ function startCountdown() {
             if (totalSeconds === 0 || totalSeconds < 1) {
                 clearInterval(countdownInterval);
                 running = false;
-                showToast('Countdown finished!', 'verylong', 'success');
                 inputsState(false);
                 btnState({
                     start: false,
                     pause: true,
                     reset: true,
                 });
+                if (countdown.notifcheckbox.checked && Notification.permission === 'granted') {
+                    showToast('Countdown finished!', 'normal');
+                    new Notification('Countdown finished!', {
+                        body: `Your timer has elapsed. It is now ${luxon.DateTime.now().toFormat('tt')}`,
+                        silent: false
+                    });
+                } else {
+                    showToast('Countdown finished!', 'verylong');
+                }
             }
         }, 1000);
         logConsole('Countdown started...', 'info');
@@ -147,17 +156,17 @@ countdown.obutton.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
         const target = e.target as HTMLElement;
-        const isMenuRelated = menu.options.contains(target) || 
-                                   menu.obutton.contains(target) || 
-                                   menu.cbutton.contains(target) || 
+        const isMenuRelated = menu.container.contains(target) || 
+                                   panel.menubutton.contains(target) || 
                                    countdown.container.contains(target) || 
                                    countdown.obutton.contains(target);
         const isCountdownVisible = countdown.container.style.display !== 'none';
         const isTooltip = target.closest('.tooltip') !== null;
-        const isCardOverlay = target.closest('[data-overlay="card-overlay"]') !== null;
+        const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
         const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
+        const isOffcanvasBackdrop = target.closest('.offcanvas-backdrop') !== null;
 
-        if (!isMenuRelated && !isTooltip && !isCardOverlay && !isScannerOverlay && isCountdownVisible) {
+        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isCountdownVisible && !isOffcanvasBackdrop) {
             countdown.container.style.display = 'none';
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');
@@ -168,10 +177,11 @@ document.addEventListener('DOMContentLoaded', function() {
 // Esc down to close countdown
 document.addEventListener('keydown', function(e) {
     const isCountdownVisible = countdown.container.style.display !== 'none';
-    const isCardOverlayVisible = document.querySelector('[data-overlay="card-overlay"]') !== null;
+    const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
     const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
+    const isOffcanvasVisible = document.querySelector('.offcanvas.show, .offcanvas.showing') !== null;
 
-    if (e.key === 'Escape' && isCountdownVisible && !isCardOverlayVisible && !isScannerOverlayVisible) {
+    if (e.key === 'Escape' && isCountdownVisible && !isBsModalVisible && !isScannerOverlayVisible && !isOffcanvasVisible) {
         countdown.container.style.display = 'none';
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');
@@ -181,6 +191,26 @@ document.addEventListener('keydown', function(e) {
 // Event listeners for buttons
 countdown.pausebtn.addEventListener('click', pauseCountdown);
 countdown.resetbtn.addEventListener('click', resetCountdown);
+
+// Notification functionality
+countdown.notifcheckbox.addEventListener('change', async function() {
+    if (this.checked && Notification.permission !== 'granted') {
+        await requestNotificationPermission()
+            .then(permission => {
+                if (permission !== 'granted') {
+                    countdown.notifcheckbox.checked = false;
+                    showToast('Notification permission denied.', 'normal', 'danger');
+                }
+            })
+            .catch(() => {
+                countdown.notifcheckbox.checked = false;
+            });
+    }
+});
+
+if (Notification.permission === 'granted') { // Enable if already granted
+    countdown.notifcheckbox.checked = true;
+}
 
 // Prevent close if running
 window.addEventListener('beforeunload', function(e) {

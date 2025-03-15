@@ -1,8 +1,21 @@
 import * as luxon from 'ts-luxon';
-import { doc, menu, dtdisplay } from './global';
-import { numberToWords } from './numberToWords.min';
+import { doc, menu, dtdisplay, panel } from './utils/dom-elements';
+import * as numberToWords from 'number-to-words';
 import { logConsole } from './utils/dom-utils';
 import { match } from 'ts-pattern';
+
+// Get 12/24 hour pref
+export function setClockMode(): void {
+    const is24Hour = !/AM|PM/.test(luxon.DateTime.local().toFormat('t'));
+
+    // Set menu radio button
+    menu.clockmoderadio.forEach((btn) => {
+        if (btn.id === (is24Hour ? 'cmo24' : 'cmo12')) {
+            btn.checked = true;
+            btn.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+}
 
 // Change tab favicon function
 export function updateFavicon(hour: string) {
@@ -67,38 +80,41 @@ export function convertToRomanNumerals(number: string | number): string {
 }
 
 // Countdown/time duration function
-export function getCountdown(target: luxon.DateTime | number): [string, string, string] {
+export function getCountdown(target: luxon.DateTime | number, eventName: string): [string, string, string, string] {
     const now = luxon.DateTime.now();
     const targetDateTime = typeof target === 'number' 
         ? luxon.DateTime.fromSeconds(target)
         : target;
     
-    const diff = targetDateTime.diff(now, ['hours', 'minutes', 'seconds']);
+    const diff = targetDateTime.diff(now, ['days', 'hours', 'minutes', 'seconds']);
+    const dayhour = Math.abs(Math.floor(diff.days)) > 0 ? `${Math.abs(Math.floor(diff.days))}d:${Math.abs(Math.floor(diff.hours))}h` : `${Math.abs(Math.floor(diff.hours))}h`;
+    const isPast = now > targetDateTime ? `since ${eventName}` : `until ${eventName}`;
     
     return [
-        `${Math.abs(Math.floor(diff.hours))}h`,
+        dayhour,
         `${Math.abs(Math.floor(diff.minutes))}m`,
-        `${Math.abs(Math.floor(diff.seconds))}s`
+        `${Math.abs(Math.floor(diff.seconds))}s`,
+        isPast 
     ];
 }
 
-export function isItDate(dateType: 'christmas' | 'weekend' | 'leapyear'): [string, string, string] {
+export function isItDate(dateType: 'christmas' | 'weekend' | 'leapyear'): [string, string, string, string] {
     const now = luxon.DateTime.now();
     let isMatch = false;
     
     return match(dateType)
-        .returnType<[string, string, string]>()
+        .returnType<[string, string, string, string]>()
         .with('christmas', () => {
             isMatch = now.month === 12 && now.day === 25;
-            return ['', isMatch ? 'It\'s Christmas!' : 'Not Christmas', ''];
+            return ['', isMatch ? 'It\'s Christmas!' : 'Not Christmas', '', ''];
         })
         .with('weekend', () => {
             isMatch = now.weekday >= 6; // 6 = Saturday, 7 = Sunday
-            return ['', isMatch ? 'It\'s the weekend!' : 'Not the weekend', ''];
+            return ['', isMatch ? 'It\'s the weekend!' : 'Not the weekend', '', ''];
         })
         .with('leapyear', () => {
             isMatch = now.isInLeapYear;
-            return ['', isMatch ? 'It\'s a leap year!' : 'Not a leap year', ''];
+            return ['', isMatch ? 'It\'s a leap year!' : 'Not a leap year', '', ''];
         })
         .exhaustive();
 }
@@ -109,50 +125,71 @@ export function colonVisibility([c1Vis, c2Vis]: (boolean | undefined)[]): void {
     if (c2Vis !== undefined) dtdisplay.colon2.style.display = c2Vis ? '' : 'none';
 }
 
-// Seconds visibility listener
-menu.secondsvisradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
-        colonVisibility([true, (value == 'none' ? false : true)]);
-        dtdisplay.secondSlot.style.display = value as string;
-        logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'debug');
-    });
-});
+export function timeBarUtil(type: string, time: luxon.DateTime) {
+    match(type)
+        .with('tbarWeekday', () => { // Week progress
+            dtdisplay.timeBar.style.width = (time.weekday / 7) * 100 + '%';
+        })
+        .with('tbarMonth', () => { // Month progress
+            dtdisplay.timeBar.style.width = (time.day / time.daysInMonth) * 100 + '%';
+        })
+        .with('tbarDay', () => { // Day progress
+            const minInDay = (time.hour * 60) + time.minute;
+            dtdisplay.timeBar.style.width = (minInDay / 1439) * 100 + '%';
+        })
+        .with('tbarHour', () => { // Hour progress
+            dtdisplay.timeBar.style.width = (time.minute / 59) * 100 + '%';
+        })
+        .with('tbarSec', () => { // Minute progress
+            dtdisplay.timeBar.style.width = (time.second / 59) * 100 + '%';
+        })
+        .otherwise(() => {});
+}
 
-// Seconds bar visibility listener
-menu.secondsbarradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
-        match(value)
-            .with('block', () => {
-                menu.bordertyperadio.forEach((btn) => {
-                    btn.disabled = true;
-                    if (btn.id === 'btyD') {
-                        btn.checked = true;
-                        btn.dispatchEvent(new Event('change'));
+// DT listener
+panel.section.dt.addEventListener('change', (e) => {
+    const target = e.target as HTMLElement;
+    
+    match(target.tagName)
+        .with('SELECT', () => {
+            const selectelement = target as HTMLSelectElement;
+            match(selectelement.id)
+                .with('timeBarSelect', () => {
+                    if (selectelement.value === 'tbarNone') {
+                        dtdisplay.timeBar.style.display = 'none';
+                        menu.bordertyperadio.forEach((btn) => {
+                            btn.disabled = false;
+                        });
+                        logConsole('Time bar hidden', 'debug');
+                    } else {
+                        dtdisplay.timeBar.style.display = 'block';
+                        menu.bordertyperadio.forEach((btn) => {
+                            btn.disabled = true;
+                            if (btn.id === 'btyD') {
+                                btn.checked = true;
+                                btn.dispatchEvent(new Event('change', { bubbles: true }));
+                            }
+                        });
+                        logConsole(`Time bar set to: ${menu.timebarselect.value}`, 'debug');
                     }
-                });
-            })
-            .with('none', () => {
-                menu.bordertyperadio.forEach((btn) => {
-                    btn.disabled = false;
-                });
-            })
-            .otherwise(() => {
-                logConsole(`Invalid value for seconds bar visibility: ${value}`, 'error');
-                return;
-            });
-
-        dtdisplay.secondsBar.style.display = value as string;
-        logConsole(`Seconds bar visibility set to: ${value}`, 'debug');
-    });
-});
-
-// Date alignment listener
-menu.datealignradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
-        dtdisplay.date.style.textAlign = value as string;
-        logConsole(`Date alignment set to: ${value}`, 'debug');
-    });
+                })
+                .otherwise(() => {});
+        })
+        .with('INPUT', () => {
+            const inputelement = target as HTMLInputElement;
+            match([inputelement.type, inputelement.name])
+                .with(['radio', 'seconds-vis-radio'], () => {
+                    const value = String(inputelement.dataset.value);
+                    colonVisibility([undefined, (value == 'none' ? false : true)]);
+                    dtdisplay.secondSlot.style.display = value as string;
+                    logConsole(`Seconds visibility set to: ${value == 'none' ? 'hidden' : 'visible'}`, 'debug');
+                })
+                .with(['radio', 'date-position-radio'], () => {
+                    const value = inputelement.dataset.value;
+                    dtdisplay.date.style.textAlign = value as string;
+                    logConsole(`Date alignment set to: ${value}`, 'debug');
+                })
+                .otherwise(() => {});
+        })
+        .otherwise(() => {});
 });
