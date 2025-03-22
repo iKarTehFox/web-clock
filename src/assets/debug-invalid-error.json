@@ -1,6 +1,6 @@
 {
 	"clockConfig": {
-		"clockDisplay": "decimal",
+		"clockDisplay": "not_a_real_value",
 		"secondsVis": "sviD",
 		"dateFormat": "D",
 		"dateAlign": "dpoL",
@@ -27,6 +27,6 @@
 		"bgImageSize": "",
 		"bgImageBlur": ""
 	},
-	"exportTimestamp": "This file has version 0, which isn't an allowed version number.",
-	"version": 0
+	"exportTimestamp": "This file has clockDisplay set to not_a_real_value, which is invalid.",
+	"version": 10
 }

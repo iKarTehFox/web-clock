@@ -4,9 +4,9 @@
 		"secondsVis": "sviD",
 		"dateFormat": "D",
 		"dateAlign": "dpoL",
-		"borderMode": "btyB",
+		"borderMode": "btyD",
 		"borderStyle": "solid",
-		"timeBar": "tbarSec",
+		"timeBar": "tbarNone",
 		"customNoteAlign": "nalB"
 	},
 	"fontConfig": {
@@ -27,5 +27,7 @@
 		"bgImageSize": "",
 		"bgImageBlur": ""
 	},
-	"version": 10
+	"exportTimestamp": "This file has an extraneous key: didnt_expect_you_to_see_this.",
+	"version": 10,
+	"didnt_expect_you_to_see_this": ""
 }

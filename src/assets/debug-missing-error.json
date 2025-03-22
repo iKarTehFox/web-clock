@@ -1,14 +1,4 @@
 {
-	"clockConfig": {
-		"clockDisplay": "decimal",
-		"secondsVis": "sviD",
-		"dateFormat": "D",
-		"dateAlign": "dpoL",
-		"borderMode": "btyD",
-		"borderStyle": "solid",
-		"timeBar": "tbarNone",
-		"customNoteAlign": "nalB"
-	},
 	"fontConfig": {
 		"fontFamily": "",
 		"fontStyle": "fstR",
@@ -27,6 +17,6 @@
 		"bgImageSize": "",
 		"bgImageBlur": ""
 	},
-	"exportTimestamp": "This file has version 0, which isn't an allowed version number.",
-	"version": 0
+	"exportTimestamp": "This file has no clockConfig subkey.",
+	"version": 10
 }

@@ -8,8 +8,10 @@ import './onlinewebclock-defaults.json';
 
 // Debug Testing Presets
 import './debug-version-error.json';
-import './debug-invalidvalue-error.json';
-import './debug-incompatiblevalues-error.json';
+import './debug-invalid-error.json';
+import './debug-incomp-error.json';
+import './debug-missing-error.json';
+import './debug-unexpected-error.json';
 
 export interface PresetInfo {
     filename: string;

@@ -1,12 +1,12 @@
 {
 	"clockConfig": {
-		"clockDisplay": "not_a_real_value",
+		"clockDisplay": "decimal",
 		"secondsVis": "sviD",
 		"dateFormat": "D",
 		"dateAlign": "dpoL",
-		"borderMode": "btyD",
+		"borderMode": "btyB",
 		"borderStyle": "solid",
-		"timeBar": "tbarNone",
+		"timeBar": "tbarSec",
 		"customNoteAlign": "nalB"
 	},
 	"fontConfig": {
@@ -27,5 +27,6 @@
 		"bgImageSize": "",
 		"bgImageBlur": ""
 	},
+	"exportTimestamp": "This file has borderMode set to btyB and timeBar set to tbarSec, which are incompatible with eachother.",
 	"version": 10
 }
