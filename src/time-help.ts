@@ -5,8 +5,8 @@ import { logConsole } from './utils/dom-utils';
 import { match } from 'ts-pattern';
 
 // Get 12/24 hour pref
-export function setClockMode(): void {
-    const is24Hour = !/AM|PM/.test(luxon.DateTime.local().toFormat('t'));
+export function setClockMode(modePreference?: 12 | 24): void {
+    const is24Hour = modePreference ? modePreference === 24 : !/AM|PM/.test(luxon.DateTime.local().toFormat('t'));
 
     // Set menu radio button
     menu.clockmoderadio.forEach((btn) => {
