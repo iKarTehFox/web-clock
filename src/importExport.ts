@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { logConsole, showToast, createBsModal, createScannerOverlay } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, panel } from './utils/dom-elements';

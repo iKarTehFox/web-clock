@@ -6,6 +6,11 @@ import './onlinewebclock-minimallight-preset.json';
 import './onlinewebclock-preset.json';
 import './onlinewebclock-defaults.json';
 
+// Debug Testing Presets
+import './debug-version-error.json';
+import './debug-invalidvalue-error.json';
+import './debug-incompatiblevalues-error.json';
+
 export interface PresetInfo {
     filename: string;
     displayName: string;
