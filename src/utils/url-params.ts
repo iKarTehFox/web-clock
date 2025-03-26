@@ -6,12 +6,14 @@ import { initializeDebugUI } from './debugUI';
 import { submitWeatherSettings } from './weather-utils';
 import { match } from 'ts-pattern';
 import { setClockMode } from '../time-help';
+import { showUpdateNotification } from './update-notify';
 
 interface URLParamConfig {
     // Booleans
     debugMode?: boolean;
     fastRefresh?: boolean;
     lockSettings?: boolean;
+    noUpdateNoti?: boolean;
     panelVis?: boolean;
     tabTitle?: boolean;
     // Numbers
@@ -32,7 +34,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
     const params = {} as Partial<URLParamConfig>;
     
     // Boolean params
-    ['debugMode', 'fastRefresh', 'lockSettings', 'panelVis', 'tabTitle'].forEach(key => {
+    ['debugMode', 'fastRefresh', 'lockSettings', 'noUpdateNoti', 'panelVis', 'tabTitle'].forEach(key => {
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value === 'true';
@@ -150,6 +152,11 @@ export async function applyURLParams() {
     if (params.preset !== undefined) {
         const preset = params.preset;
         await presetLocalJSON(preset, false);
+    }
+
+    // New update notification
+    if (!params.noUpdateNoti) {
+        showUpdateNotification();
     }
 
     // Auto-restart
