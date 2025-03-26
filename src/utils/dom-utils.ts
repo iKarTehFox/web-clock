@@ -194,6 +194,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
             const countdownEl = document.createElement('small');
             countdownEl.className = 'text-muted me-auto';
             countdownEl.textContent = `Closing in ${Math.round(constrainedDelay/1000)}s`;
+            countdownEl.style.cursor = 'pointer';
             modal.querySelector('.modal-footer')?.appendChild(countdownEl);
             
             const startTime = Date.now();
@@ -212,6 +213,15 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
                 bootstrapModal.hide();
                 resolve('timeout');
             }, constrainedDelay);
+
+            // Click listener to cancel countdown
+            countdownEl.addEventListener('click', () => {
+                clearTimeout(bsModTimeout);
+                clearTimeout(updateInterval);
+                countdownEl.textContent = '';
+                countdownEl.style.cursor = 'default';
+                logConsole(`Modal ID ${modalUID} auto-close cancelled.`);
+            });
         }
 
         buttons.forEach(btn => {
