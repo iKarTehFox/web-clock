@@ -160,7 +160,7 @@ panel.section.dt.addEventListener('change', (e) => {
                         menu.bordertyperadio.forEach((btn) => {
                             btn.disabled = false;
                         });
-                        logConsole('Time bar hidden', 'debug');
+                        logConsole('Time bar hidden', 'info');
                     } else {
                         dtdisplay.timeBar.style.display = 'block';
                         menu.bordertyperadio.forEach((btn) => {
