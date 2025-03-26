@@ -1,4 +1,5 @@
-import { logConsole } from './utils/dom-utils';
+import { match } from 'ts-pattern';
+import { createBsModal, logConsole } from './utils/dom-utils';
 
 // Value constraints
 const valid = {
@@ -25,7 +26,7 @@ const valid = {
 };
 
 // Error handling
-type ErrorType = 'missing' | 'invalid' | 'incomp';
+type ErrorType = 'missing' | 'invalid' | 'incomp' | 'unexpected';
 
 export interface ErrorDetails {
     type: ErrorType;
@@ -45,7 +46,13 @@ export function handleValidationFailure(errorDetails: ErrorDetails) {
     
     const errorMessage = errorMsg[`${errorDetails.type}`] || 'Unknown validation failure';
     logConsole(`${errorMessage}`, 'error');
-    alert(`Error loading settings from imported file.\n\n${errorMessage}\n\nIf this is a version error, please export a new settings file as settings may have been updated! If you need further assistance, please post an issue on GitHub.`);
+    createBsModal('Error importing settings!', errorMessage, [{label: 'Get help', className: 'btn btn-primary', value: 'get_help'}, {label: 'Close', value: 'close'}], 60)
+        .then(result => {
+            match(result)
+                .with('get_help', () => {
+                    window.open('https://online-clock-docs.pages.dev/troubleshooting/', '_blank');
+                });
+        });
 }
 
 // Main validation function

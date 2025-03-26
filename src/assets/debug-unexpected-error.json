@@ -1,0 +1,33 @@
+{
+	"clockConfig": {
+		"clockDisplay": "decimal",
+		"secondsVis": "sviD",
+		"dateFormat": "D",
+		"dateAlign": "dpoL",
+		"borderMode": "btyD",
+		"borderStyle": "solid",
+		"timeBar": "tbarNone",
+		"customNoteAlign": "nalB"
+	},
+	"fontConfig": {
+		"fontFamily": "",
+		"fontStyle": "fstR",
+		"fontWeight": "fweN",
+		"fontSize": "10vw",
+		"dropShadow": "0",
+		"strokeWidth": "0",
+		"strokeColor": ""
+	},
+	"colorTheme": {
+		"colorMode": "fademode",
+		"solidColor": "",
+		"textColorMode": "tcovD",
+		"textColorValue": "",
+		"bgImage": "",
+		"bgImageSize": "",
+		"bgImageBlur": ""
+	},
+	"exportTimestamp": "This file has an extraneous key: didnt_expect_you_to_see_this.",
+	"version": 10,
+	"didnt_expect_you_to_see_this": ""
+}

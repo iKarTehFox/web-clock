@@ -5,16 +5,20 @@ import { setDebug, setLockSettings, setTimeRefresh } from './debug';
 import { initializeDebugUI } from './debugUI';
 import { submitWeatherSettings } from './weather-utils';
 import { match } from 'ts-pattern';
+import { setClockMode } from '../time-help';
+import { showUpdateNotification } from './update-notify';
 
 interface URLParamConfig {
     // Booleans
     debugMode?: boolean;
     fastRefresh?: boolean;
     lockSettings?: boolean;
+    noUpdateNoti?: boolean;
     panelVis?: boolean;
     tabTitle?: boolean;
     // Numbers
     autoRestart?: number;
+    clockMode? : 12 | 24;
     weatherLat?: number;
     weatherLon?: number;
     weatherWidgetPosX?: number;
@@ -30,7 +34,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
     const params = {} as Partial<URLParamConfig>;
     
     // Boolean params
-    ['debugMode', 'fastRefresh', 'lockSettings', 'panelVis', 'tabTitle'].forEach(key => {
+    ['debugMode', 'fastRefresh', 'lockSettings', 'noUpdateNoti', 'panelVis', 'tabTitle'].forEach(key => {
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value === 'true';
@@ -41,7 +45,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
     });
 
     // Number params
-    ['autoRestart', 'weatherLat', 'weatherLon', 'weatherWidgetPosX', 'weatherWidgetPosY'].forEach(key => {
+    ['autoRestart', 'clockMode', 'weatherLat', 'weatherLon', 'weatherWidgetPosX', 'weatherWidgetPosY'].forEach(key => {
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = parseFloat(value);
@@ -98,6 +102,16 @@ export async function applyURLParams() {
             menu.themeradio[index].dispatchEvent(new Event('change'));
         })
         .exhaustive();
+
+    // Clock mode
+    match(params.clockMode)
+        .with(12, () => {
+            setClockMode(12);
+        })
+        .with(24, () => {
+            setClockMode(24);
+        })
+        .with(undefined, setClockMode);
     
     // Weather
     if (params.weatherApi !== undefined && params.weatherLat !== undefined && params.weatherLon !== undefined && (params.weatherUnits == 'imperial' || params.weatherUnits == 'metric')) {
@@ -138,6 +152,11 @@ export async function applyURLParams() {
     if (params.preset !== undefined) {
         const preset = params.preset;
         await presetLocalJSON(preset, false);
+    }
+
+    // New update notification
+    if (!params.noUpdateNoti) {
+        showUpdateNotification();
     }
 
     // Auto-restart

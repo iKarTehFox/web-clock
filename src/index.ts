@@ -17,7 +17,6 @@ import { setClockMode } from './time-help';
 window.addEventListener('DOMContentLoaded', () => {
     applyURLParams();
     populateTimeZoneSelect(); // This might be performance hungry...
-    setClockMode();
 
     // Initialize Bootstrap tooltips
     const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));

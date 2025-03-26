@@ -1,0 +1,22 @@
+{
+	"fontConfig": {
+		"fontFamily": "",
+		"fontStyle": "fstR",
+		"fontWeight": "fweN",
+		"fontSize": "10vw",
+		"dropShadow": "0",
+		"strokeWidth": "0",
+		"strokeColor": ""
+	},
+	"colorTheme": {
+		"colorMode": "fademode",
+		"solidColor": "",
+		"textColorMode": "tcovD",
+		"textColorValue": "",
+		"bgImage": "",
+		"bgImageSize": "",
+		"bgImageBlur": ""
+	},
+	"exportTimestamp": "This file has no clockConfig subkey.",
+	"version": 10
+}

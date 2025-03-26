@@ -1,0 +1,32 @@
+{
+	"clockConfig": {
+		"clockDisplay": "decimal",
+		"secondsVis": "sviD",
+		"dateFormat": "D",
+		"dateAlign": "dpoL",
+		"borderMode": "btyB",
+		"borderStyle": "solid",
+		"timeBar": "tbarSec",
+		"customNoteAlign": "nalB"
+	},
+	"fontConfig": {
+		"fontFamily": "",
+		"fontStyle": "fstR",
+		"fontWeight": "fweN",
+		"fontSize": "10vw",
+		"dropShadow": "0",
+		"strokeWidth": "0",
+		"strokeColor": ""
+	},
+	"colorTheme": {
+		"colorMode": "fademode",
+		"solidColor": "",
+		"textColorMode": "tcovD",
+		"textColorValue": "",
+		"bgImage": "",
+		"bgImageSize": "",
+		"bgImageBlur": ""
+	},
+	"exportTimestamp": "This file has borderMode set to btyB and timeBar set to tbarSec, which are incompatible with eachother.",
+	"version": 10
+}
