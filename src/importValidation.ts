@@ -46,7 +46,7 @@ export function handleValidationFailure(errorDetails: ErrorDetails) {
     
     const errorMessage = errorMsg[`${errorDetails.type}`] || 'Unknown validation failure';
     logConsole(`${errorMessage}`, 'error');
-    createBsModal('Error importing settings!', errorMessage, [{label: 'Get help', className: 'btn btn-primary', value: 'get_help'}, {label: 'Close', value: 'close'}])
+    createBsModal('Error importing settings!', errorMessage, [{label: 'Get help', className: 'btn btn-primary', value: 'get_help'}, {label: 'Close', value: 'close'}], 60)
         .then(result => {
             match(result)
                 .with('get_help', () => {

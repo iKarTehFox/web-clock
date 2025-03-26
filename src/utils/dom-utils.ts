@@ -6,6 +6,7 @@ import { processJSONSettings } from '../importExport';
 import { match } from 'ts-pattern';
 import * as bs from 'bootstrap';
 import * as luxon from 'ts-luxon';
+import randomstring from 'randomstring';
 
 // Element finding functions
 export function getElement<T extends HTMLElement>(id: string): T {
@@ -107,8 +108,11 @@ interface ModalButton {
     value?: any;
 }
 
-export function createBsModal(title: string, content: HTMLElement | string, buttons: ModalButton[] = []) {
+export function createBsModal(title: string, content: HTMLElement | string, buttons: ModalButton[] = [], timeoutDelay?: number) {
     return new Promise((resolve) => {
+        // Set internal unique id
+        const modalUID = `bs-modal-${randomstring.generate(8)}`;
+
         const modal = document.createElement('div');
         modal.className = 'modal fade';
         modal.setAttribute('tabindex', '-1');
@@ -117,7 +121,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
         modal.style.overflowWrap = 'anywhere';
 
         modal.innerHTML = `
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-centered" id="${modalUID}">
                 <div class="modal-content">
                     <div class="modal-header justify-content-center">
                         <h5 class="modal-title">${title}</h5>
@@ -179,6 +183,36 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
 
         const footer = modal.querySelector('.modal-footer')!;
         const bootstrapModal = new bs.Modal(modal);
+        
+        // Timeout handling
+        let bsModTimeout: number | undefined;
+        
+        if (timeoutDelay !== undefined) {
+            // Constrain between 5 and 60 seconds
+            const constrainedDelay = Math.max(5, Math.min(60, timeoutDelay)) * 1000;
+            
+            const countdownEl = document.createElement('small');
+            countdownEl.className = 'text-muted me-auto';
+            countdownEl.textContent = `Closing in ${Math.round(constrainedDelay/1000)}s`;
+            modal.querySelector('.modal-footer')?.appendChild(countdownEl);
+            
+            const startTime = Date.now();
+            const updateInterval = setInterval(() => {
+                const remaining = Math.ceil((constrainedDelay - (Date.now() - startTime))/1000);
+                if (remaining > 0) {
+                    countdownEl.textContent = `Closing in ${remaining}s`;
+                } else {
+                    clearInterval(updateInterval);
+                }
+            }, 1000);
+            
+            // Set the timeout to auto-close the modal
+            bsModTimeout = window.setTimeout(() => {
+                clearInterval(updateInterval);
+                bootstrapModal.hide();
+                resolve('timeout');
+            }, constrainedDelay);
+        }
 
         buttons.forEach(btn => {
             const button = document.createElement('button');
@@ -202,6 +236,12 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
                     navigator.clipboard.writeText(content as string);
                     showToast('Text copied to clipboard!', 'default', 'success');
                 }
+                
+                // Clear the timeout if a button is clicked
+                if (bsModTimeout) {
+                    clearTimeout(bsModTimeout);
+                }
+                
                 bootstrapModal.hide();
                 resolve(btn.value);
             };
@@ -209,12 +249,19 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
         });
 
         modal.addEventListener('hidden.bs.modal', () => {
+            // Clear timeout
+            if (bsModTimeout) {
+                clearTimeout(bsModTimeout);
+            }
+
             modal.remove();
-            resolve('Dismissed.');
+            logConsole(`Modal ID ${modalUID} hidden.`, 'debug');
+            resolve('dismissed');
         });
 
         document.body.appendChild(modal);
         bootstrapModal.show();
+        logConsole(`Modal ID ${modalUID} created with content: ${content}`, 'debug');
         bootstrapModal.handleUpdate();
     });
 }
@@ -245,8 +292,12 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
 
 // Function to create an scanner overlay card element
 export function createScannerOverlay() {
+    // Set internal unique id
+    const scannerUID = `scanner-overlay-${randomstring.generate(8)}`;
+
     // Create container
     const container = document.createElement('div');
+    container.id = scannerUID;
     container.dataset.overlay = 'scanner-overlay';
     container.dataset.bsTheme = menu.container.dataset.bsTheme;
     Object.assign(container.style, {
@@ -288,6 +339,7 @@ export function createScannerOverlay() {
     card.appendChild(cardBody);
     container.appendChild(card);
     document.body.appendChild(container);
+    logConsole(`Scanner overlay created with ID: ${scannerUID}`, 'debug');
 
     // Initialize QR scanner
     const html5QrCode = new Html5Qrcode('qr-reader');
@@ -295,6 +347,7 @@ export function createScannerOverlay() {
     const qrCodeSuccessCallback = (decodedText: string) => {
         html5QrCode.stop();
         container.remove();
+        logConsole(`Scanner overlay ID ${scannerUID} callback`, 'debug');
         processJSONSettings(decodedText);
     };
 
@@ -316,6 +369,7 @@ export function createScannerOverlay() {
         closeButton.onclick = () => {
             html5QrCode.stop();
             container.remove();
+            logConsole(`Scanner overlay ID ${scannerUID} closed`, 'debug');
         };
         cardBody.appendChild(closeButton);
     }).catch((error) => {
