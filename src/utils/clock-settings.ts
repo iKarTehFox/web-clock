@@ -248,6 +248,7 @@ export function setFontConfig(config: FontConfig, trigger: boolean = false): voi
     setFontStyle(config.fontStyle, trigger);
     setFontWeight(config.fontWeight, trigger);
     setFontSize(config.fontSize, trigger);
+    setDropShadow(config.dropShadow, trigger);
     setStrokeWidth(config.strokeWidth, trigger);
     setStrokeColor(config.strokeColor, trigger);
 }
