@@ -4,7 +4,7 @@ import { menu, countdown, stopwatch, panel } from './dom-elements';
 import { createBsModal } from './dom-utils';
 import { presetLocalJSON } from '../importExport';
 import { lockSettings } from './debug';
-import { getPresetByHotkey } from '../assets/presets';
+import { getPresetByHotkey } from '../assets//presets/presets';
 
 function generateShortcutsHelp(): HTMLDivElement {
     const shortcuts = {

@@ -7,6 +7,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// eslint-disable-next-line no-undef
 const isProduction = process.env.NODE_ENV == 'production';
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
 
@@ -14,8 +15,8 @@ const config = {
     entry: {
         main: './src/index.ts',
         styles: './src/css/styles.ts',
-        presets: './src/assets/presets.ts',
-        icons: './src/icons/icons.ts'
+        presets: './src/assets/presets/presets.ts',
+        icons: './src/assets/icons/icons.ts'
     },
     output: {
         path: path.resolve(__dirname, 'dist'),

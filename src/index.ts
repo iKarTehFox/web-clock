@@ -11,7 +11,6 @@ import './countdown';
 import './utils/kbd-shortcuts';
 import { applyURLParams } from './utils/url-params';
 import { populateTimeZoneSelect } from './time';
-import { setClockMode } from './time-help';
 
 // Functions to run when DOM has loaded
 window.addEventListener('DOMContentLoaded', () => {

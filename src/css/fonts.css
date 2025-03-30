@@ -1,52 +1,52 @@
 /* Dancing Script */
 @font-face {
   font-family: 'Dancing Script';
-  src: url('../fonts/Dancing_Script/DancingScript-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Dancing_Script/DancingScript-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Dancing Script';
-  src: url('../fonts/Dancing_Script/DancingScript-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Dancing_Script/DancingScript-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 /* Lato */
 @font-face {
   font-family: 'Lato';
-  src: url('../fonts/Lato/Lato-Light.ttf') format('truetype');
+  src: url('../assets/fonts/Lato/Lato-Light.ttf') format('truetype');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Lato';
-  src: url('../fonts/Lato/Lato-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Lato/Lato-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Lato';
-  src: url('../fonts/Lato/Lato-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Lato/Lato-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 @font-face {
   font-family: 'Lato';
-  src: url('../fonts/Lato/Lato-LightItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Lato/Lato-LightItalic.ttf') format('truetype');
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Lato';
-  src: url('../fonts/Lato/Lato-Italic.ttf') format('truetype');
+  src: url('../assets/fonts/Lato/Lato-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Lato';
-  src: url('../fonts/Lato/Lato-BoldItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Lato/Lato-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
 }
@@ -54,39 +54,39 @@
 /* Merriweather */
 @font-face {
   font-family: 'Merriweather';
-  src: url('../fonts/Merriweather/Merriweather-Light.ttf') format('truetype');
+  src: url('../assets/fonts/Merriweather/Merriweather-Light.ttf') format('truetype');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Merriweather';
-  src: url('../fonts/Merriweather/Merriweather-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Merriweather/Merriweather-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Merriweather';
-  src: url('../fonts/Merriweather/Merriweather-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Merriweather/Merriweather-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 @font-face {
   font-family: 'Merriweather';
-  src: url('../fonts/Merriweather/Merriweather-LightItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Merriweather/Merriweather-LightItalic.ttf') format('truetype');
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Merriweather';
-  src: url('../fonts/Merriweather/Merriweather-Italic.ttf') format('truetype');
+  src: url('../assets/fonts/Merriweather/Merriweather-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Merriweather';
-  src: url('../fonts/Merriweather/Merriweather-BoldItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Merriweather/Merriweather-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
 }
@@ -94,39 +94,39 @@
 /* Montserrat */
 @font-face {
   font-family: 'Montserrat';
-  src: url('../fonts/Montserrat/Montserrat-Light.ttf') format('truetype');
+  src: url('../assets/fonts/Montserrat/Montserrat-Light.ttf') format('truetype');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('../fonts/Montserrat/Montserrat-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Montserrat/Montserrat-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('../fonts/Montserrat/Montserrat-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Montserrat/Montserrat-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('../fonts/Montserrat/Montserrat-LightItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Montserrat/Montserrat-LightItalic.ttf') format('truetype');
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('../fonts/Montserrat/Montserrat-Italic.ttf') format('truetype');
+  src: url('../assets/fonts/Montserrat/Montserrat-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('../fonts/Montserrat/Montserrat-BoldItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Montserrat/Montserrat-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
 }
@@ -134,46 +134,46 @@
 /* Nanum Brush Script */
 @font-face {
   font-family: 'Nanum Brush Script';
-  src: url('../fonts/Nanum_Brush_Script/NanumBrushScript-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Nanum_Brush_Script/NanumBrushScript-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 /* Open Sans */
 @font-face {
   font-family: 'Open Sans';
-  src: url('../fonts/Open_Sans/OpenSans-Light.ttf') format('truetype');
+  src: url('../assets/fonts/Open_Sans/OpenSans-Light.ttf') format('truetype');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Open Sans';
-  src: url('../fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Open Sans';
-  src: url('../fonts/Open_Sans/OpenSans-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Open_Sans/OpenSans-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 @font-face {
   font-family: 'Open Sans';
-  src: url('../fonts/Open_Sans/OpenSans-LightItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Open_Sans/OpenSans-LightItalic.ttf') format('truetype');
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Open Sans';
-  src: url('../fonts/Open_Sans/OpenSans-Italic.ttf') format('truetype');
+  src: url('../assets/fonts/Open_Sans/OpenSans-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Open Sans';
-  src: url('../fonts/Open_Sans/OpenSans-BoldItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Open_Sans/OpenSans-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
 }
@@ -181,65 +181,65 @@
 /* Oswald */
 @font-face {
   font-family: 'Oswald';
-  src: url('../fonts/Oswald/Oswald-Light.ttf') format('truetype');
+  src: url('../assets/fonts/Oswald/Oswald-Light.ttf') format('truetype');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Oswald';
-  src: url('../fonts/Oswald/Oswald-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Oswald/Oswald-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Oswald';
-  src: url('../fonts/Oswald/Oswald-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Oswald/Oswald-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 /* Pangolin */
 @font-face {
   font-family: 'Pangolin';
-  src: url('../fonts/Pangolin/Pangolin-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Pangolin/Pangolin-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 /* Poppins */
 @font-face {
   font-family: 'Poppins';
-  src: url('../fonts/Poppins/Poppins-Light.ttf') format('truetype');
+  src: url('../assets/fonts/Poppins/Poppins-Light.ttf') format('truetype');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Poppins';
-  src: url('../fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Poppins';
-  src: url('../fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 @font-face {
   font-family: 'Poppins';
-  src: url('../fonts/Poppins/Poppins-LightItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Poppins/Poppins-LightItalic.ttf') format('truetype');
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Poppins';
-  src: url('../fonts/Poppins/Poppins-Italic.ttf') format('truetype');
+  src: url('../assets/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Poppins';
-  src: url('../fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
 }
@@ -247,39 +247,39 @@
 /* Roboto */
 @font-face {
   font-family: 'Roboto';
-  src: url('../fonts/Roboto/Roboto-Light.ttf') format('truetype');
+  src: url('../assets/fonts/Roboto/Roboto-Light.ttf') format('truetype');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Roboto';
-  src: url('../fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Roboto/Roboto-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Roboto';
-  src: url('../fonts/Roboto/Roboto-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Roboto/Roboto-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 @font-face {
   font-family: 'Roboto';
-  src: url('../fonts/Roboto/Roboto-LightItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Roboto/Roboto-LightItalic.ttf') format('truetype');
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Roboto';
-  src: url('../fonts/Roboto/Roboto-Italic.ttf') format('truetype');
+  src: url('../assets/fonts/Roboto/Roboto-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Roboto';
-  src: url('../fonts/Roboto/Roboto-BoldItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Roboto/Roboto-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
 }
@@ -287,52 +287,52 @@
 /* Tektur */
 @font-face {
   font-family: 'Tektur';
-  src: url('../fonts/Tektur/Tektur-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Tektur/Tektur-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Tektur';
-  src: url('../fonts/Tektur/Tektur-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Tektur/Tektur-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 /* Ubuntu */
 @font-face {
   font-family: 'Ubuntu';
-  src: url('../fonts/Ubuntu/Ubuntu-Light.ttf') format('truetype');
+  src: url('../assets/fonts/Ubuntu/Ubuntu-Light.ttf') format('truetype');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Ubuntu';
-  src: url('../fonts/Ubuntu/Ubuntu-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Ubuntu/Ubuntu-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Ubuntu';
-  src: url('../fonts/Ubuntu/Ubuntu-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Ubuntu/Ubuntu-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 @font-face {
   font-family: 'Ubuntu';
-  src: url('../fonts/Ubuntu/Ubuntu-LightItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Ubuntu/Ubuntu-LightItalic.ttf') format('truetype');
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Ubuntu';
-  src: url('../fonts/Ubuntu/Ubuntu-Italic.ttf') format('truetype');
+  src: url('../assets/fonts/Ubuntu/Ubuntu-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Ubuntu';
-  src: url('../fonts/Ubuntu/Ubuntu-BoldItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Ubuntu/Ubuntu-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
 }
@@ -340,26 +340,26 @@
 /* Ubuntu Mono */
 @font-face {
   font-family: 'Ubuntu Mono';
-  src: url('../fonts/Ubuntu_Mono/UbuntuMono-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/Ubuntu_Mono/UbuntuMono-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Ubuntu Mono';
-  src: url('../fonts/Ubuntu_Mono/UbuntuMono-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Ubuntu_Mono/UbuntuMono-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 @font-face {
   font-family: 'Ubuntu Mono';
-  src: url('../fonts/Ubuntu_Mono/UbuntuMono-Italic.ttf') format('truetype');
+  src: url('../assets/fonts/Ubuntu_Mono/UbuntuMono-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Ubuntu Mono';
-  src: url('../fonts/Ubuntu_Mono/UbuntuMono-BoldItalic.ttf') format('truetype');
+  src: url('../assets/fonts/Ubuntu_Mono/UbuntuMono-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
 }

@@ -3,7 +3,7 @@ import * as luxon from 'ts-luxon';
 import { menu, panel } from './utils/dom-elements';
 import { ErrorDetails, handleValidationFailure, verifySettingsJSON } from './importValidation';
 import { getClockConfig, getFontConfig, getColorThemeConfig, setClockConfig, setFontConfig, setColorThemeConfig } from './utils/clock-settings';
-import { presetList } from './assets/presets';
+import { presetList } from './assets/presets/presets';
 import axios from 'axios';
 import QRCode from 'qrcode';
 import { match } from 'ts-pattern';
