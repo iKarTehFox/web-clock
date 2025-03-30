@@ -2,6 +2,7 @@ import { match } from 'ts-pattern';
 import { countdown, menu, panel } from './utils/dom-elements';
 import { logConsole, requestNotificationPermission, showToast } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
+import i18next from 'i18next';
 
 
 let countdownInterval: NodeJS.Timeout;
@@ -60,13 +61,13 @@ function startCountdown() {
                     reset: true,
                 });
                 if (countdown.notifcheckbox.checked && Notification.permission === 'granted') {
-                    showToast('Countdown finished!', 'normal');
-                    new Notification('Countdown finished!', {
-                        body: `Your timer has elapsed. It is now ${luxon.DateTime.now().toFormat('tt')}`,
+                    showToast(i18next.t('toasts.countdown.finished'), 'normal');
+                    new Notification(i18next.t('toasts.countdown.finished'), {
+                        body:  i18next.t('toasts.countdown.finishednotification', {0: luxon.DateTime.now().toFormat('tt')}),
                         silent: false
                     });
                 } else {
-                    showToast('Countdown finished!', 'verylong');
+                    showToast(i18next.t('toasts.countdown.finished'), 'verylong');
                 }
             }
         }, 1000);
@@ -125,7 +126,7 @@ countdown.startbtn.addEventListener('click', () => {
 
             // Check if totalSeconds is too long (greater than 100 hours)
             if (totalSeconds > 360000) {
-                showToast('Time set too long! Make sure it is less than 100 hours.', 'normal', 'danger');
+                showToast(i18next.t('toasts.countdown.toolong'), 'normal', 'danger');
                 totalSeconds = 0;
                 return;
             }
@@ -199,7 +200,7 @@ countdown.notifcheckbox.addEventListener('change', async function() {
             .then(permission => {
                 if (permission !== 'granted') {
                     countdown.notifcheckbox.checked = false;
-                    showToast('Notification permission denied.', 'normal', 'danger');
+                    showToast(i18next.t('toasts.countdown.notificationdenied'), 'normal', 'danger');
                 }
             })
             .catch(() => {

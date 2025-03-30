@@ -7,6 +7,7 @@ import { match } from 'ts-pattern';
 import * as bs from 'bootstrap';
 import * as luxon from 'ts-luxon';
 import randomstring from 'randomstring';
+import i18next, { t } from 'i18next';
 
 // Element finding functions
 export function getElement<T extends HTMLElement>(id: string): T {
@@ -244,7 +245,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
                     link.click();
                 } else if (btn.value === 'copy') {
                     navigator.clipboard.writeText(content as string);
-                    showToast('Text copied to clipboard!', 'default', 'success');
+                    showToast(i18next.t('toasts.domutils.textcopied'), 'default', 'success');
                 }
                 
                 // Clear the timeout if a button is clicked
@@ -291,7 +292,7 @@ export function setMetaColor(type: 'color' | 'theme', value: string): void {
 
 export async function requestNotificationPermission(): Promise<NotificationPermission> {
     if (!('Notification' in window)) {
-        showToast('Notifications are not supported in this browser.', 'long', 'danger');
+        showToast(i18next.t('toasts.domutils.notificationsunsupported'), 'long', 'danger');
         return Promise.reject('Notifications not supported');
     }
 
@@ -384,7 +385,7 @@ export function createScannerOverlay() {
         cardBody.appendChild(closeButton);
     }).catch((error) => {
         logConsole(error, 'error');
-        showToast(`QR scanner failed: ${error}`, 'long', 'danger');
+        showToast(i18next.t('toasts.domutils.qrscannerfailed', { 0: error }), 'long', 'danger');
         if (html5QrCode.isScanning) {
             html5QrCode.stop();
         }

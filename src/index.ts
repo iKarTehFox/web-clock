@@ -1,4 +1,5 @@
 // TS Imports
+import './assets/locales/i18n';
 import 'iconify-icon';
 import './utils/iconify-preload';
 import * as bootstrap from 'bootstrap';

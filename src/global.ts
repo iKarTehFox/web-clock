@@ -2,6 +2,7 @@ import { match } from 'ts-pattern';
 import { menu, font, dtdisplay, stopwatch, countdown, weather, doc, panel } from './utils/dom-elements';
 import { logConsole, setMetaColor, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
+import i18next from 'i18next';
 
 // Define font sizes
 type FontSizeKey = '6vw' | '8vw' | '10vw' | '12vw' | '14vw' | '18vw';
@@ -50,12 +51,12 @@ function modifyFontStyle(type: string, value: string) {
         })
         .with('strokewidth', () => {
             dtdisplay.ccontainer.style.webkitTextStrokeWidth = `${value}px`;
-            font.strokerangelabel.textContent = `Stroke width: ${value}px`;
+            font.strokerangelabel.textContent = i18next.t('menu.section.fontcustomization.setting.texteffects.option.strokewidth', { 0: value });
             logConsole(`Font stroke width set to: ${value}px`, 'debug');
         })
         .with('strokecolor', () => {
             dtdisplay.ccontainer.style.webkitTextStrokeColor = value;
-            font.strokecolorlabel.textContent = `Stroke color: ${value}`;
+            font.strokecolorlabel.textContent = i18next.t('menu.section.fontcustomization.setting.texteffects.option.strokecolor', { 0: value });
             logConsole(`Font stroke color set to: ${value}`, 'debug');
         })
         .otherwise(() => {
@@ -97,7 +98,7 @@ function handleFontEvents(e: Event) {
                     const opacity = value / 5;
                     const strength = value * 3;
                     const dropShadowValue = `5px 5px ${strength}px rgba(0, 0, 0, ${opacity})`;
-                    font.shadowlabel.textContent = `Drop shadow: ${strength}px`;
+                    font.shadowlabel.textContent = i18next.t('menu.section.fontcustomization.setting.texteffects.option.dropshadow', { 0: strength });
                     dtdisplay.ccontainer.style.textShadow = value > 0 ? dropShadowValue : '';
                     logConsole(`Font text shadow set to: ${dropShadowValue}`, 'debug');
                 })
@@ -262,7 +263,7 @@ menu.themeradio.forEach((radio) => {
                 // Browser meta
                 setMetaColor('theme', 'light');
                 logConsole(`Menu theme set to: ${radio.id}`, 'debug');
-                showToast('Theme set to light mode ☀️');
+                showToast(i18next.t('toasts.global.themelight'));
             })
             .with('darkthememode', () => {
                 menu.container.dataset.bsTheme = 'dark';
@@ -280,7 +281,7 @@ menu.themeradio.forEach((radio) => {
                 // Browser meta
                 setMetaColor('theme', 'dark');
                 logConsole(`Menu theme set to: ${radio.id}`, 'debug');
-                showToast('Theme set to dark mode 🌙');
+                showToast(i18next.t('toasts.global.themedark'));
             })
             .otherwise(() => {
                 logConsole(`Invalid theme mode: ${radio.id}`, 'error');
@@ -332,7 +333,7 @@ export function toggleFullscreen() {
         }
     }
     logConsole('Toggled fullscreen mode', 'info');
-    showToast('Toggled fullscreen mode');
+    showToast(i18next.t('toasts.global.fullscreen'));
 }
 
 menu.fullscreenbtn.addEventListener('click', function() {

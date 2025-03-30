@@ -3,8 +3,8 @@ import OpenWeatherMap from 'openweathermap-ts';
 import { menu, weather } from './dom-elements';
 import { getFirstElement, logConsole, showToast } from './dom-utils';
 import { CurrentResponse } from 'openweathermap-ts/dist/types';
+import i18next from 'i18next';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let interval: NodeJS.Timeout;
 
 // Geolocation function
@@ -18,14 +18,14 @@ export function getLocation(): Promise<[number, number]> {
                     resolve([latitude, longitude]);
                 },
                 (error) => {
-                    showToast(`Error getting location: ${error.message}`, 'default', 'danger');
+                    showToast(i18next.t('toasts.weatherutils.gpserror', { 0: error }), 'default', 'danger');
                     reject(error);
                 },
                 { enableHighAccuracy: true }
             );
         });
     } else {
-        showToast('Geolocation is not supported by this browser.', 'long', 'danger');
+        showToast(i18next.t('toasts.weatherutils.gpsunsupported'), 'long', 'danger');
         throw new Error('Geolocation is not supported by this browser.');
     }
 }
@@ -34,7 +34,8 @@ export function getLocation(): Promise<[number, number]> {
 async function fetchWeather(appID: string, lat: number, lon: number, units: any) {
     const owm = new OpenWeatherMap({
         apiKey: appID,
-        units: units
+        units: units,
+        language: i18next.language
     });
 
     try {
@@ -47,8 +48,8 @@ async function fetchWeather(appID: string, lat: number, lon: number, units: any)
 }
 
 function updateWeatherWidget(data: CurrentResponse, units: string) {
-    const tempunit = units == 'imperial' ? 'F' : 'C';
-    const windunit = units == 'imperial' ? 'mph' : 'm/s';
+    const tempunit = units == 'imperial' ? i18next.t('weather.fahrenheit') : i18next.t('weather.celsius');
+    const windunit = units == 'imperial' ? i18next.t('weather.mph') : i18next.t('weather.ms');
 
     // Fill weather widget data. Can this be done better? Probably...
     weather.name.innerText = `${data.name}, ${data.sys.country}`;
@@ -115,7 +116,7 @@ export function submitWeatherSettings(_key: string = undefined, _lat: number = u
             } else {
                 stopWeather();
                 logConsole(`Failed fetching weather data: ${currentWeatherData.cod}`, 'error');
-                showToast(`Error fetching weather data: ${currentWeatherData.cod}`, 'normal', 'danger');
+                showToast(i18next.t('toasts.weatherutils.weathererror'), 'normal', 'danger');
             }
         })
         .catch(error => {
@@ -145,7 +146,8 @@ export function submitWeatherSettings(_key: string = undefined, _lat: number = u
 function deg2dir(degrees: number): string {
     const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
     const index = Math.round(degrees / 22.5) % 16;
-    return directions[index];
+    const translatedDirection = i18next.t(`weather.${directions[index]}`);
+    return translatedDirection;
 }
 
 

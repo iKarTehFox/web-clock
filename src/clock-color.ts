@@ -1,6 +1,7 @@
 import { match } from 'ts-pattern';
 import { menu, dtdisplay, doc } from './utils/dom-elements';
 import { getFirstElement, logConsole } from './utils/dom-utils';
+import i18next from 'i18next';
 
 // Text color override listener
 let isTextColorOverride = 0;
@@ -42,7 +43,7 @@ menu.textcolorinput.addEventListener('input', function() {
     dtdisplay.ccontainer.style.color = color;
     dtdisplay.timeBar.style.backgroundColor = color;
     doc.cnote.style.color = color;
-    menu.textcolorlabel.textContent = `Text color: ${menu.textcolorinput.value}`;
+    menu.textcolorlabel.textContent = i18next.t('menu.section.backgroundtheme.setting.textcoloroverride.option.textcolor', { 0: color });
     logConsole(`Text color override: ${color}`, 'debug');
 });
 

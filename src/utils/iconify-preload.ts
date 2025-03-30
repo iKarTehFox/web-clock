@@ -1,6 +1,7 @@
 import { loadIcons, iconExists } from 'iconify-icon';
 import { logConsole } from './dom-utils';
 import { countdown, menu, panel, stopwatch } from './dom-elements';
+import i18next from 'i18next';
 
 // Preload needed Iconify MDI icons
 // Panel
@@ -45,7 +46,9 @@ export function preloadIcons(): Promise<void> {
 preloadIcons().then(() => {
     if (iconExists('mdi:menu')) {
         logConsole('mdi:menu exists. Loading icon...', 'info');
-        panel.menubutton.innerHTML = '<iconify-icon inline icon="mdi:menu" width="15" height="15" style="height: 15px;"></iconify-icon> Menu';
+        panel.menubutton.innerHTML = `<iconify-icon inline icon="mdi:menu" width="15" height="15" style="height: 15px;"></iconify-icon> ${i18next.t('panel.menu.label')}`;
+    } else {
+        panel.menubutton.textContent = `☰ ${i18next.t('panel.menu.label')}`;
     }
     if (iconExists('mdi:github')) {
         logConsole('mdi:github exists. Loading icon...', 'info');
@@ -61,6 +64,8 @@ preloadIcons().then(() => {
     }
     if (iconExists('mdi:fullscreen')) {
         logConsole('mdi:fullscreen exists. Loading icon...', 'info');
-        menu.fullscreenbtn.innerHTML = '<iconify-icon icon="mdi:fullscreen" width="19" height="19" style="height: 15px;"></iconify-icon> Toggle View';
+        menu.fullscreenbtn.innerHTML = `<iconify-icon icon="mdi:fullscreen" width="19" height="19" style="height: 15px;"></iconify-icon> ${i18next.t('menu.section.displayoptions.setting.fullscreen.option.toggle')}`;
+    } else {
+        menu.fullscreenbtn.textContent = `⛶ ${i18next.t('menu.section.displayoptions.setting.fullscreen.option.toggle')}`;
     }
 });

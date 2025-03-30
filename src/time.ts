@@ -5,6 +5,7 @@ import { logConsole } from './utils/dom-utils';
 import * as clock from './time-help';
 import { timeRefresh } from './utils/debug';
 import { match, P } from 'ts-pattern';
+import i18next from 'i18next';
 
 // Default modes
 export let cMode = '0';
@@ -36,15 +37,15 @@ function updatePageDuration(): void {
 
     let durationText: string;
     if (days < 0 || hours < 0 || minutes < 0 || seconds < 0) {
-        durationText = 'Negative time?? 🤔';
+        durationText = i18next.t('menu.misc.pageduration.negativetime');
     } else if (days > 0) { // Day counter
-        durationText = `${days}d, ${hours}h, and ${minutes}m`;
+        durationText = i18next.t('menu.misc.pageduration.daycount', { 0: days, 1: hours, 2: minutes });
     } else if (hours > 0) { // Hour counter
-        durationText = `${hours}h, ${minutes}m, and ${seconds}s`;
+        durationText = i18next.t('menu.misc.pageduration.hourcount', { 0: hours, 1: minutes, 2: seconds });
     } else if (minutes > 0) { // Minute counter
-        durationText = `${minutes} min, and ${seconds} sec`;
+        durationText = i18next.t('menu.misc.pageduration.minutecount', { 0: minutes, 1: seconds });
     } else { // Second counter
-        durationText = `${seconds} seconds`;
+        durationText = i18next.t('menu.misc.pageduration.secondcount', { 0: seconds });
     }
     
     menu.durationdisplay.textContent = durationText;

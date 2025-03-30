@@ -7,6 +7,8 @@ import { submitWeatherSettings } from './weather-utils';
 import { match } from 'ts-pattern';
 import { setClockMode } from '../time-help';
 import { showUpdateNotification } from './update-notify';
+import i18next from 'i18next';
+import { applyFallbackTranslations, initDynamicTranslations, updateTranslations } from '../assets/locales/i18n';
 
 interface URLParamConfig {
     // Booleans
@@ -24,6 +26,7 @@ interface URLParamConfig {
     weatherWidgetPosX?: number;
     weatherWidgetPosY?: number;
     // Strings
+    language?: string;
     menuTheme?: 'light' | 'dark';
     preset?: string;
     weatherApi?: string;
@@ -56,7 +59,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
     });
 
     // String params
-    ['menuTheme', 'preset', 'weatherApi', 'weatherUnits'].forEach(key => {
+    ['language', 'menuTheme', 'preset', 'weatherApi', 'weatherUnits'].forEach(key => {
         const value = urlSearchParams.get(key);
         if (value !== null) {
             (params as any)[key] = value;
@@ -78,7 +81,7 @@ export async function applyURLParams() {
     if (params.debugMode) {
         setDebug(true);
         initializeDebugUI();
-        showToast('Debug mode enabled. DevTools memory will increase over time.', 'normal', 'warning');
+        showToast(i18next.t('toasts.urlparams.debugmode'), 'normal', 'warning');
     }
 
     // Fast time refresh
@@ -112,6 +115,24 @@ export async function applyURLParams() {
             setClockMode(24);
         })
         .with(undefined, setClockMode);
+
+    // Language
+    if (params.language !== undefined) {
+        if (i18next.isInitialized) {
+            i18next.changeLanguage(params.language);
+            updateTranslations();
+            initDynamicTranslations();
+        } else {
+            applyFallbackTranslations();
+        }
+    } else {
+        if (i18next.isInitialized) {
+            updateTranslations();
+            initDynamicTranslations();
+        } else {
+            applyFallbackTranslations();
+        }
+    }
     
     // Weather
     if (params.weatherApi !== undefined && params.weatherLat !== undefined && params.weatherLon !== undefined && (params.weatherUnits == 'imperial' || params.weatherUnits == 'metric')) {
@@ -164,11 +185,11 @@ export async function applyURLParams() {
         const autoRestartTime = params.autoRestart;
         if (!isNaN(autoRestartTime) && autoRestartTime >= 15 && autoRestartTime <= 86400) {
             logConsole(`Set auto restart time for: ${autoRestartTime} seconds...`, 'debug');
-            menu.autorestarttime.innerHTML = `Auto restart: <b>${autoRestartTime} sec</b>`;
+            menu.autorestarttime.innerHTML = i18next.t('menu.misc.autorestart.label', { 0: autoRestartTime });
             setTimeout(() => {
                 window.location.reload();
             }, autoRestartTime * 1000);
-            showToast(`Auto restart set to ${autoRestartTime} seconds.`, 'normal', 'warning');
+            showToast(i18next.t('toasts.urlparams.autorestart', { 0: autoRestartTime }), 'normal', 'warning');
         } else {
             logConsole('Invalid autoRestart value. It should be an integer between 15 and 86400 inclusive.', 'warning');
         }

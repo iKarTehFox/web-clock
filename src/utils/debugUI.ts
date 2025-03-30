@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import { debug, dtdisplay } from './dom-elements';
 import { showToast } from './dom-utils';
 
@@ -13,20 +14,20 @@ export function initializeDebugUI(): void {
     debug.container.style.display = '';
 
     // Fill debug info
-    addDbgInfo(`User Agent: ${navigator.userAgent}`); // User agent
-    addDbgInfo(`Locale: ${navigator.language}`); // Locale
-    addDbgInfo(`System Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`); // Timezone
-    addDbgInfo(`Load time: ${new Date().toLocaleString()}`); // Load time
-    addDbgInfo(`Screen Resolution: ${window.screen.width}x${window.screen.height}`); // Screen resolution
-    addDbgInfo(`Color Depth: ${window.screen.colorDepth}-bit`); // Color depth
-    addDbgInfo(`Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`); // Online status
+    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.useragent')}: ${navigator.userAgent}`); // User agent
+    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.locale')}: ${navigator.language}`); // Locale
+    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.timezone')}: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`); // Timezone
+    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.loadtime')}: ${new Date().toLocaleString()}`); // Load time
+    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.resolution')}: ${window.screen.width}x${window.screen.height}`); // Screen resolution
+    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.colordepth')}: ${window.screen.colorDepth}-bit`); // Color depth
+    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.onlinestatus')}: ${navigator.onLine ? 'Online' : 'Offline'}`); // Online status
 
     // Event listeners
     debug.toastbtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const theme = btn.dataset.dbgtoasttheme;
             const length = btn.dataset.dbgtoastlength as 'default' | 'normal' | 'long' | 'verylong' | undefined;
-            showToast(`Test toast. Theme "${theme}"`, length, theme);
+            showToast(i18next.t('toasts.debugui.testtoast', { 0: theme }), length, theme);
         });
     });
 
