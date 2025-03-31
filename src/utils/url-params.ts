@@ -183,6 +183,7 @@ export async function applyURLParams() {
         const autoRestartTime = params.autoRestart;
         if (!isNaN(autoRestartTime) && autoRestartTime >= 15 && autoRestartTime <= 86400) {
             logConsole(`Set auto restart time for: ${autoRestartTime} seconds...`, 'debug');
+            menu.autorestarttime.style.display = '';
             menu.autorestarttime.innerHTML = autoRestartTime + 's';
             setTimeout(() => {
                 window.location.reload();

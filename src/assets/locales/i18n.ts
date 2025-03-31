@@ -22,6 +22,13 @@ const supportedLangs = ['en', 'es'];
 // Get init lang
 const getInitialLanguage = (): string => {
     const browserLang = getBrowserLanguage();
+    menu.languageradio.forEach(radio => {
+        if (radio.id === browserLang.toLowerCase()) {
+            radio.checked = true;
+        } else {
+            radio.checked = false;
+        }
+    });
     return supportedLangs.includes(browserLang) ? browserLang : 'en';
 };
 
@@ -166,6 +173,8 @@ i18next.on('languageChanged', (lng) => {
         const id = radio.id;
         if (id === lng) {
             radio.checked = true;
+        } else {
+            radio.checked = false;
         }
     });
 });
