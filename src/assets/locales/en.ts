@@ -557,11 +557,11 @@ export default {
             'copy': 'Copy',
             'download': 'Download',
             'countdownel': 'Closing in {{0}}s',
+            'gethelp': 'Get help'
         },
         'rawsettingsjson': 'Raw Settings JSON',
         'backgroundimage': 'Background Image',
-        'importerror': 'Error importing settings!',
-
+        'importerror': 'Error importing settings!'
     },
     'scanneroverlay': {
         'action': {

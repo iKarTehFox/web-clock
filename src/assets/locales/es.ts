@@ -561,8 +561,7 @@ export default {
         },
         'rawsettingsjson': 'JSON de ajustes sin procesar',
         'backgroundimage': 'Imagen de fondo',
-        'importerror': '¡Error al importar ajustes!',
-
+        'importerror': '¡Error al importar ajustes!'
     },
     'scanneroverlay': {
         'action': {
@@ -582,8 +581,8 @@ export default {
         'colormodebuttongroup': 'Grupo de botones de modo de color',
         'solidcolorbuttongroup': 'Grupo de botones de color sólido',
         'textcoloroverridebuttongroup': 'Grupo de botones de anulación de color de texto',
-        'languagebuttongroup': 'Language button group',
         'weatherunitbuttongroup': 'Grupo de botones de unidad meteorológica',
+        'languagebuttongroup': 'Grupo de botones de idioma',
         'menuthemebuttongroup': 'Grupo de botones de tema del menú',
         'manualjsonsettingsentryform': 'Formulario de entrada manual de configuraciones JSON',
         'stopwatchcontrols': 'Controles del cronómetro',
