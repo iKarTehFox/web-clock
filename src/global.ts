@@ -51,12 +51,12 @@ function modifyFontStyle(type: string, value: string) {
         })
         .with('strokewidth', () => {
             dtdisplay.ccontainer.style.webkitTextStrokeWidth = `${value}px`;
-            font.strokerangelabel.textContent = i18next.t('menu.section.fontcustomization.setting.texteffects.option.strokewidth', { 0: value });
+            font.strokerangelabel.textContent = value + 'px';
             logConsole(`Font stroke width set to: ${value}px`, 'debug');
         })
         .with('strokecolor', () => {
             dtdisplay.ccontainer.style.webkitTextStrokeColor = value;
-            font.strokecolorlabel.textContent = i18next.t('menu.section.fontcustomization.setting.texteffects.option.strokecolor', { 0: value });
+            font.strokecolorlabel.textContent = value;
             logConsole(`Font stroke color set to: ${value}`, 'debug');
         })
         .otherwise(() => {
@@ -98,7 +98,7 @@ function handleFontEvents(e: Event) {
                     const opacity = value / 5;
                     const strength = value * 3;
                     const dropShadowValue = `5px 5px ${strength}px rgba(0, 0, 0, ${opacity})`;
-                    font.shadowlabel.textContent = i18next.t('menu.section.fontcustomization.setting.texteffects.option.dropshadow', { 0: strength });
+                    font.shadowlabel.textContent = strength + 'px';
                     dtdisplay.ccontainer.style.textShadow = value > 0 ? dropShadowValue : '';
                     logConsole(`Font text shadow set to: ${dropShadowValue}`, 'debug');
                 })

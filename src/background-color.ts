@@ -142,7 +142,7 @@ menu.colormoderadio.forEach(radio => {
 menu.fadetransrange.addEventListener('input', () => {
     const value = menu.fadetransrange.value;
     bodyElement.style.transition = `background-color ${value}s ease-in-out`;
-    menu.fadetransrangelabel.textContent = i18next.t('menu.section.backgroundtheme.setting.colortransition.option.length', { 0: value });
+    menu.fadetransrangelabel.textContent = value + 's';
     logConsole(`Fade transition length set to: ${value}s`, 'debug');
 });
 

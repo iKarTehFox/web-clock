@@ -57,7 +57,7 @@ menu.imagesizeselect.addEventListener('change', () => {
 menu.imageblurrange.addEventListener('input', () => {
     const blurValue = menu.imageblurrange.value;
     doc.blurpanel.style.backdropFilter = (`blur(${blurValue}px)`);
-    menu.imageblurlabel.textContent = i18next.t('menu.section.backgroundtheme.setting.imageeffects.option.imageblur', { 0: blurValue });
+    menu.imageblurlabel.textContent = blurValue + 'px';
     logConsole(`Image blur set to: ${blurValue}px`, 'debug');
 });
 

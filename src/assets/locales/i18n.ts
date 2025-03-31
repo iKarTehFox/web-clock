@@ -4,7 +4,8 @@ import { logConsole } from '../../utils/dom-utils';
 // Translations
 import enResource from './en';
 import esResource from './es';
-import { font, menu } from '../../utils/dom-elements';
+import { menu } from '../../utils/dom-elements';
+import * as bootstrap from 'bootstrap';
 
 // Get language
 function getBrowserLanguage(): string {
@@ -145,29 +146,34 @@ function updateContent() {
                 element.setAttribute(targetAttr, i18next.t(key));
             });
     });
-}
 
-export function initDynamicTranslations() {
-    // Set default values for interpolated strings
-    const defaultValues = {
-        'dropShadow': '0',
-        'strokeWidth': '0',
-        'strokeColor': '#000000',
-        'textColor': '#000000',
-        'imageBlur': '0',
-        'colorTransition': '2.8',
-    };
-
-    // Update the content
-    font.shadowlabel.textContent = i18next.t('menu.section.fontcustomization.setting.texteffects.option.dropshadow', { 0: defaultValues.dropShadow });
-    font.strokerangelabel.textContent = i18next.t('menu.section.fontcustomization.setting.texteffects.option.strokeradius', { 0: defaultValues.strokeWidth });
-    font.strokecolorlabel.textContent = i18next.t('menu.section.fontcustomization.setting.texteffects.option.strokecolor', { 0: defaultValues.strokeColor });
-    menu.textcolorlabel.textContent = i18next.t('menu.section.backgroundtheme.setting.textcoloroverride.option.textcolor', { 0: defaultValues.textColor });
-    menu.imageblurlabel.textContent = i18next.t('menu.section.backgroundtheme.setting.imageeffects.option.imageblur', { 0: defaultValues.imageBlur });
-    menu.fadetransrangelabel.textContent = i18next.t('menu.section.backgroundtheme.setting.colortransition.option.length', { 0: defaultValues.colorTransition });
+    // Reinitialize Bootstrap tooltips
+    const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    const tooltipTriggerElArray = Array.from(tooltipTriggerList);
+    const tooltipList = tooltipTriggerElArray.map(tooltipTriggerEl => {
+        return new bootstrap.Tooltip(tooltipTriggerEl); 
+    });
 }
 
 // Export function to manually update translations
 export function updateTranslations() {
     updateContent();
 }
+
+i18next.on('languageChanged', (lng) => {
+    console.log(`Language changed to: ${lng}`);
+    menu.languageradio.forEach((radio) => {
+        const id = radio.id;
+        if (id === lng) {
+            radio.checked = true;
+        }
+    });
+});
+
+menu.languageradio.forEach((radio) => {
+    radio.addEventListener('change', () => {
+        const selectedLanguage = radio.id;
+        i18next.changeLanguage(selectedLanguage);
+        updateTranslations();
+    });
+});

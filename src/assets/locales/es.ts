@@ -225,9 +225,9 @@ export default {
                     'texteffects': {
                         'title': 'Efectos de texto',
                         'option': {
-                            'dropshadow': 'Sombra paralela: {{0}}px',
-                            'strokewidth': 'Ancho del contorno: {{0}}px',
-                            'strokecolor': 'Color del contorno: {{0}}'
+                            'dropshadow': 'Sombra paralela',
+                            'strokewidth': 'Ancho del contorno',
+                            'strokecolor': 'Color del contorno'
                         }
                     },
                 }
@@ -247,7 +247,7 @@ export default {
                     'colortransition': {
                         'title': 'Transición de Color',
                         'option': {
-                            'length': 'Duración: {{0}}s',
+                            'length': 'Duración',
                             'reset': 'Restablecer',
                             'tooltip': 'Restablecer duración al valor predeterminado.'
                         }
@@ -313,7 +313,7 @@ export default {
                             'automatic': 'Automático',
                             'cover': 'Cubrir',
                             'stretch': 'Estirar',
-                            'imageblur': 'Desenfoque de imagen: {{0}}px',
+                            'imageblur': 'Desenfoque de imagen',
                             'imageblurdescription': 'Nota: Puede consumir más energía cuando está activo',
                         }
                     },
@@ -322,7 +322,7 @@ export default {
                         'option': {
                             'disabled': 'Desactivado',
                             'enabled': 'Activado',
-                            'textcolor': 'Color del texto: {{0}}'
+                            'textcolor': 'Color del texto'
                         }
                     }
                 }
@@ -370,6 +370,9 @@ export default {
             'displayoptions': {
                 'header': 'Opciones de visualización',
                 'setting': {
+                    'language': {
+                        'title': 'Idioma'
+                    },
                     'menutheme': {
                         'title': 'Tema del menú',
                         'option': {
@@ -492,7 +495,7 @@ export default {
                 'secondcount': '{{0}} segundos'
             },
             'autorestart': {
-                'label': 'Reinicio automático: {{0}} seg'
+                'label': 'Reinicio automático'
             },
             'docs': {
                 'label': 'Leer la documentación',
@@ -577,6 +580,7 @@ export default {
         'colormodebuttongroup': 'Grupo de botones de modo de color',
         'solidcolorbuttongroup': 'Grupo de botones de color sólido',
         'textcoloroverridebuttongroup': 'Grupo de botones de anulación de color de texto',
+        'languagebuttongroup': 'Language button group',
         'weatherunitbuttongroup': 'Grupo de botones de unidad meteorológica',
         'menuthemebuttongroup': 'Grupo de botones de tema del menú',
         'manualjsonsettingsentryform': 'Formulario de entrada manual de configuraciones JSON',

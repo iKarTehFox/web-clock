@@ -43,7 +43,7 @@ menu.textcolorinput.addEventListener('input', function() {
     dtdisplay.ccontainer.style.color = color;
     dtdisplay.timeBar.style.backgroundColor = color;
     doc.cnote.style.color = color;
-    menu.textcolorlabel.textContent = i18next.t('menu.section.backgroundtheme.setting.textcoloroverride.option.textcolor', { 0: color });
+    menu.textcolorlabel.textContent = color;
     logConsole(`Text color override: ${color}`, 'debug');
 });
 

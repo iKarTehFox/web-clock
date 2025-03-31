@@ -69,3 +69,18 @@ preloadIcons().then(() => {
         menu.fullscreenbtn.textContent = `⛶ ${i18next.t('menu.section.displayoptions.setting.fullscreen.option.toggle')}`;
     }
 });
+
+i18next.on('languageChanged', () => {
+    if (iconExists('mdi:menu')) {
+        logConsole('mdi:menu exists. Loading icon...', 'info');
+        panel.menubutton.innerHTML = `<iconify-icon inline icon="mdi:menu" width="15" height="15" style="height: 15px;"></iconify-icon> ${i18next.t('panel.menu.label')}`;
+    } else {
+        panel.menubutton.textContent = `☰ ${i18next.t('panel.menu.label')}`;
+    }
+    if (iconExists('mdi:fullscreen')) {
+        logConsole('mdi:fullscreen exists. Loading icon...', 'info');
+        menu.fullscreenbtn.innerHTML = `<iconify-icon icon="mdi:fullscreen" width="19" height="19" style="height: 15px;"></iconify-icon> ${i18next.t('menu.section.displayoptions.setting.fullscreen.option.toggle')}`;
+    } else {
+        menu.fullscreenbtn.textContent = `⛶ ${i18next.t('menu.section.displayoptions.setting.fullscreen.option.toggle')}`;
+    }
+});

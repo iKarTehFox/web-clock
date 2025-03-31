@@ -208,11 +208,11 @@
                                 </select>
                                 <hr>
                                 <h6 class="mb-1" data-i18n="menu.section.fontcustomization.setting.texteffects.title"></h6>
-                                <label for="dropShadowRange" class="form-label" id="dropShadowRangeLabel" data-i18n="menu.section.fontcustomization.setting.texteffects.option.dropshadow"></label>
+                                <label for="dropShadowRange" class="form-label"><span data-i18n="menu.section.fontcustomization.setting.texteffects.option.dropshadow"></span>: <span id="dropShadowRangeLabel">0px</span></label>
                                 <input type="range" class="form-range" id="dropShadowRange" min="0" max="10" value="0" step="1">
-                                <label for="textStrokeRange" class="form-label" id="textStrokeRangeLabel" data-i18n="menu.section.fontcustomization.setting.texteffects.option.strokewidth"></label>
+                                <label for="textStrokeRange" class="form-label"><span data-i18n="menu.section.fontcustomization.setting.texteffects.option.strokewidth"></span>: </span><span id="textStrokeRangeLabel"></span></label>
                                 <input type="range" class="form-range" id="textStrokeRange" min="0" max="5" value="0" step="1">
-                                <label for="textStrokeColor" class="form-label" id="textStrokeColorLabel" data-i18n="menu.section.fontcustomization.setting.texteffects.option.strokecolor"></label>
+                                <label for="textStrokeColor" class="form-label"><span data-i18n="menu.section.fontcustomization.setting.texteffects.option.strokecolor"></span>: <span id="textStrokeColorLabel"></span></label>
                                 <input type="color" class="form-control form-control-color" id="textStrokeColor" value="#000000" disabled>
                             </div>
                         </div>
@@ -239,7 +239,7 @@
                                 </div>
                                 <div class="form-group mt-2" id="fadeGroup">
                                     <h6 class="mb-1 mt-2" data-i18n="menu.section.backgroundtheme.setting.colortransition.title"></h6>
-                                    <label for="fadeTransitionRange" class="form-label" id="fadeTransitionRangeLabel" data-i18n="menu.section.backgroundtheme.setting.colortransition.option.length"></label>
+                                    <label for="fadeTransitionRange" class="form-label"><span data-i18n="menu.section.backgroundtheme.setting.colortransition.option.length"></span>: <span id="fadeTransitionRangeLabel">2.8s</span></label>
                                     <input type="range" class="form-range" id="fadeTransitionRange" min="0" max="3" value="2.8" step="0.1">
                                     <div class="d-flex justify-content-end">
                                         <button type="button" class="btn btn-outline-danger" id="fadeTransitionResetBtn" data-bs-toggle="tooltip" data-i18n-data-bs-title="menu.section.backgroundtheme.setting.colortransition.option.tooltip" data-i18n="menu.section.backgroundtheme.setting.colortransition.option.reset"></button>
@@ -353,7 +353,7 @@
                                         <option value="cover" data-i18n="menu.section.backgroundtheme.setting.imageeffects.option.cover"></option>
                                         <option value="stretch" data-i18n="menu.section.backgroundtheme.setting.imageeffects.option.stretch"></option>
                                     </select>
-                                    <label for="bgImgBlurRange" class="form-label mt-2" id="bgImgBlurRangeLabel" data-i18n="menu.section.backgroundtheme.setting.imageeffects.option.imageblur"></label>
+                                    <label for="bgImgBlurRange" class="form-label mt-2"><span data-i18n="menu.section.backgroundtheme.setting.imageeffects.option.imageblur"></span>: <span id="bgImgBlurRangeLabel">0px</span></label>
                                     <input type="range" id="bgImgBlurRange" class="d-block" min="0" max="10" step="1" value="0">
                                     <p id="bgImgBlurDesc" data-i18n="menu.section.backgroundtheme.setting.imageeffects.option.imageblurdescription"></p>
                                 </div>
@@ -368,7 +368,7 @@
                                         <label class="btn btn-outline-primary" for="tcovO" data-i18n="menu.section.backgroundtheme.setting.textcoloroverride.option.enabled"></label>
                                     </div>
                                     <div class="form-group mt-2">
-                                        <label class="form-label" for="textColorInput" id="textColorLabel" data-i18n="menu.section.backgroundtheme.setting.textcoloroverride.option.textcolor"></label>
+                                        <label class="form-label" for="textColorInput"><span data-i18n="menu.section.backgroundtheme.setting.textcoloroverride.option.textcolor"></span>: <span  id="textColorLabel"></span></label>
                                         <input type="color" class="form-control form-control-color" id="textColorInput" value="#000000" disabled>
                                     </div>
                                 </div>
@@ -423,6 +423,14 @@
                         </h2>
                         <div id="collapseDO" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body" id="panel-section-do">
+                                <h6 class="mb-1" data-i18n="menu.section.displayoptions.setting.language.title"></h6>
+                                <div class="btn-group" role="group" data-i18n-aria-label="arialabel.languagebuttongroup">
+                                    <input type="radio" class="btn-check" name="language-radio" id="en" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="en">English</label>
+                                    <input type="radio" class="btn-check" name="language-radio" id="es" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="es">Español</label>
+                                </div>
+                                <hr>
                                 <h6 class="mb-1" data-i18n="menu.section.displayoptions.setting.menutheme.title"></h6>
                                 <div class="btn-group" role="group" data-i18n-aria-label="arialabel.menuthemebuttongroup">
                                     <input type="radio" class="btn-check" name="menu-theme-radio" id="lightthememode" autocomplete="off" checked>
@@ -530,7 +538,7 @@
                     </div>
                     <p class="mb-1 mt-2" data-i18n="menu.misc.pageduration.label"></p>
                     <p class="mb-0" id="time-duration"></p>
-                    <p class="mb-0" id="autorestart-time"></p>
+                    <p class="mb-0"><span data-i18n="menu.misc.autorestart.label"></span>: <span id="autorestart-time"></span></p>
                     <hr>
                     <span id="credit">
                         Developed by iKarTehFox. Made possible with other open-source projects.<br>This app is licenced under the <a href="https://github.com/iKarTehFox/web-clock/blob/prod/LICENSE" target="_blank">Mozilla Public License 2.0 (MPL-2.0)</a>.

@@ -8,7 +8,7 @@ import { match } from 'ts-pattern';
 import { setClockMode } from '../time-help';
 import { showUpdateNotification } from './update-notify';
 import i18next from 'i18next';
-import { applyFallbackTranslations, initDynamicTranslations, updateTranslations } from '../assets/locales/i18n';
+import { applyFallbackTranslations, updateTranslations } from '../assets/locales/i18n';
 
 interface URLParamConfig {
     // Booleans
@@ -121,14 +121,12 @@ export async function applyURLParams() {
         if (i18next.isInitialized) {
             i18next.changeLanguage(params.language);
             updateTranslations();
-            initDynamicTranslations();
         } else {
             applyFallbackTranslations();
         }
     } else {
         if (i18next.isInitialized) {
             updateTranslations();
-            initDynamicTranslations();
         } else {
             applyFallbackTranslations();
         }
@@ -185,7 +183,7 @@ export async function applyURLParams() {
         const autoRestartTime = params.autoRestart;
         if (!isNaN(autoRestartTime) && autoRestartTime >= 15 && autoRestartTime <= 86400) {
             logConsole(`Set auto restart time for: ${autoRestartTime} seconds...`, 'debug');
-            menu.autorestarttime.innerHTML = i18next.t('menu.misc.autorestart.label', { 0: autoRestartTime });
+            menu.autorestarttime.innerHTML = autoRestartTime + 's';
             setTimeout(() => {
                 window.location.reload();
             }, autoRestartTime * 1000);

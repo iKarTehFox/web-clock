@@ -225,9 +225,9 @@ export default {
                     'texteffects': {
                         'title': 'Text Effects',
                         'option': {
-                            'dropshadow': 'Drop shadow: {{0}}px',
-                            'strokewidth': 'Stroke width: {{0}}px',
-                            'strokecolor': 'Stroke color: {{0}}'
+                            'dropshadow': 'Drop shadow',
+                            'strokewidth': 'Stroke width',
+                            'strokecolor': 'Stroke color'
                         }
                     },
                 }
@@ -247,7 +247,7 @@ export default {
                     'colortransition': {
                         'title': 'Color Transition',
                         'option': {
-                            'length': 'Length: {{0}}s',
+                            'length': 'Length',
                             'reset': 'Reset',
                             'tooltip': 'Reset length to default.'
                         }
@@ -313,7 +313,7 @@ export default {
                             'automatic': 'Automatic',
                             'cover': 'Cover',
                             'stretch': 'Stretch',
-                            'imageblur': 'Image Blur: {{0}}px',
+                            'imageblur': 'Image Blur',
                             'imageblurdescription': 'Note: May use more power when active',
                         }
                     },
@@ -322,7 +322,7 @@ export default {
                         'option': {
                             'disabled': 'Disabled',
                             'enabled': 'Enabled',
-                            'textcolor': 'Text color: {{0}}'
+                            'textcolor': 'Text color'
                         }
                     }
                 }
@@ -370,6 +370,9 @@ export default {
             'displayoptions': {
                 'header': 'Display Options',
                 'setting': {
+                    'language': {
+                        'title': 'Language'
+                    },
                     'menutheme': {
                         'title': 'Menu Theme',
                         'option': {
@@ -492,7 +495,7 @@ export default {
                 'secondcount': '{{0}} seconds'
             },
             'autorestart': {
-                'label': 'Auto restart: {{0}} sec'
+                'label': 'Auto restart'
             },
             'docs': {
                 'label': 'Read the Docs',
@@ -577,6 +580,7 @@ export default {
         'solidcolorbuttongroup': 'Solid color button group',
         'textcoloroverridebuttongroup': 'Text color override button group',
         'weatherunitbuttongroup': 'Weather unit button group',
+        'languagebuttongroup': 'Language button group',
         'menuthemebuttongroup': 'Menu theme button group',
         'manualjsonsettingsentryform': 'Manual JSON settings entry form',
         'stopwatchcontrols': 'Stopwatch controls',
