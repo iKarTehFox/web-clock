@@ -546,6 +546,24 @@ export default {
             'weathererror': 'Error al obtener los datos meteorológicos: {{0}}',
         }
     },
+    'bsmodal': {
+        'action': {
+            'close': 'Cerrar',
+            'copy': 'Copiar',
+            'download': 'Descargar',
+            'countdownel': 'Cerrando en {{0}}s',
+            'gethelp': 'Obtener ayuda'
+        },
+        'rawsettingsjson': 'JSON de ajustes sin procesar',
+        'backgroundimage': 'Imagen de fondo',
+        'importerror': '¡Error al importar ajustes!',
+
+    },
+    'scanneroverlay': {
+        'action': {
+            'close': 'Cerrar'
+        }
+    },
     'arialabel': {
         'menuclose': 'Cerrar',
         'clockmodebuttongroup': 'Grupo de botones de modo de reloj',

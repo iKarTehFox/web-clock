@@ -1,5 +1,6 @@
 import { match } from 'ts-pattern';
 import { createBsModal, logConsole } from './utils/dom-utils';
+import i18next from 'i18next';
 
 // Value constraints
 const valid = {
@@ -46,7 +47,7 @@ export function handleValidationFailure(errorDetails: ErrorDetails) {
     
     const errorMessage = errorMsg[`${errorDetails.type}`] || 'Unknown validation failure';
     logConsole(`${errorMessage}`, 'error');
-    createBsModal('Error importing settings!', errorMessage, [{label: 'Get help', className: 'btn btn-primary', value: 'get_help'}, {label: 'Close', value: 'close'}], 60)
+    createBsModal(i18next.t('bsmodal.importerror'), errorMessage, [{label: i18next.t('bsmodal.action.gethelp'), className: 'btn btn-primary', value: 'get_help'}, {label: i18next.t('bsmodal.action.close'), value: 'close'}], 60)
         .then(result => {
             match(result)
                 .with('get_help', () => {

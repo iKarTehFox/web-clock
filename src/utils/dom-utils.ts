@@ -167,17 +167,17 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
                 content instanceof HTMLCanvasElement || 
                 content instanceof HTMLVideoElement) {
                 buttons = [
-                    { label: 'Download', className: 'btn btn-primary', value: 'download' },
-                    { label: 'Close', className: 'btn btn-secondary', value: 'close' }
+                    { label: i18next.t('bsmodal.action.download'), className: 'btn btn-primary', value: 'download' },
+                    { label: i18next.t('bsmodal.action.close'), className: 'btn btn-secondary', value: 'close' }
                 ];
             } else if (typeof content === 'string') {
                 buttons = [
-                    { label: 'Copy', className: 'btn btn-primary', value: 'copy' },
-                    { label: 'Close', className: 'btn btn-secondary', value: 'close' }
+                    { label: i18next.t('bsmodal.action.copy'), className: 'btn btn-primary', value: 'copy' },
+                    { label: i18next.t('bsmodal.action.close'), className: 'btn btn-secondary', value: 'close' }
                 ];
             } else {
                 buttons = [
-                    { label: 'Close', className: 'btn btn-secondary', value: 'close' }
+                    { label: i18next.t('bsmodal.action.close'), className: 'btn btn-secondary', value: 'close' }
                 ];
             }
         }
@@ -194,7 +194,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
             
             const countdownEl = document.createElement('small');
             countdownEl.className = 'text-muted me-auto';
-            countdownEl.textContent = `Closing in ${Math.round(constrainedDelay/1000)}s`;
+            countdownEl.textContent = i18next.t('bsmodal.action.countdownel', { 0: Math.round(constrainedDelay/1000) });
             countdownEl.style.cursor = 'pointer';
             modal.querySelector('.modal-footer')?.appendChild(countdownEl);
             
@@ -202,7 +202,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
             const updateInterval = setInterval(() => {
                 const remaining = Math.ceil((constrainedDelay - (Date.now() - startTime))/1000);
                 if (remaining > 0) {
-                    countdownEl.textContent = `Closing in ${remaining}s`;
+                    countdownEl.textContent = i18next.t('bsmodal.action.countdownel', { 0: remaining });
                 } else {
                     clearInterval(updateInterval);
                 }
@@ -376,7 +376,7 @@ export function createScannerOverlay() {
     ).then(() => {
         const closeButton = document.createElement('button');
         closeButton.className = 'btn btn-secondary';
-        closeButton.textContent = 'Close';
+        closeButton.textContent = i18next.t('scanneroverlay.action.close');
         closeButton.onclick = () => {
             html5QrCode.stop();
             container.remove();

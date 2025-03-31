@@ -546,6 +546,23 @@ export default {
             'weathererror': 'Error fetching weather data: {{0}}',
         }
     },
+    'bsmodal': {
+        'action': {
+            'close': 'Close',
+            'copy': 'Copy',
+            'download': 'Download',
+            'countdownel': 'Closing in {{0}}s',
+        },
+        'rawsettingsjson': 'Raw Settings JSON',
+        'backgroundimage': 'Background Image',
+        'importerror': 'Error importing settings!',
+
+    },
+    'scanneroverlay': {
+        'action': {
+            'close': 'Close'
+        }
+    },
     'arialabel': {
         'menuclose': 'Close',
         'clockmodebuttongroup': 'Clock mode button group',
