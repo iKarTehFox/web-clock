@@ -34,4 +34,10 @@ export function initializeDebugUI(): void {
     debug.rmclockbtn.addEventListener('click', () => {
         dtdisplay.ccontainer.remove();
     });
+
+    // Reinitialize if language changed
+    i18next.on('languageChanged', (lng) => {
+        debug.info.innerHTML = '';
+        initializeDebugUI();
+    });
 }
