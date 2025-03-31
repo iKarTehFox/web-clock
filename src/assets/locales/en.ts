@@ -59,6 +59,7 @@ export default {
         'NNW': 'NNW'
     },
     'menu': {
+        'title': 'Menu',
         'section': {
             'datetime': {
                 'header': 'Date and Time',
@@ -503,7 +504,8 @@ export default {
             },
             'github': {
                 'tooltip': 'View source on GitHub'
-            }
+            },
+            'versionlabel': 'Version',
         },
     },
     'toasts': {

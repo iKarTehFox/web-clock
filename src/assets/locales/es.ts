@@ -59,6 +59,7 @@ export default {
         'NNW': 'NNO'
     },
     'menu': {
+        'title': 'Menú',
         'section': {
             'datetime': {
                 'header': 'Fecha y hora',
@@ -503,7 +504,8 @@ export default {
             },
             'github': {
                 'tooltip': 'Ver el código fuente en GitHub'
-            }
+            },
+            'versionlabel': 'Versión'
         },
     },
     'toasts': {
