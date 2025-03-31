@@ -223,7 +223,7 @@ export default {
                         }
                     },
                     'texteffects': {
-                        'title': 'Text Effects',
+                        'title': 'Efectos de texto',
                         'option': {
                             'dropshadow': 'Sombra paralela: {{0}}px',
                             'strokewidth': 'Ancho del contorno: {{0}}px',
