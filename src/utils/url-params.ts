@@ -10,6 +10,7 @@ import { showUpdateNotification } from './update-notify';
 import i18next from 'i18next';
 import { applyFallbackTranslations, updateTranslations } from '../assets/locales/i18n';
 
+// Define parameter interface
 interface URLParamConfig {
     // Booleans
     debugMode?: boolean;
@@ -33,12 +34,56 @@ interface URLParamConfig {
     weatherUnits?: 'imperial' | 'metric';
 }
 
+// Define aliases
+const paramAliases: Record<string, keyof URLParamConfig> = {
+    // Boolean aliases
+    'debug': 'debugMode',
+    'fRef': 'fastRefresh',
+    'lock': 'lockSettings',
+    'noNoti': 'noUpdateNoti',
+    'panel': 'panelVis',
+    'tab': 'tabTitle',
+    
+    // Number aliases
+    'auto': 'autoRestart',
+    'cMode': 'clockMode',
+    'wLat': 'weatherLat',
+    'wLon': 'weatherLon',
+    'wX': 'weatherWidgetPosX',
+    'wY': 'weatherWidgetPosY',
+    
+    // String aliases
+    'lang': 'language',
+    'theme': 'menuTheme',
+    'pre': 'preset',
+    'wApi': 'weatherApi',
+    'wUnit': 'weatherUnits'
+};  
+
 function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfig> {
     const params = {} as Partial<URLParamConfig>;
+
+    // Helper function to get parameter value checking both the key and its alias
+    const getParamValue = (key: string): string | null => {
+        let value = urlSearchParams.get(key);
+        if (value === null) {
+            // Find all aliases that map to this key
+            const aliases = Object.entries(paramAliases)
+                .filter(([_, canonicalKey]) => canonicalKey === key)
+                .map(([alias, _]) => alias);
+                    
+            // Check each alias
+            for (const alias of aliases) {
+                value = urlSearchParams.get(alias);
+                if (value !== null) break;
+            }
+        }
+        return value;
+    };
     
     // Boolean params
     ['debugMode', 'fastRefresh', 'lockSettings', 'noUpdateNoti', 'panelVis', 'tabTitle'].forEach(key => {
-        const value = urlSearchParams.get(key);
+        const value = getParamValue(key);
         if (value !== null) {
             (params as any)[key] = value === 'true';
             logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);;
@@ -49,7 +94,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
 
     // Number params
     ['autoRestart', 'clockMode', 'weatherLat', 'weatherLon', 'weatherWidgetPosX', 'weatherWidgetPosY'].forEach(key => {
-        const value = urlSearchParams.get(key);
+        const value = getParamValue(key);
         if (value !== null) {
             (params as any)[key] = parseFloat(value);
             logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);
@@ -60,7 +105,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
 
     // String params
     ['language', 'menuTheme', 'preset', 'weatherApi', 'weatherUnits'].forEach(key => {
-        const value = urlSearchParams.get(key);
+        const value = getParamValue(key);
         if (value !== null) {
             (params as any)[key] = value;
             logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);
