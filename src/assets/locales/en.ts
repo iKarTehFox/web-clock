@@ -528,7 +528,7 @@ export default {
             'exportqrsuccess': 'Exported settings to QR code! Took {{0}}ms',
             'exporting': 'Exporting settings...',
             'exporterror': 'Error exporting settings! Check console for details.',
-            'importsuccess': 'Settings successfully imported! File timestamp: {{0}}',
+            'importsuccess': 'Settings successfully imported!<hr><b>File timestamp:</b> {{0}}',
             'importerror': 'Invalid settings file. Please make sure the file contains valid JSON.',
             'fetcherror': 'Could not fetch local settings file. Please check the filename and ensure the file exists.',
             'nobgimg': 'No background image to extract.',

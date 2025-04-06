@@ -1,5 +1,5 @@
 import Toastify from 'toastify-js';
-import { doc, menu } from './dom-elements';
+import { countdown, doc, menu, stopwatch, weather } from './dom-elements';
 import { debugMode } from './debug';
 import { Html5Qrcode } from 'html5-qrcode';
 import { processJSONSettings } from '../importExport';
@@ -107,6 +107,42 @@ interface ModalButton {
     label: string;
     className?: string;
     value?: any;
+}
+
+// Menu theme function
+export function setMenuTheme(theme: 'light' | 'dark' | 'auto' | 'toggle' , quiet: boolean = false): void {
+    // Handle auto
+    if (theme === 'auto') {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    // Handle toggle
+    if (theme === 'toggle') {
+        theme = menu.container.dataset.bsTheme === 'light' ? 'dark' : 'light';
+    }
+
+    // Menu container
+    menu.container.dataset.bsTheme = theme;
+    
+    // Weather container
+    weather.container.dataset.bsTheme = theme;
+    weather.container.style.color = theme === 'light' ? '#212529' : '#fff';
+    
+    // Stopwatch container
+    stopwatch.container.dataset.bsTheme = theme;
+    stopwatch.container.style.backgroundColor = theme === 'light' ? '#ffffff' : '#313539';
+    stopwatch.container.style.color = theme === 'light' ? '#212529' : '#fff';
+    
+    // Countdown container
+    countdown.container.dataset.bsTheme = theme;
+    countdown.container.style.backgroundColor = theme === 'light' ? '#ffffff' : '#313539';
+    countdown.container.style.color = theme === 'light' ? '#212529' : '#fff';
+    
+    // Browser meta
+    setMetaColor('theme', theme);
+    
+    logConsole(`Menu theme set to: ${theme}`, 'debug');
+    if (!quiet) showToast(i18next.t(`toasts.global.theme${theme}`));
 }
 
 export function createBsModal(title: string, content: HTMLElement | string, buttons: ModalButton[] = [], timeoutDelay?: number) {

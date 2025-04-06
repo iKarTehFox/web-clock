@@ -528,7 +528,7 @@ export default {
             'exportqrsuccess': '¡Ajustes exportados a código QR! Tomó {{0}}ms',
             'exporting': 'Exportando ajustes...',
             'exporterror': '¡Error al exportar ajustes! Consulta la consola para más detalles.',
-            'importsuccess': '¡Ajustes importados con éxito! Fecha del archivo: {{0}}',
+            'importsuccess': '¡Ajustes importados con éxito!<hr><b>Fecha del archivo:</b> {{0}}',
             'importerror': 'Archivo de ajustes no válido. Asegúrate de que el archivo contenga JSON válido.',
             'fetcherror': 'No se pudo obtener el archivo de ajustes local. Verifica el nombre del archivo y asegúrate de que exista.',
             'nobgimg': 'No hay imagen de fondo para extraer.',

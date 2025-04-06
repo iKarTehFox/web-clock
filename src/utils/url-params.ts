@@ -1,10 +1,10 @@
 import { menu, weather } from './dom-elements';
 import { presetLocalJSON } from '../importExport';
-import { logConsole, showToast } from './dom-utils';
+import { logConsole, setMenuTheme, showToast } from './dom-utils';
 import { setDebug, setLockSettings, setTimeRefresh } from './debug';
 import { initializeDebugUI } from './debugUI';
 import { submitWeatherSettings } from './weather-utils';
-import { match } from 'ts-pattern';
+import { match, P } from 'ts-pattern';
 import { setClockMode } from '../time-help';
 import { showUpdateNotification } from './update-notify';
 import i18next from 'i18next';
@@ -27,7 +27,7 @@ interface URLParamConfig {
     weatherWidgetPosY?: number;
     // Strings
     language?: string;
-    menuTheme?: 'light' | 'dark';
+    menuTheme?: 'light' | 'dark' | 'auto';
     preset?: string;
     weatherApi?: string;
     weatherUnits?: 'imperial' | 'metric';
@@ -92,17 +92,13 @@ export async function applyURLParams() {
     // Menu theme
     match(params.menuTheme)
         .with('light', () => {
-            menu.themeradio[0].checked = true;
-            menu.themeradio[0].dispatchEvent(new Event('change'));
+            setMenuTheme('light', true);
         })
         .with('dark', () => {
-            menu.themeradio[1].checked = true;
-            menu.themeradio[1].dispatchEvent(new Event('change'));
+            setMenuTheme('dark', true);
         })
-        .with(undefined, () => {
-            const index = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
-            menu.themeradio[index].checked = true;
-            menu.themeradio[index].dispatchEvent(new Event('change'));
+        .with(P.union(undefined, 'auto'), () => {
+            setMenuTheme('auto', true);
         })
         .exhaustive();
 

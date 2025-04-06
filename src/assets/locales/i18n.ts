@@ -117,7 +117,7 @@ function updateContent() {
     document.querySelectorAll('[data-i18n]').forEach((element) => {
         const key = element.getAttribute('data-i18n') || '';
         const translation = i18next.t(key);
-        logConsole(`Updating ${key} with value: ${translation}`, 'debug', true);
+        //logConsole(`Updating ${key} with value: ${translation}`, 'debug', true);
         
         if (translation === key) {
             console.warn(`Translation missing for key: ${key}`);
@@ -130,7 +130,7 @@ function updateContent() {
     document.querySelectorAll('[data-i18n-html]').forEach((element) => {
         const key = element.getAttribute('data-i18n-html') || '';
         const translation = i18next.t(key);
-        logConsole(`Updating ${key} with value: ${translation}`, 'debug', true);
+        //logConsole(`Updating ${key} with value: ${translation}`, 'debug', true);
 
         if (translation === key) {
             console.warn(`Translation missing for key: ${key}`);
@@ -149,7 +149,7 @@ function updateContent() {
                 const targetAttr = attr.name.substring('data-i18n-'.length);
                 const key = attr.value;
                 // Update the attribute value
-                logConsole(`Updating attribute ${targetAttr} with key ${key} value ${i18next.t(key)}`, 'debug');
+                //logConsole(`Updating attribute ${targetAttr} with key ${key} value ${i18next.t(key)}`, 'debug');
                 element.setAttribute(targetAttr, i18next.t(key));
             });
     });

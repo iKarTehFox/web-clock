@@ -1,6 +1,6 @@
 import { match } from 'ts-pattern';
 import { menu, font, dtdisplay, stopwatch, countdown, weather, doc, panel } from './utils/dom-elements';
-import { logConsole, setMetaColor, showToast } from './utils/dom-utils';
+import { logConsole, setMenuTheme, setMetaColor, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
 import i18next from 'i18next';
 
@@ -248,40 +248,10 @@ menu.themeradio.forEach((radio) => {
     radio.addEventListener('change', () => {
         match(radio.id)
             .with('lightthememode', () => {
-                menu.container.dataset.bsTheme = 'light';
-                // Weather container
-                weather.container.dataset.bsTheme = 'light';
-                weather.container.style.color = '#212529';
-                // Stopwatch container
-                stopwatch.container.dataset.bsTheme = 'light';
-                stopwatch.container.style.backgroundColor = '#ffffff';
-                stopwatch.container.style.color = '#212529';
-                // Countdown container
-                countdown.container.dataset.bsTheme = 'light';
-                countdown.container.style.backgroundColor = '#ffffff';
-                countdown.container.style.color = '#212529';
-                // Browser meta
-                setMetaColor('theme', 'light');
-                logConsole(`Menu theme set to: ${radio.id}`, 'debug');
-                showToast(i18next.t('toasts.global.themelight'));
+                setMenuTheme('light');
             })
             .with('darkthememode', () => {
-                menu.container.dataset.bsTheme = 'dark';
-                // Weather container
-                weather.container.dataset.bsTheme = 'dark';
-                weather.container.style.color = '#fff';
-                // Stopwatch container
-                stopwatch.container.dataset.bsTheme = 'dark';
-                stopwatch.container.style.backgroundColor = '#313539';
-                stopwatch.container.style.color = '#fff';
-                // Countdown container
-                countdown.container.dataset.bsTheme = 'dark';
-                countdown.container.style.backgroundColor = '#313539';
-                countdown.container.style.color = '#fff';
-                // Browser meta
-                setMetaColor('theme', 'dark');
-                logConsole(`Menu theme set to: ${radio.id}`, 'debug');
-                showToast(i18next.t('toasts.global.themedark'));
+                setMenuTheme('dark');
             })
             .otherwise(() => {
                 logConsole(`Invalid theme mode: ${radio.id}`, 'error');
