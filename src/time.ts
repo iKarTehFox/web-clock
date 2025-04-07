@@ -248,11 +248,11 @@ export function updateDate() {
     dtdisplay.date.textContent = newDate;
     lastDate = newDate;
 
-    Array.from(menu.dateformselect.children).forEach((child: Element) => {
-        if (child instanceof HTMLOptionElement && child.value !== '') {
-            child.textContent = time.toFormat(child.value);
+    Array.from(menu.dateformselect.querySelectorAll('option')).forEach((option: HTMLOptionElement) => {
+        if (option.value !== '') {
+            option.textContent = time.toFormat(option.value);
         }
-    });
+    });    
 }
 // Initial update, then start intervals
 const time = getLuxNow('obj') as luxon.DateTime;

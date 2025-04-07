@@ -130,9 +130,15 @@ export default {
                         }
                     },
                     'datedisplay': {
-                        'title': 'Mostrar fecha',
+                        'title': 'Date Display',
                         'option': {
-                            'off': 'Apagar'
+                            'localized': {
+                                'title': 'Localizado',
+                            },
+                            'standard': {
+                                'title': 'Estándar',
+                            },
+                            'off': 'Off'
                         }
                     },
                     'datealignment': {

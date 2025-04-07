@@ -91,11 +91,25 @@
                                 <hr>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.datetime.setting.datedisplay.title"></h6>
                                 <select class="form-select" id="dateFormatSelect">
-                                    <option value="D" id="dateVisOp1"></option>
-                                    <option value="DD" id="dateVisOp2"></option>
-                                    <option value="DDD" id="dateVisOp3"></option>
-                                    <option value="DDDD" id="dateVisOp4"></option>
-                                    <option value="" id="dateVisOp5" data-i18n="menu.section.datetime.setting.datedisplay.option.off"></option>
+                                    <optgroup data-i18n-label="menu.section.datetime.setting.datedisplay.option.localized.title">
+                                        <option value="D"></option>
+                                        <option value="DD"></option>
+                                        <option value="DDD"></option>
+                                        <option value="DDDD"></option>
+                                    </optgroup>
+                                    <optgroup data-i18n-label="menu.section.datetime.setting.datedisplay.option.standard.title">
+                                        <option value="MMMM d"></option>
+                                        <option value="MMM d"></option>
+                                        <option value="d MMMM"></option>
+                                        <option value="d MMM"></option>
+                                        <option value="MMMM yyyy"></option>
+                                        <option value="yyyy"></option>
+                                        <!-- May or may not localize these -->
+                                        <option value="'Q'q, yyyy"></option>
+                                        <option value="'Day' o 'of' yyyy"></option>
+                                        <option value="'Week' W, 'Day' o"></option>
+                                    </optgroup>
+                                    <option value="" data-i18n="menu.section.datetime.setting.datedisplay.option.off"></option>
                                 </select>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.datetime.setting.datealignment.title"></h6>
                                 <div class="btn-group" role="group" data-i18n-aria-label="arialabel.datepositionbuttongroup">

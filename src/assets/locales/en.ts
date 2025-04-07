@@ -132,6 +132,12 @@ export default {
                     'datedisplay': {
                         'title': 'Date Display',
                         'option': {
+                            'localized': {
+                                'title': 'Localized'
+                            },
+                            'standard': {
+                                'title': 'Standard'
+                            },
                             'off': 'Off'
                         }
                     },
