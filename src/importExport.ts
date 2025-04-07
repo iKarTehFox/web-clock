@@ -15,7 +15,7 @@ function getSettings() {
         fontConfig: getFontConfig(),
         colorTheme: getColorThemeConfig(),
         exportTimestamp: luxon.DateTime.now().toFormat('FFFF'),
-        version: 10
+        version: 11
     };
 }
 
