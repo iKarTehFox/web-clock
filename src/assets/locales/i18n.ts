@@ -6,6 +6,7 @@ import enResource from './en';
 import esResource from './es';
 import { menu } from '../../utils/dom-elements';
 import * as bootstrap from 'bootstrap';
+import { Settings } from 'ts-luxon';
 
 // Get language
 function getBrowserLanguage(): string {
@@ -169,6 +170,7 @@ export function updateTranslations() {
 
 i18next.on('languageChanged', (lng) => {
     console.log(`Language changed to: ${lng}`);
+    Settings.defaultLocale = lng;
     menu.languageradio.forEach((radio) => {
         const id = radio.id;
         if (id === lng) {
