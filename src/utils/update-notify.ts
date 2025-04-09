@@ -2,7 +2,7 @@ import { match } from 'ts-pattern';
 import { createBsModal, logConsole } from '../utils/dom-utils';
 
 // Hardcoded values. Change as needed.
-const versionNumber = '1.6.2';
+const versionNumber = '1.7.0';
 const releaseNotes = `https://github.com/iKarTehFox/web-clock/releases/tag/${versionNumber}`;
 const releaseDescription = document.createElement('p');
 releaseDescription.innerHTML = `Online Web Clock was just updated to ${versionNumber}! Check the release notes for more information.`;
