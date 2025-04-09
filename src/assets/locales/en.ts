@@ -46,7 +46,7 @@ export default {
         'NE': 'NE',
         'ENE': 'ENE',
         'E': 'E',
-        'ESE': 'E',
+        'ESE': 'ESE',
         'SE': 'SE',
         'SSE': 'SSE',
         'S': 'S',
