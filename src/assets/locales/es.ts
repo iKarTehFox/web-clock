@@ -138,7 +138,7 @@ export default {
                             'standard': {
                                 'title': 'Estándar',
                             },
-                            'off': 'Off'
+                            'off': 'Apagar'
                         }
                     },
                     'datealignment': {
@@ -424,7 +424,7 @@ export default {
                         }
                     },
                     'devcolors': {
-                        'title': 'Dev Colors',
+                        'title': 'Colores de desarrollo',
                         'option': {
                             'jekylldark': 'Jekyll Oscuro',
                             'firefoxdark': 'Firefox Oscuro',
