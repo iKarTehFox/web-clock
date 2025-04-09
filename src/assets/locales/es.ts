@@ -460,6 +460,12 @@ export default {
                         'option': {
                             'removeclock': 'Eliminar contenedor del reloj'
                         }
+                    },
+                    'localstorage': {
+                        'title': 'localStorage (Almacenamiento local)',
+                        'option': {
+                            'clear': 'Borrar localStorage',
+                        }
                     }
                 }
             },
@@ -540,7 +546,8 @@ export default {
             'nobgimg': 'No hay imagen de fondo para extraer.',
         },
         'debugui': {
-            'testtoast': 'Prueba de mensaje emergente. Tema "{{0}}"'
+            'testtoast': 'Prueba de mensaje emergente. Tema "{{0}}"',
+            'clearls': 'Almacenamiento local borrado.',
         },
         'domutils': {
             'textcopied': '¡Texto copiado al portapapeles!',

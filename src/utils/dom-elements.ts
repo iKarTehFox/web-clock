@@ -141,6 +141,7 @@ export const countdown = {
 };
 
 export const debug = {
+    clearlsbtn: getElement<HTMLButtonElement>('debugClearLS'),
     container: getElement<HTMLDivElement>('debuggingContainer'),
     devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
     info:  getElement<HTMLParagraphElement>('debugInfo'),

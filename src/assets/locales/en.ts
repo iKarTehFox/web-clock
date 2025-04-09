@@ -460,6 +460,12 @@ export default {
                         'option': {
                             'removeclock': 'Remove clock container'
                         }
+                    },
+                    'localstorage': {
+                        'title': 'localStorage',
+                        'option': {
+                            'clear': 'Clear localStorage'
+                        }
                     }
                 }
             },
@@ -540,7 +546,8 @@ export default {
             'nobgimg': 'No background image to extract.',
         },
         'debugui': {
-            'testtoast': 'Test toast. Theme "{{0}}"'
+            'testtoast': 'Test toast. Theme "{{0}}"',
+            'clearedls': 'Cleared local storage.',
         },
         'domutils': {
             'textcopied': 'Text copied to clipboard!',

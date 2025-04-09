@@ -38,6 +38,11 @@ export function initializeDebugUI(): void {
         dtdisplay.ccontainer.remove();
     });
 
+    debug.clearlsbtn.addEventListener('click', () => {
+        localStorage.clear();
+        showToast(i18next.t('toasts.debugui.clearls'), undefined, 'warning');
+    });
+
     // Reinitialize if language changed
     i18next.on('languageChanged', (lng) => {
         debug.info.innerHTML = '';

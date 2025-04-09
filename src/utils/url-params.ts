@@ -122,6 +122,22 @@ export async function applyURLParams() {
     const urlParams = new URLSearchParams(queryString);
     const params = parseURLParams(urlParams);
 
+    // Language
+    if (params.language !== undefined) {
+        if (i18next.isInitialized) {
+            i18next.changeLanguage(params.language);
+            updateTranslations();
+        } else {
+            applyFallbackTranslations();
+        }
+    } else {
+        if (i18next.isInitialized) {
+            updateTranslations();
+        } else {
+            applyFallbackTranslations();
+        }
+    }
+
     // Debug logging mode
     if (params.debugMode) {
         setDebug(true);
@@ -156,22 +172,6 @@ export async function applyURLParams() {
             setClockMode(24);
         })
         .with(undefined, setClockMode);
-
-    // Language
-    if (params.language !== undefined) {
-        if (i18next.isInitialized) {
-            i18next.changeLanguage(params.language);
-            updateTranslations();
-        } else {
-            applyFallbackTranslations();
-        }
-    } else {
-        if (i18next.isInitialized) {
-            updateTranslations();
-        } else {
-            applyFallbackTranslations();
-        }
-    }
     
     // Weather
     if (params.weatherApi !== undefined && params.weatherLat !== undefined && params.weatherLon !== undefined && (params.weatherUnits == 'imperial' || params.weatherUnits == 'metric')) {
