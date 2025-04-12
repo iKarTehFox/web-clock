@@ -224,7 +224,8 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
         // Timeout handling
         let bsModTimeout: number | undefined;
         
-        if (timeoutDelay !== undefined) {
+        // Basically, timeout can be disabled if 0, negative, or undefined
+        if (timeoutDelay !== undefined && timeoutDelay > 0) {
             // Constrain between 5 and 60 seconds
             const constrainedDelay = Math.max(5, Math.min(60, timeoutDelay)) * 1000;
             

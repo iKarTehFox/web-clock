@@ -79,6 +79,10 @@ body {
     font-weight: bold;
 }
 
+#versionLabelClk {
+    cursor: pointer;
+}
+
 /* Seconds progress bar */
 #time-progress-bar {
   position: absolute;

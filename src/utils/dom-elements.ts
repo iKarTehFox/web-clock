@@ -65,6 +65,7 @@ export const menu = {
     timemethodselect: getElement<HTMLSelectElement>('timeMethodSelect'),
     timezoneselect: getElement<HTMLSelectElement>('timeZoneSelect'),
     titlevischeckbox: getElement<HTMLInputElement>('menuTabTitleVisible'),
+    versionlabelclk: getElement<HTMLDivElement>('versionLabelClk'),
     weatherapiinput: getElement<HTMLInputElement>('weatherAppIDTextArea'),
     weathergeobtn: getElement<HTMLButtonElement>('weatherGeoBtn'),
     weatherlatinput: getElement<HTMLInputElement>('weatherLatTextArea'),

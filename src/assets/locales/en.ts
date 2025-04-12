@@ -570,11 +570,16 @@ export default {
             'copy': 'Copy',
             'download': 'Download',
             'countdownel': 'Closing in {{0}}s',
-            'gethelp': 'Get help'
+            'gethelp': 'Get help',
+            'releasenotes': 'Release Notes',
+            'dontshowagain': 'Don\'t show again'
         },
         'rawsettingsjson': 'Raw Settings JSON',
         'backgroundimage': 'Background Image',
-        'importerror': 'Error importing settings!'
+        'importerror': 'Error importing settings!',
+        'newversion': 'New Version! ({{0}})',
+        'releasenote': 'Online Web Clock was just updated to {{0}}! Check the release notes for more information.',
+        'releasenotebypass': 'Click the button below to review the release notes for version {{0}}!'
     },
     'scanneroverlay': {
         'action': {
