@@ -547,7 +547,7 @@ export default {
         },
         'debugui': {
             'testtoast': 'Test toast. Theme "{{0}}"',
-            'clearedls': 'Cleared local storage.',
+            'clearls': 'Cleared local storage.',
         },
         'domutils': {
             'textcopied': 'Text copied to clipboard!',
