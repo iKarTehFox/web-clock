@@ -1,7 +1,8 @@
 import { match } from 'ts-pattern';
 import OpenWeatherMap from 'openweathermap-ts';
 import { menu, weather } from './dom-elements';
-import { getFirstElement, logConsole, showToast } from './dom-utils';
+import { getFirstElement } from './dom-selectors';
+import { logConsole, showToast } from './dom-utils';
 import { CurrentResponse } from 'openweathermap-ts/dist/types';
 import i18next from 'i18next';
 

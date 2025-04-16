@@ -1,4 +1,4 @@
-import { getElement, getElements } from './dom-utils';
+import { getElement, getElements } from './dom-selectors';
 
 export const doc = {
     blurpanel: getElement<HTMLDivElement>('blur-panel'),

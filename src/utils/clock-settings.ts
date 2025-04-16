@@ -1,6 +1,7 @@
 import { stopColorFade } from '../background-color';
 import { menu, font } from './dom-elements';
-import { getFirstElement, logConsole } from '../utils/dom-utils';
+import { getFirstElement } from './dom-selectors';
+import { logConsole } from '../utils/dom-utils';
 
 // Interfaces
 interface ClockConfig {

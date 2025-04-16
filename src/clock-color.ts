@@ -1,7 +1,7 @@
 import { match } from 'ts-pattern';
 import { menu, dtdisplay, doc } from './utils/dom-elements';
-import { getFirstElement, logConsole } from './utils/dom-utils';
-import i18next from 'i18next';
+import { getFirstElement } from './utils/dom-selectors';
+import { logConsole } from './utils/dom-utils';
 
 // Text color override listener
 let isTextColorOverride = 0;

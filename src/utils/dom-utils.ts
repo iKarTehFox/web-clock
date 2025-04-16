@@ -9,23 +9,6 @@ import * as luxon from 'ts-luxon';
 import randomstring from 'randomstring';
 import i18next, { t } from 'i18next';
 
-// Element finding functions
-export function getElement<T extends HTMLElement>(id: string): T {
-    const element = document.getElementById(id);
-    if (!element) throw new Error(`Element with ID ${id} not found`);
-    return element as T;
-}
-
-export function getElements<T extends Element>(selector: string): NodeListOf<T> {
-    const elements = document.querySelectorAll(selector);
-    return elements as NodeListOf<T>;
-}
-
-export function getFirstElement<T extends Element>(selector: string): T {
-    const element = document.querySelector(selector);
-    return element as T;
-}
-
 // Custom console logging function
 export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' = 'debug', bypass: boolean = false): void {
     if ((debugMode || bypass) && type === 'debug') {
