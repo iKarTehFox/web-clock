@@ -1,7 +1,7 @@
 import { match, P } from 'ts-pattern';
 import { toggleFullscreen } from '../global';
 import { menu, countdown, stopwatch, panel } from './dom-elements';
-import { createBsModal, setMenuTheme } from './dom-utils';
+import { createBsModal, getCurrentTheme, setMenuTheme } from './dom-utils';
 import { presetLocalJSON } from '../importExport';
 import { lockSettings } from './debug';
 import { getPresetByHotkey } from '../assets//presets/presets';

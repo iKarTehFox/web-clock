@@ -384,7 +384,8 @@ export default {
                         'title': 'Menu Theme',
                         'option': {
                             'light': 'Light',
-                            'dark': 'Dark'
+                            'dark': 'Dark',
+                            'midnight': 'Midnight'
                         }
                     },
                     'panelvisibility': {
@@ -530,6 +531,7 @@ export default {
         'global': {
             'themelight': 'Theme set to light mode ☀️',
             'themedark': 'Theme set to dark mode 🌙',
+            'thememidnight': 'Theme set to midnight 🌃',
             'fullscreen': 'Toggled fullscreen mode',
         },
         'importexport': {

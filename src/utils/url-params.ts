@@ -28,7 +28,7 @@ interface URLParamConfig {
     weatherWidgetPosY?: number;
     // Strings
     language?: string;
-    menuTheme?: 'light' | 'dark' | 'auto';
+    menuTheme?: 'light' | 'dark' | 'midnight' | 'auto';
     preset?: string;
     weatherApi?: string;
     weatherUnits?: 'imperial' | 'metric';
@@ -154,9 +154,15 @@ export async function applyURLParams() {
     match(params.menuTheme)
         .with('light', () => {
             setMenuTheme('light', true);
+            menu.themeradio[0].checked = true;
         })
         .with('dark', () => {
             setMenuTheme('dark', true);
+            menu.themeradio[1].checked = true;
+        })
+        .with('midnight', () => {
+            setMenuTheme('midnight', true);
+            menu.themeradio[2].checked = true;
         })
         .with(P.union(undefined, 'auto'), () => {
             setMenuTheme('auto', true);

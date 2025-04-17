@@ -254,6 +254,9 @@ menu.themeradio.forEach((radio) => {
             .with('darkthememode', () => {
                 setMenuTheme('dark');
             })
+            .with('midnightthememode', () => {
+                setMenuTheme('midnight');
+            })
             .otherwise(() => {
                 logConsole(`Invalid theme mode: ${radio.id}`, 'error');
             });

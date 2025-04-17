@@ -37,6 +37,11 @@ function getThemeInfo(colorTheme: string = 'auto') {
             textColor: '#212529',
             outline: 'rgba(255, 255, 255, 0.5) solid 2px'
         },
+        midnight: {
+            bgColor: '#0d1525',
+            textColor: '#e9ecef',
+            outline: 'rgba(18, 27, 47, 0.5) solid 2px'
+        },
         danger: {
             bgColor: '#DC3545',
             textColor: '#FFFFFF',
@@ -92,40 +97,96 @@ interface ModalButton {
     value?: any;
 }
 
+// Theme config interface
+interface ThemeConfig {
+    textColor: string;
+    metaTheme: string;
+    backgroundColor?: string;
+}
+
+const themes: Record<string, ThemeConfig> = {
+    'light': {
+        textColor: '#212529',
+        metaTheme: 'light'
+    },
+    'dark': {
+        textColor: '#fff',
+        metaTheme: 'dark'
+    },
+    'midnight': {
+        textColor: '#e9ecef',
+        metaTheme: 'dark',
+        backgroundColor: '#121b2f'
+    }
+};
+
 // Menu theme function
-export function setMenuTheme(theme: 'light' | 'dark' | 'auto' | 'toggle' , quiet: boolean = false): void {
+export function setMenuTheme(theme: string | 'toggle', quiet: boolean = false): void {
+    // Get current theme
+    const currentTheme = menu.container.dataset.bsTheme || 'light';
+    
     // Handle auto
     if (theme === 'auto') {
-        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';;
+        menu.themeradio[theme === 'light' ? 0 : 1];
     }
 
-    // Handle toggle
+    // Handle toggle (cycle through themes)
     if (theme === 'toggle') {
-        theme = menu.container.dataset.bsTheme === 'light' ? 'dark' : 'light';
+        const themeKeys = Object.keys(themes);
+        const currentIndex = themeKeys.indexOf(currentTheme);
+        const nextIndex = (currentIndex + 1) % themeKeys.length;
+        theme = themeKeys[nextIndex];
+        menu.themeradio[nextIndex].checked = true;
+    }
+    
+    // Validate theme exists
+    if (!themes[theme]) {
+        logConsole(`Invalid theme: ${theme}, defaulting to light`, 'error');
+        theme = 'light';
     }
 
-    // Menu container
-    menu.container.dataset.bsTheme = theme;
+    const themeConfig = themes[theme];
     
-    // Weather container
-    weather.container.dataset.bsTheme = theme;
-    weather.container.style.color = theme === 'light' ? '#212529' : '#fff';
+    // Apply theme to all containers
+    const containers = [
+        menu.container,
+        weather.container,
+        stopwatch.container,
+        countdown.container
+    ];
     
-    // Stopwatch container
-    stopwatch.container.dataset.bsTheme = theme;
-    stopwatch.container.style.backgroundColor = theme === 'light' ? '#ffffff' : '#313539';
-    stopwatch.container.style.color = theme === 'light' ? '#212529' : '#fff';
-    
-    // Countdown container
-    countdown.container.dataset.bsTheme = theme;
-    countdown.container.style.backgroundColor = theme === 'light' ? '#ffffff' : '#313539';
-    countdown.container.style.color = theme === 'light' ? '#212529' : '#fff';
+    containers.forEach(container => {
+        // Set data-bs-theme attribute
+        container.dataset.bsTheme = theme;
+        
+        // Set text color
+        if (container !== menu.container) {
+            container.style.color = themeConfig.textColor;
+        }
+        
+        // Set background color for popup containers
+        if (container === stopwatch.container || container === countdown.container) {
+            container.style.backgroundColor = themeConfig.backgroundColor || 
+                (theme === 'light' ? '#ffffff' : '#313539');
+        }
+    });
     
     // Browser meta
-    setMetaColor('theme', theme);
+    setMetaColor('theme', themeConfig.metaTheme);
     
     logConsole(`Menu theme set to: ${theme}`, 'debug');
     if (!quiet) showToast(i18next.t(`toasts.global.theme${theme}`));
+}
+
+// Helper function to get available themes
+export function getAvailableThemes(): string[] {
+    return Object.keys(themes);
+}
+
+// Helper function to get current theme
+export function getCurrentTheme(): string {
+    return menu.container.dataset.bsTheme || 'light';
 }
 
 export function createBsModal(title: string, content: HTMLElement | string, buttons: ModalButton[] = [], timeoutDelay?: number) {

@@ -384,7 +384,8 @@ export default {
                         'title': 'Tema del menú',
                         'option': {
                             'light': 'Claro',
-                            'dark': 'Oscuro'
+                            'dark': 'Oscuro',
+                            'midnight': 'Medianoche',
                         }
                     },
                     'panelvisibility': {
@@ -530,6 +531,7 @@ export default {
         'global': {
             'themelight': 'Tema establecido en modo claro ☀️',
             'themedark': 'Tema establecido en modo oscuro 🌙',
+            'thememidnight': 'Tema establecido en modo medianoche 🌃',
             'fullscreen': 'Modo de pantalla completa activado',
         },
         'importexport': {
