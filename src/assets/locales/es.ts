@@ -439,11 +439,20 @@ export default {
                         }
                     },
                     'settings': {
-                        'title': 'Configuración',
+                        'title': 'Settings',
                         'option': {
-                            'logjson': 'Registro JSON',
-                            'viewrawjson': 'Ver JSON sin procesar',
-                            'extractbgimg': 'Extraer imagen de fondo',
+                            'logjson': {
+                                'title': 'Registro JSON',
+                                'tooltip': 'Registrar JSON de configuración en la consola'
+                            },
+                            'viewrawjson': {
+                                'title': 'Ver JSON sin procesar',
+                                'tooltip': 'Ver JSON sin procesar en un modal'
+                            },
+                            'extractbgimg': {
+                                'title': 'Extraer imagen de fondo',
+                                'tooltip': 'Extraer y ver la imagen de fondo actual'
+                            },
                         }
                     },
                     'toasts': {

@@ -2,7 +2,7 @@ import { match } from 'ts-pattern';
 import { menu, font, dtdisplay, stopwatch, countdown, weather, doc, panel } from './utils/dom-elements';
 import { logConsole, setMenuTheme, setMetaColor, showToast } from './utils/dom-utils';
 import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
-import { showUpdateNotification, versionNumber } from './utils/update-notify';
+import { showUpdateNotification, versionNumberString } from './utils/update-notify';
 import i18next from 'i18next';
 
 // Define font sizes
@@ -347,5 +347,5 @@ menu.panelvischeckbox.addEventListener('change', () => {
 });
 
 menu.versionlabelclk.addEventListener('click', () => {
-    showUpdateNotification({'bypassCheck': true, 'customTitle': `Online Web Clock - ${versionNumber}`, 'customDescription': i18next.t('bsmodal.releasenotebypass', {0: versionNumber}), 'modalTimeout': 0});
+    showUpdateNotification({'bypassCheck': true, 'customTitle': `Online Web Clock - ${versionNumberString}`, 'customDescription': i18next.t('bsmodal.releasenotebypass', {0: versionNumberString}), 'modalTimeout': 0});
 });

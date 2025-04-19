@@ -274,7 +274,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
             const constrainedDelay = Math.max(5, Math.min(60, timeoutDelay)) * 1000;
             
             const countdownEl = document.createElement('small');
-            countdownEl.className = 'text-muted me-auto';
+            countdownEl.className = 'midnight-text-muted me-auto';
             countdownEl.textContent = i18next.t('bsmodal.action.countdownel', { 0: Math.round(constrainedDelay/1000) });
             countdownEl.style.cursor = 'pointer';
             modal.querySelector('.modal-footer')?.appendChild(countdownEl);

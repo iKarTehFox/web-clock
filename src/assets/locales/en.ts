@@ -441,9 +441,18 @@ export default {
                     'settings': {
                         'title': 'Settings',
                         'option': {
-                            'logjson': 'Log JSON',
-                            'viewrawjson': 'View Raw JSON',
-                            'extractbgimg': 'Extract BG Image',
+                            'logjson': {
+                                'title': 'Log JSON',
+                                'tooltip': 'Log JSON settings to console'
+                            },
+                            'viewrawjson': {
+                                'title': 'View Raw JSON',
+                                'tooltip': 'View current JSON settings in modal'
+                            },
+                            'extractbgimg': {
+                                'title': 'Extract BG Image',
+                                'tooltip': 'Extract and view current background image'
+                            },
                         }
                     },
                     'toasts': {

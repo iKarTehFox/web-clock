@@ -4,6 +4,7 @@ import i18next from 'i18next';
 
 // Hardcoded values. Change as needed.
 export const versionNumber = '1.7.0';
+export const versionNumberString = `v${versionNumber}`;
 const releaseNotes = `https://github.com/iKarTehFox/web-clock/releases/tag/${versionNumber}`;
 
 interface UpdateNotificationOptions {
@@ -17,10 +18,10 @@ interface UpdateNotificationOptions {
 export function showUpdateNotification(options: UpdateNotificationOptions = {}) {
     const {
         bypassCheck = false,
-        customTitle = i18next.t('bsmodal.newversion', {0: versionNumber}),
+        customTitle = i18next.t('bsmodal.newversion', {0: versionNumberString}),
         customDescription,
         customReleaseUrl = releaseNotes,
-        modalTimeout = 15
+        modalTimeout = 30
     } = options;
   
     const lastSeen = localStorage.getItem('lastUpdateNotification');
@@ -35,7 +36,7 @@ export function showUpdateNotification(options: UpdateNotificationOptions = {}) 
     // Create description element
     const descriptionElement = document.createElement('p');
     descriptionElement.innerHTML = customDescription || 
-    i18next.t('bsmodal.releasenote', {0: versionNumber});
+    i18next.t('bsmodal.releasenote', {0: versionNumberString});
   
     logConsole(`Showing update notification for version ${versionNumber}`, 'debug', true);
   
