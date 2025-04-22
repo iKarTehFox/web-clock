@@ -616,5 +616,27 @@ export default {
         'manualjsonsettingsentryform': 'Manual JSON settings entry form',
         'stopwatchcontrols': 'Stopwatch controls',
         'countdowncontrols': 'Countdown controls'
+    },
+    'time': {
+        'isit': {
+            'christmas_y': 'It\'s Christmas!',
+            'christmas_n': 'It\'s not Christmas.',
+            'weekend_y': 'It\'s the weekend!',
+            'weekend_n': 'Not the weekend.',
+            'leapyear_y': 'It\'s a leap year!',
+            'leapyear_n': 'Not a leap year.'
+        },
+        'countdown': {
+            'term': {
+                'since': 'since',
+                'until': 'until'
+            },
+            'event': {
+                'christmas': 'Christmas',
+                'newyear': 'New Year\'s',
+                'valentines': 'Valentine\'s Day',
+                '32bit': '32-bit limit'
+            }
+        }
     }
 };

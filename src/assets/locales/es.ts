@@ -616,5 +616,27 @@ export default {
         'manualjsonsettingsentryform': 'Formulario de entrada manual de configuraciones JSON',
         'stopwatchcontrols': 'Controles del cronómetro',
         'countdowncontrols': 'Controles del temporizador'
+    },
+    'time': {
+        'isit': {
+            'christmas_y': '¡Es Navidad!',
+            'christmas_n': 'No es Navidad.',
+            'weekend_y': '¡Es fin de semana!',
+            'weekend_n': 'No es fin de semana.',
+            'leapyear_y': '¡Es año bisiesto!',
+            'leapyear_n': 'No es año bisiesto.'
+        },
+        'countdown': {
+            'term': {
+                'since': 'desde',
+                'until': 'hasta'
+            },
+            'event': {
+                'christmas': 'la Navidad',
+                'newyear': 'el Año Nuevo',
+                'valentines': 'el Día de San Valentín',
+                '32bit': 'el límite de 32 bits'
+            }
+        }
     }
 };

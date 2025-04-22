@@ -104,20 +104,20 @@ function updateTime(): void {
             hexatri: (value: string) => clock.toRadix(value, 36),
             octal: (value: string) => clock.toRadix(value, 8),
             words: clock.toWords,
-            unixcountdown: () => clock.getCountdown(2147483647, '32-bit limit'),
+            unixcountdown: () => clock.getCountdown(2147483647, i18next.t('time.countdown.event.32bit')),
             se_valentines: () => clock.getCountdown(luxon.DateTime.fromObject({
                 month: 2,
                 day: 14
-            }), 'Valentine\'s'),
+            }), i18next.t('time.countdown.event.valentines')),
             se_christmas: () => clock.getCountdown(luxon.DateTime.fromObject({ 
                 month: 12, 
                 day: 25 
-            }), 'Christmas'),
+            }), i18next.t('time.countdown.event.christmas')),
             se_newyears: () => clock.getCountdown(luxon.DateTime.fromObject({
                 year: time.year + 1, // January 1st of the following year
                 month: 1,
                 day: 1
-            }), 'New Year\'s'),
+            }), i18next.t('time.countdown.event.newyear')),
             ii_christmas: () => clock.isItDate('christmas'),
             ii_weekend: () => clock.isItDate('weekend'),
             ii_leapyear: () => clock.isItDate('leapyear'),

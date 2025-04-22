@@ -3,6 +3,7 @@ import { doc, menu, dtdisplay, panel } from './utils/dom-elements';
 import * as numberToWords from 'number-to-words';
 import { logConsole } from './utils/dom-utils';
 import { match } from 'ts-pattern';
+import i18next from 'i18next';
 
 // Get 12/24 hour pref
 export function setClockMode(modePreference?: 12 | 24): void {
@@ -88,7 +89,7 @@ export function getCountdown(target: luxon.DateTime | number, eventName: string)
     
     const diff = targetDateTime.diff(now, ['days', 'hours', 'minutes', 'seconds']);
     const dayhour = Math.abs(Math.floor(diff.days)) > 0 ? `${Math.abs(Math.floor(diff.days))}d:${Math.abs(Math.floor(diff.hours))}h` : `${Math.abs(Math.floor(diff.hours))}h`;
-    const isPast = now > targetDateTime ? `since ${eventName}` : `until ${eventName}`;
+    const isPast = now > targetDateTime ? `${i18next.t('time.countdown.term.since')} ${eventName}` : `${i18next.t('time.countdown.term.until')} ${eventName}`;
     
     return [
         dayhour,
@@ -106,15 +107,15 @@ export function isItDate(dateType: 'christmas' | 'weekend' | 'leapyear'): [strin
         .returnType<[string, string, string, string]>()
         .with('christmas', () => {
             isMatch = now.month === 12 && now.day === 25;
-            return ['', isMatch ? 'It\'s Christmas!' : 'Not Christmas', '', ''];
+            return ['', isMatch ? i18next.t('time.isit.christmas_y') : i18next.t('time.isit.christmas_n'), '', ''];
         })
         .with('weekend', () => {
             isMatch = now.weekday >= 6; // 6 = Saturday, 7 = Sunday
-            return ['', isMatch ? 'It\'s the weekend!' : 'Not the weekend', '', ''];
+            return ['', isMatch ? i18next.t('time.isit.weekend_y') : i18next.t('time.isit.weekend_n'), '', ''];
         })
         .with('leapyear', () => {
             isMatch = now.isInLeapYear;
-            return ['', isMatch ? 'It\'s a leap year!' : 'Not a leap year', '', ''];
+            return ['', isMatch ? i18next.t('time.isit.leapyear_y') : i18next.t('time.isit.leapyear_n'), '', ''];
         })
         .exhaustive();
 }
