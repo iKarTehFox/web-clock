@@ -615,7 +615,8 @@ export default {
         'menuthemebuttongroup': 'Grupo de botones de tema del menú',
         'manualjsonsettingsentryform': 'Formulario de entrada manual de configuraciones JSON',
         'stopwatchcontrols': 'Controles del cronómetro',
-        'countdowncontrols': 'Controles del temporizador'
+        'countdowncontrols': 'Controles del temporizador',
+        'toggledropdown': 'Botón desplegable de alternancia'
     },
     'time': {
         'isit': {

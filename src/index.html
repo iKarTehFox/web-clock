@@ -548,11 +548,17 @@
                                 <p class="mb-1 mt-2" id="subtext-light" data-i18n-html="menu.section.importexport.setting.presets.description"></p>
                                 <hr>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.importexport.setting.exportsettings.title"></h6>
-                                <button type="button" class="btn btn-outline-warning mb-1" id="jsonExportDlBtn" data-i18n="menu.section.importexport.setting.exportsettings.option.downloadjson"></button>
-                                <button type="button" class="btn btn-outline-warning mb-1" id="jsonExportClipBtn" data-i18n="menu.section.importexport.setting.exportsettings.option.copyjson"></button>
-                                <button type="button" class="btn btn-outline-warning" id="jsonExportQrBtn" data-i18n="menu.section.importexport.setting.exportsettings.option.genqrcode"></button>
-                                <p class="mb-1 mt-2" id="subtext-light" data-i18n="menu.section.importexport.setting.exportsettings.option.description"></p>
-                            </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-warning" id="jsonExportDlBtn" data-i18n="menu.section.importexport.setting.exportsettings.option.downloadjson"></button>
+                                    <button type="button" class="btn btn-outline-warning dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden" data-i18n="aria.toggledropdown"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><button class="dropdown-item btn btn-outline-warning mb-1" id="jsonExportClipBtn" data-i18n="menu.section.importexport.setting.exportsettings.option.copyjson"></button></li>
+                                        <li><button class="dropdown-item btn btn-outline-warning" id="jsonExportQrBtn" data-i18n="menu.section.importexport.setting.exportsettings.option.genqrcode"></button></li>
+                                    </ul>
+                                </div>
+                                <p class="mb-1 mt-2" id="subtext-light" data-i18n="menu.section.importexport.setting.exportsettings.option.description"></p>                            </div>
                         </div>
                     </div>
                     <p class="mb-1 mt-2" data-i18n="menu.misc.pageduration.label"></p>

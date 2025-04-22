@@ -615,7 +615,8 @@ export default {
         'menuthemebuttongroup': 'Menu theme button group',
         'manualjsonsettingsentryform': 'Manual JSON settings entry form',
         'stopwatchcontrols': 'Stopwatch controls',
-        'countdowncontrols': 'Countdown controls'
+        'countdowncontrols': 'Countdown controls',
+        'toggledropdown': 'Toggle dropdown'
     },
     'time': {
         'isit': {
