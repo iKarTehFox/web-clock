@@ -31,7 +31,7 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
     
     URL.revokeObjectURL(url);
     
-    showToast(i18next.t('toasts.importexport.exportsuccess', { 0: luxon.DateTime.now().toMillis() - startTime.toMillis() }), 'long', 'success');
+    showToast(i18next.t('toasts.importexport.exportsuccess', { 0: luxon.DateTime.now().toMillis() - startTime.toMillis() }), 'normal', 'success');
 }
 
 type ExportType = 'clipboard' | 'download' | 'log' | 'qr' | 'card';
@@ -46,7 +46,7 @@ function handleExport(settings: any, type: ExportType, startTime: luxon.DateTime
     const exportActions = {
         clipboard: () => {
             navigator.clipboard.writeText(settingsJSON);
-            showToast(i18next.t('toasts.importexport.exportcopysuccess', { 0: getElapsedTime(startTime) }));
+            showToast(i18next.t('toasts.importexport.exportcopysuccess', { 0: getElapsedTime(startTime) }), 'normal', 'success');
         },
         log: () => logConsole(`Settings JSON: ${settingsJSON}`, 'debug'),
         card: () => {
@@ -79,7 +79,7 @@ function handleExport(settings: any, type: ExportType, startTime: luxon.DateTime
 
 export function exportSettings(toType: ExportType = 'download'): void {
     const startTime = luxon.DateTime.now();
-    showToast(i18next.t('toasts.importexport.exporting'), 'normal', 'info');
+    showToast(i18next.t('toasts.importexport.exporting'), 'normal');
 
     try {
         const settings = getSettings();
