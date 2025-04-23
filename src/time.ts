@@ -11,6 +11,7 @@ import i18next from 'i18next';
 export let cMode = '0';
 export let dateFormat = 'D';
 export let timeDisplayMethod: string;
+export let currentDrift: number = 0;
 let lastTime: Array<string>;
 let lastDate: string;
 const pageLoadTime = getLuxNow('sec');
@@ -291,17 +292,17 @@ function startNewClock() {
 
         clockInterval = setInterval(() => {
             const currentTime = performance.now();
-            const drift = currentTime - expectedTime;
+            currentDrift = currentTime - expectedTime;
 
             updateTime();
             updatePageDuration();
             logConsole('Time, date, and page duration updated...', 'info');
 
             // Cap drift at ±1000ms
-            const cappedDrift = Math.max(Math.min(drift, 1000), -1000);
+            const cappedDrift = Math.max(Math.min(currentDrift, 1000), -1000);
 
-            if (Math.abs(drift) > 150) {
-                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.${Math.abs(drift) > 1000 ? ` Capped to ${cappedDrift}ms` : ''}`, 'debug');
+            if (Math.abs(currentDrift) > 150) {
+                logConsole(`Time drift detected: ${currentDrift > 0 ? '+':''}${currentDrift}ms.${Math.abs(currentDrift) > 1000 ? ` Capped to ${cappedDrift}ms` : ''}`, 'debug');
                 clearInterval(clockInterval!);
                 setTimeout(startNewClock, 1000 - cappedDrift);
             }
@@ -313,6 +314,7 @@ function startNewClock() {
 
 // Function to start the old clock method
 function startOldClock() {
+    currentDrift = 0;
     clockInterval = setInterval(() => {
         updateTime();
         updatePageDuration();

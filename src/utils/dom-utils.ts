@@ -63,10 +63,11 @@ function getThemeInfo(colorTheme: string = 'auto') {
 }
 
 // Function to show a toast message
-export function showToast(message: string, duration: 'default' | 'normal' | 'long' | 'verylong' = 'default', style: string = 'auto'): void {
+export function showToast(message: string, duration: 'veryshort' | 'default' | 'normal' | 'long' | 'verylong' = 'default', style: string = 'auto'): void {
     const theme = getThemeInfo(style);
     
     const durationMap = {
+        'veryshort': 1000,
         'default': 3000,
         'normal': 5000,
         'long': 10000,

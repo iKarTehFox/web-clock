@@ -1,9 +1,10 @@
 import * as luxon from 'ts-luxon';
 import { doc, menu, dtdisplay, panel } from './utils/dom-elements';
 import * as numberToWords from 'number-to-words';
-import { logConsole } from './utils/dom-utils';
+import { logConsole, showToast } from './utils/dom-utils';
 import { match } from 'ts-pattern';
 import i18next from 'i18next';
+import { currentDrift } from './time';
 
 // Get 12/24 hour pref
 export function setClockMode(modePreference?: 12 | 24): void {
@@ -143,6 +144,23 @@ export function timeBarUtil(type: string, time: luxon.DateTime) {
         })
         .with('tbarSec', () => { // Minute progress
             dtdisplay.timeBar.style.width = (time.second / 59) * 100 + '%';
+        })
+        .with('debug_drift', () => { // Debug drift
+            const driftPercentage = Math.min(Math.abs(currentDrift) / 150 * 100, 100);
+
+            // Colorize
+            const driftColor = `hsl(${120 - (driftPercentage * 1.2)}, 100%, 50%)`;
+            dtdisplay.timeBar.style.backgroundColor = driftColor;
+
+            if (driftPercentage < 33) {
+                showToast(`Current drift: ${currentDrift}ms`, 'veryshort', 'success');
+            } else if (driftPercentage >= 33 && driftPercentage < 66) {
+                showToast(`Current drift: ${currentDrift}ms`, 'veryshort', 'warning');
+            } else {
+                showToast(`Current drift: ${currentDrift}ms`, 'veryshort', 'danger');
+            }
+
+            dtdisplay.timeBar.style.width = `${driftPercentage}%`;
         })
         .otherwise(() => {});
 }
