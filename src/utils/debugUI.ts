@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-import { debug, dtdisplay, menu } from './dom-elements';
+import { debug, dtdisplay } from './dom-elements';
 import { showToast } from './dom-utils';
 
 // Get load time
@@ -42,12 +42,6 @@ export function initializeDebugUI(): void {
         localStorage.clear();
         showToast(i18next.t('toasts.debugui.clearls'), undefined, 'warning');
     });
-
-    // Drift time bar option
-    const driftoption = document.createElement('option');
-    driftoption.value = 'debug_drift';
-    driftoption.textContent = 'DRIFT DEBUG (ms)';
-    menu.timebarselect.appendChild(driftoption);
 
     // Reinitialize if language changed
     i18next.on('languageChanged', (lng) => {
