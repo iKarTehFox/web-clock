@@ -576,7 +576,7 @@ export default {
         }
     },
     'bsmodal': {
-        'action': {
+        'button': {
             'close': 'Cerrar',
             'copy': 'Copiar',
             'download': 'Descargar',
@@ -585,12 +585,16 @@ export default {
             'releasenotes': 'Notas de la versión',
             'dontshowagain': 'No mostrar de nuevo'
         },
-        'rawsettingsjson': 'JSON de ajustes sin procesar',
-        'backgroundimage': 'Imagen de fondo',
-        'importerror': '¡Error al importar ajustes!',
-        'newversion': '¡Nueva versión! ({{0}})',
-        'releasenote': '¡Online Web Clock se actualizó a {{0}}! Consulta las notas de la versión para más información.',
-        'releasenotebypass': 'Haz clic en el botón de abajo para revisar las notas de la versión {{0}}!'
+        'importexport': {
+            'backgroundimage': 'Imagen de fondo',
+            'importerror': '¡Error al importar ajustes!',
+            'rawsettingsjson': 'JSON de ajustes sin procesar'
+        },
+        'updatenoti': {
+            'newversion': '¡Nueva versión! ({{0}})',
+            'releasenote': '¡Online Web Clock se actualizó a {{0}}! Consulta las notas de la versión para más información.',
+            'releasenotebypass': '¡Haz clic en el botón de abajo para revisar las notas de la versión {{0}}!'
+        }
     },
     'scanneroverlay': {
         'action': {

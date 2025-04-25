@@ -47,7 +47,7 @@ export function handleValidationFailure(errorDetails: ErrorDetails) {
     
     const errorMessage = errorMsg[`${errorDetails.type}`] || 'Unknown validation failure';
     logConsole(`${errorMessage}`, 'error');
-    createBsModal(i18next.t('bsmodal.importerror'), errorMessage, [{label: i18next.t('bsmodal.action.gethelp'), className: 'btn btn-primary', value: 'get_help'}, {label: i18next.t('bsmodal.action.close'), value: 'close'}], 60)
+    createBsModal(i18next.t('bsmodal.importexport.importerror'), errorMessage, [{label: i18next.t('bsmodal.button.gethelp'), className: 'btn btn-primary', value: 'get_help'}, {label: i18next.t('bsmodal.button.close'), value: 'close'}], 60)
         .then(result => {
             match(result)
                 .with('get_help', () => {

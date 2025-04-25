@@ -50,7 +50,7 @@ function handleExport(settings: any, type: ExportType, startTime: luxon.DateTime
         },
         log: () => logConsole(`Settings JSON: ${settingsJSON}`, 'debug'),
         card: () => {
-            createBsModal('Raw Settings JSON', settingsJSON);
+            createBsModal(i18next.t('bsmodal.importexport.rawsettingsjson'), settingsJSON);
             showToast(i18next.t('toasts.importexport.exportrawsuccess', { 0: getElapsedTime(startTime) }), 'normal', 'success');
         },
         qr: () => {
@@ -246,7 +246,7 @@ panel.section.dbg.addEventListener('click', (e) => {
                 }
                 const imgElement = document.createElement('img');
                 imgElement.src = bgImageUrl;
-                createBsModal('Background Image', imgElement);
+                createBsModal(i18next.t('bsmodal.importexport.backgroundimage'), imgElement);
             })
             .otherwise(() => {});
     }

@@ -347,5 +347,5 @@ menu.panelvischeckbox.addEventListener('change', () => {
 });
 
 menu.versionlabelclk.addEventListener('click', () => {
-    showUpdateNotification({'bypassCheck': true, 'customTitle': `Online Web Clock - ${versionNumberString}`, 'customDescription': i18next.t('bsmodal.releasenotebypass', {0: versionNumberString}), 'modalTimeout': 0});
+    showUpdateNotification({'bypassCheck': true, 'customTitle': `Online Web Clock - ${versionNumberString}`, 'customDescription': i18next.t('bsmodal.updatenoti.releasenotebypass', {0: versionNumberString}), 'modalTimeout': 0});
 });

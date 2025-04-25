@@ -2,24 +2,24 @@ import { getElement, getElements } from './dom-selectors';
 
 export const doc = {
     blurpanel: getElement<HTMLDivElement>('blur-panel'),
-    favicon: getElement<HTMLLinkElement>('favicon'),
-    themecolormeta: getElement<HTMLMetaElement>('theme-color-meta'),
     cnote: getElement<HTMLParagraphElement>('custom-note'),
+    favicon: getElement<HTMLLinkElement>('favicon'),
+    themecolormeta: getElement<HTMLMetaElement>('theme-color-meta')
 };
 
 export const panel = {
     container: getElement<HTMLDivElement>('panel-container'),
-    menubutton: getElement<HTMLButtonElement>('menu-button'),
     menubody: getElement<HTMLDivElement>('menu-body'),
+    menubutton: getElement<HTMLButtonElement>('menu-button'),
     // Settings sections
     section: {
-        dt: getElement<HTMLDivElement>('panel-section-dt'),
-        fc: getElement<HTMLDivElement>('panel-section-fc'),
         bt: getElement<HTMLDivElement>('panel-section-bt'),
         dbg: getElement<HTMLDivElement>('panel-section-dbg'),
-        we: getElement<HTMLDivElement>('panel-section-we'),
         do: getElement<HTMLDivElement>('panel-section-do'),
-        ie: getElement<HTMLDivElement>('panel-section-ie')
+        dt: getElement<HTMLDivElement>('panel-section-dt'),
+        fc: getElement<HTMLDivElement>('panel-section-fc'),
+        ie: getElement<HTMLDivElement>('panel-section-ie'),
+        we: getElement<HTMLDivElement>('panel-section-we')
     }
 };
 
@@ -28,12 +28,12 @@ export const menu = {
     borderstyleselect: getElement<HTMLSelectElement>('borderStyleSelect'),
     bordertyperadio: getElements<HTMLInputElement>('input[name="border-type-radio"]'),
     clockmoderadio: getElements<HTMLInputElement>('input[name="clock-mode-radio"]'),
+    cnotealignradio: getElements<HTMLInputElement>('input[name="note-alignment-radio"]'),
+    cnoteinput: getElement<HTMLInputElement>('cnote-input'),
     colorbadge: getElement<HTMLParagraphElement>('currentColorBadge'),
     colorbadgelabel: getElement<HTMLDivElement>('currentColorLabel'),
     colormoderadio: getElements<HTMLInputElement>('input[name="color-mode-radio"]'),
     container: getElement<HTMLDivElement>('menu-offcanvas'),
-    cnoteinput: getElement<HTMLInputElement>('cnote-input'),
-    cnotealignradio: getElements<HTMLInputElement>('input[name="note-alignment-radio"]'),
     datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
     dateformselect: getElement<HTMLSelectElement>('dateFormatSelect'),
     durationdisplay: getElement<HTMLParagraphElement>('time-duration'),
@@ -74,7 +74,7 @@ export const menu = {
     weathermovetoggle: getElement<HTMLInputElement>('weatherMoveToggle'),
     weatherstopbtn: getElement<HTMLButtonElement>('weatherStopBtn'),
     weathersubmitbtn: getElement<HTMLButtonElement>('weatherSubmitBtn'),
-    weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]'),
+    weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]')
 };
 
 export const font = {
@@ -89,7 +89,7 @@ export const font = {
     strokerange: getElement<HTMLInputElement>('textStrokeRange'),
     strokerangelabel: getElement<HTMLLabelElement>('textStrokeRangeLabel'),
     styleradio: getElements<HTMLInputElement>('input[name="font-style-radio"]'),
-    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]'),
+    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]')
 };
 
 export const dtdisplay = {
@@ -102,7 +102,7 @@ export const dtdisplay = {
     minuteSlot: getElement<HTMLSpanElement>('minute-slot'),
     secondSlot: getElement<HTMLSpanElement>('second-slot'),
     tcontainer: getElement<HTMLDivElement>('time-container'),
-    timeBar: getElement<HTMLDivElement>('time-progress-bar'),
+    timeBar: getElement<HTMLDivElement>('time-progress-bar')
 };
 
 export const weather = {
@@ -125,7 +125,7 @@ export const stopwatch = {
     obutton: getElement<HTMLButtonElement>('stopwatch-button'),
     pausebtn: getElement<HTMLButtonElement>('stopwatch-pause'),
     resetbtn: getElement<HTMLButtonElement>('stopwatch-reset'),
-    startbtn: getElement<HTMLButtonElement>('stopwatch-start'),
+    startbtn: getElement<HTMLButtonElement>('stopwatch-start')
 };
 
 export const countdown = {
@@ -138,7 +138,7 @@ export const countdown = {
     pausebtn: getElement<HTMLButtonElement>('countdown-pause'),
     resetbtn: getElement<HTMLButtonElement>('countdown-reset'),
     secinput: getElement<HTMLInputElement>('countdown-seconds'),
-    startbtn: getElement<HTMLButtonElement>('countdown-start'),
+    startbtn: getElement<HTMLButtonElement>('countdown-start')
 };
 
 export const debug = {
@@ -147,5 +147,5 @@ export const debug = {
     devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
     info:  getElement<HTMLParagraphElement>('debugInfo'),
     rmclockbtn: getElement<HTMLButtonElement>('debugRmClock'),
-    toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]'),
+    toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]')
 };

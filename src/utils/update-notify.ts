@@ -18,7 +18,7 @@ interface UpdateNotificationOptions {
 export function showUpdateNotification(options: UpdateNotificationOptions = {}) {
     const {
         bypassCheck = false,
-        customTitle = i18next.t('bsmodal.newversion', {0: versionNumberString}),
+        customTitle = i18next.t('bsmodal.updatenoti.newversion', {0: versionNumberString}),
         customDescription,
         customReleaseUrl = releaseNotes,
         modalTimeout = 30
@@ -36,7 +36,7 @@ export function showUpdateNotification(options: UpdateNotificationOptions = {}) 
     // Create description element
     const descriptionElement = document.createElement('p');
     descriptionElement.innerHTML = customDescription || 
-    i18next.t('bsmodal.releasenote', {0: versionNumberString});
+    i18next.t('bsmodal.updatenoti.releasenote', {0: versionNumberString});
   
     logConsole(`Showing update notification for version ${versionNumber}`, 'debug', true);
   
@@ -46,11 +46,11 @@ export function showUpdateNotification(options: UpdateNotificationOptions = {}) 
         descriptionElement, 
         bypassCheck ? 
             [
-                {label: i18next.t('bsmodal.action.releasenotes'), className: 'btn btn-primary', value: 'release-note'}
+                {label: i18next.t('bsmodal.button.releasenotes'), className: 'btn btn-primary', value: 'release-note'}
             ] : 
             [
-                {label: i18next.t('bsmodal.action.dontshowagain'), className: 'btn btn-secondary', value: 'never-show'}, 
-                {label: i18next.t('bsmodal.action.releasenotes'), className: 'btn btn-primary', value: 'release-note'}
+                {label: i18next.t('bsmodal.button.dontshowagain'), className: 'btn btn-secondary', value: 'never-show'}, 
+                {label: i18next.t('bsmodal.button.releasenotes'), className: 'btn btn-primary', value: 'release-note'}
             ], 
         modalTimeout
     ).then((result) => {

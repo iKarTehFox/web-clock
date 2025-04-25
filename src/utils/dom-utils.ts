@@ -248,17 +248,17 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
                 content instanceof HTMLCanvasElement || 
                 content instanceof HTMLVideoElement) {
                 buttons = [
-                    { label: i18next.t('bsmodal.action.download'), className: 'btn btn-primary', value: 'download' },
-                    { label: i18next.t('bsmodal.action.close'), className: 'btn btn-secondary', value: 'close' }
+                    { label: i18next.t('bsmodal.button.download'), className: 'btn btn-primary', value: 'download' },
+                    { label: i18next.t('bsmodal.button.close'), className: 'btn btn-secondary', value: 'close' }
                 ];
             } else if (typeof content === 'string') {
                 buttons = [
-                    { label: i18next.t('bsmodal.action.copy'), className: 'btn btn-primary', value: 'copy' },
-                    { label: i18next.t('bsmodal.action.close'), className: 'btn btn-secondary', value: 'close' }
+                    { label: i18next.t('bsmodal.button.copy'), className: 'btn btn-primary', value: 'copy' },
+                    { label: i18next.t('bsmodal.button.close'), className: 'btn btn-secondary', value: 'close' }
                 ];
             } else {
                 buttons = [
-                    { label: i18next.t('bsmodal.action.close'), className: 'btn btn-secondary', value: 'close' }
+                    { label: i18next.t('bsmodal.button.close'), className: 'btn btn-secondary', value: 'close' }
                 ];
             }
         }
@@ -276,7 +276,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
             
             const countdownEl = document.createElement('small');
             countdownEl.className = 'midnight-text-muted me-auto';
-            countdownEl.textContent = i18next.t('bsmodal.action.countdownel', { 0: Math.round(constrainedDelay/1000) });
+            countdownEl.textContent = i18next.t('bsmodal.button.countdownel', { 0: Math.round(constrainedDelay/1000) });
             countdownEl.style.cursor = 'pointer';
             modal.querySelector('.modal-footer')?.appendChild(countdownEl);
             
@@ -284,7 +284,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
             const updateInterval = setInterval(() => {
                 const remaining = Math.ceil((constrainedDelay - (Date.now() - startTime))/1000);
                 if (remaining > 0) {
-                    countdownEl.textContent = i18next.t('bsmodal.action.countdownel', { 0: remaining });
+                    countdownEl.textContent = i18next.t('bsmodal.button.countdownel', { 0: remaining });
                 } else {
                     clearInterval(updateInterval);
                 }
