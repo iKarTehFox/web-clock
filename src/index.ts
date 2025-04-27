@@ -2,7 +2,6 @@
 import './assets/locales/i18n';
 import 'iconify-icon';
 import './utils/iconify-preload';
-import * as bootstrap from 'bootstrap';
 import './global';
 import './background-image';
 import './time';
@@ -12,6 +11,7 @@ import './countdown';
 import './utils/kbd-shortcuts';
 import { applyURLParams } from './utils/url-params';
 import { populateTimeZoneSelect } from './time';
+import { Tooltip } from 'bootstrap';
 
 // Functions to run when DOM has loaded
 window.addEventListener('DOMContentLoaded', () => {
@@ -22,6 +22,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     const tooltipTriggerElArray = Array.from(tooltipTriggerList);
     const tooltipList = tooltipTriggerElArray.map(tooltipTriggerEl => {
-        return new bootstrap.Tooltip(tooltipTriggerEl); 
+        return new Tooltip(tooltipTriggerEl); 
     });
 });

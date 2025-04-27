@@ -4,7 +4,7 @@ import { debugMode } from './debug';
 import { Html5Qrcode } from 'html5-qrcode';
 import { processJSONSettings } from '../importExport';
 import { match } from 'ts-pattern';
-import * as bs from 'bootstrap';
+import { Modal } from 'bootstrap';
 import * as luxon from 'ts-luxon';
 import randomstring from 'randomstring';
 import i18next, { t } from 'i18next';
@@ -264,7 +264,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
         }
 
         const footer = modal.querySelector('.modal-footer')!;
-        const bootstrapModal = new bs.Modal(modal);
+        const bootstrapModal = new Modal(modal);
         
         // Timeout handling
         let bsModTimeout: number | undefined;
