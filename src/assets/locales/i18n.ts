@@ -5,7 +5,7 @@ import { logConsole } from '../../utils/dom-utils';
 import enResource from './en';
 import esResource from './es';
 import { menu } from '../../utils/dom-elements';
-import * as bootstrap from 'bootstrap';
+import { Tooltip } from 'bootstrap';
 import { Settings } from 'ts-luxon';
 
 // Get language
@@ -159,7 +159,7 @@ function updateContent() {
     const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     const tooltipTriggerElArray = Array.from(tooltipTriggerList);
     const tooltipList = tooltipTriggerElArray.map(tooltipTriggerEl => {
-        return new bootstrap.Tooltip(tooltipTriggerEl); 
+        return new Tooltip(tooltipTriggerEl); 
     });
 }
 
