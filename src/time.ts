@@ -6,6 +6,7 @@ import * as clock from './time-help';
 import { timeRefresh } from './utils/debug';
 import { match, P } from 'ts-pattern';
 import i18next from 'i18next';
+import Bowser from 'bowser';
 
 // Default modes
 export let cMode = '0';
@@ -15,6 +16,7 @@ let lastTime: Array<string>;
 let lastDate: string;
 const pageLoadTime = getLuxNow('sec');
 type TimeFormat = 'sec' | 'millis' | 'obj';
+const browserInfo = Bowser.parse(window.navigator.userAgent);
 
 function getLuxNow(format: TimeFormat = 'sec'): number | luxon.DateTime {
     const now = luxon.DateTime.now();
@@ -288,25 +290,43 @@ function startNewClock() {
         // Set initial reference point
         const startTime = performance.now();
         let expectedTime = startTime + 1000; // Next expected tick
+        let lastExecutionTime = 0; // Track execution time
 
         clockInterval = setInterval(() => {
-            const currentTime = performance.now();
-            const drift = currentTime - expectedTime;
+            // Measure drift before any operations
+            const beforeExecution = performance.now();
+            const drift = beforeExecution - expectedTime;
 
+            // Update after calculation
             updateTime();
             updatePageDuration();
             logConsole('Time, date, and page duration updated...', 'info');
 
+            // Calculate execution time
+            const afterExecution = performance.now();
+            const executionTime = afterExecution - beforeExecution;
+            lastExecutionTime = executionTime;
+
             // Cap drift at ±1000ms
             const cappedDrift = Math.max(Math.min(drift, 1000), -1000);
 
-            if (Math.abs(drift) > 150) {
-                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.${Math.abs(drift) > 1000 ? ` Capped to ${cappedDrift}ms` : ''}`, 'debug');
+            // Set browser-specific threshold
+            const driftThreshold = browserInfo.engine.name?.includes('Blink') 
+                ? 150 
+                : Math.max(200, lastExecutionTime * 1.5);
+
+            if (Math.abs(drift) > driftThreshold) {
+                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.${Math.abs(drift) > 1000 ? ` Capped to ${cappedDrift}ms` : ''} (Execution: ${executionTime.toFixed(2)}ms)`, 'debug');
                 clearInterval(clockInterval!);
-                setTimeout(startNewClock, 1000 - cappedDrift);
+                
+                // Adjust next start time by considering execution time
+                // This helps prevent cascading drift
+                const adjustedDelay = Math.max(0, 1000 - cappedDrift - Math.min(executionTime, 100));
+                setTimeout(startNewClock, adjustedDelay);
             }
 
-            expectedTime += 1000; // Update expected time for next tick
+            // Update expected time for next tick
+            expectedTime += 1000;
         }, 1000);
     }, timeToNextSecond);
 }
