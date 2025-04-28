@@ -275,7 +275,7 @@ function startClock() {
     if (menu.legacyrefreshcheckbox.checked) {
         startOldClock();
     } else {
-        startNewClock();
+        startExperimentalClock();
     }
 }
 
@@ -331,12 +331,41 @@ function startNewClock() {
     }, timeToNextSecond);
 }
 
+// Function to start experimental clock
+function startExperimentalClock() {
+    // Initial update
+    updateTime();
+    updatePageDuration();
+    logConsole('Experimental clock started...', 'info');
+    
+    // Function to schedule the next update
+    function scheduleNextUpdate() {
+        // Calculate time to next second
+        const timeToNextSecond = 1000 - Number(getLuxNow('millis')) % 1000;
+        
+        // Schedule next update
+        clockInterval = setTimeout(() => {
+            // Update the clock
+            updateTime();
+            updatePageDuration();
+
+            logConsole('Time, date, and page duration updated... (Experimental method)', 'debug');
+            
+            // Schedule the next update
+            scheduleNextUpdate();
+        }, timeToNextSecond);
+    }
+    
+    // Start the scheduling loop
+    scheduleNextUpdate();
+}
+
 // Function to start the old clock method
 function startOldClock() {
     clockInterval = setInterval(() => {
         updateTime();
         updatePageDuration();
-        logConsole('Time, date, and page duration updated (Legacy method)...', 'info');
+        logConsole('Time, date, and page duration updated... (Legacy method)', 'info');
     }, timeRefresh) as unknown as NodeJS.Timeout;
 }
 
