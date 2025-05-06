@@ -167,7 +167,10 @@ export async function applyURLParams() {
         .with(P.union(undefined, 'auto'), () => {
             setMenuTheme('auto', true);
         })
-        .exhaustive();
+        .otherwise((invalidTheme) => {
+            logConsole(`Invalid theme: ${invalidTheme}, defaulting to auto`, 'warning');
+            setMenuTheme('auto', true);
+    });
 
     // Clock mode
     match(params.clockMode)
@@ -177,7 +180,9 @@ export async function applyURLParams() {
         .with(24, () => {
             setClockMode(24);
         })
-        .with(undefined, setClockMode);
+        .otherwise(() => {
+            setClockMode();
+        })
     
     // Weather
     if (params.weatherApi !== undefined && params.weatherLat !== undefined && params.weatherLon !== undefined && (params.weatherUnits == 'imperial' || params.weatherUnits == 'metric')) {
