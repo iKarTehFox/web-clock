@@ -1,4 +1,4 @@
-import { menu, weather } from './dom-elements';
+import { menu, panel, weather } from './dom-elements';
 import { presetLocalJSON } from '../importExport';
 import { logConsole, setMenuTheme, showToast } from './dom-utils';
 import { setDebug, setLockSettings, setTimeRefresh } from './debug';
@@ -170,7 +170,7 @@ export async function applyURLParams() {
         .otherwise((invalidTheme) => {
             logConsole(`Invalid theme: ${invalidTheme}, defaulting to auto`, 'warning');
             setMenuTheme('auto', true);
-    });
+        });
 
     // Clock mode
     match(params.clockMode)
@@ -182,7 +182,7 @@ export async function applyURLParams() {
         })
         .otherwise(() => {
             setClockMode();
-        })
+        });
     
     // Weather
     if (params.weatherApi !== undefined && params.weatherLat !== undefined && params.weatherLon !== undefined && (params.weatherUnits == 'imperial' || params.weatherUnits == 'metric')) {
@@ -250,6 +250,7 @@ export async function applyURLParams() {
     if (params.lockSettings) {
         setLockSettings(true);
         menu.container.remove();
+        panel.container.remove();
         logConsole('Settings locked - Menu container removed...', 'info');
     }
 }
