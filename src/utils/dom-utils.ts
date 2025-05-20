@@ -128,8 +128,8 @@ export function setMenuTheme(theme: string | 'toggle', quiet: boolean = false): 
     
     // Handle auto
     if (theme === 'auto') {
-        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';;
-        menu.themeradio[theme === 'light' ? 0 : 1];
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        menu.themeradio[theme === 'light' ? 0 : 1].checked = true;
     }
 
     // Handle toggle (cycle through themes)
