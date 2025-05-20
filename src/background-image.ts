@@ -1,6 +1,7 @@
 import { match } from 'ts-pattern';
 import { doc, menu } from './utils/dom-elements';
 import { logConsole } from './utils/dom-utils';
+import i18next from 'i18next';
 
 export function uploadBGImg() {
     const input = document.createElement('input');
@@ -56,7 +57,7 @@ menu.imagesizeselect.addEventListener('change', () => {
 menu.imageblurrange.addEventListener('input', () => {
     const blurValue = menu.imageblurrange.value;
     doc.blurpanel.style.backdropFilter = (`blur(${blurValue}px)`);
-    menu.imageblurlabel.textContent = `Image Blur: ${blurValue}px`;
+    menu.imageblurlabel.textContent = blurValue + 'px';
     logConsole(`Image blur set to: ${blurValue}px`, 'debug');
 });
 

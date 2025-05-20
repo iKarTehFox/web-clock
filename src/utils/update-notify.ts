@@ -1,30 +1,65 @@
 import { match } from 'ts-pattern';
 import { createBsModal, logConsole } from '../utils/dom-utils';
+import i18next from 'i18next';
 
 // Hardcoded values. Change as needed.
-const versionNumber = 'v1.6.1';
+export const versionNumber = '1.7.0';
+export const versionNumberString = `v${versionNumber}`;
 const releaseNotes = `https://github.com/iKarTehFox/web-clock/releases/tag/${versionNumber}`;
-const releaseDescription = document.createElement('p');
-releaseDescription.innerHTML = `Online Web Clock was just updated to ${versionNumber}! Check the release notes for more information.`;
 
-export function showUpdateNotification() {
+interface UpdateNotificationOptions {
+  bypassCheck?: boolean;
+  customTitle?: string;
+  customDescription?: string;
+  customReleaseUrl?: string;
+  modalTimeout?: number;
+}
+
+export function showUpdateNotification(options: UpdateNotificationOptions = {}) {
+    const {
+        bypassCheck = false,
+        customTitle = i18next.t('bsmodal.updatenoti.newversion', {0: versionNumberString}),
+        customDescription,
+        customReleaseUrl = releaseNotes,
+        modalTimeout = 30
+    } = options;
+  
     const lastSeen = localStorage.getItem('lastUpdateNotification');
-    
-    // Respect user choice
-    if (lastSeen === 'never') return;
+  
+    // Version check
+    if (!bypassCheck && (lastSeen === 'never' || lastSeen === versionNumber)) return;
 
-    if (lastSeen !== versionNumber) {
+    if (!bypassCheck) {
         localStorage.setItem('lastUpdateNotification', versionNumber);
-        logConsole(`Showing update notification for version ${versionNumber}`, 'debug', true);
-        createBsModal(`New Version! (${versionNumber})`, releaseDescription, [{label: 'Don\'t show again', className: 'btn btn-secondary', value: 'never-show'}, {label: 'Release notes', className: 'btn btn-primary', value: 'release-note'}], 15)
-            .then((result) => {
-                match(result)
-                    .with('release-note', () => {
-                        window.open(releaseNotes, '_blank');
-                    })
-                    .with('never-show', () => {
-                        localStorage.setItem('lastUpdateNotification', 'never');
-                    });
-            });
     }
+  
+    // Create description element
+    const descriptionElement = document.createElement('p');
+    descriptionElement.innerHTML = customDescription || 
+    i18next.t('bsmodal.updatenoti.releasenote', {0: versionNumberString});
+  
+    logConsole(`Showing update notification for version ${versionNumber}`, 'debug', true);
+  
+    // Show the modal
+    createBsModal(
+        customTitle, 
+        descriptionElement, 
+        bypassCheck ? 
+            [
+                {label: i18next.t('bsmodal.button.releasenotes'), className: 'btn btn-primary', value: 'release-note'}
+            ] : 
+            [
+                {label: i18next.t('bsmodal.button.dontshowagain'), className: 'btn btn-secondary', value: 'never-show'}, 
+                {label: i18next.t('bsmodal.button.releasenotes'), className: 'btn btn-primary', value: 'release-note'}
+            ], 
+        modalTimeout
+    ).then((result) => {
+        match(result)
+            .with('release-note', () => {
+                window.open(customReleaseUrl, '_blank');
+            })
+            .with('never-show', () => {
+                localStorage.setItem('lastUpdateNotification', 'never');
+            });
+    });
 }

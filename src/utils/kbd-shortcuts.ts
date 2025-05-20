@@ -1,10 +1,10 @@
 import { match, P } from 'ts-pattern';
 import { toggleFullscreen } from '../global';
 import { menu, countdown, stopwatch, panel } from './dom-elements';
-import { createBsModal } from './dom-utils';
+import { createBsModal, getCurrentTheme, setMenuTheme } from './dom-utils';
 import { presetLocalJSON } from '../importExport';
 import { lockSettings } from './debug';
-import { getPresetByHotkey } from '../assets/presets';
+import { getPresetByHotkey } from '../assets//presets/presets';
 
 function generateShortcutsHelp(): HTMLDivElement {
     const shortcuts = {
@@ -89,11 +89,7 @@ document.addEventListener('keydown', (e) => {
             stopwatch.obutton.click();
         })
         .with('t', () => { // Toggle menu theme
-            if (menu.themeradio[0].checked) {
-                menu.themeradio[1].click();
-            } else {
-                menu.themeradio[0].click();
-            }
+            setMenuTheme('toggle');
         })
         .with('v', () => { // Toggle panel visibility
             menu.panelvischeckbox.click();

@@ -1,6 +1,7 @@
 import { match } from 'ts-pattern';
 import { menu, debug, dtdisplay, doc } from './utils/dom-elements';
 import { logConsole, setMetaColor } from './utils/dom-utils';
+import i18next from 'i18next';
 
 let fadeIntervalID: NodeJS.Timeout;
 const bodyElement = document.body;
@@ -141,7 +142,7 @@ menu.colormoderadio.forEach(radio => {
 menu.fadetransrange.addEventListener('input', () => {
     const value = menu.fadetransrange.value;
     bodyElement.style.transition = `background-color ${value}s ease-in-out`;
-    menu.fadetransrangelabel.textContent = `Length: ${value}s`;
+    menu.fadetransrangelabel.textContent = value + 's';
     logConsole(`Fade transition length set to: ${value}s`, 'debug');
 });
 

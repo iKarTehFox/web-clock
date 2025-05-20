@@ -27,17 +27,7 @@ export default [
     {
         ignores: [
             'dist/**',
-            'out/**',
-            'bootstrap.bundle.min.js',
-            'code.iconify.design_iconify-icon_1.0.7_iconify-icon.min.js',
-            'datetime.d.ts',
-            'forge.config.js',
-            'numberToWords.min.js',
-            'luxon.min.js',
-            'webpack.config.js',
-            'bootstrap.4.6.2.bundle.min.js',
-            'jquery.3.5.1.min.js',
-            'corejs.minified.min.js'
+            'node_modules/**',
         ]
     }
 ];

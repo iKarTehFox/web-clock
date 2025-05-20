@@ -75,6 +75,14 @@ body {
     max-height: 150px;
 }
 
+#bgImgBlurDesc {
+    font-weight: bold;
+}
+
+#versionLabelClk {
+    cursor: pointer;
+}
+
 /* Seconds progress bar */
 #time-progress-bar {
   position: absolute;

@@ -1,29 +1,13 @@
 import Toastify from 'toastify-js';
-import { doc, menu } from './dom-elements';
+import { countdown, doc, menu, stopwatch, weather } from './dom-elements';
 import { debugMode } from './debug';
 import { Html5Qrcode } from 'html5-qrcode';
 import { processJSONSettings } from '../importExport';
 import { match } from 'ts-pattern';
-import * as bs from 'bootstrap';
+import { Modal } from 'bootstrap';
 import * as luxon from 'ts-luxon';
 import randomstring from 'randomstring';
-
-// Element finding functions
-export function getElement<T extends HTMLElement>(id: string): T {
-    const element = document.getElementById(id);
-    if (!element) throw new Error(`Element with ID ${id} not found`);
-    return element as T;
-}
-
-export function getElements<T extends Element>(selector: string): NodeListOf<T> {
-    const elements = document.querySelectorAll(selector);
-    return elements as NodeListOf<T>;
-}
-
-export function getFirstElement<T extends Element>(selector: string): T {
-    const element = document.querySelector(selector);
-    return element as T;
-}
+import i18next, { t } from 'i18next';
 
 // Custom console logging function
 export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' = 'debug', bypass: boolean = false): void {
@@ -53,6 +37,11 @@ function getThemeInfo(colorTheme: string = 'auto') {
             textColor: '#212529',
             outline: 'rgba(255, 255, 255, 0.5) solid 2px'
         },
+        midnight: {
+            bgColor: '#0d1525',
+            textColor: '#e9ecef',
+            outline: 'rgba(18, 27, 47, 0.5) solid 2px'
+        },
         danger: {
             bgColor: '#DC3545',
             textColor: '#FFFFFF',
@@ -74,10 +63,11 @@ function getThemeInfo(colorTheme: string = 'auto') {
 }
 
 // Function to show a toast message
-export function showToast(message: string, duration: 'default' | 'normal' | 'long' | 'verylong' = 'default', style: string = 'auto'): void {
+export function showToast(message: string, duration: 'veryshort' | 'default' | 'normal' | 'long' | 'verylong' = 'default', style: string = 'auto'): void {
     const theme = getThemeInfo(style);
     
     const durationMap = {
+        'veryshort': 1000,
         'default': 3000,
         'normal': 5000,
         'long': 10000,
@@ -106,6 +96,98 @@ interface ModalButton {
     label: string;
     className?: string;
     value?: any;
+}
+
+// Theme config interface
+interface ThemeConfig {
+    textColor: string;
+    metaTheme: string;
+    backgroundColor?: string;
+}
+
+const themes: Record<string, ThemeConfig> = {
+    'light': {
+        textColor: '#212529',
+        metaTheme: 'light'
+    },
+    'dark': {
+        textColor: '#fff',
+        metaTheme: 'dark'
+    },
+    'midnight': {
+        textColor: '#e9ecef',
+        metaTheme: 'dark',
+        backgroundColor: '#121b2f'
+    }
+};
+
+// Menu theme function
+export function setMenuTheme(theme: string | 'toggle', quiet: boolean = false): void {
+    // Get current theme
+    const currentTheme = menu.container.dataset.bsTheme || 'light';
+    
+    // Handle auto
+    if (theme === 'auto') {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        menu.themeradio[theme === 'light' ? 0 : 1].checked = true;
+    }
+
+    // Handle toggle (cycle through themes)
+    if (theme === 'toggle') {
+        const themeKeys = Object.keys(themes);
+        const currentIndex = themeKeys.indexOf(currentTheme);
+        const nextIndex = (currentIndex + 1) % themeKeys.length;
+        theme = themeKeys[nextIndex];
+        menu.themeradio[nextIndex].checked = true;
+    }
+    
+    // Validate theme exists
+    if (!themes[theme]) {
+        logConsole(`Invalid theme: ${theme}, defaulting to light`, 'error');
+        theme = 'light';
+    }
+
+    const themeConfig = themes[theme];
+    
+    // Apply theme to all containers
+    const containers = [
+        menu.container,
+        weather.container,
+        stopwatch.container,
+        countdown.container
+    ];
+    
+    containers.forEach(container => {
+        // Set data-bs-theme attribute
+        container.dataset.bsTheme = theme;
+        
+        // Set text color
+        if (container !== menu.container) {
+            container.style.color = themeConfig.textColor;
+        }
+        
+        // Set background color for popup containers
+        if (container === stopwatch.container || container === countdown.container) {
+            container.style.backgroundColor = themeConfig.backgroundColor || 
+                (theme === 'light' ? '#ffffff' : '#313539');
+        }
+    });
+    
+    // Browser meta
+    setMetaColor('theme', themeConfig.metaTheme);
+    
+    logConsole(`Menu theme set to: ${theme}`, 'debug');
+    if (!quiet) showToast(i18next.t(`toasts.global.theme${theme}`));
+}
+
+// Helper function to get available themes
+export function getAvailableThemes(): string[] {
+    return Object.keys(themes);
+}
+
+// Helper function to get current theme
+export function getCurrentTheme(): string {
+    return menu.container.dataset.bsTheme || 'light';
 }
 
 export function createBsModal(title: string, content: HTMLElement | string, buttons: ModalButton[] = [], timeoutDelay?: number) {
@@ -166,34 +248,35 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
                 content instanceof HTMLCanvasElement || 
                 content instanceof HTMLVideoElement) {
                 buttons = [
-                    { label: 'Download', className: 'btn btn-primary', value: 'download' },
-                    { label: 'Close', className: 'btn btn-secondary', value: 'close' }
+                    { label: i18next.t('bsmodal.button.download'), className: 'btn btn-primary', value: 'download' },
+                    { label: i18next.t('bsmodal.button.close'), className: 'btn btn-secondary', value: 'close' }
                 ];
             } else if (typeof content === 'string') {
                 buttons = [
-                    { label: 'Copy', className: 'btn btn-primary', value: 'copy' },
-                    { label: 'Close', className: 'btn btn-secondary', value: 'close' }
+                    { label: i18next.t('bsmodal.button.copy'), className: 'btn btn-primary', value: 'copy' },
+                    { label: i18next.t('bsmodal.button.close'), className: 'btn btn-secondary', value: 'close' }
                 ];
             } else {
                 buttons = [
-                    { label: 'Close', className: 'btn btn-secondary', value: 'close' }
+                    { label: i18next.t('bsmodal.button.close'), className: 'btn btn-secondary', value: 'close' }
                 ];
             }
         }
 
         const footer = modal.querySelector('.modal-footer')!;
-        const bootstrapModal = new bs.Modal(modal);
+        const bootstrapModal = new Modal(modal);
         
         // Timeout handling
         let bsModTimeout: number | undefined;
         
-        if (timeoutDelay !== undefined) {
+        // Basically, timeout can be disabled if 0, negative, or undefined
+        if (timeoutDelay !== undefined && timeoutDelay > 0) {
             // Constrain between 5 and 60 seconds
             const constrainedDelay = Math.max(5, Math.min(60, timeoutDelay)) * 1000;
             
             const countdownEl = document.createElement('small');
-            countdownEl.className = 'text-muted me-auto';
-            countdownEl.textContent = `Closing in ${Math.round(constrainedDelay/1000)}s`;
+            countdownEl.className = 'midnight-text-muted me-auto';
+            countdownEl.textContent = i18next.t('bsmodal.button.countdownel', { 0: Math.round(constrainedDelay/1000) });
             countdownEl.style.cursor = 'pointer';
             modal.querySelector('.modal-footer')?.appendChild(countdownEl);
             
@@ -201,7 +284,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
             const updateInterval = setInterval(() => {
                 const remaining = Math.ceil((constrainedDelay - (Date.now() - startTime))/1000);
                 if (remaining > 0) {
-                    countdownEl.textContent = `Closing in ${remaining}s`;
+                    countdownEl.textContent = i18next.t('bsmodal.button.countdownel', { 0: remaining });
                 } else {
                     clearInterval(updateInterval);
                 }
@@ -244,7 +327,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
                     link.click();
                 } else if (btn.value === 'copy') {
                     navigator.clipboard.writeText(content as string);
-                    showToast('Text copied to clipboard!', 'default', 'success');
+                    showToast(i18next.t('toasts.domutils.textcopied'), 'default', 'success');
                 }
                 
                 // Clear the timeout if a button is clicked
@@ -291,7 +374,7 @@ export function setMetaColor(type: 'color' | 'theme', value: string): void {
 
 export async function requestNotificationPermission(): Promise<NotificationPermission> {
     if (!('Notification' in window)) {
-        showToast('Notifications are not supported in this browser.', 'long', 'danger');
+        showToast(i18next.t('toasts.domutils.notificationsunsupported'), 'long', 'danger');
         return Promise.reject('Notifications not supported');
     }
 
@@ -375,7 +458,7 @@ export function createScannerOverlay() {
     ).then(() => {
         const closeButton = document.createElement('button');
         closeButton.className = 'btn btn-secondary';
-        closeButton.textContent = 'Close';
+        closeButton.textContent = i18next.t('scanneroverlay.action.close');
         closeButton.onclick = () => {
             html5QrCode.stop();
             container.remove();
@@ -384,7 +467,7 @@ export function createScannerOverlay() {
         cardBody.appendChild(closeButton);
     }).catch((error) => {
         logConsole(error, 'error');
-        showToast(`QR scanner failed: ${error}`, 'long', 'danger');
+        showToast(i18next.t('toasts.domutils.qrscannerfailed', { 0: error }), 'long', 'danger');
         if (html5QrCode.isScanning) {
             html5QrCode.stop();
         }

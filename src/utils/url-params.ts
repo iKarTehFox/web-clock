@@ -1,13 +1,16 @@
-import { menu, weather } from './dom-elements';
+import { menu, panel, weather } from './dom-elements';
 import { presetLocalJSON } from '../importExport';
-import { logConsole, showToast } from './dom-utils';
+import { logConsole, setMenuTheme, showToast } from './dom-utils';
 import { setDebug, setLockSettings, setTimeRefresh } from './debug';
 import { initializeDebugUI } from './debugUI';
 import { submitWeatherSettings } from './weather-utils';
-import { match } from 'ts-pattern';
+import { match, P } from 'ts-pattern';
 import { setClockMode } from '../time-help';
 import { showUpdateNotification } from './update-notify';
+import i18next from 'i18next';
+import { applyFallbackTranslations, updateTranslations } from '../assets/locales/i18n';
 
+// Define parameter interface
 interface URLParamConfig {
     // Booleans
     debugMode?: boolean;
@@ -24,18 +27,63 @@ interface URLParamConfig {
     weatherWidgetPosX?: number;
     weatherWidgetPosY?: number;
     // Strings
-    menuTheme?: 'light' | 'dark';
+    language?: string;
+    menuTheme?: 'light' | 'dark' | 'midnight' | 'auto';
     preset?: string;
     weatherApi?: string;
     weatherUnits?: 'imperial' | 'metric';
 }
 
+// Define aliases
+const paramAliases: Record<string, keyof URLParamConfig> = {
+    // Boolean aliases
+    'debug': 'debugMode',
+    'fRef': 'fastRefresh',
+    'lock': 'lockSettings',
+    'noNoti': 'noUpdateNoti',
+    'panel': 'panelVis',
+    'tab': 'tabTitle',
+    
+    // Number aliases
+    'auto': 'autoRestart',
+    'cMode': 'clockMode',
+    'wLat': 'weatherLat',
+    'wLon': 'weatherLon',
+    'wX': 'weatherWidgetPosX',
+    'wY': 'weatherWidgetPosY',
+    
+    // String aliases
+    'lang': 'language',
+    'theme': 'menuTheme',
+    'pre': 'preset',
+    'wApi': 'weatherApi',
+    'wUnit': 'weatherUnits'
+};  
+
 function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfig> {
     const params = {} as Partial<URLParamConfig>;
+
+    // Helper function to get parameter value checking both the key and its alias
+    const getParamValue = (key: string): string | null => {
+        let value = urlSearchParams.get(key);
+        if (value === null) {
+            // Find all aliases that map to this key
+            const aliases = Object.entries(paramAliases)
+                .filter(([_, canonicalKey]) => canonicalKey === key)
+                .map(([alias, _]) => alias);
+                    
+            // Check each alias
+            for (const alias of aliases) {
+                value = urlSearchParams.get(alias);
+                if (value !== null) break;
+            }
+        }
+        return value;
+    };
     
     // Boolean params
     ['debugMode', 'fastRefresh', 'lockSettings', 'noUpdateNoti', 'panelVis', 'tabTitle'].forEach(key => {
-        const value = urlSearchParams.get(key);
+        const value = getParamValue(key);
         if (value !== null) {
             (params as any)[key] = value === 'true';
             logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);;
@@ -46,7 +94,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
 
     // Number params
     ['autoRestart', 'clockMode', 'weatherLat', 'weatherLon', 'weatherWidgetPosX', 'weatherWidgetPosY'].forEach(key => {
-        const value = urlSearchParams.get(key);
+        const value = getParamValue(key);
         if (value !== null) {
             (params as any)[key] = parseFloat(value);
             logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);
@@ -56,8 +104,8 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
     });
 
     // String params
-    ['menuTheme', 'preset', 'weatherApi', 'weatherUnits'].forEach(key => {
-        const value = urlSearchParams.get(key);
+    ['language', 'menuTheme', 'preset', 'weatherApi', 'weatherUnits'].forEach(key => {
+        const value = getParamValue(key);
         if (value !== null) {
             (params as any)[key] = value;
             logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);
@@ -74,11 +122,27 @@ export async function applyURLParams() {
     const urlParams = new URLSearchParams(queryString);
     const params = parseURLParams(urlParams);
 
+    // Language
+    if (params.language !== undefined) {
+        if (i18next.isInitialized) {
+            i18next.changeLanguage(params.language);
+            updateTranslations();
+        } else {
+            applyFallbackTranslations();
+        }
+    } else {
+        if (i18next.isInitialized) {
+            updateTranslations();
+        } else {
+            applyFallbackTranslations();
+        }
+    }
+
     // Debug logging mode
     if (params.debugMode) {
         setDebug(true);
         initializeDebugUI();
-        showToast('Debug mode enabled. DevTools memory will increase over time.', 'normal', 'warning');
+        showToast(i18next.t('toasts.urlparams.debugmode'), 'normal', 'warning');
     }
 
     // Fast time refresh
@@ -89,19 +153,24 @@ export async function applyURLParams() {
     // Menu theme
     match(params.menuTheme)
         .with('light', () => {
+            setMenuTheme('light', true);
             menu.themeradio[0].checked = true;
-            menu.themeradio[0].dispatchEvent(new Event('change'));
         })
         .with('dark', () => {
+            setMenuTheme('dark', true);
             menu.themeradio[1].checked = true;
-            menu.themeradio[1].dispatchEvent(new Event('change'));
         })
-        .with(undefined, () => {
-            const index = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
-            menu.themeradio[index].checked = true;
-            menu.themeradio[index].dispatchEvent(new Event('change'));
+        .with('midnight', () => {
+            setMenuTheme('midnight', true);
+            menu.themeradio[2].checked = true;
         })
-        .exhaustive();
+        .with(P.union(undefined, 'auto'), () => {
+            setMenuTheme('auto', true);
+        })
+        .otherwise((invalidTheme) => {
+            logConsole(`Invalid theme: ${invalidTheme}, defaulting to auto`, 'warning');
+            setMenuTheme('auto', true);
+        });
 
     // Clock mode
     match(params.clockMode)
@@ -111,7 +180,9 @@ export async function applyURLParams() {
         .with(24, () => {
             setClockMode(24);
         })
-        .with(undefined, setClockMode);
+        .otherwise(() => {
+            setClockMode();
+        });
     
     // Weather
     if (params.weatherApi !== undefined && params.weatherLat !== undefined && params.weatherLon !== undefined && (params.weatherUnits == 'imperial' || params.weatherUnits == 'metric')) {
@@ -164,11 +235,12 @@ export async function applyURLParams() {
         const autoRestartTime = params.autoRestart;
         if (!isNaN(autoRestartTime) && autoRestartTime >= 15 && autoRestartTime <= 86400) {
             logConsole(`Set auto restart time for: ${autoRestartTime} seconds...`, 'debug');
-            menu.autorestarttime.innerHTML = `Auto restart: <b>${autoRestartTime} sec</b>`;
+            menu.autorestarttime.style.display = '';
+            menu.autorestarttime.innerHTML = autoRestartTime + 's';
             setTimeout(() => {
                 window.location.reload();
             }, autoRestartTime * 1000);
-            showToast(`Auto restart set to ${autoRestartTime} seconds.`, 'normal', 'warning');
+            showToast(i18next.t('toasts.urlparams.autorestart', { 0: autoRestartTime }), 'normal', 'warning');
         } else {
             logConsole('Invalid autoRestart value. It should be an integer between 15 and 86400 inclusive.', 'warning');
         }
@@ -178,6 +250,7 @@ export async function applyURLParams() {
     if (params.lockSettings) {
         setLockSettings(true);
         menu.container.remove();
+        panel.container.remove();
         logConsole('Settings locked - Menu container removed...', 'info');
     }
 }

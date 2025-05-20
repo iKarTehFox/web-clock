@@ -1,6 +1,7 @@
 import { stopColorFade } from '../background-color';
 import { menu, font } from './dom-elements';
-import { getFirstElement, logConsole } from '../utils/dom-utils';
+import { getFirstElement } from './dom-selectors';
+import { logConsole } from '../utils/dom-utils';
 
 // Interfaces
 interface ClockConfig {
@@ -248,6 +249,7 @@ export function setFontConfig(config: FontConfig, trigger: boolean = false): voi
     setFontStyle(config.fontStyle, trigger);
     setFontWeight(config.fontWeight, trigger);
     setFontSize(config.fontSize, trigger);
+    setDropShadow(config.dropShadow, trigger);
     setStrokeWidth(config.strokeWidth, trigger);
     setStrokeColor(config.strokeColor, trigger);
 }

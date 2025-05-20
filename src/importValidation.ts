@@ -1,11 +1,12 @@
 import { match } from 'ts-pattern';
 import { createBsModal, logConsole } from './utils/dom-utils';
+import i18next from 'i18next';
 
 // Value constraints
 const valid = {
     CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words', 'unixmillis', 'unixsec', 'unixcountdown', 'se_valentines', 'se_christmas', 'se_newyears', 'ii_christmas', 'ii_weekend', 'ii_leapyear'],
     SV: ['sviD', 'sviN'],
-    DF: ['D', 'DD', 'DDD', 'DDDD', ''],
+    DF: ['D', 'DD', 'DDD', 'DDDD', 'MMMM d', 'MMM d', 'd MMMM', 'd MMM', 'MMMM yyyy', 'yyyy', '\'Q\'q, yyyy', '\'Day\' o \'of\' yyyy', '\'Week\' W, \'Day\' o', ''],
     DA: ['dpoL', 'dpoC', 'dpoR'],
     BM: ['btyD', 'btyR', 'btyB'],
     BS: ['solid', 'dashed', 'dotted', 'double'],
@@ -22,7 +23,7 @@ const valid = {
     TCM: ['tcovD', 'tcovO'],
     BIS: ['', 'auto', 'cover', 'stretch'],
     BIB: ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    Ver: [10]
+    Ver: [10, 11]
 };
 
 // Error handling
@@ -46,7 +47,7 @@ export function handleValidationFailure(errorDetails: ErrorDetails) {
     
     const errorMessage = errorMsg[`${errorDetails.type}`] || 'Unknown validation failure';
     logConsole(`${errorMessage}`, 'error');
-    createBsModal('Error importing settings!', errorMessage, [{label: 'Get help', className: 'btn btn-primary', value: 'get_help'}, {label: 'Close', value: 'close'}], 60)
+    createBsModal(i18next.t('bsmodal.importexport.importerror'), errorMessage, [{label: i18next.t('bsmodal.button.gethelp'), className: 'btn btn-primary', value: 'get_help'}, {label: i18next.t('bsmodal.button.close'), value: 'close'}], 60)
         .then(result => {
             match(result)
                 .with('get_help', () => {

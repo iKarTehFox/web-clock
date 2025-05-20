@@ -8,5 +8,5 @@
     "lib": ["dom", "es2022"],
     "allowJs": true
   },
-  "files": ["src/global.ts"]
+  "include": ["src/**/*.ts"]
 }
