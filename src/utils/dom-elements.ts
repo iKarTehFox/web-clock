@@ -78,7 +78,6 @@ export const menu = {
 };
 
 export const font = {
-    applyfontinput: getElement<HTMLButtonElement>('applyCustomFontButton'),
     customfontinput: getElement<HTMLInputElement>('customFontInputForm'),
     familysel: getElement<HTMLSelectElement>('fontFamilySelect'),
     shadowlabel: getElement<HTMLLabelElement>('dropShadowRangeLabel'),
@@ -87,9 +86,7 @@ export const font = {
     strokecolor: getElement<HTMLInputElement>('textStrokeColor'),
     strokecolorlabel: getElement<HTMLLabelElement>('textStrokeColorLabel'),
     strokerange: getElement<HTMLInputElement>('textStrokeRange'),
-    strokerangelabel: getElement<HTMLLabelElement>('textStrokeRangeLabel'),
-    styleradio: getElements<HTMLInputElement>('input[name="font-style-radio"]'),
-    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]')
+    strokerangelabel: getElement<HTMLLabelElement>('textStrokeRangeLabel')
 };
 
 export const dtdisplay = {
