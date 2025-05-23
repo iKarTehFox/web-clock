@@ -68,6 +68,13 @@ const config = {
             {
                 test: /\.css$/i,
                 use: [stylesHandler, 'css-loader'],
+            },{
+                test: /\.s[ac]ss$/i,
+                use: [
+                    stylesHandler,
+                    'css-loader',
+                    'sass-loader'
+                ],
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
