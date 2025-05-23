@@ -116,7 +116,7 @@ function handleFontEvents(e: Event) {
         .with('BUTTON', () => {
             const buttonElement = target as HTMLButtonElement;
             match(buttonElement.id)
-                .with('applyFontInput', () => {
+                .with('applyCustomFontButton', () => {
                     const customFont = font.customfontinput.value;
                     if (customFont.length > 0) {
                         font.familysel.value = '';
