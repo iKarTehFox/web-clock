@@ -279,58 +279,6 @@ function startClock() {
     }
 }
 
-// Function to start the new clock method
-function startNewClock() {
-    const timeToNextSecond = 1000 - Number(getLuxNow('millis')) % 1000;
-
-    setTimeout(() => {
-        updateTime();
-        updatePageDuration();
-
-        // Set initial reference point
-        const startTime = performance.now();
-        let expectedTime = startTime + 1000; // Next expected tick
-        let lastExecutionTime = 0; // Track execution time
-
-        clockInterval = setInterval(() => {
-            // Measure drift before any operations
-            const beforeExecution = performance.now();
-            const drift = beforeExecution - expectedTime;
-
-            // Update after calculation
-            updateTime();
-            updatePageDuration();
-            logConsole('Time, date, and page duration updated...', 'info');
-
-            // Calculate execution time
-            const afterExecution = performance.now();
-            const executionTime = afterExecution - beforeExecution;
-            lastExecutionTime = executionTime;
-
-            // Cap drift at ±1000ms
-            const cappedDrift = Math.max(Math.min(drift, 1000), -1000);
-
-            // Set browser-specific threshold
-            const driftThreshold = browserInfo.engine.name?.includes('Blink') 
-                ? 150 
-                : Math.max(200, lastExecutionTime * 1.5);
-
-            if (Math.abs(drift) > driftThreshold) {
-                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.${Math.abs(drift) > 1000 ? ` Capped to ${cappedDrift}ms` : ''} (Execution: ${executionTime.toFixed(2)}ms)`, 'debug');
-                clearInterval(clockInterval!);
-                
-                // Adjust next start time by considering execution time
-                // This helps prevent cascading drift
-                const adjustedDelay = Math.max(0, 1000 - cappedDrift - Math.min(executionTime, 100));
-                setTimeout(startNewClock, adjustedDelay);
-            }
-
-            // Update expected time for next tick
-            expectedTime += 1000;
-        }, 1000);
-    }, timeToNextSecond);
-}
-
 // Function to start experimental clock
 function startExperimentalClock() {
     // Initial update
