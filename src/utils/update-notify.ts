@@ -1,9 +1,10 @@
 import { match } from 'ts-pattern';
 import { createBsModal, logConsole } from '../utils/dom-utils';
 import i18next from 'i18next';
+import { menu } from './dom-elements';
 
 // Hardcoded values. Change as needed.
-export const versionNumber = '1.7.0';
+export const versionNumber = '1.7.1';
 export const versionNumberString = `v${versionNumber}`;
 const releaseNotes = `https://github.com/iKarTehFox/web-clock/releases/tag/${versionNumber}`;
 
@@ -63,3 +64,8 @@ export function showUpdateNotification(options: UpdateNotificationOptions = {}) 
             });
     });
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+    menu.versionlabelclk.textContent = versionNumberString;
+    logConsole(`Updated version label to ${versionNumberString}`, 'debug', true);
+});
