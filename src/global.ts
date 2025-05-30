@@ -18,7 +18,7 @@ const fontSizeOptions: Record<FontSizeKey, string> = {
 };
 
 // Font style handler function
-function modifyFontStyle(type: string, value: string) {
+export function modifyFontStyle(type: string, value: string) {
     const fontSize = value as FontSizeKey;
     match(type)
         .with('style', () => {
@@ -63,6 +63,14 @@ function modifyFontStyle(type: string, value: string) {
         .otherwise(() => {
             logConsole(`Invalid font modification type: ${type}`, 'error');
         });
+}
+
+export function getFont(): string {
+    return dtdisplay.ccontainer.style.fontFamily;
+}
+
+export function getFontList(): string[] {
+    return Array.from(font.familysel.options).map((option) => option.value);
 }
 
 panel.section.fc.addEventListener('change', handleFontEvents);

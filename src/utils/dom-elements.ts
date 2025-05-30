@@ -23,6 +23,14 @@ export const panel = {
     }
 };
 
+export const devcon = {
+    container: getElement<HTMLDivElement>('dev-console-container'),
+    closebtn: getElement<HTMLButtonElement>('dev-console-close'),
+    output: getElement<HTMLDivElement>('dev-console-output'),
+    input: getElement<HTMLInputElement>('dev-console-input'),
+    submitbtn: getElement<HTMLButtonElement>('dev-console-submit'),
+};
+
 export const menu = {
     autorestarttime: getElement<HTMLSpanElement>('autorestart-time'),
     borderstyleselect: getElement<HTMLSelectElement>('borderStyleSelect'),

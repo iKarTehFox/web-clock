@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { menu, panel, stopwatch } from './utils/dom-elements';
+import { devcon, menu, panel, stopwatch } from './utils/dom-elements';
 import { logConsole } from './utils/dom-utils';
 
 let timeInterval: NodeJS.Timeout;
@@ -131,6 +131,43 @@ function lapStopwatch() {
     }
 }
 
+// External control
+export function startStopwatchExternal(): Promise<void> {
+    if (running) {
+        return Promise.reject(new Error('Stopwatch is already running'));
+    }
+
+    startStopwatch();
+    return Promise.resolve();
+}
+
+export function pauseStopwatchExternal(): Promise<void> {
+    if (!running) {
+        return Promise.reject(new Error('Stopwatch is not running'));
+    }
+
+    pauseStopwatch();
+    return Promise.resolve();
+}
+
+export function resetStopwatchExternal(): Promise<void> {
+    if (!running && elapsedTime === 0) {
+        return Promise.reject(new Error('Stopwatch is already reset'));
+    }
+
+    resetStopwatch();
+    return Promise.resolve();
+}
+
+export function lapStopwatchExternal(): Promise<void> {
+    if (!running) {
+        return Promise.reject(new Error('Stopwatch is not running'));
+    }
+
+    lapStopwatch();
+    return Promise.resolve();
+}
+
 // Stopwatch button listener
 stopwatch.obutton.addEventListener('click', () => {
     if (stopwatch.container.style.display == 'block') {
@@ -153,14 +190,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const isMenuRelated = menu.container.contains(target) || 
                                    panel.menubutton.contains(target) || 
                                    stopwatch.container.contains(target) || 
-                                   stopwatch.obutton.contains(target);
+                                   stopwatch.obutton.contains(target) ||
+                                   devcon.container.contains(target);
         const isStopwatchVisible = stopwatch.container.style.display !== 'none';
         const isTooltip = target.closest('.tooltip') !== null;
         const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
         const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
         const isOffcanvasBackdrop = target.closest('.offcanvas-backdrop') !== null;
+        const isInputFocused = document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement;
 
-        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isStopwatchVisible && !isOffcanvasBackdrop) {
+        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isStopwatchVisible && !isOffcanvasBackdrop && !isInputFocused) {
             stopwatch.container.style.display = 'none';
             stopwatch.obutton.className = 'btn btn-secondary';
             logConsole('Stopwatch panel closed', 'info');

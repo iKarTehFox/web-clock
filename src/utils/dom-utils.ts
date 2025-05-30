@@ -1,5 +1,5 @@
 import Toastify from 'toastify-js';
-import { countdown, doc, menu, stopwatch, weather } from './dom-elements';
+import { countdown, devcon, doc, menu, stopwatch, weather } from './dom-elements';
 import { debugMode } from './debug';
 import { Html5Qrcode } from 'html5-qrcode';
 import { processJSONSettings } from '../importExport';
@@ -154,7 +154,8 @@ export function setMenuTheme(theme: string | 'toggle', quiet: boolean = false): 
         menu.container,
         weather.container,
         stopwatch.container,
-        countdown.container
+        countdown.container,
+        devcon.container
     ];
     
     containers.forEach(container => {
@@ -178,6 +179,10 @@ export function setMenuTheme(theme: string | 'toggle', quiet: boolean = false): 
     
     logConsole(`Menu theme set to: ${theme}`, 'debug');
     if (!quiet) showToast(i18next.t(`toasts.global.theme${theme}`));
+}
+
+export function getMenuTheme(): string {
+    return menu.container.dataset.bsTheme || 'light';
 }
 
 // Helper function to get available themes

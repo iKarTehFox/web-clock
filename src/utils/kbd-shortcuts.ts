@@ -1,10 +1,11 @@
 import { match, P } from 'ts-pattern';
 import { toggleFullscreen } from '../global';
-import { menu, countdown, stopwatch, panel } from './dom-elements';
+import { menu, countdown, stopwatch, panel, devcon } from './dom-elements';
 import { createBsModal, getCurrentTheme, setMenuTheme } from './dom-utils';
 import { presetLocalJSON } from '../importExport';
-import { lockSettings } from './debug';
+import { debugMode, lockSettings } from './debug';
 import { getPresetByHotkey } from '../assets//presets/presets';
+import { debugConsole } from './debug-console';
 
 function generateShortcutsHelp(): HTMLDivElement {
     const shortcuts = {
@@ -66,6 +67,15 @@ document.addEventListener('keydown', (e) => {
         .with('c', () => { // Show/hide countdown
             countdown.obutton.click();
         })
+        .with('d', () => { // Toggle dev console
+            if (debugMode) {
+                // Prevent the 'd' character from being entered in the input
+                e.preventDefault();
+                // Use the existing toggle method from debug-console.ts
+                debugConsole.toggle();
+            }
+        })
+
         .with('f', () => { // Toggle fullscreen
             toggleFullscreen();
         })

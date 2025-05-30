@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { countdown, menu, panel } from './utils/dom-elements';
+import { countdown, devcon, menu, panel } from './utils/dom-elements';
 import { logConsole, requestNotificationPermission, showToast } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import i18next from 'i18next';
@@ -139,6 +139,39 @@ countdown.startbtn.addEventListener('click', () => {
     }
 });
 
+// External control
+export function startCountdownExternal(length: number): Promise<void> {
+    if (running && totalSeconds > 0) {
+        return Promise.reject(new Error('Countdown is already running.'));
+    }
+
+    if (length > 360000 || length < 1) {
+        return Promise.reject(new Error('Countdown length must be a positive integer less than 360000 seconds.'));
+    }
+
+    totalSeconds = length;
+    startCountdown();
+    return Promise.resolve();
+}
+
+export function pauseCountdownExternal(): Promise<void> {
+    if (!running) {
+        return Promise.reject(new Error('Countdown is not running.'));
+    }
+
+    pauseCountdown();
+    return Promise.resolve();
+}
+
+export function resetCountdownExternal(): Promise<void> {
+    if (!running && totalSeconds === 0) {
+        return Promise.reject(new Error('Countdown is not running and is already reset.'));
+    }
+
+    resetCountdown();
+    return Promise.resolve();
+}
+
 // Countdown button listener
 countdown.obutton.addEventListener('click', () => {
     if (countdown.container.style.display == 'block') {
@@ -160,7 +193,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const isMenuRelated = menu.container.contains(target) || 
                                    panel.menubutton.contains(target) || 
                                    countdown.container.contains(target) || 
-                                   countdown.obutton.contains(target);
+                                   countdown.obutton.contains(target) ||
+                                   devcon.container.contains(target);
         const isCountdownVisible = countdown.container.style.display !== 'none';
         const isTooltip = target.closest('.tooltip') !== null;
         const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
@@ -181,8 +215,9 @@ document.addEventListener('keydown', function(e) {
     const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
     const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
     const isOffcanvasVisible = document.querySelector('.offcanvas.show, .offcanvas.showing') !== null;
+    const isInputFocused = document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement;
 
-    if (e.key === 'Escape' && isCountdownVisible && !isBsModalVisible && !isScannerOverlayVisible && !isOffcanvasVisible) {
+    if (e.key === 'Escape' && isCountdownVisible && !isBsModalVisible && !isScannerOverlayVisible && !isOffcanvasVisible && !isInputFocused) {
         countdown.container.style.display = 'none';
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');
