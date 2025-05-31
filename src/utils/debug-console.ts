@@ -5,9 +5,10 @@ import { match } from 'ts-pattern';
 import { presetLocalJSON, resetSettings } from '../importExport';
 import { presetList } from '../assets/presets/presets';
 import { versionNumberString } from './update-notify';
-import { getFontFamily, getFontList, getFontSize, getFontStrokeColor, getFontStrokeWidth, getFontStyle, getFontWeight, modifyFontStyle, FontSizeKey } from '../global';
+import { getFontList, FontSizeKey } from '../global';
 import { startCountdownExternal, pauseCountdownExternal, resetCountdownExternal } from '../countdown';
 import { lapStopwatchExternal, pauseStopwatchExternal, resetStopwatchExternal, startStopwatchExternal } from '../stopwatch';
+import { getFontFamily, getFontSize, getFontWeight, getFontStyle, getStrokeColor, getStrokeWidth, setFontFamily, setFontSize, setFontWeight, setFontStyle, setStrokeWidth, setStrokeColor } from './clock-settings';
 
 // Command history
 let commandHistory: string[] = [];
@@ -601,8 +602,8 @@ const commands: Command[] = [
                 appendToConsole(`Size: ${getFontSize()}`);
                 appendToConsole(`Weight: ${getFontWeight()}`);
                 appendToConsole(`Style: ${getFontStyle()}`);
-                appendToConsole(`Stroke Width: ${getFontStrokeWidth()}`);
-                appendToConsole(`Stroke Color: ${getFontStrokeColor()}`);
+                appendToConsole(`Stroke Width: ${getStrokeWidth()}`);
+                appendToConsole(`Stroke Color: ${getStrokeColor()}`);
                 return;
             }
 
@@ -622,16 +623,21 @@ const commands: Command[] = [
                                 return;
                             }
                             const fontName = args.value;
-                        
-                            modifyFontStyle('family', fontName);
-                        
-                            if (!options.quiet) {
-                                appendToConsole(`Font family set to ${fontName}`);
+
+                            if (getFontList().includes(fontName)) {
+                                setFontFamily(fontName, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Font family set to ${fontName}`);
+                                }
+                            } else {
+                                appendToConsole(`Font family not found: ${fontName}`, 'error');
+                                const fonts = getFontList();
+                                appendToConsole(`List of font families:${fonts.join('\n')}`);
                             }
                         })
                         .with('list', () => {
                             const fonts = getFontList();
-                            appendToConsole(`Available font families:\n${fonts.join('\n')}`);
+                            appendToConsole(`Available font families:${fonts.join('\n')}`);
                         })
                         .otherwise((act) => {
                             appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
@@ -657,7 +663,7 @@ const commands: Command[] = [
                                 return;
                             }
                         
-                            modifyFontStyle('size', fontSize);
+                            setFontSize(fontSize, true);
                         
                             if (!options.quiet) {
                                 appendToConsole(`Font size set to ${fontSize}`);
@@ -684,7 +690,7 @@ const commands: Command[] = [
                             }
                             const fontWeight = args.value;
                         
-                            modifyFontStyle('weight', fontWeight);
+                            setFontWeight(fontWeight, true);
                         
                             if (!options.quiet) {
                                 appendToConsole(`Font weight set to ${fontWeight}`);
@@ -710,7 +716,7 @@ const commands: Command[] = [
                             }
                             const fontStyle = args.value;
                         
-                            modifyFontStyle('style', fontStyle);
+                            setFontStyle(fontStyle, true);
                         
                             if (!options.quiet) {
                                 appendToConsole(`Font style set to ${fontStyle}`);
@@ -726,8 +732,8 @@ const commands: Command[] = [
                 .with('stroke', () => {
                     match(action)
                         .with('get', () => {
-                            const strokeWidth = getFontStrokeWidth();
-                            const strokeColor = getFontStrokeColor();
+                            const strokeWidth = getStrokeWidth();
+                            const strokeColor = getStrokeColor();
                             appendToConsole(`Current font stroke width: ${strokeWidth}`);
                             appendToConsole(`Current font stroke color: ${strokeColor}`);
                         })
@@ -743,14 +749,20 @@ const commands: Command[] = [
                                 return;
                             }
 
-                            modifyFontStyle('strokewidth', String(strokeWidth));
+                            setStrokeWidth(`${strokeWidth}px`, true);
                         
                             if (!options.quiet) {
                                 appendToConsole(`Font stroke width set to ${strokeWidth}px`);
                             }
                             
                             if (options.color) {
-                                modifyFontStyle('strokecolor', options.color);
+                                if (!/^#[0-9A-Fa-f]{6}$/.test(options.color)) {
+                                    appendToConsole('Error: Invalid color format. Color must be in full hex format (e.g. #FF0000)', 'error');
+                                    return;
+                                }
+
+                                setStrokeColor(options.color, true);
+                                
                                 if (!options.quiet) {
                                     appendToConsole(`Font stroke color set to ${options.color}`);
                                 }
@@ -1226,7 +1238,12 @@ function appendToConsole(text: string, type: 'normal' | 'command' | 'error' = 'n
     devcon.output.appendChild(entry);
 
     const logTimestamp = new Date().toLocaleTimeString();
-    logConsole(`[${logTimestamp}] Developer Console Output - ${text}`, 'debug');
+
+    // Remove oldest entries if exceeding 100
+    while (devcon.output.children.length > 100) {
+        logConsole(`[${logTimestamp}] Developer Console Output - Limit reached (${devcon.output.children.length}/100) Removing ${devcon.output.firstChild.textContent}`, 'debug');
+        devcon.output.removeChild(devcon.output.firstChild);
+    }
     
     // Auto-scroll to bottom
     devcon.output.scrollTop = devcon.output.scrollHeight;

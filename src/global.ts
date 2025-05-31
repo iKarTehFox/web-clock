@@ -18,7 +18,7 @@ const fontSizeOptions: Record<FontSizeKey, string> = {
 };
 
 // Font style handler function
-export function modifyFontStyle(type: string, value: string) {
+function modifyFontStyle(type: string, value: string) {
     const fontSize = value as FontSizeKey;
     match(type)
         .with('style', () => {
@@ -67,30 +67,6 @@ export function modifyFontStyle(type: string, value: string) {
 
 export function getFontList(): string[] {
     return Array.from(font.familysel.options).map((option) => option.value);
-}
-
-export function getFontFamily(): string {
-    return dtdisplay.ccontainer.style.fontFamily;
-}
-
-export function getFontSize(): string {
-    return dtdisplay.ccontainer.style.fontSize;
-}
-
-export function getFontWeight(): string {
-    return dtdisplay.ccontainer.style.fontWeight;
-}
-
-export function getFontStyle(): string {
-    return dtdisplay.ccontainer.style.fontStyle;
-}
-
-export function getFontStrokeWidth(): string {
-    return dtdisplay.ccontainer.style.webkitTextStrokeWidth;
-}
-
-export function getFontStrokeColor(): string {
-    return dtdisplay.ccontainer.style.webkitTextStrokeColor;
 }
 
 panel.section.fc.addEventListener('change', handleFontEvents);
