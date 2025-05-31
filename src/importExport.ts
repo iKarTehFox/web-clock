@@ -216,6 +216,34 @@ export function generatePresetButtons(): void {
 
 generatePresetButtons();
 
+// Resetter function
+export function resetSettings(): Promise<string> {
+    return new Promise((resolve) => {
+        if (window.confirm('Reset all clock settings to defaults?')) {
+            // Perform the reset
+            presetLocalJSON('onlinewebclock-defaults', false) // Clock settings
+                .then(() => {
+                    // Apply other resets
+                    menu.themeradio[0].click(); // Light theme
+                    menu.panelvischeckbox.checked = true;
+                    menu.panelvischeckbox.dispatchEvent(new Event('change'));
+                    if (menu.weatherstopbtn.disabled === false) menu.weatherstopbtn.click();
+                    menu.titlevischeckbox.checked = true;
+                    
+                    // Resolve with true to indicate success
+                    resolve('Settings reset successfully');
+                })
+                .catch(error => {
+                    logConsole(`Error resetting settings: ${error}`, 'error');
+                    resolve(`Error resetting settings: ${error}`);
+                });
+        } else {
+            // User canceled the reset
+            resolve('Reset canceled');
+        }
+    });
+}
+
 // IE listener
 panel.section.ie.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;

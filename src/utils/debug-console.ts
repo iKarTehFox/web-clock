@@ -1,8 +1,8 @@
-import { countdown, devcon, menu, panel, stopwatch } from './dom-elements';
+import { countdown, debug, devcon, menu, panel, stopwatch } from './dom-elements';
 import { getAvailableThemes, getMenuTheme, logConsole, requestNotificationPermission, setMenuTheme } from './dom-utils';
 import { debugMode } from './debug';
 import { match } from 'ts-pattern';
-import { presetLocalJSON } from '../importExport';
+import { presetLocalJSON, resetSettings } from '../importExport';
 import { presetList } from '../assets/presets/presets';
 import { versionNumberString } from './update-notify';
 import { getFont, getFontList, modifyFontStyle } from '../global';
@@ -617,6 +617,18 @@ const commands: Command[] = [
         }
     },
     {
+        name: 'reset',
+        description: 'Reset all Online Web Clock settings to default',
+        usage: 'reset',
+        aliases: ['reset-settings', 'reset-config'],
+        execute: () => {
+            resetSettings()
+                .then(result => {
+                    appendToConsole(result);
+                });
+        }
+    },
+    {
         name: 'version',
         description: 'Display the current version of the application',
         usage: 'version',
@@ -638,6 +650,20 @@ const commands: Command[] = [
             } else {
                 appendToConsole(`Online Web Clock ${versionNumberString}`);
             }
+        }
+    },
+    {
+        name: 'exit',
+        description: 'Exits the Developer Console',
+        usage: 'exit',
+        aliases: ['quit', 'q'],
+        execute: () => {
+            appendToConsole('Exiting Developer Console...');
+
+            // Artificial delay
+            setTimeout(() => {
+                debugConsole.hide();
+            }, 100);
         }
     }
 ];
@@ -776,6 +802,35 @@ function parseCommandArguments(command: Command, rawArgs: string[]): {
     return { parsedArgs, parsedOptions, errors };
 }
 
+// Handle global options before command execution
+function handleGlobalOptions(commandName: string, rawArgs: string[]): boolean {
+    // Check for help flag
+    const helpFlags = ['-h', '--help'];
+    const hasHelpFlag = rawArgs.some(arg => helpFlags.includes(arg));
+  
+    if (hasHelpFlag) {
+    // Find the command
+        const command = commands.find(cmd => 
+            cmd.name === commandName || 
+      (cmd.aliases && cmd.aliases.includes(commandName))
+        );
+    
+        if (command) {
+            // Display help for the command (reuse the help command's functionality)
+            const helpCommand = commands.find(cmd => cmd.name === 'help');
+            if (helpCommand) {
+                helpCommand.execute({ command: commandName }, {}, []);
+            }
+        } else {
+            appendToConsole(`Unknown command: ${commandName}`, 'error');
+        }
+    
+        return true; // Indicate that we've handled the command
+    }
+  
+    return false; // No global options were handled
+}
+
 // Handle command execution
 function executeCommand(): void {
     const input = devcon.input.value.trim();
@@ -819,10 +874,16 @@ function executeCommand(): void {
     const commandName = tokens[0].toLowerCase();
     const rawArgs = tokens.slice(1);
   
+    // Check for global options first
+    if (handleGlobalOptions(commandName, rawArgs)) {
+        devcon.input.value = '';
+        return;
+    }
+  
     // Find command by name or alias
     const command = commands.find(cmd => 
         cmd.name === commandName || 
-    (cmd.aliases && cmd.aliases.includes(commandName))
+        (cmd.aliases && cmd.aliases.includes(commandName))
     );
   
     if (command) {
@@ -1013,6 +1074,9 @@ function appendToConsole(text: string, type: 'normal' | 'command' | 'error' = 'n
     
     entry.textContent = text;
     devcon.output.appendChild(entry);
+
+    const logTimestamp = new Date().toLocaleTimeString();
+    logConsole(`[${logTimestamp}] Developer Console Output - ${text}`, 'debug');
     
     // Auto-scroll to bottom
     devcon.output.scrollTop = devcon.output.scrollHeight;
