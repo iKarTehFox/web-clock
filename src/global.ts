@@ -6,7 +6,7 @@ import { showUpdateNotification, versionNumberString } from './utils/update-noti
 import i18next from 'i18next';
 
 // Define font sizes
-type FontSizeKey = '6vw' | '8vw' | '10vw' | '12vw' | '14vw' | '18vw';
+export type FontSizeKey = '6vw' | '8vw' | '10vw' | '12vw' | '14vw' | '18vw';
 
 const fontSizeOptions: Record<FontSizeKey, string> = {
     '6vw': '1.09vw',
@@ -65,12 +65,32 @@ export function modifyFontStyle(type: string, value: string) {
         });
 }
 
-export function getFont(): string {
+export function getFontList(): string[] {
+    return Array.from(font.familysel.options).map((option) => option.value);
+}
+
+export function getFontFamily(): string {
     return dtdisplay.ccontainer.style.fontFamily;
 }
 
-export function getFontList(): string[] {
-    return Array.from(font.familysel.options).map((option) => option.value);
+export function getFontSize(): string {
+    return dtdisplay.ccontainer.style.fontSize;
+}
+
+export function getFontWeight(): string {
+    return dtdisplay.ccontainer.style.fontWeight;
+}
+
+export function getFontStyle(): string {
+    return dtdisplay.ccontainer.style.fontStyle;
+}
+
+export function getFontStrokeWidth(): string {
+    return dtdisplay.ccontainer.style.webkitTextStrokeWidth;
+}
+
+export function getFontStrokeColor(): string {
+    return dtdisplay.ccontainer.style.webkitTextStrokeColor;
 }
 
 panel.section.fc.addEventListener('change', handleFontEvents);

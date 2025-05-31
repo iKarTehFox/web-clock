@@ -5,7 +5,7 @@ import { match } from 'ts-pattern';
 import { presetLocalJSON, resetSettings } from '../importExport';
 import { presetList } from '../assets/presets/presets';
 import { versionNumberString } from './update-notify';
-import { getFont, getFontList, modifyFontStyle } from '../global';
+import { getFontFamily, getFontList, getFontSize, getFontStrokeColor, getFontStrokeWidth, getFontStyle, getFontWeight, modifyFontStyle, FontSizeKey } from '../global';
 import { startCountdownExternal, pauseCountdownExternal, resetCountdownExternal } from '../countdown';
 import { lapStopwatchExternal, pauseStopwatchExternal, resetStopwatchExternal, startStopwatchExternal } from '../stopwatch';
 
@@ -554,9 +554,16 @@ const commands: Command[] = [
     },
     {
         name: 'font',
-        description: 'Change or get the current font',
-        usage: 'font [get|set <font-name>|list]',
+        description: 'View or modify font settings',
+        usage: 'font [family|size|weight|style|stroke] [get|set|list] [value]',
+        aliases: ['f'],
         args: [
+            {
+                name: 'property',
+                type: 'string',
+                description: 'Font property to modify (family, size, weight, style, stroke)',
+                required: false
+            },
             {
                 name: 'action',
                 type: 'string',
@@ -564,9 +571,9 @@ const commands: Command[] = [
                 required: false
             },
             {
-                name: 'fontName',
+                name: 'value',
                 type: 'string',
-                description: 'Font name to set (required for "set" action)',
+                description: 'Value to set for the property',
                 required: false
             }
         ],
@@ -577,41 +584,184 @@ const commands: Command[] = [
                 type: 'boolean',
                 description: 'Change font without showing notifications',
                 default: false
+            },
+            {
+                name: 'color',
+                shortName: 'c',
+                type: 'string',
+                description: 'Color value for stroke (when using stroke property)',
+                default: ''
             }
         ],
         execute: (args, options) => {
-            if (!args.action) {
+            if (!args.property) {
                 appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'font')?.usage}`, 'error');
-                // Print current font
-                const currentFont = getFont();
-                appendToConsole(`Current font: ${currentFont}`);
+                appendToConsole('Current font settings:');
+                appendToConsole(`Family: ${getFontFamily()}`);
+                appendToConsole(`Size: ${getFontSize()}`);
+                appendToConsole(`Weight: ${getFontWeight()}`);
+                appendToConsole(`Style: ${getFontStyle()}`);
+                appendToConsole(`Stroke Width: ${getFontStrokeWidth()}`);
+                appendToConsole(`Stroke Color: ${getFontStrokeColor()}`);
                 return;
             }
 
-            match(args.action.toLowerCase())
-                .with('get', () => {
-                    const currentFont = getFont();
-                    appendToConsole(`Current font: ${currentFont}`);
+            const property = args.property.toLowerCase();
+            const action = args.action ? args.action.toLowerCase() : 'get';
+
+            match(property)
+                .with('family', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentFont = getFontFamily();
+                            appendToConsole(`Current font family: ${currentFont}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing font name. Usage: font family set <font-name>', 'error');
+                                return;
+                            }
+                            const fontName = args.value;
+                        
+                            modifyFontStyle('family', fontName);
+                        
+                            if (!options.quiet) {
+                                appendToConsole(`Font family set to ${fontName}`);
+                            }
+                        })
+                        .with('list', () => {
+                            const fonts = getFontList();
+                            appendToConsole(`Available font families:\n${fonts.join('\n')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
                 })
-                .with('set', () => {
-                    if (!args.fontName) {
-                        appendToConsole('Error: Missing font name. Usage: font set <font-name>', 'error');
-                        return;
-                    }
-                    const fontName = args.fontName;
-                    
-                    modifyFontStyle('family', fontName);
-                    
-                    if (!options.quiet) {
-                        appendToConsole(`Font set to ${fontName}`);
-                    }
+                .with('size', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentSize = getFontSize();
+                            appendToConsole(`Current font size: ${currentSize}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing size value. Usage: font size set <size>', 'error');
+                                return;
+                            }
+                            const fontSize = args.value;
+                        
+                            // Check if the provided size is a valid FontSizeKey
+                            const validSizes: FontSizeKey[] = ['6vw', '8vw', '10vw', '12vw', '14vw', '18vw'];
+                            if (!validSizes.includes(fontSize as FontSizeKey)) {
+                                appendToConsole(`Error: Invalid font size "${fontSize}". Valid sizes are: ${validSizes.join(', ')}`, 'error');
+                                return;
+                            }
+                        
+                            modifyFontStyle('size', fontSize);
+                        
+                            if (!options.quiet) {
+                                appendToConsole(`Font size set to ${fontSize}`);
+                            }
+                        })
+                        .with('list', () => {
+                            const validSizes: FontSizeKey[] = ['6vw', '8vw', '10vw', '12vw', '14vw', '18vw'];
+                            appendToConsole(`Available font sizes: ${validSizes.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
                 })
-                .with('list', () => {
-                    const fonts = getFontList();
-                    appendToConsole(`Available fonts:\n${fonts.join('\n')}`);
+                .with('weight', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentWeight = getFontWeight();
+                            appendToConsole(`Current font weight: ${currentWeight}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing weight value. Usage: font weight set <weight>', 'error');
+                                return;
+                            }
+                            const fontWeight = args.value;
+                        
+                            modifyFontStyle('weight', fontWeight);
+                        
+                            if (!options.quiet) {
+                                appendToConsole(`Font weight set to ${fontWeight}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole('Available font weights: normal, bold');
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
                 })
-                .otherwise((action) => {
-                    appendToConsole(`Unknown action: ${action}. Available actions: get, set, list`, 'error');
+                .with('style', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentStyle = getFontStyle();
+                            appendToConsole(`Current font style: ${currentStyle}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing style value. Usage: font style set <style>', 'error');
+                                return;
+                            }
+                            const fontStyle = args.value;
+                        
+                            modifyFontStyle('style', fontStyle);
+                        
+                            if (!options.quiet) {
+                                appendToConsole(`Font style set to ${fontStyle}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole('Available font styles: normal, italic');
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('stroke', () => {
+                    match(action)
+                        .with('get', () => {
+                            const strokeWidth = getFontStrokeWidth();
+                            const strokeColor = getFontStrokeColor();
+                            appendToConsole(`Current font stroke width: ${strokeWidth}`);
+                            appendToConsole(`Current font stroke color: ${strokeColor}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing stroke width value. Usage: font stroke set <width> [--color <color>]', 'error');
+                                return;
+                            }
+                            const strokeWidth = parseInt(args.value);
+                        
+                            if (isNaN(strokeWidth) || strokeWidth < 0 || strokeWidth > 5) {
+                                appendToConsole(`Error: Invalid stroke width value ${strokeWidth}. Ensure it is a number between 0 and 5. Usage: font stroke set <width> [--color <color>]`, 'error');
+                                return;
+                            }
+
+                            modifyFontStyle('strokewidth', String(strokeWidth));
+                        
+                            if (!options.quiet) {
+                                appendToConsole(`Font stroke width set to ${strokeWidth}px`);
+                            }
+                            
+                            if (options.color) {
+                                modifyFontStyle('strokecolor', options.color);
+                                if (!options.quiet) {
+                                    appendToConsole(`Font stroke color set to ${options.color}`);
+                                }
+                            }
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, color`, 'error');
+                        });
+                })
+                .otherwise((prop) => {
+                    appendToConsole(`Unknown property: ${prop}. Available properties: family, size, weight, style, stroke`, 'error');
                     appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'font')?.usage}`, 'error');
                 });
         }
