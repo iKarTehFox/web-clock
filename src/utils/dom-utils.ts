@@ -105,7 +105,9 @@ interface ThemeConfig {
     backgroundColor?: string;
 }
 
-const themes: Record<string, ThemeConfig> = {
+type ThemeKey = 'light' | 'dark' | 'midnight';
+
+const themes: Record<ThemeKey, ThemeConfig> = {
     'light': {
         textColor: '#212529',
         metaTheme: 'light'
@@ -122,32 +124,33 @@ const themes: Record<string, ThemeConfig> = {
 };
 
 // Menu theme function
-export function setMenuTheme(theme: string | 'toggle', quiet: boolean = false): void {
+export function setMenuTheme(theme: 'auto' | 'toggle' | ThemeKey, quiet: boolean = false): void {
     // Get current theme
     const currentTheme = menu.container.dataset.bsTheme || 'light';
     
     // Handle auto
     if (theme === 'auto') {
-        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        menu.themeradio[theme === 'light' ? 0 : 1].checked = true;
+        const detectedTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        menu.themeradio[detectedTheme === 'light' ? 0 : 1].checked = true;
+        theme = detectedTheme as ThemeKey;
     }
 
     // Handle toggle (cycle through themes)
     if (theme === 'toggle') {
-        const themeKeys = Object.keys(themes);
-        const currentIndex = themeKeys.indexOf(currentTheme);
+        const themeKeys = Object.keys(themes) as ThemeKey[];
+        const currentIndex = themeKeys.indexOf(currentTheme as ThemeKey);
         const nextIndex = (currentIndex + 1) % themeKeys.length;
         theme = themeKeys[nextIndex];
         menu.themeradio[nextIndex].checked = true;
     }
     
     // Validate theme exists
-    if (!themes[theme]) {
+    if (!themes[theme as ThemeKey]) {
         logConsole(`Invalid theme: ${theme}, defaulting to light`, 'error');
         theme = 'light';
     }
 
-    const themeConfig = themes[theme];
+    const themeConfig = themes[theme as ThemeKey];
     
     // Apply theme to all containers
     const containers = [

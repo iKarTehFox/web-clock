@@ -1,4 +1,4 @@
-import { logConsole, showToast, createBsModal, createScannerOverlay } from './utils/dom-utils';
+import { logConsole, showToast, createBsModal, createScannerOverlay, setMenuTheme } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, panel } from './utils/dom-elements';
 import { ErrorDetails, handleValidationFailure, verifySettingsJSON } from './importValidation';
@@ -224,7 +224,7 @@ export function resetSettings(): Promise<string> {
             presetLocalJSON('onlinewebclock-defaults', false) // Clock settings
                 .then(() => {
                     // Apply other resets
-                    menu.themeradio[0].click(); // Light theme
+                    setMenuTheme('light', true);
                     menu.panelvischeckbox.checked = true;
                     menu.panelvischeckbox.dispatchEvent(new Event('change'));
                     if (menu.weatherstopbtn.disabled === false) menu.weatherstopbtn.click();
