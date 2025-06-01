@@ -5,10 +5,10 @@ import { match } from 'ts-pattern';
 import { presetLocalJSON, resetSettings } from '../importExport';
 import { presetList } from '../assets/presets/presets';
 import { versionNumberString } from './update-notify';
-import { getFontList, FontSizeKey } from '../global';
 import { startCountdownExternal, pauseCountdownExternal, resetCountdownExternal } from '../countdown';
 import { lapStopwatchExternal, pauseStopwatchExternal, resetStopwatchExternal, startStopwatchExternal } from '../stopwatch';
-import { getFontFamily, getFontSize, getFontWeight, getFontStyle, getStrokeColor, getStrokeWidth, setFontFamily, setFontSize, setFontWeight, setFontStyle, setStrokeWidth, setStrokeColor } from './clock-settings';
+import { getFontFamily, getFontSize, getFontWeight, getFontStyle, getStrokeColor, getStrokeWidth, setFontFamily, setFontSize, setFontWeight, setFontStyle, setStrokeWidth, setStrokeColor, getBorderMode, getBorderStyle, getClockConfig, getClockDisplay, getCustomNote, getCustomNoteAlign, getDateAlign, getDateFormat, getSecondsVis, getTimeBar, setBorderMode, setBorderStyle, setClockDisplay, setCustomNote, setCustomNoteAlign, setDateAlign, setDateFormat, setSecondsVis, setTimeBar, getDropShadow, setDropShadow, getFontConfig, getBGImageBlur, getBGImageSize, getColorMode, getSolidColorValue, getTextColorMode, getTextColorValue, setBackgroundImageBlur, setBackgroundImageSize, setColorMode, setSolidColor, setTextColorMode, setTextColorValue } from './clock-settings';
+import { valid } from '../importValidation';
 
 // Command history
 let commandHistory: string[] = [];
@@ -553,10 +553,346 @@ const commands: Command[] = [
             }
         }
     },
+    // Add this new command to the commands array
+    {
+        name: 'clock',
+        description: 'View or modify clock settings',
+        usage: 'clock [display|seconds|date-format|date-align|border-mode|border-style|time-bar|note|note-align] [get|set|list] [value]',
+        aliases: ['c'],
+        args: [
+            {
+                name: 'property',
+                type: 'string',
+                description: 'Clock property to modify (display, seconds, date-format, date-align, border-mode, border-style, time-bar, note, note-align)',
+                required: false
+            },
+            {
+                name: 'action',
+                type: 'string',
+                description: 'Action to perform (get, set, list)',
+                required: false
+            },
+            {
+                name: 'value',
+                type: 'string',
+                description: 'Value to set for the property',
+                required: false
+            }
+        ],
+        options: [
+            {
+                name: 'quiet',
+                shortName: 'q',
+                type: 'boolean',
+                description: 'Change clock settings without showing notifications',
+                default: false
+            }
+        ],
+        execute: (args, options) => {
+            if (!args.property) {
+                appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'clock')?.usage}`, 'error');
+                const config = getClockConfig();
+                appendToConsole('Current clock settings:');
+                appendToConsole(`Display: ${config.clockDisplay}`);
+                appendToConsole(`Seconds Visibility: ${config.secondsVis}`);
+                appendToConsole(`Date Format: ${config.dateFormat}`);
+                appendToConsole(`Date Alignment: ${config.dateAlign}`);
+                appendToConsole(`Border Mode: ${config.borderMode}`);
+                appendToConsole(`Border Style: ${config.borderStyle}`);
+                appendToConsole(`Time Bar: ${config.timeBar}`);
+                appendToConsole(`Custom Note: ${config.customNote}`);
+                appendToConsole(`Custom Note Alignment: ${config.customNoteAlign}`);
+                return;
+            }
+
+            const property = args.property.toLowerCase();
+            const action = args.action ? args.action.toLowerCase() : 'get';
+
+            match(property)
+                .with('display', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentDisplay = getClockDisplay();
+                            appendToConsole(`Current clock display: ${currentDisplay}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing display value. Usage: clock display set <value>', 'error');
+                                return;
+                            }
+                            const displayValue = args.value;
+
+                            if (valid.CD.includes(displayValue)) {
+                                setClockDisplay(displayValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Clock display set to ${displayValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid display value: ${displayValue}`, 'error');
+                                appendToConsole(`Valid display values: ${valid.CD.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available clock display values: ${valid.CD.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('seconds', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentSecondsVis = getSecondsVis();
+                            appendToConsole(`Current seconds visibility: ${currentSecondsVis}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing seconds visibility value. Usage: clock seconds set <value>', 'error');
+                                return;
+                            }
+                            const secondsVisValue = args.value;
+
+                            if (valid.SV.includes(secondsVisValue)) {
+                                setSecondsVis(secondsVisValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Seconds visibility set to ${secondsVisValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid seconds visibility value: ${secondsVisValue}`, 'error');
+                                appendToConsole(`Valid seconds visibility values: ${valid.SV.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available seconds visibility values: ${valid.SV.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('date-format', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentDateFormat = getDateFormat();
+                            appendToConsole(`Current date format: ${currentDateFormat}`);
+                        })
+                        .with('set', () => {
+                            if (args.value === undefined) {
+                                appendToConsole('Error: Missing date format value. Usage: clock date-format set <value>', 'error');
+                                return;
+                            }
+                            const dateFormatValue = args.value;
+
+                            if (valid.DF.includes(dateFormatValue)) {
+                                setDateFormat(dateFormatValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Date format set to ${dateFormatValue || '(empty)'}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid date format value: ${dateFormatValue}`, 'error');
+                                appendToConsole(`Valid date format values: ${valid.DF.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available date format values: ${valid.DF.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('date-align', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentDateAlign = getDateAlign();
+                            appendToConsole(`Current date alignment: ${currentDateAlign}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing date alignment value. Usage: clock date-align set <value>', 'error');
+                                return;
+                            }
+                            const dateAlignValue = args.value;
+
+                            if (valid.DA.includes(dateAlignValue)) {
+                                setDateAlign(dateAlignValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Date alignment set to ${dateAlignValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid date alignment value: ${dateAlignValue}`, 'error');
+                                appendToConsole(`Valid date alignment values: ${valid.DA.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available date alignment values: ${valid.DA.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('border-mode', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentBorderMode = getBorderMode();
+                            appendToConsole(`Current border mode: ${currentBorderMode}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing border mode value. Usage: clock border-mode set <value>', 'error');
+                                return;
+                            }
+                            const borderModeValue = args.value;
+
+                            if (valid.BM.includes(borderModeValue)) {
+                                setBorderMode(borderModeValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Border mode set to ${borderModeValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid border mode value: ${borderModeValue}`, 'error');
+                                appendToConsole(`Valid border mode values: ${valid.BM.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available border mode values: ${valid.BM.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('border-style', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentBorderStyle = getBorderStyle();
+                            appendToConsole(`Current border style: ${currentBorderStyle}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing border style value. Usage: clock border-style set <value>', 'error');
+                                return;
+                            }
+                            const borderStyleValue = args.value;
+
+                            if (valid.BS.includes(borderStyleValue)) {
+                                setBorderStyle(borderStyleValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Border style set to ${borderStyleValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid border style value: ${borderStyleValue}`, 'error');
+                                appendToConsole(`Valid border style values: ${valid.BS.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available border style values: ${valid.BS.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('time-bar', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentTimeBar = getTimeBar();
+                            appendToConsole(`Current time bar: ${currentTimeBar}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing time bar value. Usage: clock time-bar set <value>', 'error');
+                                return;
+                            }
+                            const timeBarValue = args.value;
+
+                            if (valid.TB.includes(timeBarValue)) {
+                                setTimeBar(timeBarValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Time bar set to ${timeBarValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid time bar value: ${timeBarValue}`, 'error');
+                                appendToConsole(`Valid time bar values: ${valid.TB.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available time bar values: ${valid.TB.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('note', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentNote = getCustomNote();
+                            appendToConsole(`Current Custom Note: ${currentNote}`);
+                        })
+                        .with('set', () => {
+                            if (args.value === undefined) {
+                                appendToConsole('Error: Missing Custom Note value. Usage: clock note set <value>', 'error');
+                                return;
+                            }
+                            const noteValue = args.value;
+
+                            // Check max custom note length
+                            if (noteValue.length > 75) {
+                                appendToConsole(`Error: Custom Note is too long (${noteValue.length}/75 characters)`, 'error');
+                                return;
+                            }
+
+                            setCustomNote(noteValue, true);
+                            if (!options.quiet) {
+                                appendToConsole(`Custom Note set to: ${noteValue || '(empty)'}`);
+                            }
+                        })
+                        .with('clear', () => {
+                            setCustomNote('', true);
+                            if (!options.quiet) {
+                                appendToConsole('Custom Note cleared');
+                            }
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, clear`, 'error');
+                        });
+                })
+                .with('note-align', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentNoteAlign = getCustomNoteAlign();
+                            appendToConsole(`Current Custom Note alignment: ${currentNoteAlign}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing Custom Note alignment value. Usage: clock note-align set <value>', 'error');
+                                return;
+                            }
+                            const noteAlignValue = args.value;
+
+                            if (valid.CNA.includes(noteAlignValue)) {
+                                setCustomNoteAlign(noteAlignValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Custom Note alignment set to ${noteAlignValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid Custom Note alignment value: ${noteAlignValue}`, 'error');
+                                appendToConsole(`Valid Custom Note alignment values: ${valid.CNA.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available Custom Note alignment values: ${valid.CNA.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .otherwise((prop) => {
+                    appendToConsole(`Unknown property: ${prop}. Available properties: display, seconds, date-format, date-align, border-mode, border-style, time-bar, note, note-align`, 'error');
+                    appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'clock')?.usage}`, 'error');
+                });
+        }
+    },
     {
         name: 'font',
         description: 'View or modify font settings',
-        usage: 'font [family|size|weight|style|stroke] [get|set|list] [value]',
+        usage: 'font [family|size|weight|style|stroke|dropshadow] [get|set|list] [value]',
         aliases: ['f'],
         args: [
             {
@@ -597,13 +933,15 @@ const commands: Command[] = [
         execute: (args, options) => {
             if (!args.property) {
                 appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'font')?.usage}`, 'error');
+                const config = getFontConfig();
                 appendToConsole('Current font settings:');
-                appendToConsole(`Family: ${getFontFamily()}`);
-                appendToConsole(`Size: ${getFontSize()}`);
-                appendToConsole(`Weight: ${getFontWeight()}`);
-                appendToConsole(`Style: ${getFontStyle()}`);
-                appendToConsole(`Stroke Width: ${getStrokeWidth()}`);
-                appendToConsole(`Stroke Color: ${getStrokeColor()}`);
+                appendToConsole(`Family: ${config.fontFamily}`);
+                appendToConsole(`Size: ${config.fontSize}`);
+                appendToConsole(`Weight: ${config.fontWeight}`);
+                appendToConsole(`Style: ${config.fontStyle}`);
+                appendToConsole(`Stroke Width: ${config.strokeWidth}px`);
+                appendToConsole(`Stroke Color: ${config.strokeColor}`);
+                appendToConsole(`Drop Shadow: ${config.dropShadow}`);
                 return;
             }
 
@@ -624,19 +962,19 @@ const commands: Command[] = [
                             }
                             const fontName = args.value;
 
-                            if (getFontList().includes(fontName)) {
+                            if (valid.FF.includes(fontName)) {
                                 setFontFamily(fontName, true);
                                 if (!options.quiet) {
                                     appendToConsole(`Font family set to ${fontName}`);
                                 }
                             } else {
                                 appendToConsole(`Font family not found: ${fontName}`, 'error');
-                                const fonts = getFontList();
+                                const fonts = valid.FF;
                                 appendToConsole(`List of font families:${fonts.join('\n')}`);
                             }
                         })
                         .with('list', () => {
-                            const fonts = getFontList();
+                            const fonts = valid.FF;
                             appendToConsole(`Available font families:${fonts.join('\n')}`);
                         })
                         .otherwise((act) => {
@@ -656,10 +994,8 @@ const commands: Command[] = [
                             }
                             const fontSize = args.value;
                         
-                            // Check if the provided size is a valid FontSizeKey
-                            const validSizes: FontSizeKey[] = ['6vw', '8vw', '10vw', '12vw', '14vw', '18vw'];
-                            if (!validSizes.includes(fontSize as FontSizeKey)) {
-                                appendToConsole(`Error: Invalid font size "${fontSize}". Valid sizes are: ${validSizes.join(', ')}`, 'error');
+                            if (!valid.FZ.includes(fontSize)) {
+                                appendToConsole(`Error: Invalid font size "${fontSize}". Valid sizes are: ${valid.FZ.join(', ')}`, 'error');
                                 return;
                             }
                         
@@ -670,8 +1006,7 @@ const commands: Command[] = [
                             }
                         })
                         .with('list', () => {
-                            const validSizes: FontSizeKey[] = ['6vw', '8vw', '10vw', '12vw', '14vw', '18vw'];
-                            appendToConsole(`Available font sizes: ${validSizes.join(', ')}`);
+                            appendToConsole(`Available font sizes: ${valid.FZ.join(', ')}`);
                         })
                         .otherwise((act) => {
                             appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
@@ -716,6 +1051,11 @@ const commands: Command[] = [
                             }
                             const fontStyle = args.value;
                         
+                            if (!valid.FS.includes(fontStyle)) {
+                                appendToConsole(`Error: Invalid font style "${fontStyle}". Valid styles are: ${valid.FS.join(', ')}`, 'error');
+                                return;
+                            }
+
                             setFontStyle(fontStyle, true);
                         
                             if (!options.quiet) {
@@ -723,7 +1063,7 @@ const commands: Command[] = [
                             }
                         })
                         .with('list', () => {
-                            appendToConsole('Available font styles: normal, italic');
+                            appendToConsole(`Available font styles: ${valid.FS.join(', ')}`);
                         })
                         .otherwise((act) => {
                             appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
@@ -742,10 +1082,11 @@ const commands: Command[] = [
                                 appendToConsole('Error: Missing stroke width value. Usage: font stroke set <width> [--color <color>]', 'error');
                                 return;
                             }
-                            const strokeWidth = parseInt(args.value);
+
+                            const strokeWidth = args.value;
                         
-                            if (isNaN(strokeWidth) || strokeWidth < 0 || strokeWidth > 5) {
-                                appendToConsole(`Error: Invalid stroke width value ${strokeWidth}. Ensure it is a number between 0 and 5. Usage: font stroke set <width> [--color <color>]`, 'error');
+                            if (!valid.FStW.includes(strokeWidth)) {
+                                appendToConsole(`Error: Invalid stroke width "${strokeWidth}". Valid widths are: ${valid.FStW.join(', ')}`, 'error');
                                 return;
                             }
 
@@ -772,9 +1113,317 @@ const commands: Command[] = [
                             appendToConsole(`Unknown action: ${act}. Available actions: get, set, color`, 'error');
                         });
                 })
+                .with('dropshadow', () => {
+                    match(action)
+                        .with('get', () => {
+                            const dropShadow = getDropShadow();
+                            appendToConsole(`Current drop shadow: ${dropShadow}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing drop shadow value. Usage: font dropshadow set <value>', 'error');
+                                return;
+                            }
+
+                            const dropShadow = args.value;
+
+                            if (valid.DS.includes(dropShadow)) {
+                                setDropShadow(dropShadow, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Drop shadow set to ${dropShadow}`);
+                                }
+                            } else {
+                                appendToConsole(`Error: Invalid drop shadow value "${dropShadow}". Valid values are: ${valid.DS.join(', ')}`, 'error');
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available drop shadow values: ${valid.DS.join(', ')}`);
+                        });
+                })
                 .otherwise((prop) => {
                     appendToConsole(`Unknown property: ${prop}. Available properties: family, size, weight, style, stroke`, 'error');
                     appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'font')?.usage}`, 'error');
+                });
+        }
+    },
+    {
+        name: 'color',
+        description: 'View or modify color settings',
+        usage: 'color [mode|solid|text-mode|text-color|bg-size|bg-blur] [get|set|list] [value]',
+        aliases: ['col', 'colors'],
+        args: [
+            {
+                name: 'property',
+                type: 'string',
+                description: 'Color property to modify (mode, solid, text-mode, text-color, bg-size, bg-blur)',
+                required: false
+            },
+            {
+                name: 'action',
+                type: 'string',
+                description: 'Action to perform (get, set, list)',
+                required: false
+            },
+            {
+                name: 'value',
+                type: 'string',
+                description: 'Value to set for the property',
+                required: false
+            }
+        ],
+        options: [
+            {
+                name: 'quiet',
+                shortName: 'q',
+                type: 'boolean',
+                description: 'Change color settings without showing notifications',
+                default: false
+            }
+        ],
+        execute: (args, options) => {
+            if (!args.property) {
+                appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'color')?.usage}`, 'error');
+                const currentColorMode = getColorMode();
+                appendToConsole('Current color settings:');
+                appendToConsole(`Color Mode: ${currentColorMode}`);
+            
+                if (currentColorMode === 'solidmode') {
+                    appendToConsole(`Solid Color: ${getSolidColorValue()}`);
+                }
+
+                if (currentColorMode !== 'fademode') {
+                    appendToConsole(`Text Color Mode: ${getTextColorMode()}`);
+                    appendToConsole(`Text Color Value: ${getTextColorValue()}`);
+                }
+            
+                if (currentColorMode === 'imgmode') {
+                    appendToConsole(`Background Image Size: ${getBGImageSize()}`);
+                    appendToConsole(`Background Image Blur: ${getBGImageBlur()}`);
+                }
+                return;
+            }
+
+            const property = args.property.toLowerCase();
+            const action = args.action ? args.action.toLowerCase() : 'get';
+
+            match(property)
+                .with('mode', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentMode = getColorMode();
+                            appendToConsole(`Current color mode: ${currentMode}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing color mode value. Usage: color mode set <value>', 'error');
+                                return;
+                            }
+                            const modeValue = args.value;
+
+                            if (valid.CMo.includes(modeValue)) {
+                                setColorMode(modeValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Color mode set to ${modeValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid color mode value: ${modeValue}`, 'error');
+                                appendToConsole(`Valid color mode values: ${valid.CMo.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available color mode values: ${valid.CMo.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('solid', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentMode = getColorMode();
+                            if (currentMode === 'solidmode') {
+                                const currentColor = getSolidColorValue();
+                                appendToConsole(`Current solid color: ${currentColor}`);
+                            } else {
+                                appendToConsole(`Cannot get solid color: Current mode is ${currentMode}, not solidmode`, 'error');
+                            }
+                        })
+                        .with('set', () => {
+                            const currentMode = getColorMode();
+                            if (currentMode !== 'solidmode') {
+                                appendToConsole(`Cannot set solid color: Current mode is ${currentMode}, not solidmode`, 'error');
+                                appendToConsole('Switch to solid mode first with: color mode set solidmode');
+                                return;
+                            }
+                        
+                            if (!args.value) {
+                                appendToConsole('Error: Missing solid color value. Usage: color solid set <value>', 'error');
+                                return;
+                            }
+                            const colorValue = args.value;
+
+                            if (valid.SC.includes(colorValue)) {
+                                setSolidColor(colorValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Solid color set to ${colorValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid solid color value: ${colorValue}`, 'error');
+                                appendToConsole(`Valid solid color values: ${valid.SC.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available solid color values: ${valid.SC.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('text-mode', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentTextMode = getTextColorMode();
+                            appendToConsole(`Current text color mode: ${currentTextMode}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing text color mode value. Usage: color text-mode set <value>', 'error');
+                                return;
+                            }
+                            const textModeValue = args.value;
+
+                            if (valid.TCM.includes(textModeValue)) {
+                                setTextColorMode(textModeValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Text color mode set to ${textModeValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid text color mode value: ${textModeValue}`, 'error');
+                                appendToConsole(`Valid text color mode values: ${valid.TCM.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available text color mode values: ${valid.TCM.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('text-color', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentTextValue = getTextColorValue();
+                            appendToConsole(`Current text color value: ${currentTextValue}`);
+                        })
+                        .with('set', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing text color value. Usage: color text-color set <value>', 'error');
+                                return;
+                            }
+                            const textColorValue = args.value;
+
+                            // Check if it's a valid hex color
+                            if (/^#[0-9A-Fa-f]{6}$/.test(textColorValue)) {
+                                setTextColorValue(textColorValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Text color value set to ${textColorValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid text color value: ${textColorValue}`, 'error');
+                                appendToConsole('Text color must be in full hex format (e.g. #FF0000)');
+                            }
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set`, 'error');
+                        });
+                })
+                .with('bg-size', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentMode = getColorMode();
+                            if (currentMode === 'imgmode') {
+                                const currentSize = getBGImageSize();
+                                appendToConsole(`Current background image size: ${currentSize || '(empty)'}`);
+                            } else {
+                                appendToConsole(`Cannot get background image size: Current mode is ${currentMode}, not imgmode`, 'error');
+                            }
+                        })
+                        .with('set', () => {
+                            const currentMode = getColorMode();
+                            if (currentMode !== 'imgmode') {
+                                appendToConsole(`Cannot set background image size: Current mode is ${currentMode}, not imgmode`, 'error');
+                                appendToConsole('Switch to image mode first with: color mode set imgmode');
+                                return;
+                            }
+                        
+                            if (args.value === undefined) {
+                                appendToConsole('Error: Missing background image size value. Usage: color bg-size set <value>', 'error');
+                                return;
+                            }
+                            const sizeValue = args.value;
+
+                            if (valid.BIS.includes(sizeValue)) {
+                                setBackgroundImageSize(sizeValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Background image size set to ${sizeValue || '(empty)'}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid background image size value: ${sizeValue}`, 'error');
+                                appendToConsole(`Valid background image size values: ${valid.BIS.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available background image size values: ${valid.BIS.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .with('bg-blur', () => {
+                    match(action)
+                        .with('get', () => {
+                            const currentMode = getColorMode();
+                            if (currentMode === 'imgmode') {
+                                const currentBlur = getBGImageBlur();
+                                appendToConsole(`Current background image blur: ${currentBlur}`);
+                            } else {
+                                appendToConsole(`Cannot get background image blur: Current mode is ${currentMode}, not imgmode`, 'error');
+                            }
+                        })
+                        .with('set', () => {
+                            const currentMode = getColorMode();
+                            if (currentMode !== 'imgmode') {
+                                appendToConsole(`Cannot set background image blur: Current mode is ${currentMode}, not imgmode`, 'error');
+                                appendToConsole('Switch to image mode first with: color mode set imgmode');
+                                return;
+                            }
+                        
+                            if (!args.value) {
+                                appendToConsole('Error: Missing background image blur value. Usage: color bg-blur set <value>', 'error');
+                                return;
+                            }
+                            const blurValue = args.value;
+
+                            if (valid.BIB.includes(blurValue)) {
+                                setBackgroundImageBlur(blurValue, true);
+                                if (!options.quiet) {
+                                    appendToConsole(`Background image blur set to ${blurValue}`);
+                                }
+                            } else {
+                                appendToConsole(`Invalid background image blur value: ${blurValue}`, 'error');
+                                appendToConsole(`Valid background image blur values: ${valid.BIB.join(', ')}`);
+                            }
+                        })
+                        .with('list', () => {
+                            appendToConsole(`Available background image blur values: ${valid.BIB.join(', ')}`);
+                        })
+                        .otherwise((act) => {
+                            appendToConsole(`Unknown action: ${act}. Available actions: get, set, list`, 'error');
+                        });
+                })
+                .otherwise((prop) => {
+                    appendToConsole(`Unknown property: ${prop}. Available properties: mode, solid, text-mode, text-color, bg-size, bg-blur`, 'error');
+                    appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'color')?.usage}`, 'error');
                 });
         }
     },

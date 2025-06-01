@@ -65,10 +65,6 @@ function modifyFontStyle(type: string, value: string) {
         });
 }
 
-export function getFontList(): string[] {
-    return Array.from(font.familysel.options).map((option) => option.value);
-}
-
 panel.section.fc.addEventListener('change', handleFontEvents);
 panel.section.fc.addEventListener('input', handleFontEvents);
 panel.section.fc.addEventListener('click', handleFontEvents);

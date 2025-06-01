@@ -3,7 +3,7 @@ import { createBsModal, logConsole } from './utils/dom-utils';
 import i18next from 'i18next';
 
 // Value constraints
-const valid = {
+export const valid = {
     CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words', 'unixmillis', 'unixsec', 'unixcountdown', 'se_valentines', 'se_christmas', 'se_newyears', 'ii_christmas', 'ii_weekend', 'ii_leapyear'],
     SV: ['sviD', 'sviN'],
     DF: ['D', 'DD', 'DDD', 'DDDD', 'MMMM d', 'MMM d', 'd MMMM', 'd MMM', 'MMMM yyyy', 'yyyy', '\'Q\'q, yyyy', '\'Day\' o \'of\' yyyy', '\'Week\' W, \'Day\' o', ''],
