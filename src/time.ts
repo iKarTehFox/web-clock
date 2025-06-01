@@ -16,7 +16,6 @@ let lastTime: Array<string>;
 let lastDate: string;
 const pageLoadTime = getLuxNow('sec');
 type TimeFormat = 'sec' | 'millis' | 'obj';
-const browserInfo = Bowser.parse(window.navigator.userAgent);
 
 function getLuxNow(format: TimeFormat = 'sec'): number | luxon.DateTime {
     const now = luxon.DateTime.now();
