@@ -1,4 +1,4 @@
-import { countdown, debug, devcon, menu, panel, stopwatch } from './dom-elements';
+import { countdown, devcon, menu, panel, stopwatch } from './dom-elements';
 import { getAvailableThemes, getMenuTheme, logConsole, requestNotificationPermission, setMenuTheme } from './dom-utils';
 import { debugMode } from './debug';
 import { match } from 'ts-pattern';
