@@ -553,7 +553,6 @@ const commands: Command[] = [
             }
         }
     },
-    // Add this new command to the commands array
     {
         name: 'clock',
         description: 'View or modify clock settings',
