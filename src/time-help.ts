@@ -1,7 +1,7 @@
 import * as luxon from 'ts-luxon';
 import { doc, menu, dtdisplay, panel } from './utils/dom-elements';
 import * as numberToWords from 'number-to-words';
-import { logConsole, showToast } from './utils/dom-utils';
+import { logConsole } from './utils/dom-utils';
 import { match } from 'ts-pattern';
 import i18next from 'i18next';
 
