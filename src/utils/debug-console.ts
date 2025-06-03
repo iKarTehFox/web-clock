@@ -9,6 +9,7 @@ import { startCountdownExternal, pauseCountdownExternal, resetCountdownExternal 
 import { lapStopwatchExternal, pauseStopwatchExternal, resetStopwatchExternal, startStopwatchExternal } from '../stopwatch';
 import { getFontFamily, getFontSize, getFontWeight, getFontStyle, getStrokeColor, getStrokeWidth, setFontFamily, setFontSize, setFontWeight, setFontStyle, setStrokeWidth, setStrokeColor, getBorderMode, getBorderStyle, getClockConfig, getClockDisplay, getCustomNote, getCustomNoteAlign, getDateAlign, getDateFormat, getSecondsVis, getTimeBar, setBorderMode, setBorderStyle, setClockDisplay, setCustomNote, setCustomNoteAlign, setDateAlign, setDateFormat, setSecondsVis, setTimeBar, getDropShadow, setDropShadow, getFontConfig, getBGImageBlur, getBGImageSize, getColorMode, getSolidColorValue, getTextColorMode, getTextColorValue, setBackgroundImageBlur, setBackgroundImageSize, setColorMode, setSolidColor, setTextColorMode, setTextColorValue } from './clock-settings';
 import { valid } from '../importValidation';
+import * as luxon from 'ts-luxon';
 
 // Command history
 let commandHistory: string[] = [];
@@ -551,6 +552,187 @@ const commands: Command[] = [
                     appendToConsole(`Theme set to ${currentTheme}`);
                 }
             }
+        }
+    },
+    {
+        name: 'time',
+        description: 'Get or set time-related information',
+        usage: 'time <get|set> [options]',
+        aliases: ['t', 'datetime'],
+        args: [
+            {
+                name: 'action',
+                type: 'string',
+                description: 'Action to perform (get, set)',
+                required: true
+            },
+            {
+                name: 'option',
+                type: 'string',
+                description: 'Option for the action (get: unix|sec|local|iso, set: tz|locale)',
+                required: false
+            },
+            {
+                name: 'value',
+                type: 'string',
+                description: 'Value for set operations',
+                required: false
+            }
+        ],
+        options: [
+            {
+                name: 'format',
+                shortName: 'f',
+                type: 'string',
+                description: 'Format string for datetime output (for get action)',
+                default: ''
+            }
+        ],
+        execute: (args, options) => {
+            const currentTime = luxon.DateTime.now();
+
+            if (!args.action) {
+                appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'time')?.usage}`, 'error');
+                appendToConsole('Available actions:');
+                appendToConsole('  get [unix|sec|local|iso] - Get current time in different formats');
+                appendToConsole('  set [tz|locale] <value> - Set timezone or locale for time display');
+                return;
+            }
+
+            match(args.action.toLowerCase())
+                .with('get', () => {
+                    if (!args.option) {
+                    // Default to local time if no option specified
+                        const formatted = options.format 
+                            ? currentTime.toFormat(options.format)
+                            : currentTime.toLocaleString(luxon.DateTime.DATETIME_FULL);
+                        appendToConsole(`Current time (${options.format ? 'formatted' : 'local'}): ${formatted}`);
+                        appendToConsole(`Timezone: ${luxon.Settings.defaultZone.name}`);
+                        appendToConsole(`Locale: ${luxon.Settings.defaultLocale || 'system default'}`);
+                        return;
+                    }
+
+                    match(args.option.toLowerCase())
+                        .with('unix', () => {
+                            if (options.format) {
+                                appendToConsole('Option -f is unsupported here', 'error');
+                            }
+                            appendToConsole(`Current Unix timestamp (milliseconds): ${currentTime.toMillis()}`);
+                        })
+                        .with('sec', () => {
+                            if (options.format) {
+                                appendToConsole('Option -f is unsupported here', 'error');
+                            }
+                            appendToConsole(`Current Unix timestamp (seconds): ${Math.floor(currentTime.toSeconds())}`);
+                        })
+                        .with('local', () => {
+                            const formatted = options.format 
+                                ? currentTime.toFormat(options.format)
+                                : currentTime.toLocaleString(luxon.DateTime.DATETIME_FULL);
+                            appendToConsole(`Current ${options.format ? 'formatted' : 'local'} time: ${formatted}`);
+                            appendToConsole(`Timezone: ${currentTime.zoneName}`);
+                        })
+                        .with('iso', () => {
+                            if (options.format) {
+                                appendToConsole('Option -f is unsupported here', 'error');
+                            }
+                            appendToConsole(`Current time (ISO): ${currentTime.toISO()}`);
+                        })
+                        .otherwise((opt) => {
+                            appendToConsole(`Unknown option: ${opt}. Available options: unix, sec, local, iso`, 'error');
+                        });
+                })
+                .with('set', () => {
+                    if (!args.option) {
+                        appendToConsole('Missing option. Available options: tz, locale', 'error');
+                        return;
+                    }
+
+                    match(args.option.toLowerCase())
+                        .with('tz', () => {
+                            if (!args.value) {
+                                // Display current timezone
+                                appendToConsole(`Current timezone: ${luxon.Settings.defaultZone.name}`);
+                                appendToConsole('To set default timezone: time set tz <timezone>');
+                                appendToConsole('Example timezones: America/New_York, Europe/London, Asia/Tokyo');
+                                return;
+                            }
+
+                            try {
+                                // Validate the timezone by attempting to use it
+                                const testTime = luxon.DateTime.now().setZone(args.value);
+                                if (!testTime.isValid) {
+                                    appendToConsole(`Invalid timezone: ${args.value}`, 'error');
+                                    return;
+                                }
+
+                                // Set the default timezone for Luxon
+                                luxon.Settings.defaultZone = luxon.IANAZone.create(args.value);
+                        
+                                // Update the timezone dropdown selection
+                                const timezoneSelect = menu.timezoneselect;
+                            
+                                // First, deselect the current selection
+                                const currentSelected = timezoneSelect.querySelector('option:checked') as HTMLOptionElement;
+                                if (currentSelected) {
+                                    currentSelected.selected = false;
+                                }
+                            
+                                // Find and select the new timezone option
+                                let found = false;
+                                Array.from(timezoneSelect.querySelectorAll('optgroup')).forEach(optgroup => {
+                                    const option = optgroup.querySelector(`option[value="${args.value}"]`) as HTMLOptionElement;
+                                    if (option) {
+                                        option.selected = true;
+                                        found = true;
+                                    }
+                                });
+                            
+                                // Confirm the change
+                                appendToConsole(`Default timezone set to: ${args.value}`);
+                                appendToConsole(`Current time in ${args.value}: ${luxon.DateTime.now().toLocaleString(luxon.DateTime.DATETIME_FULL)}`);
+                            
+                                if (!found) {
+                                    appendToConsole(`Note: Timezone "${args.value}" was not found in the dropdown menu, but the setting was applied.`, 'error');
+                                }
+                            
+                                logConsole(`Default timezone changed to ${args.value}`, 'info');
+                            } catch (error) {
+                                appendToConsole(`Error setting timezone: ${error}`, 'error');
+                            }
+                        })
+                        .with('locale', () => {
+                            if (!args.value) {
+                            // Display current locale
+                                appendToConsole(`Current locale: ${luxon.Settings.defaultLocale || 'system default'}`);
+                                appendToConsole('To set default locale: time set locale <locale>');
+                                appendToConsole('Example locales: en-US, fr-FR, ja-JP, de-DE');
+                                return;
+                            }
+
+                            try {
+                            // Test if the locale is valid by formatting a date with it
+                                const testFormat = currentTime.setLocale(args.value).toLocaleString();
+                            
+                                // If we get here, the locale is valid - set it as default
+                                const oldLocale = luxon.Settings.defaultLocale || 'system default';
+                                luxon.Settings.defaultLocale = args.value;
+                            
+                                // Confirm the change
+                                appendToConsole(`Default locale changed from ${oldLocale} to ${args.value}`);
+                                appendToConsole(`Sample time with new locale: ${luxon.DateTime.now().toLocaleString(luxon.DateTime.DATETIME_FULL)}`);
+                                logConsole(`Default locale changed to ${args.value}`, 'info');
+                            } catch (error) {
+                                appendToConsole(`Invalid locale: ${args.value}`, 'error');
+                            }
+                        })
+                        .otherwise((opt) => {
+                            appendToConsole(`Unknown option: ${opt}. Available options: tz, locale`, 'error');
+                        });
+                })
+                .otherwise((action) => {
+                    appendToConsole(`Unknown action: ${action}. Available actions: get, set`, 'error');
+                });
         }
     },
     {
