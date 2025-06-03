@@ -385,7 +385,8 @@ export default {
                         'option': {
                             'light': 'Light',
                             'dark': 'Dark',
-                            'midnight': 'Midnight'
+                            'midnight': 'Midnight',
+                            'amoled': 'AMOLED'
                         }
                     },
                     'panelvisibility': {
@@ -458,8 +459,10 @@ export default {
                     'toasts': {
                         'title': 'Toasts',
                         'option': {
-                            'dark': 'Dark',
                             'light': 'Light',
+                            'dark': 'Dark',
+                            'midnight': 'Midnight',
+                            'amoled': 'AMOLED',
                             'danger': 'Danger',
                             'success': 'Success',
                             'warning': 'Warning'
@@ -541,6 +544,7 @@ export default {
             'themelight': 'Theme set to light mode ☀️',
             'themedark': 'Theme set to dark mode 🌙',
             'thememidnight': 'Theme set to midnight 🌃',
+            'themeamoled': 'Theme set to AMOLED 🌑',
             'fullscreen': 'Toggled fullscreen mode',
         },
         'importexport': {

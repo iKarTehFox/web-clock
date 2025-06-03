@@ -257,6 +257,9 @@ menu.themeradio.forEach((radio) => {
             .with('midnightthememode', () => {
                 setMenuTheme('midnight');
             })
+            .with('amoledthememode', () => {
+                setMenuTheme('amoled');
+            })
             .otherwise(() => {
                 logConsole(`Invalid theme mode: ${radio.id}`, 'error');
             });

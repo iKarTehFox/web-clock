@@ -386,6 +386,7 @@ export default {
                             'light': 'Claro',
                             'dark': 'Oscuro',
                             'midnight': 'Medianoche',
+                            'amoled': 'AMOLED',
                         }
                     },
                     'panelvisibility': {
@@ -458,8 +459,10 @@ export default {
                     'toasts': {
                         'title': 'Mensajes emergentes (Toasts)',
                         'option': {
-                            'dark': 'Oscuro',
                             'light': 'Claro',
+                            'dark': 'Oscuro',
+                            'midnight': 'Medianoche',
+                            'amoled': 'AMOLED',
                             'danger': 'Peligro',
                             'success': 'Éxito',
                             'warning': 'Advertencia'
@@ -541,6 +544,7 @@ export default {
             'themelight': 'Tema establecido en modo claro ☀️',
             'themedark': 'Tema establecido en modo oscuro 🌙',
             'thememidnight': 'Tema establecido en modo medianoche 🌃',
+            'themeamoled': 'Tema establecido en modo AMOLED 🌑',
             'fullscreen': 'Modo de pantalla completa activado',
         },
         'importexport': {

@@ -27,20 +27,25 @@ function getThemeInfo(colorTheme: string = 'auto') {
     const theme = colorTheme === 'auto' ? menu.container.dataset.bsTheme : colorTheme;
 
     const themes = {
-        dark: {
-            bgColor: '#313539',
-            textColor: '#FFFFFF',
-            outline: 'rgba(49, 43, 57, 0.5) solid 2px'
-        },
         light: {
             bgColor: '#FFFFFF',
             textColor: '#212529',
             outline: 'rgba(255, 255, 255, 0.5) solid 2px'
         },
+        dark: {
+            bgColor: '#313539',
+            textColor: '#FFFFFF',
+            outline: 'rgba(49, 43, 57, 0.5) solid 2px'
+        },
         midnight: {
             bgColor: '#0d1525',
             textColor: '#e9ecef',
             outline: 'rgba(18, 27, 47, 0.5) solid 2px'
+        },
+        amoled: {
+            bgColor: '#000000',
+            textColor: '#FFFFFF',
+            outline: 'rgba(49, 49, 49, 0.5) solid 2px'
         },
         danger: {
             bgColor: '#DC3545',
@@ -105,7 +110,7 @@ interface ThemeConfig {
     backgroundColor?: string;
 }
 
-type ThemeKey = 'light' | 'dark' | 'midnight';
+type ThemeKey = 'light' | 'dark' | 'midnight' | 'amoled';
 
 const themes: Record<ThemeKey, ThemeConfig> = {
     'light': {
@@ -120,6 +125,11 @@ const themes: Record<ThemeKey, ThemeConfig> = {
         textColor: '#e9ecef',
         metaTheme: 'dark',
         backgroundColor: '#121b2f'
+    },
+    'amoled': {
+        textColor: '#ffffff',
+        metaTheme: 'dark',
+        backgroundColor: '#000000'
     }
 };
 

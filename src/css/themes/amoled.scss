@@ -1,0 +1,452 @@
+/* AMOLED Theme */
+
+// Define SCSS variables for reuse
+$amoled-primary: #ffffff;
+$amoled-primary-rgb: 255, 255, 255;
+$amoled-bg: #000000;
+$amoled-bg-lighter: #0a0a0a;
+$amoled-bg-medium: #121212;
+$amoled-bg-darker: #000000;
+$amoled-border: #222222;
+$amoled-text-color: #ffffff;
+$amoled-text-muted: #888888;
+
+// Button mixins
+@mixin button-variant($color, $hover-color, $active-color, $disabled-color, $text-color: var(--bs-black)) {
+  --bs-btn-bg: var(#{$color});
+  --bs-btn-border-color: var(#{$color});
+  --bs-btn-hover-bg: var(#{$hover-color});
+  --bs-btn-hover-border-color: var(#{$hover-color});
+  --bs-btn-active-bg: var(#{$active-color});
+  --bs-btn-active-border-color: var(#{$active-color});
+  --bs-btn-disabled-bg: var(#{$disabled-color});
+  --bs-btn-disabled-color: #{$text-color};
+  --bs-btn-disabled-border-color: var(#{$disabled-color});
+  
+  --bs-btn-color: #{$text-color};
+  --bs-btn-hover-color: #{$text-color};
+  --bs-btn-active-color: #{$text-color};
+}
+
+@mixin button-outline-variant($color, $text-color: var(--bs-white), $focus-shadow-rgb: null) {
+  --bs-btn-color: var(#{$color});
+  --bs-btn-border-color: var(#{$color});
+  --bs-btn-hover-color: #{$text-color};
+  --bs-btn-hover-bg: var(#{$color});
+  --bs-btn-hover-border-color: var(#{$color});
+  --bs-btn-active-color: #{$text-color};
+  --bs-btn-active-bg: var(#{$color});
+  --bs-btn-active-border-color: var(#{$color});
+  --bs-btn-disabled-color: var(#{$color});
+  --bs-btn-disabled-border-color: var(#{$color});
+  --bs-btn-disabled-bg: transparent;
+  
+  @if $focus-shadow-rgb != null {
+    --bs-btn-focus-shadow-rgb: #{$focus-shadow-rgb};
+  }
+}
+
+[data-bs-theme="amoled"] {
+  /* Browser */
+  color-scheme: dark;
+
+  /* Base colors */
+  --bs-body-color: #{$amoled-text-color};
+  --bs-body-color-rgb: 255, 255, 255;
+  --bs-body-bg: #{$amoled-bg};
+  --bs-body-bg-rgb: 0, 0, 0;
+  --bs-black: #000000;
+
+  /* Theme-specific colors */
+  --amoled-bg-lighter: #{$amoled-bg-lighter};
+  --amoled-bg-medium: #{$amoled-bg-medium};
+  --amoled-bg-darker: #{$amoled-bg-darker};
+  --amoled-border: #{$amoled-border};
+  --amoled-text-muted: #{$amoled-text-muted};
+  --amoled-focus-shadow: rgba(#{$amoled-primary-rgb}, 0.25);
+  --amoled-focus-shadow-rgb: #{$amoled-primary-rgb};
+  
+  /* Theme colors with variants */
+  /* Primary (Purple) */
+  --bs-primary: #{$amoled-primary};
+  --bs-primary-rgb: #{$amoled-primary-rgb};
+  --bs-primary-hover: #d9d9d9;
+  --bs-primary-active: #bfbfbf;
+  --bs-primary-disabled: #{$amoled-primary};
+  
+  /* Secondary (Gray) */
+  --bs-secondary: #495057;
+  --bs-secondary-rgb: 73, 80, 87;
+  --bs-secondary-hover: #3d4349;
+  --bs-secondary-active: #343a40;
+  --bs-secondary-disabled: #495057;
+  
+  /* Success (Green) */
+  --bs-success: #198754;
+  --bs-success-rgb: 25, 135, 84;
+  --bs-success-hover: #157347;
+  --bs-success-active: #146c43;
+  --bs-success-disabled: #198754;
+  
+  /* Danger (Red) */
+  --bs-danger: #dc3545;
+  --bs-danger-rgb: 220, 53, 69;
+  --bs-danger-hover: #bb2d3b;
+  --bs-danger-active: #b02a37;
+  --bs-danger-disabled: #dc3545;
+  
+  /* Warning (Yellow) */
+  --bs-warning: #ffc107;
+  --bs-warning-rgb: 255, 193, 7;
+  --bs-warning-hover: #d9a406;
+  --bs-warning-active: #cc9a06;
+  --bs-warning-disabled: #ffc107;
+  
+  /* Info (Cyan) */
+  --bs-info: #0dcaf0;
+  --bs-info-rgb: 13, 202, 240;
+  --bs-info-hover: #0baccc;
+  --bs-info-active: #0aa1bf;
+  --bs-info-disabled: #0dcaf0;
+  
+  /* Other necessary variables */
+  --bs-tertiary-bg: var(--amoled-bg-medium);
+  --bs-border-color: var(--amoled-border);
+  --bs-secondary-bg: var(--amoled-bg-darker);
+  --bs-secondary-bg-rgb: 0, 0, 0;
+}
+
+/* Muted text */
+[data-bs-theme="amoled"] {
+  .amoled-text-muted {
+    color: var(--amoled-text-muted) !important;
+  }
+}
+
+/* Border colors */
+[data-bs-theme="amoled"] {
+  --bs-border-color: var(--amoled-border);
+}
+
+/* Link colors */
+[data-bs-theme="amoled"] {
+  --bs-link-color: #cccccc;
+  --bs-link-color-rgb: 204, 204, 204;
+  --bs-link-hover-color: #ffffff;
+  --bs-link-hover-color-rgb: 255, 255, 255;
+}
+
+/* Card colors */
+[data-bs-theme="amoled"] {
+  --bs-card-bg: var(--amoled-bg-lighter);
+  --bs-card-border-color: var(--amoled-border);
+}
+
+/* Form colors */
+[data-bs-theme="amoled"] {
+  --bs-form-control-bg: var(--amoled-bg-lighter);
+  --bs-form-control-disabled-bg: var(--bs-body-bg);
+}
+
+/* Form select specific variables */
+[data-bs-theme="amoled"] {
+  --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23e9ecef' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  --bs-form-select-disabled-indicator-color: #6c757d;
+}
+
+/* Input colors */
+[data-bs-theme="amoled"] {
+  --bs-input-bg: var(--amoled-bg-lighter);
+  --bs-input-border-color: var(--amoled-border);
+  --bs-input-focus-border-color: var(--bs-primary);
+  --bs-input-focus-box-shadow: 0 0 0 0.25rem var(--amoled-focus-shadow);
+}
+
+/* Placeholder text color for amoled theme */
+[data-bs-theme="amoled"] {
+  input, textarea, select {
+    &::placeholder {
+      color: var(--amoled-text-muted) !important;
+      opacity: 1;
+    }
+    
+    &::-webkit-input-placeholder {
+      color: var(--amoled-text-muted) !important;
+    }
+    
+    &::-moz-placeholder {
+      color: var(--amoled-text-muted) !important;
+    }
+    
+    &:-ms-input-placeholder {
+      color: var(--amoled-text-muted) !important;
+    }
+    
+    &:-moz-placeholder {
+      color: var(--amoled-text-muted) !important;
+    }
+  }
+}
+
+/* Form select customization for amoled theme */
+[data-bs-theme="amoled"] {
+  .form-select:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+  }
+}
+
+/* Dropdown customization for amoled theme */
+[data-bs-theme="amoled"] {
+  .dropdown-menu {
+    --bs-dropdown-bg: var(--amoled-bg-lighter);
+    --bs-dropdown-border-color: var(--amoled-border);
+    --bs-dropdown-link-color: var(--bs-body-color);
+    --bs-dropdown-link-hover-bg: var(--amoled-border);
+    --bs-dropdown-link-active-bg: var(--bs-primary);
+  }
+}
+
+/* Button customization for amoled theme */
+[data-bs-theme="amoled"] {
+  .btn-primary {
+    @include button-variant('--bs-primary', '--bs-primary-hover', '--bs-primary-active', '--bs-primary-disabled', var(--bs-black));
+  }
+
+  .btn-secondary {
+    @include button-variant('--bs-secondary', '--bs-secondary-hover', '--bs-secondary-active', '--bs-secondary-disabled');
+  }
+
+  .btn-success {
+    @include button-variant('--bs-success', '--bs-success-hover', '--bs-success-active', '--bs-success-disabled');
+  }
+
+  .btn-danger {
+    @include button-variant('--bs-danger', '--bs-danger-hover', '--bs-danger-active', '--bs-danger-disabled');
+  }
+
+  .btn-warning {
+    @include button-variant('--bs-warning', '--bs-warning-hover', '--bs-warning-active', '--bs-warning-disabled', var(--bs-black));
+  }
+
+  .btn-info {
+    @include button-variant('--bs-info', '--bs-info-hover', '--bs-info-active', '--bs-info-disabled', var(--bs-black));
+  }
+}
+
+/* Outline button styles for amoled theme */
+[data-bs-theme="amoled"] {
+  .btn-outline-primary {
+    @include button-outline-variant('--bs-primary', var(--bs-black), '255, 255, 255');
+  }
+
+  .btn-outline-secondary {
+    @include button-outline-variant('--bs-secondary', var(--bs-white), '73, 80, 87');
+  }
+
+  .btn-outline-success {
+    @include button-outline-variant('--bs-success');
+  }
+
+  .btn-outline-danger {
+    @include button-outline-variant('--bs-danger');
+  }
+
+  .btn-outline-warning {
+    @include button-outline-variant('--bs-warning', var(--bs-black));
+  }
+
+  .btn-outline-info {
+    @include button-outline-variant('--bs-info', var(--bs-black));
+  }
+}
+
+/* For radio buttons using btn-check */
+[data-bs-theme="amoled"] {
+  .btn-check:checked + .btn-outline-primary {
+    color: var(--bs-btn-active-color);
+    background-color: var(--bs-btn-active-bg);
+    border-color: var(--bs-btn-active-border-color);
+  }
+
+  .btn-check:checked + .btn-outline-secondary {
+    color: var(--bs-btn-active-color);
+    background-color: var(--bs-btn-active-bg);
+    border-color: var(--bs-btn-active-border-color);
+  }
+}
+
+/* Focus state for btn-check */
+[data-bs-theme="amoled"] {
+  .btn-check:focus + .btn-outline-primary,
+  .btn-check:focus + .btn-outline-secondary {
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb), 0.5);
+  }
+}
+
+/* Disabled state for btn-check */
+[data-bs-theme="amoled"] {
+  .btn-check:disabled + .btn-outline-primary,
+  .btn-check:disabled + .btn-outline-secondary {
+    color: var(--bs-btn-disabled-color);
+    background-color: transparent;
+    border-color: var(--bs-btn-disabled-border-color);
+  }
+}
+
+/* Checkbox styling for amoled theme */
+[data-bs-theme="amoled"] {
+  .form-check-input {
+    --bs-form-check-bg: var(--amoled-bg-lighter);
+    border-color: var(--amoled-border);
+    
+    /* Checked state */
+    &:checked {
+      background-color: var(--bs-primary);
+      border-color: var(--bs-primary);
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+    }
+    
+    /* Focus state */
+    &:focus {
+      border-color: var(--bs-primary-lighter);
+      box-shadow: 0 0 0 0.25rem var(--amoled-focus-shadow);
+    }
+    
+    /* Disabled state */
+    &:disabled {
+      background-color: var(--amoled-bg-darker);
+      border-color: var(--amoled-bg-medium);
+      opacity: 0.5;
+      
+      /* Disabled label */
+      & ~ .form-check-label {
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+/* Switch specific styling */
+[data-bs-theme="amoled"] {
+  .form-switch {
+    .form-check-input {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%232c3e67'/%3e%3c/svg%3e");
+      
+      &:checked {
+        background-color: var(--bs-primary);
+        border-color: var(--bs-primary);
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23000'/%3e%3c/svg%3e");
+      }
+    }
+  }
+}
+
+/* Range input styling for amoled theme */
+[data-bs-theme="amoled"] {
+  // Base thumb styling
+  .form-range {
+    &::-webkit-slider-thumb {
+      background-color: var(--bs-primary);
+    }
+    
+    &::-moz-range-thumb {
+      background-color: var(--bs-primary);
+    }
+    
+    &::-ms-thumb {
+      background-color: var(--bs-primary);
+    }
+  }
+  
+  // Focus state
+  .form-range:focus {
+    &::-webkit-slider-thumb {
+      box-shadow: 0 0 0 1px var(--bs-body-bg), var(--bs-input-focus-box-shadow);
+    }
+    
+    &::-moz-range-thumb {
+      box-shadow: 0 0 0 1px var(--bs-body-bg), var(--bs-input-focus-box-shadow);
+    }
+    
+    &::-ms-thumb {
+      box-shadow: 0 0 0 1px var(--bs-body-bg), var(--bs-input-focus-box-shadow);
+    }
+  }
+  
+    // Disabled state
+  .form-range:disabled {
+    &::-webkit-slider-thumb {
+      background-color: #666666;
+    }
+    
+    &::-moz-range-thumb {
+      background-color: #666666;
+    }
+    
+    &::-ms-thumb {
+      background-color: #666666;
+    }
+  }
+}
+
+/* Close button customization for amoled theme */
+[data-bs-theme="amoled"] {
+  .btn-close {
+    --bs-btn-close-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+    --bs-btn-close-opacity: 0.5;
+  }
+}
+  
+/* Modal customization for amoled theme */
+[data-bs-theme="amoled"] {
+  .modal-content {
+    --bs-modal-color: var(--bs-body-color);
+    --bs-modal-bg: var(--amoled-bg-lighter);
+    --bs-modal-border-color: var(--amoled-border);
+  }
+}
+
+/* Offcanvas customization for amoled theme */
+[data-bs-theme="amoled"] {
+  .offcanvas {
+    --bs-offcanvas-bg: var(--amoled-bg-lighter);
+    --bs-offcanvas-border-color: var(--amoled-border);
+  }
+}
+
+/* Accordion customization for amoled theme */
+[data-bs-theme="amoled"] {
+  .accordion {
+    --bs-accordion-bg: var(--amoled-bg-lighter);
+    --bs-accordion-border-color: var(--amoled-border);
+  }
+  
+  .accordion-button {
+    --bs-accordion-btn-bg: var(--amoled-bg-medium);
+    --bs-accordion-btn-color: var(--bs-body-color);
+    --bs-accordion-active-bg: var(--amoled-border);
+    --bs-accordion-active-color: var(--bs-white);
+    
+    &:not(.collapsed) {
+      background-color: var(--bs-accordion-active-bg);
+      color: var(--bs-accordion-active-color);
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.25);
+    }
+    
+    &:focus {
+      border-color: var(--bs-primary);
+      box-shadow: var(--bs-input-focus-box-shadow);
+    }
+    
+    &::after {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23e9ecef'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+      opacity: 0.75;
+    }
+  }
+  
+  .accordion-body {
+    background-color: var(--amoled-bg-lighter);
+    color: var(--bs-body-color);
+  }
+}
