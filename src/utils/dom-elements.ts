@@ -9,6 +9,7 @@ export const doc = {
 
 export const panel = {
     container: getElement<HTMLDivElement>('panel-container'),
+    devconbutton: getElement<HTMLDivElement>('devcon-button'),
     menubody: getElement<HTMLDivElement>('menu-body'),
     menubutton: getElement<HTMLButtonElement>('menu-button'),
     // Settings sections
@@ -115,7 +116,7 @@ export const weather = {
     condition: getElement<HTMLParagraphElement>('weather-condition'),
     container: getElement<HTMLDivElement>('weather-widget'),
     feelslike: getElement<HTMLParagraphElement>('weather-feelslike'),
-    icon: document.getElementById('weather-icon'),
+    icon: getElement<HTMLElement>('weather-icon'),
     maxtemp: getElement<HTMLParagraphElement>('weather-max'),
     mintemp: getElement<HTMLParagraphElement>('weather-min'),
     name: getElement<HTMLParagraphElement>('weather-name'),

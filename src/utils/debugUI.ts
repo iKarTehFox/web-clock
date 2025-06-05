@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-import { debug, dtdisplay } from './dom-elements';
+import { debug, dtdisplay, panel } from './dom-elements';
 import { showToast } from './dom-utils';
 
 // Get load time
@@ -24,6 +24,9 @@ export function initializeDebugUI(): void {
     addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.resolution')}: ${window.screen.width}x${window.screen.height}`); // Screen resolution
     addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.colordepth')}: ${window.screen.colorDepth}-bit`); // Color depth
     addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.onlinestatus')}: ${navigator.onLine ? 'Online' : 'Offline'}`); // Online status
+
+    // Dev Console
+    panel.devconbutton.classList.remove('d-none');
 
     // Event listeners
     debug.toastbtns.forEach(btn => {

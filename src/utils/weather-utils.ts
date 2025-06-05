@@ -62,18 +62,17 @@ function updateWeatherWidget(data: CurrentResponse, units: string) {
     weather.condition.innerText = `${data.weather[0].description.charAt(0).toUpperCase() + data.weather[0].description.slice(1)}`;
 
     // Icon logic
-    weather.icon.setAttribute('icon', match(data.weather[0].icon)
-        .with('01d', () => 'mdi:weather-sunny')
-        .with('02d', () => 'mdi:weather-partly-cloudy')
-        .with('03d', () => 'mdi:weather-cloudy')
-        .with('04d', () => 'mdi:weather-cloudy')
-        .with('09d', () => 'mdi:weather-partly-rainy')
-        .with('10d', () => 'mdi:weather-pouring')
-        .with('11d', () => 'mdi:weather-lightning')
-        .with('13d', () => 'mdi:weather-snowy')
-        .with('50d', () => 'mdi:weather-fog')
-        .otherwise(() => 'mdi:weather-cloudy')
-    );
+    weather.icon.className = match(data.weather[0].icon)
+        .with('01d', () => 'bi bi-sun fs-4') // clear sky
+        .with('02d', () => 'bi bi-cloud-sun fs-4') // few clouds
+        .with('03d', () => 'bi bi-cloud fs-4') // scattered clouds
+        .with('04d', () => 'bi bi-clouds fs-4') // broken clouds
+        .with('09d', () => 'bi bi-cloud-drizzle fs-4') // shower rain
+        .with('10d', () => 'bi bi-cloud-rain-heavy fs-4') // rain
+        .with('11d', () => 'bi bi-cloud-lightning fs-4') // thunderstorm
+        .with('13d', () => 'bi bi-snow fs-4') // snow
+        .with('50d', () => 'bi bi-cloud-fog fs-4') // mist
+        .otherwise(() => 'bi bi-cloud fs-4');
 
     weather.container.className = 'weather-container';
 }

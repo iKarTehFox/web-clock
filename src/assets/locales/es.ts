@@ -1,5 +1,8 @@
 export default {
     'panel': {
+        'devcon': {
+            'tooltip': 'Consola de desarrollo'
+        },
         'countdown': {
             'tooltip': 'Temporizador'
         },
@@ -29,6 +32,18 @@ export default {
             'pause': 'Pausar',
             'reset': 'Reiniciar',
             'lap': 'Vuelta',
+        }
+    },
+    'devcon': {
+        'title': 'Consola de Desarrollador',
+        'tabs': {
+            'console': 'Consola',
+            'logs': 'Registros'
+        },
+        'input': {
+            'placeholder': 'Ingrese comando...',
+            'execute': 'Ejecutar',
+            'tip': 'Presione Enter para ejecutar, Esc para cerrar, ↑↓ para historial'
         }
     },
     'weather': {

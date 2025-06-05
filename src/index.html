@@ -14,30 +14,36 @@
     <body>
         <!-- Blur panel -->
         <div id="blur-panel"></div>
-        <!-- Menu panel -->
+        <!-- Panel buttons -->
         <div id="panel-container">
-            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-title="Dev Console" data-bs-placement="bottom">
+            <button type="button" id="devcon-button" class="btn btn-secondary d-none" data-bs-toggle="tooltip" data-bs-placement="bottom" data-i18n-data-bs-title="panel.devcon.tooltip">
                 <i class="bi bi-terminal"></i>
             </button>
-            <button id="countdown-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-i18n-data-bs-title="panel.countdown.tooltip">⏳</button>
-            <button id="stopwatch-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-i18n-data-bs-title="panel.stopwatch.tooltip">⏱️</button>
-            <button id="menu-button" class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#menu-offcanvas" role="button" aria-controls="menu-offcanvas" style="width: 100px;">☰</button>
+            <button type="button" id="countdown-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-i18n-data-bs-title="panel.countdown.tooltip">
+                <i class="bi bi-hourglass-bottom"></i>
+            </button>
+            <button type="button" id="stopwatch-button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-i18n-data-bs-title="panel.stopwatch.tooltip">
+                <i class="bi bi-stopwatch"></i>
+            </button>
+            <button type="button" id="menu-button" class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#menu-offcanvas" aria-controls="menu-offcanvas">
+                <i class="bi bi-list"></i> <span data-i18n="panel.menu.label"></span>
+            </button>
         </div>
         <!-- Dev console -->
         <div id="dev-console-container">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>Developer Console</span>
+                    <span data-i18n="devcon.title"></span>
                     <button type="button" class="btn-close" id="dev-console-close" aria-label="Close"></button>
                 </div>
                 <div class="card-body">
                     <!-- Tab navigation -->
                     <ul class="nav nav-tabs mb-3" id="devConsoleTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="console-tab" data-bs-toggle="tab" data-bs-target="#console-tab-pane" type="button" role="tab" aria-controls="console-tab-pane" aria-selected="true">Console</button>
+                            <button class="nav-link active" id="console-tab" data-bs-toggle="tab" data-bs-target="#console-tab-pane" type="button" role="tab" aria-controls="console-tab-pane" aria-selected="true" data-i18n="devcon.tabs.console"></button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="logs-tab" data-bs-toggle="tab" data-bs-target="#logs-tab-pane" type="button" role="tab" aria-controls="logs-tab-pane" aria-selected="false">Logs</button>
+                            <button class="nav-link" id="logs-tab" data-bs-toggle="tab" data-bs-target="#logs-tab-pane" type="button" role="tab" aria-controls="logs-tab-pane" aria-selected="false" data-i18n="devcon.tabs.logs"></button>
                         </li>
                     </ul>
                     
@@ -47,10 +53,10 @@
                         <div class="tab-pane fade show active" id="console-tab-pane" role="tabpanel" aria-labelledby="console-tab" tabindex="0">
                             <div id="dev-console-output" class="mb-2"></div>
                             <div class="input-group">
-                                <input type="text" id="dev-console-input" class="form-control" maxlength="150" placeholder="Enter command..." aria-label="Developer command">
-                                <button class="btn btn-outline-secondary" type="button" id="dev-console-submit">Execute</button>
+                                <input type="text" id="dev-console-input" class="form-control" maxlength="150" data-i18n-placeholder="devcon.input.placeholder">
+                                <button class="btn btn-outline-secondary" type="button" id="dev-console-submit" data-i18n="devcon.input.execute"></button>
                             </div>
-                            <span class="mt-1" id="subtext-light">Press Enter to execute, Esc to close, ↑↓ for history</span>
+                            <span class="mt-1" id="subtext-light" data-i18n="devcon.input.tip"></span>
                         </div>
                         
                         <!-- Logs tab -->
@@ -513,7 +519,9 @@
                                     <label class="form-check-label" for="menuTabTitleVisible" data-i18n="menu.section.displayoptions.setting.tabtitle.option.label"></label>
                                 </div>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.displayoptions.setting.fullscreen.title"></h6>
-                                <button id="fs-toggle" class="btn btn-primary mb-2"></button>
+                                <button id="fs-toggle" class="btn btn-primary mb-2">
+                                    <i class="bi bi-fullscreen"></i> <span data-i18n="menu.section.displayoptions.setting.fullscreen.option.toggle"></span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -615,11 +623,11 @@
                     <span id="credit">
                         Developed by iKarTehFox. Made possible with other open-source projects.<br>This app is licenced under the <a href="https://github.com/iKarTehFox/web-clock/blob/prod/LICENSE" target="_blank">Mozilla Public License 2.0 (MPL-2.0)</a>.
                     </span>
-                    <br>
-                    <a type="button" class="btn btn-primary btn-social-icon btn-github" data-bs-toggle="tooltip" data-bs-custom-class="secondary-tooltip" data-i18n-data-bs-title="menu.misc.github.tooltip" href="https://github.com/ikartehfox/web-clock" target="_blank" id="github-btn">
-                        <p style="margin-top: -1.5px;">🐙</p>
+                    <hr>
+                    <a role="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-i18n-data-bs-title="menu.misc.github.tooltip" href="https://github.com/ikartehfox/web-clock" target="_blank" id="github-btn">
+                        <i class="bi bi-github"></i>
                     </a>
-                    <a type="button" class="btn btn-github ms-1" href="https://online-clock-docs.pages.dev/" data-bs-toggle="tooltip" data-i18n-data-bs-title="menu.misc.docs.tooltip" data-i18n="menu.misc.docs.label"></a>
+                    <a role="button" class="btn btn-secondary ms-1" href="https://online-clock-docs.pages.dev/" data-bs-toggle="tooltip" data-i18n-data-bs-title="menu.misc.docs.tooltip" data-i18n="menu.misc.docs.label"></a>
                     <p class="mb-1 mt-2"><a href="/privacy.html" data-i18n="menu.section.weather.setting.privacy"></a></p>
                     <p class="mb-1 mt-2"><span data-i18n="menu.misc.versionlabel"></span>: <b id="versionLabelClk"></b></p>
                 </div>
@@ -644,8 +652,8 @@
                     <div><span data-i18n="weather.wind"></span>: <strong id="weather-wind">-- mph N</strong></div>
                     <hr>
                     <div class="d-flex flex-row align-items-center justify-content-between">
-                        <p class="mb-0 me-2 align-left" id="weather-condition">Condition</p>
-                        <iconify-icon icon="mdi:weather-cloudy" id="weather-icon" width="2em" height="2em"></iconify-icon>
+                        <p class="mb-0" id="weather-condition">Condition</p>
+                        <i id="weather-icon" class="bi bi-cloud fs-4"></i>
                     </div>
                 </div>
             </div>

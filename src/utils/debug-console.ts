@@ -1,4 +1,4 @@
-import { countdown, devcon, menu, panel, stopwatch } from './dom-elements';
+import { countdown, debug, devcon, menu, panel, stopwatch } from './dom-elements';
 import { getAvailableThemes, getMenuTheme, logConsole, requestNotificationPermission, setMenuTheme } from './dom-utils';
 import { debugMode, setDevConInit } from './debug';
 import { match } from 'ts-pattern';
@@ -2002,7 +2002,11 @@ export function initDebugConsole(): void {
     devcon.submitbtn.addEventListener('click', executeCommand);
     devcon.input.addEventListener('keydown', handleInputKeydown);
     devcon.closebtn.addEventListener('click', () => {
-        devcon.container.classList.remove('show');
+        debugConsole.hide();
+    });
+
+    panel.devconbutton.addEventListener('click', () => {
+        debugConsole.toggle();
     });
     
     // Initial message
@@ -2019,7 +2023,7 @@ function handleInputKeydown(event: KeyboardEvent): void {
             executeCommand();
         })
         .with('Escape', () => {
-            devcon.container.classList.remove('show');
+            debugConsole.hide();
         })
         .with('ArrowUp', () => {
             navigateHistory(1);
@@ -2086,19 +2090,23 @@ export const debugConsole = {
         if (debugMode) {
             devcon.container.classList.add('show');
             devcon.input.focus();
+            panel.devconbutton.className = 'btn btn-danger';
         }
     },
     hide: () => {
         devcon.container.classList.remove('show');
+        panel.devconbutton.className = 'btn btn-secondary';
     },
     toggle: () => {
         if (debugMode) {
             const isVisible = devcon.container.classList.contains('show');
             if (isVisible) {
                 devcon.container.classList.remove('show');
+                panel.devconbutton.className = 'btn btn-secondary';
             } else {
                 devcon.container.classList.add('show');
                 devcon.input.focus();
+                panel.devconbutton.className = 'btn btn-danger';
             }
         }
     },
