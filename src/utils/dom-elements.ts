@@ -29,6 +29,7 @@ export const devcon = {
     output: getElement<HTMLDivElement>('dev-console-output'),
     input: getElement<HTMLInputElement>('dev-console-input'),
     submitbtn: getElement<HTMLButtonElement>('dev-console-submit'),
+    logs: getElement<HTMLDivElement>('dev-console-logs')
 };
 
 export const menu = {

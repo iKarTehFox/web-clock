@@ -2,6 +2,7 @@
 export let debugMode: boolean = false;
 export let timeRefresh: number = 100;
 export let lockSettings: boolean = false;
+export let isDevConInit: boolean = false;
 
 export function setDebug(value: boolean): void {
     debugMode = value;
@@ -16,4 +17,8 @@ export function setTimeRefresh(value: number): void {
 export function setLockSettings(value: boolean): void {
     lockSettings = value;
     console.log(`Lock settings is now ${value ? 'on' : 'off'}.`);
+}
+
+export function setDevConInit(value: boolean): void {
+    isDevConInit = value;
 }

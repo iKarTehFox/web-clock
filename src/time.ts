@@ -296,7 +296,7 @@ function startExperimentalClock() {
             updateTime();
             updatePageDuration();
 
-            logConsole('Time, date, and page duration updated... (Experimental method)', 'debug');
+            logConsole('Time, date, and page duration updated... (Experimental method)', 'debug', false, false);
             
             // Schedule the next update
             scheduleNextUpdate();
@@ -312,7 +312,7 @@ function startOldClock() {
     clockInterval = setInterval(() => {
         updateTime();
         updatePageDuration();
-        logConsole('Time, date, and page duration updated... (Legacy method)', 'info');
+        logConsole('Time, date, and page duration updated... (Legacy method)', 'info', false, false);
     }, timeRefresh) as unknown as NodeJS.Timeout;
 }
 

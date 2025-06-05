@@ -1,6 +1,6 @@
 import Toastify from 'toastify-js';
 import { countdown, devcon, doc, menu, stopwatch, weather } from './dom-elements';
-import { debugMode } from './debug';
+import { debugMode, isDevConInit } from './debug';
 import { Html5Qrcode } from 'html5-qrcode';
 import { processJSONSettings } from '../importExport';
 import { match } from 'ts-pattern';
@@ -10,7 +10,7 @@ import randomstring from 'randomstring';
 import i18next, { t } from 'i18next';
 
 // Custom console logging function
-export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' = 'debug', bypass: boolean = false): void {
+export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' = 'debug', bypass: boolean = false, appendDevCon: boolean = true): void {
     if ((debugMode || bypass) && type === 'debug') {
         console.log(`DEBUG - ${message}`);
     } else if (type === 'error') {
@@ -20,6 +20,48 @@ export function logConsole(message: string, type: 'debug' | 'error' | 'warning' 
     } else if ((debugMode || bypass) && type === 'info') {
         console.info(`INFO - ${message}`);
     }
+
+    if (appendDevCon) {
+        appendToLogs(message, type, true);
+    }
+}
+
+export function appendToLogs(text: string, type: 'info' | 'warning' | 'error' | 'debug' = 'info', timestamp: boolean = true): void {
+    if (!isDevConInit) return;
+
+    // Create a new log entry
+    const entry = document.createElement('div');
+    
+    // Add timestamp if requested
+    const timeString = timestamp ? `[${new Date().toLocaleTimeString()}] ` : '';
+    
+    // Style based on log type
+    match(type)
+        .with('debug', () => {
+            entry.style.color = '#6c757d'; // Gray for debug
+        })
+        .with('info', () => {
+            entry.style.color = '#0d6efd'; // Blue for info
+        })
+        .with('warning', () => {
+            entry.style.color = '#ffc107'; // Yellow for warnings
+        })
+        .with('error', () => {
+            entry.style.color = '#dc3545'; // Red for errors
+        })
+        .otherwise(() => {});
+    
+    // Set the content with timestamp if enabled
+    entry.textContent = `${timeString}${type.toUpperCase()}: ${text}`;
+    devcon.logs.appendChild(entry);
+    
+    // Remove oldest entries if exceeding 500
+    while (devcon.logs.children.length > 500) {
+        devcon.logs.removeChild(devcon.logs.firstChild);
+    }
+    
+    // Auto-scroll to bottom
+    devcon.logs.scrollTop = devcon.logs.scrollHeight;
 }
 
 // Function to set toast theme

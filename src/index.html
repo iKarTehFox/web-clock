@@ -28,12 +28,33 @@
                     <button type="button" class="btn-close" id="dev-console-close" aria-label="Close"></button>
                 </div>
                 <div class="card-body">
-                    <div id="dev-console-output" class="mb-2"></div>
-                    <div class="input-group">
-                        <input type="text" id="dev-console-input" class="form-control" maxlength="150" placeholder="Enter command..." aria-label="Developer command">
-                        <button class="btn btn-outline-secondary" type="button" id="dev-console-submit">Execute</button>
+                    <!-- Tab navigation -->
+                    <ul class="nav nav-tabs mb-3" id="devConsoleTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="console-tab" data-bs-toggle="tab" data-bs-target="#console-tab-pane" type="button" role="tab" aria-controls="console-tab-pane" aria-selected="true">Console</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="logs-tab" data-bs-toggle="tab" data-bs-target="#logs-tab-pane" type="button" role="tab" aria-controls="logs-tab-pane" aria-selected="false">Logs</button>
+                        </li>
+                    </ul>
+                    
+                    <!-- Tab content -->
+                    <div class="tab-content" id="devConsoleTabContent">
+                        <!-- Console tab -->
+                        <div class="tab-pane fade show active" id="console-tab-pane" role="tabpanel" aria-labelledby="console-tab" tabindex="0">
+                            <div id="dev-console-output" class="mb-2"></div>
+                            <div class="input-group">
+                                <input type="text" id="dev-console-input" class="form-control" maxlength="150" placeholder="Enter command..." aria-label="Developer command">
+                                <button class="btn btn-outline-secondary" type="button" id="dev-console-submit">Execute</button>
+                            </div>
+                            <span class="mt-1" id="subtext-light">Press Enter to execute, Esc to close, ↑↓ for history</span>
+                        </div>
+                        
+                        <!-- Logs tab -->
+                        <div class="tab-pane fade" id="logs-tab-pane" role="tabpanel" aria-labelledby="logs-tab" tabindex="0">
+                            <div id="dev-console-logs" class="mb-2"></div>
+                        </div>
                     </div>
-                    <span class="mt-1" id="subtext-light">Press Enter to execute, Esc to close, ↑↓ for history</span>
                 </div>
             </div>
         </div>

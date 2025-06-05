@@ -450,3 +450,30 @@ $amoled-text-muted: #888888;
     color: var(--bs-body-color);
   }
 }
+
+/* Nav tabs customization for amoled theme */
+[data-bs-theme="amoled"] {
+  .nav-tabs {
+    --bs-nav-tabs-border-color: var(--amoled-border);
+    --bs-nav-tabs-link-hover-border-color: var(--amoled-border) var(--amoled-border) transparent;
+    --bs-nav-tabs-link-active-color: var(--bs-body-color);
+    --bs-nav-tabs-link-active-bg: var(--amoled-bg-lighter);
+    --bs-nav-tabs-link-active-border-color: var(--amoled-border) var(--amoled-border) var(--amoled-bg-lighter);
+    
+    .nav-link {
+      color: var(--amoled-text-muted);
+      
+      &:hover {
+        color: var(--bs-body-color);
+        border-color: var(--amoled-border) var(--amoled-border) transparent;
+      }
+      
+      &.active {
+        color: var(--bs-body-color);
+        background-color: var(--amoled-bg-lighter);
+        border-color: var(--amoled-border) var(--amoled-border) var(--amoled-bg-lighter);
+      }
+    }
+  }
+}
+

@@ -50,7 +50,7 @@ body {
     box-shadow: $box-shadow;
   }
   
-  #dev-console-output {
+  #dev-console-output, #dev-console-logs {
     max-height: 200px;
     overflow-y: auto;
     font-family: monospace;

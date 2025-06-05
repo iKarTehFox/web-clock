@@ -461,3 +461,29 @@ $midnight-text-muted: #6c7793;
     color: var(--bs-body-color);
   }
 }
+
+/* Nav tabs customization for midnight theme */
+[data-bs-theme="midnight"] {
+  .nav-tabs {
+    --bs-nav-tabs-border-color: var(--midnight-border);
+    --bs-nav-tabs-link-hover-border-color: var(--midnight-border) var(--midnight-border) transparent;
+    --bs-nav-tabs-link-active-color: var(--bs-body-color);
+    --bs-nav-tabs-link-active-bg: var(--midnight-bg-lighter);
+    --bs-nav-tabs-link-active-border-color: var(--midnight-border) var(--midnight-border) var(--midnight-bg-lighter);
+    
+    .nav-link {
+      color: var(--midnight-text-muted);
+      
+      &:hover {
+        color: var(--bs-body-color);
+        border-color: var(--midnight-border) var(--midnight-border) transparent;
+      }
+      
+      &.active {
+        color: var(--bs-body-color);
+        background-color: var(--midnight-bg-lighter);
+        border-color: var(--midnight-border) var(--midnight-border) var(--midnight-bg-lighter);
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { countdown, devcon, menu, panel, stopwatch } from './dom-elements';
 import { getAvailableThemes, getMenuTheme, logConsole, requestNotificationPermission, setMenuTheme } from './dom-utils';
-import { debugMode } from './debug';
+import { debugMode, setDevConInit } from './debug';
 import { match } from 'ts-pattern';
 import { presetLocalJSON, resetSettings } from '../importExport';
 import { presetList } from '../assets/presets/presets';
@@ -11,7 +11,7 @@ import { getFontFamily, getFontSize, getFontWeight, getFontStyle, getStrokeColor
 import { valid } from '../importValidation';
 import * as luxon from 'ts-luxon';
 
-// Command history
+// Init
 let commandHistory: string[] = [];
 let historyIndex = -1;
 
@@ -110,50 +110,21 @@ const commands: Command[] = [
         }
     },
     {
-        name: 'echo',
-        description: 'Outputs the given text',
-        usage: 'echo <text>',
-        args: [
-            {
-                name: 'text',
-                type: 'string',
-                description: 'Text to output to the console',
-                required: true
-            }
-        ],
-        options: [
-            {
-                name: 'color',
-                shortName: 'c',
-                type: 'string',
-                description: 'Color of the text (e.g., red, blue, green)',
-                default: ''
-            }
-        ],
-        execute: (args, options) => {
-            if (options.color) {
-                const entry = document.createElement('div');
-                entry.style.color = options.color;
-                entry.textContent = args.text;
-                devcon.output.appendChild(entry);
-            
-                // Auto-scroll to bottom
-                devcon.output.scrollTop = devcon.output.scrollHeight;
-            } else {
-                appendToConsole(args.text);
-            }
-        }
-    },
-    {
         name: 'log',
-        description: 'Logs the given text to the console',
-        usage: 'log <text> [--level <level>]',
+        description: 'Logs the given text to the console or manages logs',
+        usage: 'log <string|clear|send> [--level <level>] [--bypass]',
         args: [
             {
-                name: 'text',
+                name: 'action',
                 type: 'string',
-                description: 'Text to log to the browser console',
+                description: 'Text to log or action to perform (clear, send)',
                 required: true
+            },
+            {
+                name: 'message',
+                type: 'string',
+                description: 'Message to log (when using send action)',
+                required: false
             }
         ],
         options: [
@@ -175,14 +146,42 @@ const commands: Command[] = [
         execute: (args, options) => {
             const validLevels = ['debug', 'info', 'warning', 'error'];
             const level = options.level.toLowerCase();
-        
-            if (!validLevels.includes(level)) {
-                appendToConsole(`Invalid log level: ${level}. Valid levels are: ${validLevels.join(', ')}`, 'error');
-                return;
+
+            if (!args.action) {
+                appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'log')?.usage}`, 'error');
             }
-        
-            logConsole(args.text, level as 'debug' | 'error' | 'warning' | 'info', options.bypass);
-            appendToConsole(`Logged to console with level: ${level}`);
+
+            match(args.action)
+                .with('clear', () => {
+                    // Clear all logs
+                    devcon.logs.innerHTML = '';
+                    console.clear();
+                    appendToConsole('Logs cleared.');
+                })
+                .with('send', () => {
+                    if (!args.message) {
+                        appendToConsole('Error: Missing message to log. Usage: log send <message> [--level <level>]', 'error');
+                        return;
+                    }
+            
+                    if (!validLevels.includes(level)) {
+                        appendToConsole(`Invalid log level: ${level}. Valid levels are: ${validLevels.join(', ')}`, 'error');
+                        return;
+                    }
+            
+                    logConsole(args.message, level as 'debug' | 'error' | 'warning' | 'info', options.bypass);
+                    appendToConsole(`Logged to console with level: ${level}`);
+                })
+                .otherwise(() => {
+                    // Original logging functionality
+                    if (!validLevels.includes(level)) {
+                        appendToConsole(`Invalid log level: ${level}. Valid levels are: ${validLevels.join(', ')}`, 'error');
+                        return;
+                    }
+            
+                    logConsole(args.action, level as 'debug' | 'error' | 'warning' | 'info', options.bypass);
+                    appendToConsole(`Logged to console with level: ${level}`);
+                });
         }
     },
     {
@@ -2008,6 +2007,7 @@ export function initDebugConsole(): void {
     
     // Initial message
     appendToConsole('Welcome to the console! Type "help" for available commands.');
+    setDevConInit(true);
     
     logConsole('Debug console initialized', 'debug');
 }
@@ -2053,6 +2053,7 @@ function navigateHistory(direction: number): void {
 
 // Append text to the console output
 function appendToConsole(text: string, type: 'normal' | 'command' | 'error' = 'normal'): void {
+
     const entry = document.createElement('div');
     
     match(type)
@@ -2106,5 +2107,8 @@ export const debugConsole = {
             devcon.input.value = command;
             executeCommand();
         }
+    },
+    clearLogs: () => {
+        devcon.logs.innerHTML = '';
     }
 };
