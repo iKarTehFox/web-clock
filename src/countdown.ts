@@ -244,8 +244,15 @@ countdown.notifcheckbox.addEventListener('change', async function() {
     }
 });
 
-if (Notification.permission === 'granted') { // Enable if already granted
-    countdown.notifcheckbox.checked = true;
+// Enable countdown notification if already granted
+// Using try/catch to handle errors in browsers without Notification API
+try {
+    if (Notification.permission === 'granted') {
+        countdown.notifcheckbox.checked = true;
+    }
+} catch (e) {
+    countdown.notifcheckbox.checked = false;
+    logConsole(`Error with Notification API: ${e}`, 'error');
 }
 
 // Prevent close if running
