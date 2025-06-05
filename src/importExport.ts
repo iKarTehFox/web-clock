@@ -34,7 +34,7 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
     showToast(i18next.t('toasts.importexport.exportsuccess', { 0: luxon.DateTime.now().toMillis() - startTime.toMillis() }), 'normal', 'success');
 }
 
-type ExportType = 'clipboard' | 'download' | 'log' | 'qr' | 'card';
+export type ExportType = 'clipboard' | 'download' | 'log' | 'qr' | 'card';
 
 function getElapsedTime(startTime: luxon.DateTime): number {
     return luxon.DateTime.now().toMillis() - startTime.toMillis();
@@ -145,7 +145,7 @@ export function importSettingsFromJSON() {
 }
 
 // Function for manual JSON text input
-export function manualJSONImport() {
+function manualJSONImport() {
     const jsontext = menu.manualjsontextinput.value;
 
     if (jsontext) {

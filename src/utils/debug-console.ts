@@ -2,7 +2,7 @@ import { countdown, debug, devcon, menu, panel, stopwatch } from './dom-elements
 import { getAvailableThemes, getMenuTheme, logConsole, requestNotificationPermission, setMenuTheme } from './dom-utils';
 import { debugMode, setDevConInit } from './debug';
 import { match } from 'ts-pattern';
-import { presetLocalJSON, resetSettings } from '../importExport';
+import { exportSettings, ExportType, importSettingsFromJSON, presetLocalJSON, resetSettings } from '../importExport';
 import { presetList } from '../assets/presets/presets';
 import { versionNumberString } from './update-notify';
 import { startCountdownExternal, pauseCountdownExternal, resetCountdownExternal } from '../countdown';
@@ -420,21 +420,27 @@ const commands: Command[] = [
         }
     },
     {
-        name: 'preset',
-        description: 'Load a preset configuration or list available presets',
-        usage: 'preset [list|load <preset-filename>]',
-        aliases: ['pre'],
+        name: 'importexport',
+        description: 'Import and export clock settings',
+        usage: 'importexport <import|export|preset> [options]',
+        aliases: ['ie', 'settings'],
         args: [
             {
                 name: 'action',
                 type: 'string',
-                description: 'Action to perform (list, load)',
+                description: 'Action to perform (import, export, preset)',
+                required: true
+            },
+            {
+                name: 'subaction',
+                type: 'string',
+                description: 'Sub-action (import: file|preset, export: download|clipboard|qr|log|card, preset: list|load)',
                 required: false
             },
             {
-                name: 'preset',
+                name: 'value',
                 type: 'string',
-                description: 'Preset filename to load',
+                description: 'Value for the action (e.g., preset name)',
                 required: false
             }
         ],
@@ -443,58 +449,127 @@ const commands: Command[] = [
                 name: 'quiet',
                 shortName: 'q',
                 type: 'boolean',
-                description: 'Load preset without showing notifications',
+                description: 'Perform operation without showing notifications',
                 default: false
             }
         ],
-        execute: (args, options) => {
-        // If no action is provided, show usage and list presets
+        execute: (args, options, rawArgs) => {
             if (!args.action) {
-                appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'preset')?.usage}`, 'error');
-            
-                // Display available presets
-                const presetInfo = presetList.map(preset => 
-                    `${preset.filename}: ${preset.displayName}`
-                ).join('\n');
-            
-                appendToConsole(`Available presets:\n${presetInfo}`);
+                appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'importexport')?.usage}`, 'error');
                 return;
             }
-        
-            match(args.action.toLowerCase())
-                .with('list', () => {
-                    let presetInfo = presetList.map(preset => 
-                        `${preset.filename}: ${preset.displayName}`
-                    ).join('\n');
-                    
-                    appendToConsole(`Available presets:\n${presetInfo}`);
-                })
-                .with('load', () => {
-                    if (!args.preset) {
-                        appendToConsole('Error: Missing preset name. Usage: preset load <preset-filename>', 'error');
+
+            match(args.action)
+                .with('import', () => {
+                    if (!args.subaction) {
+                        appendToConsole('Missing sub-action. Available sub-actions: file, preset', 'error');
                         return;
                     }
-                    
-                    let presetName = args.preset;
-                    
-                    // Check if the preset exists
-                    let presetExists = presetList.some(preset => preset.filename === presetName);
-                    if (!presetExists) {
-                        appendToConsole(`Error: Preset "${presetName}" not found. Use "preset list" to see available presets.`, 'error');
-                        return;
-                    }
-                    
-                    presetLocalJSON(presetName)
-                        .then(() => {
-                            appendToConsole(`Successfully loaded preset: ${presetName}`);
+
+                    match(args.subaction)
+                        .with('file', () => {
+                            appendToConsole('Importing settings from file...');
+                            importSettingsFromJSON();
                         })
-                        .catch(error => {
-                            appendToConsole(`Error loading preset: ${error}`, 'error');
+                        .with('preset', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing preset name. Usage: importexport import preset <preset-name>', 'error');
+                                
+                                // Display available presets
+                                const presetInfo = presetList.map(preset => 
+                                    `${preset.filename}: ${preset.displayName}`
+                                ).join('\n');
+                                
+                                appendToConsole(`Available presets:\n${presetInfo}`);
+                                return;
+                            }
+                            
+                            const presetName = args.value;
+                            
+                            // Check if the preset exists
+                            const presetExists = presetList.some(preset => preset.filename === presetName);
+                            if (!presetExists) {
+                                appendToConsole(`Error: Preset "${presetName}" not found. Use "importexport preset list" to see available presets.`, 'error');
+                                return;
+                            }
+                            
+                            presetLocalJSON(presetName, !options.quiet)
+                                .then(() => {
+                                    appendToConsole(`Successfully loaded preset: ${presetName}`);
+                                })
+                                .catch(error => {
+                                    appendToConsole(`Error loading preset: ${error}`, 'error');
+                                });
+                        })
+                        .otherwise((subaction) => {
+                            appendToConsole(`Unknown sub-action: ${subaction}. Available sub-actions: file, preset`, 'error');
                         });
                 })
-                .otherwise(() => {
-                    appendToConsole(`Unknown action: ${args.action}. Available actions: list, load`, 'error');
-                    appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'preset')?.usage}`, 'error');
+                .with('export', () => {
+                    if (!args.subaction) {
+                        appendToConsole('Missing sub-action. Available sub-actions: download, clipboard, qr, log, card', 'error');
+                        return;
+                    }
+
+                    const validExportTypes: ExportType[] = ['download', 'clipboard', 'qr', 'log', 'card'];
+                    const exportType = args.subaction as ExportType;
+
+                    if (!validExportTypes.includes(exportType)) {
+                        appendToConsole(`Unknown export type: ${exportType}. Available types: ${validExportTypes.join(', ')}`, 'error');
+                        return;
+                    }
+
+                    try {
+                        appendToConsole(`Exporting settings as ${exportType}...`);
+                        exportSettings(exportType);
+                    } catch (error) {
+                        appendToConsole(`Error exporting settings: ${error}`, 'error');
+                    }
+                })
+                .with('preset', () => {
+                    if (!args.subaction) {
+                        appendToConsole('Missing sub-action. Available sub-actions: list, load', 'error');
+                        return;
+                    }
+
+                    match(args.subaction)
+                        .with('list', () => {
+                            const presetInfo = presetList.map(preset => 
+                                `${preset.filename}: ${preset.displayName}`
+                            ).join('\n');
+                            
+                            appendToConsole(`Available presets:\n${presetInfo}`);
+                        })
+                        .with('load', () => {
+                            if (!args.value) {
+                                appendToConsole('Error: Missing preset name. Usage: importexport preset load <preset-name>', 'error');
+                                return;
+                            }
+                            
+                            const presetName = args.value;
+                            
+                            // Check if the preset exists
+                            const presetExists = presetList.some(preset => preset.filename === presetName);
+                            if (!presetExists) {
+                                appendToConsole(`Error: Preset "${presetName}" not found. Use "importexport preset list" to see available presets.`, 'error');
+                                return;
+                            }
+                            
+                            presetLocalJSON(presetName, !options.quiet)
+                                .then(() => {
+                                    appendToConsole(`Successfully loaded preset: ${presetName}`);
+                                })
+                                .catch(error => {
+                                    appendToConsole(`Error loading preset: ${error}`, 'error');
+                                });
+                        })
+                        .otherwise((subaction) => {
+                            appendToConsole(`Unknown sub-action: ${subaction}. Available sub-actions: list, load`, 'error');
+                        });
+                })
+                .otherwise((action) => {
+                    appendToConsole(`Unknown action: ${action}. Available actions: import, export, preset`, 'error');
+                    appendToConsole(`Usage: ${commands.find(cmd => cmd.name === 'importexport')?.usage}`, 'error');
                 });
         }
     },
@@ -531,7 +606,7 @@ const commands: Command[] = [
                 return;
             }
     
-            const themeName = args.name.toLowerCase();
+            const themeName = args.name;
             const validThemes = ['auto', 'toggle', 'light', 'dark', 'midnight'];
     
             if (!validThemes.includes(themeName)) {
@@ -598,7 +673,7 @@ const commands: Command[] = [
                 return;
             }
 
-            match(args.action.toLowerCase())
+            match(args.action)
                 .with('get', () => {
                     if (!args.option) {
                     // Default to local time if no option specified
@@ -611,7 +686,7 @@ const commands: Command[] = [
                         return;
                     }
 
-                    match(args.option.toLowerCase())
+                    match(args.option)
                         .with('unix', () => {
                             if (options.format) {
                                 appendToConsole('Option -f is unsupported here', 'error');
@@ -647,7 +722,7 @@ const commands: Command[] = [
                         return;
                     }
 
-                    match(args.option.toLowerCase())
+                    match(args.option)
                         .with('tz', () => {
                             if (!args.value) {
                                 // Display current timezone
@@ -785,8 +860,8 @@ const commands: Command[] = [
                 return;
             }
 
-            const property = args.property.toLowerCase();
-            const action = args.action ? args.action.toLowerCase() : 'get';
+            const property = args.property;
+            const action = args.action ? args.action : 'get';
 
             match(property)
                 .with('display', () => {
@@ -1125,8 +1200,8 @@ const commands: Command[] = [
                 return;
             }
 
-            const property = args.property.toLowerCase();
-            const action = args.action ? args.action.toLowerCase() : 'get';
+            const property = args.property;
+            const action = args.action ? args.action : 'get';
 
             match(property)
                 .with('family', () => {
@@ -1383,8 +1458,8 @@ const commands: Command[] = [
                 return;
             }
 
-            const property = args.property.toLowerCase();
-            const action = args.action ? args.action.toLowerCase() : 'get';
+            const property = args.property;
+            const action = args.action ? args.action : 'get';
 
             match(property)
                 .with('mode', () => {
