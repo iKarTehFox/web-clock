@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import { menu } from './dom-elements';
 
 // Hardcoded values. Change as needed.
-export const versionNumber = '1.7.1';
+export const versionNumber = '1.8.0';
 export const versionNumberString = `v${versionNumber}`;
 const releaseNotes = `https://github.com/iKarTehFox/web-clock/releases/tag/${versionNumber}`;
 
