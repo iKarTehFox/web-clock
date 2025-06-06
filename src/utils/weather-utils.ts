@@ -1,6 +1,6 @@
 import { match } from 'ts-pattern';
 import OpenWeatherMap from 'openweathermap-ts';
-import { menu, weather } from './dom-elements';
+import { menu, panel, weather } from './dom-elements';
 import { getFirstElement } from './dom-selectors';
 import { logConsole, showToast } from './dom-utils';
 import { CurrentResponse } from 'openweathermap-ts/dist/types';
@@ -173,3 +173,98 @@ export function stopWeather() {
     menu.weatherstopbtn.disabled = true;
     logConsole('Weather interval stopped.', 'info');
 }
+
+// Weather move toggle listener
+let isMoving: boolean = false;
+
+panel.section.we.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    
+    match(target.tagName)
+        .with('BUTTON', () => {
+            const buttonElement = target as HTMLButtonElement;
+            match(buttonElement.id)
+                .with('weatherGeoBtn', async () => {
+                    try {
+                        const latlonArray = await getLocation();
+                        menu.weatherlatinput.value = latlonArray[0].toString();
+                        menu.weatherloninput.value = latlonArray[1].toString();
+                        logConsole(`Retrieved geolocation: ${latlonArray}`, 'debug');
+                    } catch (error) {
+                        logConsole(`Failed to get location: ${error}`, 'error');
+                    }
+                })
+                .with('weatherSubmitBtn', () => {
+                    submitWeatherSettings();
+                })
+                .with('weatherStopBtn', () => {
+                    stopWeather();
+                })
+                .with('weatherMoveToggle', () => {
+                    isMoving = buttonElement.classList.contains('active');
+                    weather.container.style.cursor = isMoving ? 'grab' : 'default';
+                    logConsole(`Weather moving toggle set to: ${isMoving}`, 'debug');
+                })                
+                .with('weatherMoveReset', () => {
+                    weather.container.style.left = '';
+                    weather.container.style.top = '';
+                    weather.container.style.bottom = '';
+                    logConsole('Weather widget position reset...', 'info');
+                })
+                .otherwise(() => {});
+        })
+        .otherwise(() => {});
+});
+
+weather.container.addEventListener('mousedown', (e) => {
+    if (!isMoving) return;
+    
+    weather.container.style.cursor = 'grabbing';
+    logConsole('Weather widget mousedown...', 'info');
+    
+    // Convert from bottom positioning to top positioning
+    const rect = weather.container.getBoundingClientRect();
+    const topPosition = rect.top;
+    
+    // Clear bottom positioning and set top positioning
+    weather.container.style.bottom = 'auto';
+    weather.container.style.top = `${topPosition}px`;
+    
+    const startX = e.clientX - weather.container.offsetLeft;
+    const startY = e.clientY - topPosition; // Use the calculated top position
+    
+    // Get container dimensions once at the start
+    const containerWidth = rect.width;
+    const containerHeight = rect.height;
+
+    function onMouseMove(e: { clientX: number; clientY: number; }) {
+        const posX = e.clientX - startX;
+        const posY = e.clientY - startY;
+
+        // Constrain to viewport bounds
+        const clampedX = Math.max(0, Math.min(posX, window.innerWidth - containerWidth));
+        const clampedY = Math.max(0, Math.min(posY, window.innerHeight - containerHeight));
+
+        weather.container.style.left = `${clampedX}px`;
+        weather.container.style.top = `${clampedY}px`;
+        logConsole(`Weather widget moving. PosX: ${clampedX}, PosY: ${clampedY}`, 'debug');
+    }
+
+    function onMouseUp() {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        weather.container.style.cursor = 'grab';
+        logConsole('Weather widget mouseup...', 'info');
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+});
+
+weather.container.addEventListener('dblclick', () => {
+    if (!isMoving) return;
+    weather.container.style.left = '';
+    weather.container.style.top = '';
+    weather.container.style.bottom = '';
+    logConsole('Weather widget position reset...', 'info');
+});

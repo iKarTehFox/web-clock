@@ -2069,9 +2069,56 @@ function findSimilarCommands(input: string): string[] {
     return suggestions;
 }
 
-// Initialize the console
+// Header drag functionality
+function setupDragFunctionality(): void {
+    devcon.header.addEventListener('mousedown', (e) => {
+        devcon.header.style.cursor = 'grabbing';
+        const startX = e.clientX - devcon.container.offsetLeft;
+        const startY = e.clientY - devcon.container.offsetTop;
+
+        function onMouseMove(e: { clientX: number; clientY: number; }) {
+            const posX = e.clientX - startX;
+            const posY = e.clientY - startY;
+
+            // Get container dimensions
+            const containerRect = devcon.container.getBoundingClientRect();
+    
+            // Constrain to viewport bounds
+            const clampedX = Math.max(0, Math.min(posX, window.innerWidth - containerRect.width));
+            const clampedY = Math.max(0, Math.min(posY, window.innerHeight - containerRect.height));
+
+            devcon.container.style.left = `${clampedX}px`;
+            devcon.container.style.top = `${clampedY}px`;
+        }
+
+        function onMouseUp() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            devcon.header.style.cursor = 'grab';
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
+
+    // Double click to reset position
+    devcon.header.addEventListener('dblclick', () => {
+        devcon.container.style.left = '';
+        devcon.container.style.top = '';
+        devcon.container.style.transform = '';
+        logConsole('Developer console position reset', 'info');
+    });
+
+    // Set initial cursor style
+    devcon.header.style.cursor = 'grab';
+}
+
+// Update the initDebugConsole function
 export function initDebugConsole(): void {
     if (!debugMode) return;
+    
+    // Set up drag functionality
+    setupDragFunctionality();
     
     // Set up event listeners
     devcon.submitbtn.addEventListener('click', executeCommand);

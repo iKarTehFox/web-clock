@@ -25,12 +25,13 @@ export const panel = {
 };
 
 export const devcon = {
-    container: getElement<HTMLDivElement>('dev-console-container'),
     closebtn: getElement<HTMLButtonElement>('dev-console-close'),
-    output: getElement<HTMLDivElement>('dev-console-output'),
+    container: getElement<HTMLDivElement>('dev-console-container'),
+    header: getElement<HTMLDivElement>('dev-console-header'),
     input: getElement<HTMLInputElement>('dev-console-input'),
-    submitbtn: getElement<HTMLButtonElement>('dev-console-submit'),
-    logs: getElement<HTMLDivElement>('dev-console-logs')
+    logs: getElement<HTMLDivElement>('dev-console-logs'),
+    output: getElement<HTMLDivElement>('dev-console-output'),
+    submitbtn: getElement<HTMLButtonElement>('dev-console-submit')
 };
 
 export const menu = {
