@@ -196,10 +196,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const isTooltip = target.closest('.tooltip') !== null;
         const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
         const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
+        const isExportOverlay = target.closest('[data-overlay="export-modal-overlay"]') !== null;
         const isOffcanvasBackdrop = target.closest('.offcanvas-backdrop') !== null;
         const isInputFocused = document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement;
 
-        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isStopwatchVisible && !isOffcanvasBackdrop && !isInputFocused) {
+        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && !isExportOverlay && isStopwatchVisible && !isOffcanvasBackdrop && !isInputFocused) {
             stopwatch.container.style.display = 'none';
             stopwatch.obutton.className = 'btn btn-secondary';
             logConsole('Stopwatch panel closed', 'info');
@@ -213,9 +214,10 @@ document.addEventListener('keydown', function(e) {
     const isStopwatchVisible = stopwatch.container.style.display !== 'none';
     const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
     const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
+    const isExportOverlayVisible = document.querySelector('[data-overlay="export-modal-overlay"]') !== null;
     const isOffcanvasVisible = document.querySelector('.offcanvas.show, .offcanvas.showing') !== null;
 
-    if (e.key === 'Escape' && isStopwatchVisible && !isBsModalVisible && !isScannerOverlayVisible && !isOffcanvasVisible) {
+    if (e.key === 'Escape' && isStopwatchVisible && !isBsModalVisible && !isScannerOverlayVisible && !isExportOverlayVisible && !isOffcanvasVisible) {
         stopwatch.container.style.display = 'none';
         stopwatch.obutton.className = 'btn btn-secondary';
         logConsole('Stopwatch panel closed', 'info');

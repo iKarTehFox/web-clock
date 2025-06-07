@@ -43,7 +43,7 @@ document.addEventListener('keydown', (e) => {
     }
 
     // Skip if overlays visible
-    if (document.querySelector('[data-overlay="bs-modal-overlay"]') || document.querySelector('[data-overlay="scanner-overlay"]')) {
+    if (document.querySelector('[data-overlay="bs-modal-overlay"]') || document.querySelector('[data-overlay="scanner-overlay"]') || document.querySelector('[data-overlay="export-modal-overlay"]')) {
         return;
     }
 

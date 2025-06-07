@@ -1,4 +1,4 @@
-import { logConsole, showToast, createBsModal, createScannerOverlay, setMenuTheme } from './utils/dom-utils';
+import { logConsole, showToast, createBsModal, createScannerOverlay, setMenuTheme, createExportModal } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import { menu, panel } from './utils/dom-elements';
 import { ErrorDetails, handleValidationFailure, verifySettingsJSON } from './importValidation';
@@ -19,11 +19,18 @@ function getSettings() {
     };
 }
 
-function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
+function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime, customFilename?: string) {
+    const startExecTime = luxon.DateTime.now();
     const url = URL.createObjectURL(blob);
     const downloadLink = document.createElement('a');
     downloadLink.href = url;
-    downloadLink.download = `onlinewebclock-settings_${startTime.toFormat('X')}.json`;
+    
+    // Use custom filename if provided, otherwise use default template
+    const filename = customFilename 
+        ? `${customFilename}.json`
+        : `onlinewebclock-settings_${startTime.toFormat('X')}.json`;
+    
+    downloadLink.download = filename;
     
     document.body.appendChild(downloadLink);
     downloadLink.click();
@@ -31,7 +38,7 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime) {
     
     URL.revokeObjectURL(url);
     
-    showToast(i18next.t('toasts.importexport.exportsuccess', { 0: luxon.DateTime.now().toMillis() - startTime.toMillis() }), 'normal', 'success');
+    showToast(i18next.t('toasts.importexport.exportsuccess', { 0: luxon.DateTime.now().toMillis() - startExecTime.toMillis() }), 'normal', 'success');
 }
 
 export type ExportType = 'clipboard' | 'download' | 'log' | 'qr' | 'card';
@@ -68,9 +75,14 @@ function handleExport(settings: any, type: ExportType, startTime: luxon.DateTime
             }).then(canvas => createBsModal('QR Code', canvas));
             showToast(i18next.t('toasts.importexport.exportqrsuccess', { 0: getElapsedTime(startTime) }), 'normal', 'success');
         },
-        download: () => {
-            const blob = new Blob([settingsJSON], { type: 'application/json' });
-            downloadSettingsFile(blob, startTime);
+        download: async () => {
+            const defaultFilename = `onlinewebclock-settings_${startTime.toFormat('X')}`;
+            const result = await createExportModal(defaultFilename);
+            
+            if (result.action === 'confirm') {
+                const blob = new Blob([settingsJSON], { type: 'application/json' });
+                downloadSettingsFile(blob, startTime, result.filename);
+            }
         }
     };
 

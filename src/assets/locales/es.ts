@@ -596,13 +596,20 @@ export default {
     },
     'bsmodal': {
         'button': {
+            'cancel': 'Cancelar',
             'close': 'Cerrar',
             'copy': 'Copiar',
-            'download': 'Descargar',
             'countdownel': 'Cerrando en {{0}}s',
+            'dontshowagain': 'No mostrar de nuevo',
+            'download': 'Descargar',
+            'export': 'Exportar',
             'gethelp': 'Obtener ayuda',
-            'releasenotes': 'Notas de la versión',
-            'dontshowagain': 'No mostrar de nuevo'
+            'releasenotes': 'Notas de la versión'
+        },
+        'export': {
+            'title': 'Exportar ajustes',
+            'filename': 'Nombre del archivo',
+            'namehelp': 'Dejar en blanco para usar el nombre de archivo predeterminado.',
         },
         'importexport': {
             'backgroundimage': 'Imagen de fondo',

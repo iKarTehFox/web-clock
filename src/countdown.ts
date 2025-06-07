@@ -199,9 +199,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const isTooltip = target.closest('.tooltip') !== null;
         const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
         const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
+        const isExportOverlay = target.closest('[data-overlay="export-modal-overlay"]') !== null;
         const isOffcanvasBackdrop = target.closest('.offcanvas-backdrop') !== null;
 
-        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isCountdownVisible && !isOffcanvasBackdrop) {
+        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && !isExportOverlay && isCountdownVisible && !isOffcanvasBackdrop) {
             countdown.container.style.display = 'none';
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');
@@ -214,10 +215,11 @@ document.addEventListener('keydown', function(e) {
     const isCountdownVisible = countdown.container.style.display !== 'none';
     const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
     const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
+    const isExportOverlayVisible = document.querySelector('[data-overlay="export-modal-overlay"]') !== null;
     const isOffcanvasVisible = document.querySelector('.offcanvas.show, .offcanvas.showing') !== null;
     const isInputFocused = document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement;
 
-    if (e.key === 'Escape' && isCountdownVisible && !isBsModalVisible && !isScannerOverlayVisible && !isOffcanvasVisible && !isInputFocused) {
+    if (e.key === 'Escape' && isCountdownVisible && !isBsModalVisible && !isScannerOverlayVisible && !isExportOverlayVisible && !isOffcanvasVisible && !isInputFocused) {
         countdown.container.style.display = 'none';
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');

@@ -542,3 +542,90 @@ export function createScannerOverlay() {
         container.remove();
     });
 }
+
+export function createExportModal(defaultFilename: string): Promise<{ filename: string; action: string }> {
+    return new Promise((resolve) => {
+        const modalUID = `export-modal-${randomstring.generate(8)}`;
+
+        const modal = document.createElement('div');
+        modal.className = 'modal fade';
+        modal.setAttribute('tabindex', '-1');
+        modal.dataset.overlay = 'export-modal-overlay';
+
+        modal.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered" id="${modalUID}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">${i18next.t('bsmodal.export.title')}</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form id="export-form-${modalUID}">
+                            <div class="mb-3">
+                                <label for="filename-input-${modalUID}" class="form-label">${i18next.t('bsmodal.export.filename')}</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="filename-input-${modalUID}" placeholder="${defaultFilename}">
+                                    <div class="input-group-text">.json</div>
+                                </div>
+                                <div class="form-text">${i18next.t('bsmodal.export.namehelp')}</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-action="cancel">${i18next.t('bsmodal.button.cancel')}</button>
+                        <button type="button" class="btn btn-primary" data-action="confirm">${i18next.t('bsmodal.button.export')}</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Apply theme
+        modal.dataset.bsTheme = menu.container.dataset.bsTheme;
+
+        const bootstrapModal = new Modal(modal);
+        const filenameInput = modal.querySelector(`#filename-input-${modalUID}`) as HTMLInputElement;
+        
+        // Handle button clicks
+        modal.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            if (target.tagName === 'BUTTON') {
+                const action = target.dataset.action;
+                if (action === 'confirm') {
+                    const filename = filenameInput.value.trim();
+                    bootstrapModal.hide();
+                    resolve({ filename, action: 'confirm' });
+                } else if (action === 'cancel') {
+                    bootstrapModal.hide();
+                    resolve({ filename: '', action: 'cancel' });
+                }
+            }
+        });
+
+        // Handle Enter key in form
+        filenameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const filename = filenameInput.value.trim();
+                if (filename) {
+                    bootstrapModal.hide();
+                    resolve({ filename, action: 'confirm' });
+                }
+            }
+        });
+
+        modal.addEventListener('hidden.bs.modal', () => {
+            modal.remove();
+            logConsole(`Export modal ID ${modalUID} hidden.`, 'debug');
+        });
+
+        document.body.appendChild(modal);
+        bootstrapModal.show();
+        
+        // Focus and select the filename input
+        setTimeout(() => {
+            filenameInput.focus();
+            filenameInput.select();
+        }, 150);
+        
+        logConsole(`Export modal ID ${modalUID} created.`, 'debug');
+    });
+}

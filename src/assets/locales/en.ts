@@ -596,13 +596,20 @@ export default {
     },
     'bsmodal': {
         'button': {
+            'cancel': 'Cancel',
             'close': 'Close',
             'copy': 'Copy',
-            'download': 'Download',
             'countdownel': 'Closing in {{0}}s',
+            'dontshowagain': 'Don\'t show again',
+            'download': 'Download',
+            'export': 'Export',
             'gethelp': 'Get help',
-            'releasenotes': 'Release Notes',
-            'dontshowagain': 'Don\'t show again'
+            'releasenotes': 'Release Notes'
+        },
+        'export': {
+            'title': 'Export Settings',
+            'filename': 'Filename',
+            'namehelp': 'Leave empty for default filename',
         },
         'importexport': {
             'backgroundimage': 'Background Image',

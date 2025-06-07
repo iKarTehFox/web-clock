@@ -487,3 +487,17 @@ $midnight-text-muted: #6c7793;
     }
   }
 }
+
+/* Form text customization for midnight theme */
+[data-bs-theme="midnight"] {
+  .form-text {
+    color: var(--midnight-text-muted);
+    
+    font-size: 0.875em;
+    opacity: 0.9;
+    
+    &.text-muted {
+      color: var(--midnight-text-muted) !important;
+    }
+  }
+}

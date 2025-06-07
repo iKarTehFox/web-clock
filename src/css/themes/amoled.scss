@@ -477,3 +477,16 @@ $amoled-text-muted: #888888;
   }
 }
 
+/* Form text customization for amoled theme */
+[data-bs-theme="amoled"] {
+  .form-text {
+    color: var(--amoled-text-muted);
+    
+    font-size: 0.875em;
+    opacity: 0.9;
+    
+    &.text-muted {
+      color: var(--amoled-text-muted) !important;
+    }
+  }
+}
