@@ -398,10 +398,10 @@ export default {
                     'menutheme': {
                         'title': 'Tema del menú',
                         'option': {
-                            'light': 'Claro',
-                            'dark': 'Oscuro',
-                            'midnight': 'Medianoche',
-                            'amoled': 'AMOLED',
+                            'light': 'Claro ☀️',
+                            'dark': 'Oscuro 🌙',
+                            'midnight': 'Medianoche 🌃',
+                            'amoled': 'AMOLED 🌑',
                         }
                     },
                     'panelvisibility': {

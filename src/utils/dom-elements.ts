@@ -71,7 +71,7 @@ export const menu = {
     textcolorinput: getElement<HTMLInputElement>('textColorInput'),
     textcolorlabel: getElement<HTMLLabelElement>('textColorLabel'),
     textcoloroverrideradio: getElements<HTMLInputElement>('input[name="text-color-override-radio"]'),
-    themeradio: getElements<HTMLInputElement>('input[name="menu-theme-radio"]'),
+    themeselect: getElement<HTMLSelectElement>('menuThemeSelect'),
     timebarselect: getElement<HTMLInputElement>('timeBarSelect'),
     timemethodselect: getElement<HTMLSelectElement>('timeMethodSelect'),
     timezoneselect: getElement<HTMLSelectElement>('timeZoneSelect'),

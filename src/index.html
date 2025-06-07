@@ -495,16 +495,12 @@
                                 </div>
                                 <hr>
                                 <h6 class="mb-1" data-i18n="menu.section.displayoptions.setting.menutheme.title"></h6>
-                                <div class="btn-group" role="group" data-i18n-aria-label="arialabel.menuthemebuttongroup">
-                                    <input type="radio" class="btn-check" name="menu-theme-radio" id="lightthememode" autocomplete="off" checked>
-                                    <label class="btn btn-outline-primary" for="lightthememode" data-i18n="menu.section.displayoptions.setting.menutheme.option.light"></label>
-                                    <input type="radio" class="btn-check" name="menu-theme-radio" id="darkthememode" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="darkthememode" data-i18n="menu.section.displayoptions.setting.menutheme.option.dark"></label>
-                                    <input type="radio" class="btn-check" name="menu-theme-radio" id="midnightthememode" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="midnightthememode" data-i18n="menu.section.displayoptions.setting.menutheme.option.midnight"></label>
-                                    <input type="radio" class="btn-check" name="menu-theme-radio" id="amoledthememode" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="amoledthememode" data-i18n="menu.section.displayoptions.setting.menutheme.option.amoled"></label>
-                                </div>
+                                <select class="form-select" id="menuThemeSelect">
+                                    <option value="lightthememode" data-i18n="menu.section.displayoptions.setting.menutheme.option.light" selected></option>
+                                    <option value="darkthememode" data-i18n="menu.section.displayoptions.setting.menutheme.option.dark"></option>
+                                    <option value="midnightthememode" data-i18n="menu.section.displayoptions.setting.menutheme.option.midnight"></option>
+                                    <option value="amoledthememode" data-i18n="menu.section.displayoptions.setting.menutheme.option.amoled"></option>
+                                </select>
                                 <hr>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.displayoptions.setting.panelvisibility.title"></h6>
                                 <div class="form-check">

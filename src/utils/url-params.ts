@@ -154,19 +154,19 @@ export async function applyURLParams() {
     match(params.menuTheme)
         .with('light', () => {
             setMenuTheme('light', true);
-            menu.themeradio[0].checked = true;
+            menu.themeselect.value = 'lightthememode';
         })
         .with('dark', () => {
             setMenuTheme('dark', true);
-            menu.themeradio[1].checked = true;
+            menu.themeselect.value = 'darkthememode';
         })
         .with('midnight', () => {
             setMenuTheme('midnight', true);
-            menu.themeradio[2].checked = true;
+            menu.themeselect.value = 'midnightthememode';
         })
         .with('amoled', () => {
             setMenuTheme('amoled', true);
-            menu.themeradio[3].checked = true;
+            menu.themeselect.value = 'amoledthememode';
         })
         .with(P.union(undefined, 'auto'), () => {
             setMenuTheme('auto', true);

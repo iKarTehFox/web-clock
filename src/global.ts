@@ -176,25 +176,23 @@ menu.borderstyleselect.addEventListener('change', () => {
 });
 
 // Menu theme listener
-menu.themeradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        match(radio.id)
-            .with('lightthememode', () => {
-                setMenuTheme('light');
-            })
-            .with('darkthememode', () => {
-                setMenuTheme('dark');
-            })
-            .with('midnightthememode', () => {
-                setMenuTheme('midnight');
-            })
-            .with('amoledthememode', () => {
-                setMenuTheme('amoled');
-            })
-            .otherwise(() => {
-                logConsole(`Invalid theme mode: ${radio.id}`, 'error');
-            });
-    });
+menu.themeselect.addEventListener('change', () => {
+    match(menu.themeselect.value)
+        .with('lightthememode', () => {
+            setMenuTheme('light');
+        })
+        .with('darkthememode', () => {
+            setMenuTheme('dark');
+        })
+        .with('midnightthememode', () => {
+            setMenuTheme('midnight');
+        })
+        .with('amoledthememode', () => {
+            setMenuTheme('amoled');
+        })
+        .otherwise(() => {
+            logConsole(`Invalid theme mode: ${menu.themeselect.value}`, 'error');
+        });
 });
 
 // Menu button visibility on double click

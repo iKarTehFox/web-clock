@@ -183,7 +183,7 @@ export function setMenuTheme(theme: 'auto' | 'toggle' | ThemeKey, quiet: boolean
     // Handle auto
     if (theme === 'auto') {
         const detectedTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        menu.themeradio[detectedTheme === 'light' ? 0 : 1].checked = true;
+        menu.themeselect.value = detectedTheme === 'light' ? 'lightthememode' : 'darkthememode';
         theme = detectedTheme as ThemeKey;
     }
 
@@ -193,7 +193,15 @@ export function setMenuTheme(theme: 'auto' | 'toggle' | ThemeKey, quiet: boolean
         const currentIndex = themeKeys.indexOf(currentTheme as ThemeKey);
         const nextIndex = (currentIndex + 1) % themeKeys.length;
         theme = themeKeys[nextIndex];
-        menu.themeradio[nextIndex].checked = true;
+        
+        // Map theme to select option value
+        const themeToOptionMap: Record<string, string> = {
+            'light': 'lightthememode',
+            'dark': 'darkthememode',
+            'midnight': 'midnightthememode',
+            'amoled': 'amoledthememode'
+        };
+        menu.themeselect.value = themeToOptionMap[theme] || 'lightthememode';
     }
     
     // Validate theme exists
