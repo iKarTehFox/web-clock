@@ -19,7 +19,7 @@ function getSettings() {
     };
 }
 
-function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime, customFilename?: string) {
+function downloadSettingsFile(blob: Blob, exportTime: luxon.DateTime, customFilename?: string) {
     const startExecTime = luxon.DateTime.now();
     const url = URL.createObjectURL(blob);
     const downloadLink = document.createElement('a');
@@ -28,7 +28,7 @@ function downloadSettingsFile(blob: Blob, startTime: luxon.DateTime, customFilen
     // Use custom filename if provided, otherwise use default template
     const filename = customFilename 
         ? `${customFilename}.json`
-        : `onlinewebclock-settings_${startTime.toFormat('X')}.json`;
+        : `onlinewebclock-settings_${exportTime.toFormat('X')}.json`;
     
     downloadLink.download = filename;
     
@@ -47,18 +47,18 @@ function getElapsedTime(startTime: luxon.DateTime): number {
     return luxon.DateTime.now().toMillis() - startTime.toMillis();
 }
 
-function handleExport(settings: any, type: ExportType, startTime: luxon.DateTime): void {
+function handleExport(settings: any, type: ExportType, exportTime: luxon.DateTime): void {
     const settingsJSON = JSON.stringify(settings);
 
     const exportActions = {
         clipboard: () => {
             navigator.clipboard.writeText(settingsJSON);
-            showToast(i18next.t('toasts.importexport.exportcopysuccess', { 0: getElapsedTime(startTime) }), 'normal', 'success');
+            showToast(i18next.t('toasts.importexport.exportcopysuccess', { 0: getElapsedTime(exportTime) }), 'normal', 'success');
         },
         log: () => logConsole(`Settings JSON: ${settingsJSON}`, 'debug'),
         card: () => {
             createBsModal(i18next.t('bsmodal.importexport.rawsettingsjson'), settingsJSON);
-            showToast(i18next.t('toasts.importexport.exportrawsuccess', { 0: getElapsedTime(startTime) }), 'normal', 'success');
+            showToast(i18next.t('toasts.importexport.exportrawsuccess', { 0: getElapsedTime(exportTime) }), 'normal', 'success');
         },
         qr: () => {
             const blob = new Blob([settingsJSON], { type: 'application/json' });
@@ -73,15 +73,15 @@ function handleExport(settings: any, type: ExportType, startTime: luxon.DateTime
                 scale: 4,
                 width: 400
             }).then(canvas => createBsModal('QR Code', canvas));
-            showToast(i18next.t('toasts.importexport.exportqrsuccess', { 0: getElapsedTime(startTime) }), 'normal', 'success');
+            showToast(i18next.t('toasts.importexport.exportqrsuccess', { 0: getElapsedTime(exportTime) }), 'normal', 'success');
         },
         download: async () => {
-            const defaultFilename = `onlinewebclock-settings_${startTime.toFormat('X')}`;
+            const defaultFilename = `onlinewebclock-settings_${exportTime.toFormat('X')}`;
             const result = await createExportModal(defaultFilename);
             
             if (result.action === 'confirm') {
                 const blob = new Blob([settingsJSON], { type: 'application/json' });
-                downloadSettingsFile(blob, startTime, result.filename);
+                downloadSettingsFile(blob, exportTime, result.filename);
             }
         }
     };
@@ -90,7 +90,7 @@ function handleExport(settings: any, type: ExportType, startTime: luxon.DateTime
 }
 
 export function exportSettings(toType: ExportType = 'download'): void {
-    const startTime = luxon.DateTime.now();
+    const exportTime = luxon.DateTime.now();
     showToast(i18next.t('toasts.importexport.exporting'), 'normal');
 
     try {
@@ -101,7 +101,7 @@ export function exportSettings(toType: ExportType = 'download'): void {
             logConsole('Settings JSON may be invalid and import verification will fail. If you have modified the settings manually, ignore this message.', 'warning');
         }
 
-        handleExport(settings, toType, startTime);
+        handleExport(settings, toType, exportTime);
     } catch (error) {
         logConsole(`Export failed: ${error}`, 'error');
         showToast(i18next.t('toasts.importexport.exporterror'), 'normal', 'danger');
