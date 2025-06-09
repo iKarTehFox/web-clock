@@ -1,0 +1,43 @@
+
+
+.accordion-button[data-i18n="menu.section.datetime.header"]::before {
+  content: "\F293";
+  font-family: "bootstrap-icons";
+  margin-right: 0.5rem;
+}
+
+.accordion-button[data-i18n="menu.section.fontcustomization.header"]::before {
+  content: "\F36B";
+  font-family: "bootstrap-icons";
+  margin-right: 0.5rem;
+}
+
+.accordion-button[data-i18n="menu.section.backgroundtheme.header"]::before {
+  content: "\F4B2";
+  font-family: "bootstrap-icons";
+  margin-right: 0.5rem;
+}
+
+.accordion-button[data-i18n="menu.section.weather.header"]::before {
+  content: "\F2BD";
+  font-family: "bootstrap-icons";
+  margin-right: 0.5rem;
+}
+
+.accordion-button[data-i18n="menu.section.displayoptions.header"]::before {
+  content: "\F302";
+  font-family: "bootstrap-icons";
+  margin-right: 0.5rem;
+}
+
+.accordion-button[data-i18n="menu.section.debugging.header"]::before {
+  content: "\F2C6";
+  font-family: "bootstrap-icons";
+  margin-right: 0.5rem;
+}
+
+.accordion-button[data-i18n="menu.section.importexport.header"]::before {
+  content: "\F30A";
+  font-family: "bootstrap-icons";
+  margin-right: 0.5rem;
+}
