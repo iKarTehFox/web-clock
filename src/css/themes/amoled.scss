@@ -118,7 +118,7 @@ $amoled-text-muted: #888888;
 
 /* Muted text */
 [data-bs-theme="amoled"] {
-  .amoled-text-muted {
+  .text-muted {
     color: var(--amoled-text-muted) !important;
   }
 }

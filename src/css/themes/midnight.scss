@@ -119,7 +119,7 @@ $midnight-text-muted: #6c7793;
 
 /* Muted text */
 [data-bs-theme="midnight"] {
-  .midnight-text-muted {
+  .text-muted {
     color: var(--midnight-text-muted) !important;
   }
 }
