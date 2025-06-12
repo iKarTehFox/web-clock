@@ -62,19 +62,22 @@ function updateWeatherWidget(data: CurrentResponse, units: string) {
     weather.condition.innerText = `${data.weather[0].description.charAt(0).toUpperCase() + data.weather[0].description.slice(1)}`;
 
     // Icon logic
+    logConsole(`Received weather icon code: ${data.weather[0].icon}`, 'info');
     weather.icon.className = match(data.weather[0].icon)
-        .with('01d', () => 'bi bi-sun fs-4') // clear sky
-        .with('02d', () => 'bi bi-cloud-sun fs-4') // few clouds
-        .with('03d', () => 'bi bi-cloud fs-4') // scattered clouds
-        .with('04d', () => 'bi bi-clouds fs-4') // broken clouds
-        .with('09d', () => 'bi bi-cloud-drizzle fs-4') // shower rain
-        .with('10d', () => 'bi bi-cloud-rain-heavy fs-4') // rain
-        .with('11d', () => 'bi bi-cloud-lightning fs-4') // thunderstorm
-        .with('13d', () => 'bi bi-snow fs-4') // snow
-        .with('50d', () => 'bi bi-cloud-fog fs-4') // mist
+        .with('01d', () => 'bi bi-sun fs-4') // clear sky (day)
+        .with('01n', () => 'bi bi-moon fs-4') // clear sky (night)
+        .with('02d', () => 'bi bi-cloud-sun fs-4') // few clouds (day)
+        .with('02n', () => 'bi bi-cloud-moon fs-4') // few clouds (night)
+        .with('03d', '03n', () => 'bi bi-cloud fs-4') // scattered clouds
+        .with('04d', '04n', () => 'bi bi-clouds fs-4') // broken clouds
+        .with('09d', '09n', () => 'bi bi-cloud-drizzle fs-4') // shower rain
+        .with('10d', '10n', () => 'bi bi-cloud-rain-heavy fs-4') // rain
+        .with('11d', '11n', () => 'bi bi-cloud-lightning fs-4') // thunderstorm
+        .with('13d', '13n', () => 'bi bi-snow fs-4') // snow
+        .with('50d', '50n', () => 'bi bi-cloud-fog fs-4') // mist
         .otherwise(() => 'bi bi-cloud fs-4');
 
-    weather.container.className = 'weather-container';
+    weather.container.classList.remove('d-none');
 }
 
 export function submitWeatherSettings(_key: string = undefined, _lat: number = undefined, _lon: number = undefined, _units: string = undefined): void {
@@ -168,7 +171,7 @@ function weatherMenuDisable(disabled: boolean) {
 export function stopWeather() {
     clearInterval(interval);
     weatherMenuDisable(false);
-    weather.container.className = 'weather-hidden';
+    weather.container.classList.add('d-none');
     menu.weathersubmitbtn.disabled = false;
     menu.weatherstopbtn.disabled = true;
     logConsole('Weather interval stopped.', 'info');

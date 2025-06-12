@@ -157,21 +157,13 @@ body {
 }
 
 // Weather widget
-.weather-container {
+#weather-widget {
   position: absolute;
   display: block;
   left: 10px;
   bottom: 10px;
   cursor: default;
   z-index: 2;
-  
-  &.weather-hidden {
-    display: none;
-  }
-}
-
-.weather-hidden {
-  display: none;
 }
 
 #credit {
