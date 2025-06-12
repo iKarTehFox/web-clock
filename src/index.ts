@@ -1,4 +1,5 @@
 // TS Imports
+import './system/event-bus';
 import './assets/locales/i18n';
 import './global';
 import './background-image';
@@ -8,6 +9,7 @@ import './stopwatch';
 import './countdown';
 import './utils/kbd-shortcuts';
 import './utils/debug-console';
+import './utils/debugUI';
 import { applyURLParams } from './utils/url-params';
 import { populateTimeZoneSelect } from './time';
 import { Tooltip } from 'bootstrap';

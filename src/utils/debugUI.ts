@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import { debug, dtdisplay, panel } from './dom-elements';
 import { showToast } from './dom-utils';
+import { on, AppEvents } from '../system/event-bus';
 
 // Get load time
 const loadTime = new Date().toLocaleString();
@@ -12,9 +13,9 @@ function addDbgInfo(text: string): void {
     debug.info.appendChild(p);
 }
 
-export function initializeDebugUI(): void {
+function initializeDebugUI(): void {
     // Enable debug container
-    debug.container.style.display = '';
+    debug.container.classList.remove('d-none');
 
     // Fill debug info
     addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.useragent')}: ${navigator.userAgent}`); // User agent
@@ -59,3 +60,9 @@ export function initializeDebugUI(): void {
         addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.onlinestatus')}: ${navigator.onLine ? 'Online' : 'Offline'}`); // Online status
     });
 }
+
+on(AppEvents.DEBUG_MODE_ENABLED, (state) => {
+    if (state) {
+        initializeDebugUI();
+    }
+});

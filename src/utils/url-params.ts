@@ -2,13 +2,13 @@ import { menu, panel, weather } from './dom-elements';
 import { presetLocalJSON } from '../importExport';
 import { logConsole, setMenuTheme, showToast } from './dom-utils';
 import { setDebug, setLockSettings, setTimeRefresh } from './debug';
-import { initializeDebugUI } from './debugUI';
 import { submitWeatherSettings } from './weather-utils';
 import { match, P } from 'ts-pattern';
 import { setClockMode } from '../time-help';
 import { showUpdateNotification } from './update-notify';
 import i18next from 'i18next';
 import { applyFallbackTranslations, updateTranslations } from '../assets/locales/i18n';
+import { emit, AppEvents } from '../system/event-bus';
 
 // Define parameter interface
 interface URLParamConfig {
@@ -141,7 +141,6 @@ export async function applyURLParams() {
     // Debug logging mode
     if (params.debugMode) {
         setDebug(true);
-        initializeDebugUI();
         showToast(i18next.t('toasts.urlparams.debugmode'), 'normal', 'warning');
     }
 
@@ -255,6 +254,10 @@ export async function applyURLParams() {
         setLockSettings(true);
         menu.container.remove();
         panel.container.remove();
+        emit(AppEvents.SETTINGS_LOCKED, { state: true });
         logConsole('Settings locked - Menu container removed...', 'info');
     }
+
+    // Finalize
+    emit(AppEvents.URL_PARAMS_LOADED, {timestamp: Date.now()});
 }
