@@ -33,8 +33,12 @@ function initializeDebugUI(): void {
     debug.toastbtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const theme = btn.dataset.dbgtoasttheme;
-            const length = btn.dataset.dbgtoastlength as 'default' | 'normal' | 'long' | 'verylong' | undefined;
-            showToast(i18next.t('toasts.debugui.testtoast', { 0: theme }), length, theme);
+            const length = btn.dataset.dbgtoastlength as 'veryshort' | 'default' | 'normal' | 'long' | 'verylong' | undefined;
+            if (!theme) {
+                showToast(i18next.t('toasts.debugui.title'), i18next.t('toasts.debugui.testtoast2', { 0: length }), length);
+                return;
+            }
+            showToast(i18next.t('toasts.debugui.title'), i18next.t('toasts.debugui.testtoast', { 0: theme }), length, theme);
         });
     });
 
@@ -44,7 +48,7 @@ function initializeDebugUI(): void {
 
     debug.clearlsbtn.addEventListener('click', () => {
         localStorage.clear();
-        showToast(i18next.t('toasts.debugui.clearls'), undefined, 'warning');
+        showToast(i18next.t('toasts.debugui.title'), i18next.t('toasts.debugui.clearls'), undefined, 'warning');
     });
 
     // Reinitialize if language changed

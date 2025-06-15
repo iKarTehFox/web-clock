@@ -480,7 +480,12 @@ export default {
                             'amoled': 'AMOLED',
                             'danger': 'Peligro',
                             'success': 'Éxito',
-                            'warning': 'Advertencia'
+                            'warning': 'Advertencia',
+                            'veryshort': 'Muy corto',
+                            'default': 'Predeterminado',
+                            'normal': 'Normal',
+                            'long': 'Largo',
+                            'verylong': 'Muy largo'
                         }
                     },
                     'ui': {
@@ -550,12 +555,14 @@ export default {
     },
     'toasts': {
         'countdown': {
+            'title': 'Temporizador',
             'finished': '¡Temporizador terminado!',
             'finishednotification': 'Tu temporizador ha finalizado. Ahora es {{0}}',
             'toolong': '¡El tiempo establecido es demasiado largo! Asegúrate de que sea menos de 100 horas.',
             'notificationdenied': 'Permiso de notificación denegado.',
         },
         'global': {
+            'title': 'Online Web Clock',
             'themelight': 'Tema establecido en modo claro ☀️',
             'themedark': 'Tema establecido en modo oscuro 🌙',
             'thememidnight': 'Tema establecido en modo medianoche 🌃',
@@ -563,6 +570,7 @@ export default {
             'fullscreen': 'Modo de pantalla completa activado',
         },
         'importexport': {
+            'title': 'Ajustes de Importación/Exportación',
             'exportsuccess': '¡Ajustes exportados! Tomó {{0}}ms',
             'exportcopysuccess': '¡Ajustes copiados! Tomó {{0}}ms',
             'exportrawsuccess': 'JSON exportado. Tomó {{0}}ms',
@@ -570,25 +578,30 @@ export default {
             'exportqrsuccess': '¡Ajustes exportados a código QR! Tomó {{0}}ms',
             'exporting': 'Exportando ajustes...',
             'exporterror': '¡Error al exportar ajustes! Consulta la consola para más detalles.',
-            'importsuccess': '¡Ajustes importados con éxito!<hr><b>Fecha del archivo:</b> {{0}}',
+            'importsuccess': '¡Ajustes importados con éxito!<br><br><b>Fecha del archivo:</b> {{0}}',
             'importerror': 'Archivo de ajustes no válido. Asegúrate de que el archivo contenga JSON válido.',
             'fetcherror': 'No se pudo obtener el archivo de ajustes local. Verifica el nombre del archivo y asegúrate de que exista.',
             'nobgimg': 'No hay imagen de fondo para extraer.',
         },
         'debugui': {
+            'title': 'Depuración',
             'testtoast': 'Prueba de mensaje emergente. Tema "{{0}}"',
+            'testtoast2': 'Prueba de mensaje emergente. Duracion "{{0}}"',
             'clearls': 'Almacenamiento local borrado.',
         },
         'domutils': {
+            'title': 'Utilidades',
             'textcopied': '¡Texto copiado al portapapeles!',
             'notificationunsupported': 'Las notificaciones no son compatibles con este navegador.',
             'qrscannerfailed': 'Error en el escáner QR: {{0}}',
         },
         'urlparams': {
+            'title': 'Parámetros de URL',
             'debugmode': 'Modo de depuración habilitado. La memoria de DevTools aumentará con el tiempo.',
             'autorestart': 'Reinicio automático configurado a {{0}} segundos.'
         },
         'weatherutils': {
+            'title': 'Clima',
             'gpserror': 'Error al obtener la ubicación: {{0}}',
             'gpsunsupported': 'La geolocalización no es compatible con este navegador.',
             'weathererror': 'Error al obtener los datos meteorológicos: {{0}}',

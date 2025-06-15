@@ -239,7 +239,7 @@ export function toggleFullscreen() {
         }
     }
     logConsole('Toggled fullscreen mode', 'info');
-    showToast(i18next.t('toasts.global.fullscreen'));
+    i18next.t('toasts.global.title'), (i18next.t('toasts.global.fullscreen'));
 }
 
 menu.fullscreenbtn.addEventListener('click', function() {

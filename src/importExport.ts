@@ -38,7 +38,7 @@ function downloadSettingsFile(blob: Blob, exportTime: luxon.DateTime, customFile
     
     URL.revokeObjectURL(url);
     
-    showToast(i18next.t('toasts.importexport.exportsuccess', { 0: luxon.DateTime.now().toMillis() - startExecTime.toMillis() }), 'normal', 'success');
+    showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.exportsuccess', { 0: luxon.DateTime.now().toMillis() - startExecTime.toMillis() }), 'normal', 'success');
 }
 
 export type ExportType = 'clipboard' | 'download' | 'log' | 'qr' | 'card';
@@ -53,18 +53,18 @@ function handleExport(settings: any, type: ExportType, exportTime: luxon.DateTim
     const exportActions = {
         clipboard: () => {
             navigator.clipboard.writeText(settingsJSON);
-            showToast(i18next.t('toasts.importexport.exportcopysuccess', { 0: getElapsedTime(exportTime) }), 'normal', 'success');
+            showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.exportcopysuccess', { 0: getElapsedTime(exportTime) }), 'normal', 'success');
         },
         log: () => logConsole(`Settings JSON: ${settingsJSON}`, 'debug'),
         card: () => {
             createBsModal(i18next.t('bsmodal.importexport.rawsettingsjson'), settingsJSON);
-            showToast(i18next.t('toasts.importexport.exportrawsuccess', { 0: getElapsedTime(exportTime) }), 'normal', 'success');
+            showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.exportrawsuccess', { 0: getElapsedTime(exportTime) }), 'normal', 'success');
         },
         qr: () => {
             const blob = new Blob([settingsJSON], { type: 'application/json' });
             if (blob.size > 2953) {
                 logConsole(`Settings JSON too large. Max 2953 bytes, got ${blob.size} bytes`, 'error');
-                showToast(i18next.t('toasts.importexport.exportqrtoolarge'), 'normal', 'danger');
+                showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.exportqrtoolarge'), 'normal', 'danger');
                 return;
             }
             QRCode.toCanvas(settingsJSON, {
@@ -73,7 +73,7 @@ function handleExport(settings: any, type: ExportType, exportTime: luxon.DateTim
                 scale: 4,
                 width: 400
             }).then(canvas => createBsModal('QR Code', canvas));
-            showToast(i18next.t('toasts.importexport.exportqrsuccess', { 0: getElapsedTime(exportTime) }), 'normal', 'success');
+            showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.exportqrsuccess', { 0: getElapsedTime(exportTime) }), 'normal', 'success');
         },
         download: async () => {
             const defaultFilename = `onlinewebclock-settings_${exportTime.toFormat('X')}`;
@@ -91,7 +91,7 @@ function handleExport(settings: any, type: ExportType, exportTime: luxon.DateTim
 
 export function exportSettings(toType: ExportType = 'download'): void {
     const exportTime = luxon.DateTime.now();
-    showToast(i18next.t('toasts.importexport.exporting'), 'normal');
+    showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.exporting'), 'normal');
 
     try {
         const settings = getSettings();
@@ -104,7 +104,7 @@ export function exportSettings(toType: ExportType = 'download'): void {
         handleExport(settings, toType, exportTime);
     } catch (error) {
         logConsole(`Export failed: ${error}`, 'error');
-        showToast(i18next.t('toasts.importexport.exporterror'), 'normal', 'danger');
+        showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.exporterror'), 'normal', 'danger');
     }
 }
 
@@ -122,11 +122,11 @@ export function processJSONSettings(jsonText: string, alertConfirmation: boolean
         updateClockSettings(importedSettings);
         logConsole('Settings successfully loaded!', 'info');
         if (alertConfirmation === true) {
-            showToast(i18next.t('toasts.importexport.importsuccess', { 0: (importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp') }), 'normal');
+            showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.importsuccess', { 0: (importedSettings.exportTimestamp ? importedSettings.exportTimestamp : 'Unknown or missing timestamp') }), 'normal');
         }
     } catch (error) {
         logConsole(`Issue processing settings: ${error}`, 'error');
-        showToast(i18next.t('toasts.importexport.importerror'), 'normal', 'danger');
+        showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.importerror'), 'normal', 'danger');
     }
 }
 
@@ -176,7 +176,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
 
     // Reject sanitized filename if it doesn't match the original filename
     if (sanitizedFilename !== filename) {
-        showToast(i18next.t('toasts.importexport.fetcherror'), 'normal', 'danger');
+        showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.fetcherror'), 'normal', 'danger');
         return Promise.reject(new Error('Illegal characters in preset filename. Only alphanumeric characters are allowed.'));
     }
 
@@ -191,7 +191,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
         })
         .catch(error => {
             logConsole(`Error fetching local settings file: ${error}`, 'error');
-            showToast(i18next.t('toasts.importexport.fetcherror'), 'normal', 'danger');
+            showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.fetcherror'), 'normal', 'danger');
             return Promise.reject(error);
         });
 }
@@ -281,7 +281,7 @@ panel.section.dbg.addEventListener('click', (e) => {
             .with('debugGetBGBtn', () => {
                 const bgImageUrl = document.body.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
                 if (!bgImageUrl) {
-                    showToast(i18next.t('toasts.importexport.nobgimg'));
+                    showToast(i18next.t('toasts.importexport.title'), i18next.t('toasts.importexport.nobgimg'));
                     return;
                 }
                 const imgElement = document.createElement('img');

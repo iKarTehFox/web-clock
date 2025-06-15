@@ -141,7 +141,7 @@ export async function applyURLParams() {
     // Debug logging mode
     if (params.debugMode) {
         setDebug(true);
-        showToast(i18next.t('toasts.urlparams.debugmode'), 'normal', 'warning');
+        showToast(i18next.t('toasts.urlparams.title'), i18next.t('toasts.urlparams.debugmode'), 'normal', 'warning');
     }
 
     // Fast time refresh
@@ -243,7 +243,7 @@ export async function applyURLParams() {
             setTimeout(() => {
                 window.location.reload();
             }, autoRestartTime * 1000);
-            showToast(i18next.t('toasts.urlparams.autorestart', { 0: autoRestartTime }), 'normal', 'warning');
+            showToast(i18next.t('toasts.urlparams.title'), i18next.t('toasts.urlparams.autorestart', { 0: autoRestartTime }), 'normal', 'warning');
         } else {
             logConsole('Invalid autoRestart value. It should be an integer between 15 and 86400 inclusive.', 'warning');
         }

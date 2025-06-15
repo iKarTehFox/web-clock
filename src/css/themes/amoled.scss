@@ -12,7 +12,7 @@ $amoled-text-color: #ffffff;
 $amoled-text-muted: #888888;
 
 // Button mixins
-@mixin button-variant($color, $hover-color, $active-color, $disabled-color, $text-color: var(--bs-black)) {
+@mixin button-variant($color, $hover-color, $active-color, $disabled-color, $text-color: var(--bs-white)) {
   --bs-btn-bg: var(#{$color});
   --bs-btn-border-color: var(#{$color});
   --bs-btn-hover-bg: var(#{$hover-color});
@@ -23,9 +23,11 @@ $amoled-text-muted: #888888;
   --bs-btn-disabled-color: #{$text-color};
   --bs-btn-disabled-border-color: var(#{$disabled-color});
   
-  --bs-btn-color: #{$text-color};
-  --bs-btn-hover-color: #{$text-color};
-  --bs-btn-active-color: #{$text-color};
+  @if $text-color != var(--bs-white) {
+    --bs-btn-color: #{$text-color};
+    --bs-btn-hover-color: #{$text-color};
+    --bs-btn-active-color: #{$text-color};
+  }
 }
 
 @mixin button-outline-variant($color, $text-color: var(--bs-white), $focus-shadow-rgb: null) {
@@ -55,7 +57,6 @@ $amoled-text-muted: #888888;
   --bs-body-color-rgb: 255, 255, 255;
   --bs-body-bg: #{$amoled-bg};
   --bs-body-bg-rgb: 0, 0, 0;
-  --bs-black: #000000;
 
   /* Theme-specific colors */
   --amoled-bg-lighter: #{$amoled-bg-lighter};

@@ -61,13 +61,13 @@ function startCountdown() {
                     reset: true,
                 });
                 if (countdown.notifcheckbox.checked && Notification.permission === 'granted') {
-                    showToast(i18next.t('toasts.countdown.finished'), 'normal');
+                    showToast(i18next.t('toasts.countdown.title'), i18next.t('toasts.countdown.finished'), 'normal');
                     new Notification(i18next.t('toasts.countdown.finished'), {
                         body:  i18next.t('toasts.countdown.finishednotification', {0: luxon.DateTime.now().toFormat('tt')}),
                         silent: false
                     });
                 } else {
-                    showToast(i18next.t('toasts.countdown.finished'), 'verylong');
+                    showToast(i18next.t('toasts.countdown.title'), i18next.t('toasts.countdown.finished'), 'verylong');
                 }
             }
         }, 1000);
@@ -126,7 +126,7 @@ countdown.startbtn.addEventListener('click', () => {
 
             // Check if totalSeconds is too long (greater than 100 hours)
             if (totalSeconds > 360000) {
-                showToast(i18next.t('toasts.countdown.toolong'), 'normal', 'danger');
+                showToast(i18next.t('toasts.countdown.title'), i18next.t('toasts.countdown.toolong'), 'normal', 'danger');
                 totalSeconds = 0;
                 return;
             }
@@ -237,7 +237,7 @@ countdown.notifcheckbox.addEventListener('change', async function() {
             .then(permission => {
                 if (permission !== 'granted') {
                     countdown.notifcheckbox.checked = false;
-                    showToast(i18next.t('toasts.countdown.notificationdenied'), 'normal', 'danger');
+                    showToast(i18next.t('toasts.countdown.title'), i18next.t('toasts.countdown.notificationdenied'), 'normal', 'danger');
                 }
             })
             .catch(() => {

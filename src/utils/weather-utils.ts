@@ -19,14 +19,14 @@ export function getLocation(): Promise<[number, number]> {
                     resolve([latitude, longitude]);
                 },
                 (error) => {
-                    showToast(i18next.t('toasts.weatherutils.gpserror', { 0: error }), 'default', 'danger');
+                    showToast(i18next.t('toasts.weather.title'), i18next.t('toasts.weatherutils.gpserror', { 0: error }), 'default', 'danger');
                     reject(error);
                 },
                 { enableHighAccuracy: true }
             );
         });
     } else {
-        showToast(i18next.t('toasts.weatherutils.gpsunsupported'), 'long', 'danger');
+        showToast(i18next.t('toasts.weather.title'), i18next.t('toasts.weatherutils.gpsunsupported'), 'long', 'danger');
         throw new Error('Geolocation is not supported by this browser.');
     }
 }
@@ -119,7 +119,7 @@ export function submitWeatherSettings(_key: string = undefined, _lat: number = u
             } else {
                 stopWeather();
                 logConsole(`Failed fetching weather data: ${currentWeatherData.cod}`, 'error');
-                showToast(i18next.t('toasts.weatherutils.weathererror'), 'normal', 'danger');
+                showToast(i18next.t('toasts.weather.title'), i18next.t('toasts.weatherutils.weathererror'), 'normal', 'danger');
             }
         })
         .catch(error => {

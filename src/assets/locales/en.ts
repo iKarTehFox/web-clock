@@ -480,7 +480,12 @@ export default {
                             'amoled': 'AMOLED',
                             'danger': 'Danger',
                             'success': 'Success',
-                            'warning': 'Warning'
+                            'warning': 'Warning',
+                            'veryshort': 'Very Short',
+                            'default': 'Default',
+                            'normal': 'Normal',
+                            'long': 'Long',
+                            'verylong': 'Very Long'
                         }
                     },
                     'ui': {
@@ -550,12 +555,14 @@ export default {
     },
     'toasts': {
         'countdown': {
+            'title': 'Countdown',
             'finished': 'Countdown finished!',
             'finishednotification': 'Your timer has elapsed. It is now {{0}}',
             'toolong': 'Time set too long! Make sure it is less than 100 hours.',
             'notificationdenied': 'Notification permission denied.',
         },
         'global': {
+            'title': 'Online Web Clock',
             'themelight': 'Theme set to light mode ☀️',
             'themedark': 'Theme set to dark mode 🌙',
             'thememidnight': 'Theme set to midnight 🌃',
@@ -563,6 +570,7 @@ export default {
             'fullscreen': 'Toggled fullscreen mode',
         },
         'importexport': {
+            'title': 'Import/Export Settings',
             'exportsuccess': 'Settings exported! Took {{0}}ms',
             'exportcopysuccess': 'Settings copied to clipboard! Took {{0}}ms',
             'exportrawsuccess': 'Exported raw JSON. Took {{0}}ms',
@@ -570,25 +578,30 @@ export default {
             'exportqrsuccess': 'Exported settings to QR code! Took {{0}}ms',
             'exporting': 'Exporting settings...',
             'exporterror': 'Error exporting settings! Check console for details.',
-            'importsuccess': 'Settings successfully imported!<hr><b>File timestamp:</b> {{0}}',
+            'importsuccess': 'Settings successfully imported!<br><br><b>File timestamp:</b> {{0}}',
             'importerror': 'Invalid settings file. Please make sure the file contains valid JSON.',
             'fetcherror': 'Could not fetch local settings file. Please check the filename and ensure the file exists.',
             'nobgimg': 'No background image to extract.',
         },
         'debugui': {
+            'title': 'Debugging',
             'testtoast': 'Test toast. Theme "{{0}}"',
+            'testtoast2': 'Test toast. Duration "{{0}}"',
             'clearls': 'Cleared local storage.',
         },
         'domutils': {
+            'title': 'Utilities',
             'textcopied': 'Text copied to clipboard!',
             'notificationunsupported': 'Notifications are not supported in this browser.',
             'qrscannerfailed': 'QR scanner failed: {{0}}',
         },
         'urlparams': {
+            'title': 'URL Parameters',
             'debugmode': 'Debug mode enabled. DevTools memory will increase over time.',
             'autorestart': 'Auto restart set to {{0}} seconds.'
         },
         'weatherutils': {
+            'title': 'Weather',
             'gpserror': 'Error getting location: {{0}}',
             'gpsunsupported': 'Geolocation is not supported by this browser.',
             'weathererror': 'Error fetching weather data: {{0}}',
