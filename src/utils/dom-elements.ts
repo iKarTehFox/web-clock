@@ -83,6 +83,7 @@ export const menu = {
     weatherloninput: getElement<HTMLInputElement>('weatherLonTextArea'),
     weathermovereset: getElement<HTMLButtonElement>('weatherMoveReset'),
     weathermovetoggle: getElement<HTMLInputElement>('weatherMoveToggle'),
+    weatherposlabel: getElement<HTMLParagraphElement>('weatherPosLabel'),
     weatherstopbtn: getElement<HTMLButtonElement>('weatherStopBtn'),
     weathersubmitbtn: getElement<HTMLButtonElement>('weatherSubmitBtn'),
     weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]')

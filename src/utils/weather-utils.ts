@@ -223,7 +223,6 @@ weather.container.addEventListener('mousedown', (e) => {
     if (!isMoving) return;
     
     weather.container.style.cursor = 'grabbing';
-    logConsole('Weather widget mousedown...', 'info');
     
     // Convert from bottom positioning to top positioning
     const rect = weather.container.getBoundingClientRect();
@@ -250,14 +249,17 @@ weather.container.addEventListener('mousedown', (e) => {
 
         weather.container.style.left = `${clampedX}px`;
         weather.container.style.top = `${clampedY}px`;
-        logConsole(`Weather widget moving. PosX: ${clampedX}, PosY: ${clampedY}`, 'debug');
+
+        if (menu.weatherposlabel.classList.contains('d-none')) {
+            menu.weatherposlabel.classList.remove('d-none');
+        }
+        menu.weatherposlabel.innerText = `X: ${Math.round(clampedX)} Y: ${Math.round(clampedY)}`;
     }
 
     function onMouseUp() {
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
         weather.container.style.cursor = 'grab';
-        logConsole('Weather widget mouseup...', 'info');
     }
 
     document.addEventListener('mousemove', onMouseMove);
