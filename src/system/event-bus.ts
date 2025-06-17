@@ -1,9 +1,10 @@
-// Define all your app events in one place for type safety
+// List of App Events
 export const AppEvents = {
     URL_PARAMS_LOADED: 'urlParamsLoaded',
     DEBUG_MODE_ENABLED: 'debugModeEnabled',
     SETTINGS_LOCKED: 'settingsLocked',
     API_WIDGET_REMOVED: 'apiWidgetRemoved',
+    TOAST_POSITION_CHANGED: 'toastPositionChanged',
 } as const;
 
 // Type-safe event data interface
@@ -12,6 +13,7 @@ interface EventDataMap {
     [AppEvents.DEBUG_MODE_ENABLED]: { state: boolean };
     [AppEvents.SETTINGS_LOCKED]: { state: boolean };
     [AppEvents.API_WIDGET_REMOVED]: { widgetId: string };
+    [AppEvents.TOAST_POSITION_CHANGED]: { position: 'topleft' | 'topmiddle' | 'bottomleft' | 'bottommiddle' | 'bottomright' };
 }
 
 // Dispatch event function

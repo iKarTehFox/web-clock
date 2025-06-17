@@ -7,6 +7,7 @@ import { Modal, Toast } from 'bootstrap';
 import * as luxon from 'ts-luxon';
 import randomstring from 'randomstring';
 import i18next, { t } from 'i18next';
+import { toastPosition } from './debug';
 
 // Custom console logging function
 export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' = 'debug', bypass: boolean = false, appendDevCon: boolean = true): void {
@@ -119,6 +120,7 @@ function getThemeInfo(colorTheme: string = 'auto') {
 export function showToast(title: string, message: string, duration: 'veryshort' | 'default' | 'normal' | 'long' | 'verylong' = 'default', style: string = 'auto'): void {
     const theme = getThemeInfo(style);
     
+    // Map duration to proper ms values
     const durationMap = {
         'veryshort': 1000,
         'default': 3000,
@@ -128,14 +130,28 @@ export function showToast(title: string, message: string, duration: 'veryshort' 
     };
 
     const durationMs = durationMap[duration];
+
+    // Map toast position to CSS classes and positioning
+    const positionMap: Record<string, string> = {
+        'topleft': 'position-fixed top-0 start-0 p-3' ,
+        'topmiddle': 'position-fixed top-0 start-50 translate-middle-x p-3',
+        'bottomleft': 'position-fixed bottom-0 start-0 p-3',
+        'bottommiddle': 'position-fixed bottom-0 start-50 translate-middle-x p-3',
+        'bottomright': 'position-fixed bottom-0 end-0 p-3'
+    };
+    
+    const toastPos = positionMap[toastPosition];
     
     // Create toast container if it doesn't exist
     let toastContainer: HTMLElement = document.querySelector('.toast-container');
     if (!toastContainer) {
         toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+        toastContainer.className = `toast-container ${toastPos}`;
         toastContainer.style.zIndex = '1090';
         document.body.appendChild(toastContainer);
+    } else {
+        // Update existing container position
+        toastContainer.className = `toast-container ${toastPos}`;
     }
     
     // Generate unique ID for this toast

@@ -5,6 +5,7 @@ export let debugMode: boolean = false;
 export let timeRefresh: number = 100;
 export let lockSettings: boolean = false;
 export let isDevConInit: boolean = false;
+export let toastPosition: 'topleft' | 'topmiddle' | 'bottomleft' | 'bottommiddle' | 'bottomright' = 'bottomright';
 
 export function setDebug(value: boolean): void {
     debugMode = value;
@@ -14,7 +15,7 @@ export function setDebug(value: boolean): void {
 
 export function setTimeRefresh(value: number): void {
     timeRefresh = value;
-    console.log(`Time refresh delay set to ${value}ms.`);
+    console.log(`Time refresh interval set to ${value}ms.`);
 }
 
 export function setLockSettings(value: boolean): void {
@@ -24,4 +25,10 @@ export function setLockSettings(value: boolean): void {
 
 export function setDevConInit(value: boolean): void {
     isDevConInit = value;
+}
+
+export function setToastPosition(position: 'topleft' | 'topmiddle' | 'bottomleft' | 'bottommiddle' | 'bottomright'): void {
+    toastPosition = position;
+    console.log(`Toast position set to ${position}.`);
+    emit(AppEvents.TOAST_POSITION_CHANGED, { position });
 }
