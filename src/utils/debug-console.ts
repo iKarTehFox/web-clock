@@ -1,4 +1,4 @@
-import { countdown, debug, devcon, menu, panel, stopwatch } from './dom-elements';
+import { countdown, devcon, menu, panel, stopwatch } from './dom-elements';
 import { getAvailableThemes, getMenuTheme, logConsole, requestNotificationPermission, setMenuTheme } from './dom-utils';
 import { debugMode, setDevConInit } from './debug';
 import { match } from 'ts-pattern';
@@ -10,6 +10,7 @@ import { lapStopwatchExternal, pauseStopwatchExternal, resetStopwatchExternal, s
 import { getFontFamily, getFontSize, getFontWeight, getFontStyle, getStrokeColor, getStrokeWidth, setFontFamily, setFontSize, setFontWeight, setFontStyle, setStrokeWidth, setStrokeColor, getBorderMode, getBorderStyle, getClockConfig, getClockDisplay, getCustomNote, getCustomNoteAlign, getDateAlign, getDateFormat, getSecondsVis, getTimeBar, setBorderMode, setBorderStyle, setClockDisplay, setCustomNote, setCustomNoteAlign, setDateAlign, setDateFormat, setSecondsVis, setTimeBar, getDropShadow, setDropShadow, getFontConfig, getBGImageBlur, getBGImageSize, getColorMode, getSolidColorValue, getTextColorMode, getTextColorValue, setBackgroundImageBlur, setBackgroundImageSize, setColorMode, setSolidColor, setTextColorMode, setTextColorValue } from './clock-settings';
 import { valid } from '../importValidation';
 import * as luxon from 'ts-luxon';
+import i18n from '../assets/locales/i18n';
 
 // Init
 let commandHistory: string[] = [];
@@ -1691,6 +1692,54 @@ const commands: Command[] = [
             resetSettings()
                 .then(result => {
                     appendToConsole(result);
+                });
+        }
+    },
+    {
+        name: 'language',
+        description: 'Change or get the current language',
+        usage: 'language [code] [--quiet]',
+        aliases: ['lang', 'locale'],
+        args: [
+            {
+                name: 'code',
+                type: 'string',
+                description: 'Language code (en, es)',
+                required: false
+            }
+        ],
+        options: [
+            {
+                name: 'quiet',
+                shortName: 'q',
+                type: 'boolean',
+                description: 'Change language without showing a notification',
+                default: false
+            }
+        ],
+        execute: (args, options) => {
+            if (!args.code) {
+            // Get current language
+                const currentLang = i18n.getCurrentLanguage();
+                appendToConsole(`Current language: ${currentLang}`);
+            
+                // Show available languages
+                const availableLanguages = i18n.getSupportedLanguages();
+                appendToConsole(`Available languages: ${availableLanguages.join(', ')}`);
+                return;
+            }
+
+            const langCode = args.code.toLowerCase();
+
+            // Change the language using the i18n interface
+            i18n.changeLanguage(langCode)
+                .then(() => {
+                    if (!options.quiet) {
+                        appendToConsole(`Language changed to ${langCode}`);
+                    }
+                })
+                .catch(error => {
+                    appendToConsole(`Error changing language: ${error.message}`, 'error');
                 });
         }
     },

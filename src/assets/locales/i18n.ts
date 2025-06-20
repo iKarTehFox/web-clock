@@ -184,7 +184,31 @@ i18next.on('languageChanged', (lng) => {
 menu.languageradio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const selectedLanguage = radio.id;
-        i18next.changeLanguage(selectedLanguage);
-        updateTranslations();
+        i18n.changeLanguage(selectedLanguage).catch(error => {
+            logConsole(`Failed to change language: ${error}`, 'error');
+        });
     });
 });
+
+// Export i18n interface methods
+export const i18n = {
+    getCurrentLanguage: () => i18next.language,
+    getSupportedLanguages: () => supportedLangs,
+    changeLanguage: (langCode: string) => {
+        if (!supportedLangs.includes(langCode)) {
+            throw new Error(`Unsupported language: ${langCode}. Supported languages: ${supportedLangs.join(', ')}`);
+        }
+    
+        return i18next.changeLanguage(langCode).then(() => {
+        // Update translations
+            updateTranslations();
+        
+            logConsole(`Language changed to ${langCode}`, 'info');
+        });
+    },
+    translate: (key: string, options?: any) => i18next.t(key, options),
+    isReady: () => i18next.isInitialized
+};
+
+// Default export
+export default i18n;

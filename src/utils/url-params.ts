@@ -7,7 +7,7 @@ import { match, P } from 'ts-pattern';
 import { setClockMode } from '../time-help';
 import { showUpdateNotification } from './update-notify';
 import i18next from 'i18next';
-import { applyFallbackTranslations, updateTranslations } from '../assets/locales/i18n';
+import i18n, { applyFallbackTranslations, updateTranslations } from '../assets/locales/i18n';
 import { emit, AppEvents } from '../system/event-bus';
 
 // Define parameter interface
@@ -257,14 +257,16 @@ export async function applyURLParams() {
 
     // Language
     if (params.language !== undefined) {
-        if (i18next.isInitialized) {
-            i18next.changeLanguage(params.language);
-            updateTranslations();
+        if (i18n.isReady()) {
+            i18n.changeLanguage(params.language).catch(error => {
+                logConsole(`Failed to change language via URL param: ${error}`, 'warning');
+                applyFallbackTranslations();
+            });
         } else {
             applyFallbackTranslations();
         }
     } else {
-        if (i18next.isInitialized) {
+        if (i18n.isReady()) {
             updateTranslations();
         } else {
             applyFallbackTranslations();

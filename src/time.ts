@@ -6,7 +6,6 @@ import * as clock from './time-help';
 import { timeRefresh } from './utils/debug';
 import { match, P } from 'ts-pattern';
 import i18next from 'i18next';
-import Bowser from 'bowser';
 
 // Default modes
 export let cMode = '0';
