@@ -308,7 +308,7 @@
                                         <button type="button" class="btn btn-outline-danger" id="fadeTransitionResetBtn" data-bs-toggle="tooltip" data-i18n-data-bs-title="menu.section.backgroundtheme.setting.colortransition.option.tooltip" data-i18n="menu.section.backgroundtheme.setting.colortransition.option.reset"></button>
                                     </div>
                                 </div>
-                                <div class="form-group mt-2" id="presetColorGroup" style="display: none;">
+                                <div class="form-group mt-2 d-none" id="presetColorGroup">
                                     <hr>
                                     <!-- Basic colors -->
                                     <h6 class="mb-1 mt-2" data-i18n="menu.section.backgroundtheme.setting.basiccolors.title"></h6>
@@ -405,7 +405,7 @@
                                         <label class="btn btn-outline-primary" for="darklilac" data-bs-toggle="tooltip" data-i18n-data-bs-title="menu.section.backgroundtheme.setting.deepcolors.tooltip.darklilac"><div class="color-block" style="background-color: #7C5793;"></div></label>
                                     </div>
                                 </div>
-                                <div class="form-group mt-2" id="bgImgGroup" style="display: none;">
+                                <div class="form-group mt-2 d-none" id="bgImgGroup">
                                     <hr>
                                     <h6 class="mb-1 mt-2" data-i18n="menu.section.backgroundtheme.setting.backgroundimage.title"></h6>
                                     <button type="button" class="btn btn-outline-primary" id="bgImageUploadBtn" data-i18n="menu.section.backgroundtheme.setting.backgroundimage.option.uploadimage"></button>
@@ -420,7 +420,7 @@
                                     <input type="range" id="bgImgBlurRange" class="d-block" min="0" max="10" step="1" value="0">
                                     <p id="bgImgBlurDesc" data-i18n="menu.section.backgroundtheme.setting.imageeffects.option.imageblurdescription"></p>
                                 </div>
-                                <div class="form-group mt-2" id="textColorGroup" style="display: none;">
+                                <div class="form-group mt-2 d-none" id="textColorGroup">
                                     <hr>
                                     <h6 class="mb-1 mt-2" data-i18n="menu.section.backgroundtheme.setting.textcoloroverride.title"></h6>
                                     <div class="btn-group" role="group" data-i18n-aria-label="arialabel.textcoloroverridebuttongroup">
@@ -530,7 +530,7 @@
                             <div class="accordion-body" id="panel-section-dbg">
                                 <h6 class="mb-1" data-i18n="menu.section.debugging.setting.debuginfo.title"></h6>
                                 <div id="debugInfo"></div>
-                                <div id="devColorsContainer" style="display: none;">
+                                <div id="devColorsContainer" class="d-none">
                                     <hr>
                                     <h6 class="mb-1 mt-2" data-i18n="menu.section.debugging.setting.devcolors.title"></h6>
                                     <div class="btn-group d-flex flex-wrap" role="group" data-i18n-aria-label="arialabel.solidcolorbuttongroup">
@@ -620,7 +620,9 @@
                     </div>
                     <p class="mb-1 mt-2" data-i18n="menu.misc.pageduration.label"></p>
                     <p class="mb-0" id="time-duration"></p>
-                    <p class="mb-0" style="display: none;"><span data-i18n="menu.misc.autorestart.label"></span>: <span id="autorestart-time"></span></p>
+                    <div class="mb-0 d-none" id="autorestart-group">
+                        <span data-i18n="menu.misc.autorestart.label" style="font-weight: bold;"></span>: <span id="autorestart-time"></span>
+                    </div>
                     <hr>
                     <span id="credit">
                         Developed by iKarTehFox. Made possible with other open-source projects.<br>This app is licenced under the <a href="https://github.com/iKarTehFox/web-clock/blob/prod/LICENSE" target="_blank">Mozilla Public License 2.0 (MPL-2.0)</a>.
@@ -661,7 +663,7 @@
             </div>
         </div>
         <!-- Stopwatch Popup -->
-        <div id="stopwatch-container" style="display: none;">
+        <div id="stopwatch-container" class="d-none">
             <div class="d-flex align-items-center justify-content-center">
                 <div class="container text-center">
                     <h4 data-i18n="stopwatch.title"></h4>
@@ -680,7 +682,7 @@
             </div>
         </div>
         <!-- Countdown Popup -->
-        <div id="countdown-container" style="display: none;">
+        <div id="countdown-container" class="d-none">
             <div class="d-flex align-items-center justify-content-center">
                 <div class="container text-center">
                     <div class="row">

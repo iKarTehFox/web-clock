@@ -272,9 +272,9 @@ menu.cnotealignradio.forEach(radio => {
 
 menu.panelvischeckbox.addEventListener('change', () => {
     if (menu.panelvischeckbox.checked) {
-        panel.container.style.display = '';
+        panel.container.classList.remove('d-none');
     } else {
-        panel.container.style.display = 'none';
+        panel.container.classList.add('d-none');
     }
 });
 

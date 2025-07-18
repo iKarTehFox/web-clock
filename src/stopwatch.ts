@@ -170,14 +170,14 @@ export function lapStopwatchExternal(): Promise<void> {
 
 // Stopwatch button listener
 stopwatch.obutton.addEventListener('click', () => {
-    if (stopwatch.container.style.display == 'block') {
-        stopwatch.container.style.display = 'none';
+    if (!stopwatch.container.classList.contains('d-none')) {
+        stopwatch.container.classList.add('d-none');
         stopwatch.obutton.className = 'btn btn-secondary';
         logConsole('Stopwatch panel closed', 'info');
         pauseStopwatch();
         return;
-    } else if (!(stopwatch.container.style.display == 'block')) {
-        stopwatch.container.style.display = 'block';
+    } else if (stopwatch.container.classList.contains('d-none')) {
+        stopwatch.container.classList.remove('d-none');
         stopwatch.obutton.className = 'btn btn-danger';
         logConsole('Stopwatch panel opened', 'info');
     }
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                    stopwatch.container.contains(target) || 
                                    stopwatch.obutton.contains(target) ||
                                    devcon.container.contains(target);
-        const isStopwatchVisible = stopwatch.container.style.display !== 'none';
+        const isStopwatchVisible = !stopwatch.container.classList.contains('d-none');
         const isTooltip = target.closest('.tooltip') !== null;
         const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
         const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isInputFocused = document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement;
 
         if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && !isExportOverlay && isStopwatchVisible && !isOffcanvasBackdrop && !isInputFocused) {
-            stopwatch.container.style.display = 'none';
+            stopwatch.container.classList.add('d-none');
             stopwatch.obutton.className = 'btn btn-secondary';
             logConsole('Stopwatch panel closed', 'info');
             pauseStopwatch();
@@ -211,14 +211,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Esc down to close stopwatch
 document.addEventListener('keydown', function(e) {
-    const isStopwatchVisible = stopwatch.container.style.display !== 'none';
+    const isStopwatchVisible = !stopwatch.container.classList.contains('d-none');
     const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
     const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
     const isExportOverlayVisible = document.querySelector('[data-overlay="export-modal-overlay"]') !== null;
     const isOffcanvasVisible = document.querySelector('.offcanvas.show, .offcanvas.showing') !== null;
 
     if (e.key === 'Escape' && isStopwatchVisible && !isBsModalVisible && !isScannerOverlayVisible && !isExportOverlayVisible && !isOffcanvasVisible) {
-        stopwatch.container.style.display = 'none';
+        stopwatch.container.classList.add('d-none');
         stopwatch.obutton.className = 'btn btn-secondary';
         logConsole('Stopwatch panel closed', 'info');
         pauseStopwatch();

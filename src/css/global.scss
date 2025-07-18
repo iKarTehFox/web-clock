@@ -172,7 +172,6 @@ body {
 
 // Popup containers
 %popup-container {
-  display: none;
   @include fixed-center;
   background-color: white;
   padding: 20px;

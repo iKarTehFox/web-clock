@@ -122,8 +122,20 @@ export function isItDate(dateType: 'christmas' | 'weekend' | 'leapyear'): [strin
 // Element display
 // Colon visibility function
 export function colonVisibility([c1Vis, c2Vis]: (boolean | undefined)[]): void {
-    if (c1Vis !== undefined) dtdisplay.colon1.style.display = c1Vis ? '' : 'none';
-    if (c2Vis !== undefined) dtdisplay.colon2.style.display = c2Vis ? '' : 'none';
+    if (c1Vis !== undefined) {
+        if (c1Vis) {
+            dtdisplay.colon1.classList.remove('d-none');
+        } else {
+            dtdisplay.colon1.classList.add('d-none');
+        }
+    }
+    if (c2Vis !== undefined) {
+        if (c2Vis) {
+            dtdisplay.colon2.classList.remove('d-none');
+        } else {
+            dtdisplay.colon2.classList.add('d-none');
+        }
+    }
 }
 
 export function timeBarUtil(type: string, time: luxon.DateTime) {
@@ -157,13 +169,13 @@ panel.section.dt.addEventListener('change', (e) => {
             match(selectelement.id)
                 .with('timeBarSelect', () => {
                     if (selectelement.value === 'tbarNone') {
-                        dtdisplay.timeBar.style.display = 'none';
+                        dtdisplay.timeBar.classList.add('d-none');
                         menu.bordertyperadio.forEach((btn) => {
                             btn.disabled = false;
                         });
                         logConsole('Time bar hidden', 'info');
                     } else {
-                        dtdisplay.timeBar.style.display = 'block';
+                        dtdisplay.timeBar.classList.remove('d-none');
                         menu.bordertyperadio.forEach((btn) => {
                             btn.disabled = true;
                             if (btn.id === 'btyD') {

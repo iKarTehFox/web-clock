@@ -76,12 +76,12 @@ menu.colormoderadio.forEach(radio => {
                 menu.imagesizeselect.disabled = true;
                 bodyElement.style.backgroundImage = '';
                 // Set groups display
-                menu.colorbadgelabel.style.display = 'block';
-                menu.fadegroup.style.display = 'block';
-                menu.presetgroup.style.display = 'none';
-                debug.devcolorscontainer.style.display = 'none';
-                menu.textcolorgroup.style.display = 'none';
-                menu.imagegroup.style.display = 'none';
+                menu.colorbadgelabel.classList.remove('d-none');
+                menu.fadegroup.classList.remove('d-none');
+                menu.presetgroup.classList.add('d-none');
+                debug.devcolorscontainer.classList.add('d-none');
+                menu.textcolorgroup.classList.add('d-none');
+                menu.imagegroup.classList.add('d-none');
             })
             .with('solidmode', () => {
                 stopColorFade();
@@ -96,12 +96,12 @@ menu.colormoderadio.forEach(radio => {
                 menu.imagesizeselect.disabled = true;
                 bodyElement.style.backgroundImage = '';
                 // Set groups display
-                menu.colorbadgelabel.style.display = 'block';
-                menu.fadegroup.style.display = 'block';
-                menu.presetgroup.style.display = '';
-                debug.devcolorscontainer.style.display = '';
-                menu.textcolorgroup.style.display = '';
-                menu.imagegroup.style.display = 'none';
+                menu.colorbadgelabel.classList.remove('d-none');
+                menu.fadegroup.classList.remove('d-none');
+                menu.presetgroup.classList.remove('d-none');
+                debug.devcolorscontainer.classList.remove('d-none');
+                menu.textcolorgroup.classList.remove('d-none');
+                menu.imagegroup.classList.add('d-none');
             })
             .with('imgmode', () => {
                 stopColorFade();
@@ -125,12 +125,12 @@ menu.colormoderadio.forEach(radio => {
                 menu.imageuploadbutton.disabled = false;
                 menu.imagesizeselect.disabled = false;
                 // Set groups display
-                menu.colorbadgelabel.style.display = 'none';
-                menu.fadegroup.style.display = 'none';
-                menu.presetgroup.style.display = 'none';
-                debug.devcolorscontainer.style.display = 'none';
-                menu.textcolorgroup.style.display = '';
-                menu.imagegroup.style.display = '';
+                menu.colorbadgelabel.classList.add('d-none');
+                menu.fadegroup.classList.add('d-none');
+                menu.presetgroup.classList.add('d-none');
+                debug.devcolorscontainer.classList.add('d-none');
+                menu.textcolorgroup.classList.remove('d-none');
+                menu.imagegroup.classList.remove('d-none');
             })
             .otherwise(() => {
                 logConsole('Invalid color mode selected', 'error');

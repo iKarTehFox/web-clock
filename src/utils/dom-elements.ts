@@ -35,6 +35,7 @@ export const devcon = {
 };
 
 export const menu = {
+    autorestartgroup: getElement<HTMLDivElement>('autorestart-group'),
     autorestarttime: getElement<HTMLSpanElement>('autorestart-time'),
     borderstyleselect: getElement<HTMLSelectElement>('borderStyleSelect'),
     bordertyperadio: getElements<HTMLInputElement>('input[name="border-type-radio"]'),

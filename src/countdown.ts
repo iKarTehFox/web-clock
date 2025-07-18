@@ -174,13 +174,13 @@ export function resetCountdownExternal(): Promise<void> {
 
 // Countdown button listener
 countdown.obutton.addEventListener('click', () => {
-    if (countdown.container.style.display == 'block') {
-        countdown.container.style.display = 'none';
+    if (!countdown.container.classList.contains('d-none')) {
+        countdown.container.classList.add('d-none');
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');
         return;
-    } else if (!(countdown.container.style.display == 'block')) {
-        countdown.container.style.display = 'block';
+    } else if (countdown.container.classList.contains('d-none')) {
+        countdown.container.classList.remove('d-none');
         countdown.obutton.className = 'btn btn-danger';
         logConsole('Countdown panel opened', 'info');
     }
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                    countdown.container.contains(target) || 
                                    countdown.obutton.contains(target) ||
                                    devcon.container.contains(target);
-        const isCountdownVisible = countdown.container.style.display !== 'none';
+        const isCountdownVisible = !countdown.container.classList.contains('d-none');
         const isTooltip = target.closest('.tooltip') !== null;
         const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
         const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isOffcanvasBackdrop = target.closest('.offcanvas-backdrop') !== null;
 
         if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && !isExportOverlay && isCountdownVisible && !isOffcanvasBackdrop) {
-            countdown.container.style.display = 'none';
+            countdown.container.classList.add('d-none');
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');
         }
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Esc down to close countdown
 document.addEventListener('keydown', function(e) {
-    const isCountdownVisible = countdown.container.style.display !== 'none';
+    const isCountdownVisible = !countdown.container.classList.contains('d-none');
     const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
     const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
     const isExportOverlayVisible = document.querySelector('[data-overlay="export-modal-overlay"]') !== null;
@@ -220,7 +220,7 @@ document.addEventListener('keydown', function(e) {
     const isInputFocused = document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement;
 
     if (e.key === 'Escape' && isCountdownVisible && !isBsModalVisible && !isScannerOverlayVisible && !isExportOverlayVisible && !isOffcanvasVisible && !isInputFocused) {
-        countdown.container.style.display = 'none';
+        countdown.container.classList.add('d-none');
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');
     }
