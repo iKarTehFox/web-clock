@@ -616,7 +616,7 @@ export default {
             'dontshowagain': 'Don\'t show again',
             'download': 'Download',
             'export': 'Export',
-            'gethelp': 'Get Help',
+            'gethelp': 'Get help',
             'getstarted': 'Get Started',
             'releasenotes': 'Release Notes'
         },

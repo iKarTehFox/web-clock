@@ -617,6 +617,7 @@ export default {
             'download': 'Descargar',
             'export': 'Exportar',
             'gethelp': 'Obtener ayuda',
+            'getstarted': 'Iniciar',
             'releasenotes': 'Notas de la versión'
         },
         'export': {
@@ -633,6 +634,11 @@ export default {
             'newversion': '¡Nueva versión! ({{0}})',
             'releasenote': '¡Online Web Clock se actualizó a {{0}}! Consulta las notas de la versión para más información.',
             'releasenotebypass': '¡Haz clic en el botón de abajo para revisar las notas de la versión {{0}}!'
+        },
+        'welcome': {
+            'title': '¡Bienvenido a Online Web Clock!',
+            'description': 'Online Web Clock es una aplicación de reloj personalizable basada en web con varios temas, integración del clima y opciones de personalización.',
+            'help': '¿Necesitas ayuda para comenzar? Consulta nuestra documentación o visita nuestro repositorio de GitHub.'
         }
     },
     'scanneroverlay': {
