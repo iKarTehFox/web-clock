@@ -1,2 +1,6 @@
+# Project
 node_modules/
 dist/
+
+# System
+.vscode/
