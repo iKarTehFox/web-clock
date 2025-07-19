@@ -616,7 +616,8 @@ export default {
             'dontshowagain': 'Don\'t show again',
             'download': 'Download',
             'export': 'Export',
-            'gethelp': 'Get help',
+            'gethelp': 'Get Help',
+            'getstarted': 'Get Started',
             'releasenotes': 'Release Notes'
         },
         'export': {
@@ -632,7 +633,12 @@ export default {
         'updatenoti': {
             'newversion': 'New Version! ({{0}})',
             'releasenote': 'Online Web Clock was just updated to {{0}}! Check the release notes for more information.',
-            'releasenotebypass': 'Click the button below to review the release notes for version {{0}}!'
+            'releasenotebypass': 'Click the button below to review the release notes for version {{0}}!',
+        },
+        'welcome': {
+            'title': 'Welcome to Online Web Clock!',
+            'description': 'Online Web Clock is a customizable web-based clock application with various themes, weather integration, and personalization options.',
+            'help': 'Need help getting started? Check out our documentation or visit our GitHub repository.'
         }
     },
     'scanneroverlay': {

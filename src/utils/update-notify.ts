@@ -16,6 +16,47 @@ interface UpdateNotificationOptions {
   modalTimeout?: number;
 }
 
+function showWelcomeModal() {
+    const welcomeTitle = i18next.t('bsmodal.welcome.title');
+    
+    // Create description element
+    const descriptionElement = document.createElement('div');
+    descriptionElement.innerHTML = `
+        <p>${i18next.t('bsmodal.welcome.description')}</p>
+        <p>${i18next.t('bsmodal.welcome.help')}</p>
+    `;
+    
+    logConsole('Showing welcome modal for new user', 'debug', true);
+    
+    // Show the welcome modal
+    createBsModal(
+        welcomeTitle,
+        descriptionElement,
+        [
+            {label: i18next.t('bsmodal.button.gethelp'), className: 'btn btn-info', value: 'help'},
+            {label: 'GitHub', className: 'btn btn-secondary', value: 'github'},
+            {label: i18next.t('bsmodal.button.getstarted'), className: 'btn btn-primary', value: 'get-started'}
+        ],
+        60
+    ).then((result) => {
+        match(result)
+            .with('help', () => {
+                // Open OWC docs
+                window.open('https://online-clock-docs.pages.dev', '_blank');
+            })
+            .with('github', () => {
+                // Open GitHub
+                window.open('https://github.com/iKarTehFox/web-clock', '_blank');
+            })
+            .otherwise(() => {
+                // Get Started or dismissed modal
+            });
+    });
+    
+    // Set the localStorage item so they won't see this welcome modal again
+    localStorage.setItem('lastUpdateNotification', versionNumber);
+}
+
 export function showUpdateNotification(options: UpdateNotificationOptions = {}) {
     const {
         bypassCheck = false,
@@ -27,7 +68,13 @@ export function showUpdateNotification(options: UpdateNotificationOptions = {}) 
   
     const lastSeen = localStorage.getItem('lastUpdateNotification');
   
-    // Version check
+    // Check if user is new (no localStorage item or empty)
+    if (!bypassCheck && (!lastSeen || lastSeen === '')) {
+        showWelcomeModal();
+        return;
+    }
+    
+    // Version check for existing users
     if (!bypassCheck && (lastSeen === 'never' || lastSeen === versionNumber)) return;
 
     if (!bypassCheck) {
