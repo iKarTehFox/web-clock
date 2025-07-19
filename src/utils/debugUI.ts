@@ -1,30 +1,136 @@
 import i18next from 'i18next';
+import randomstring from 'randomstring';
 import { debug, dtdisplay, panel } from './dom-elements';
 import { showToast } from './dom-utils';
 import { on, AppEvents } from '../system/event-bus';
+import { getElement } from './dom-selectors';
 
-// Get load time
+// Constants
 const loadTime = new Date().toLocaleString();
+const refreshPeriod = 60000; // 60 seconds
 
-function addDbgInfo(text: string): void {
+// Debug info entries with unique IDs
+const debugEntries = {
+    userAgent: randomstring.generate(8),
+    locale: randomstring.generate(8),
+    timezone: randomstring.generate(8),
+    loadTime: randomstring.generate(8),
+    resolution: randomstring.generate(8),
+    colorDepth: randomstring.generate(8),
+    onlineStatus: randomstring.generate(8)
+};
+
+// Debug info configuration
+interface DebugInfoConfig {
+    translationKey: string;
+    getValue: () => string;
+    isStatic?: boolean; // For values that don't change (like loadTime)
+}
+
+const debugInfoConfig: Record<keyof typeof debugEntries, DebugInfoConfig> = {
+    userAgent: {
+        translationKey: 'menu.section.debugging.setting.debuginfo.option.useragent',
+        getValue: () => navigator.userAgent
+    },
+    locale: {
+        translationKey: 'menu.section.debugging.setting.debuginfo.option.locale',
+        getValue: () => navigator.language
+    },
+    timezone: {
+        translationKey: 'menu.section.debugging.setting.debuginfo.option.timezone',
+        getValue: () => Intl.DateTimeFormat().resolvedOptions().timeZone
+    },
+    loadTime: {
+        translationKey: 'menu.section.debugging.setting.debuginfo.option.loadtime',
+        getValue: () => loadTime,
+        isStatic: true
+    },
+    resolution: {
+        translationKey: 'menu.section.debugging.setting.debuginfo.option.resolution',
+        getValue: () => `${window.screen.width}x${window.screen.height}`,
+        isStatic: true
+    },
+    colorDepth: {
+        translationKey: 'menu.section.debugging.setting.debuginfo.option.colordepth',
+        getValue: () => `${window.screen.colorDepth}-bit`,
+        isStatic: true
+    },
+    onlineStatus: {
+        translationKey: 'menu.section.debugging.setting.debuginfo.option.onlinestatus',
+        getValue: () => navigator.onLine ? 'Online' : 'Offline'
+    }
+};
+
+function createDebugEntry(key: keyof typeof debugEntries): HTMLParagraphElement {
     const p = document.createElement('p');
     p.className = 'mb-1';
-    p.textContent = text;
-    debug.info.appendChild(p);
+    p.id = debugEntries[key];
+    
+    const config = debugInfoConfig[key];
+    const label = i18next.t(config.translationKey);
+    const value = config.getValue();
+    p.textContent = `${label}: ${value}`;
+    
+    return p;
+}
+
+function updateDebugEntryValue(key: keyof typeof debugEntries): void {
+    const element = getElement<HTMLParagraphElement>(debugEntries[key]);
+    if (!element) return;
+    
+    const config = debugInfoConfig[key];
+    const label = i18next.t(config.translationKey);
+    const value = config.getValue();
+    element.textContent = `${label}: ${value}`;
+}
+
+function updateDebugEntryLabel(key: keyof typeof debugEntries): void {
+    const element = getElement<HTMLParagraphElement>(debugEntries[key]);
+    if (!element) return;
+    
+    const config = debugInfoConfig[key];
+    const currentText = element.textContent || '';
+    const colonIndex = currentText.indexOf(':');
+    
+    if (colonIndex !== -1) {
+        const value = currentText.substring(colonIndex);
+        const newLabel = i18next.t(config.translationKey);
+        element.textContent = `${newLabel}${value}`;
+    }
+}
+
+function initializeAllDebugEntries(): void {
+    // Clear existing entries
+    debug.info.innerHTML = '';
+    
+    // Create all debug entries
+    Object.keys(debugEntries).forEach(key => {
+        const entry = createDebugEntry(key as keyof typeof debugEntries);
+        debug.info.appendChild(entry);
+    });
+}
+
+function updateAllDebugValues(): void {
+    Object.keys(debugEntries).forEach(key => {
+        const config = debugInfoConfig[key as keyof typeof debugEntries];
+        if (!config.isStatic) {
+            updateDebugEntryValue(key as keyof typeof debugEntries);
+        }
+    });
+}
+
+function updateAllDebugLabels(): void {
+    Object.keys(debugEntries).forEach(key => {
+        updateDebugEntryLabel(key as keyof typeof debugEntries);
+    });
 }
 
 function initializeDebugUI(): void {
     // Enable debug container
     debug.container.classList.remove('d-none');
 
-    // Fill debug info
-    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.useragent')}: ${navigator.userAgent}`); // User agent
-    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.locale')}: ${navigator.language}`); // Locale
-    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.timezone')}: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`); // Timezone
-    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.loadtime')}: ${loadTime}`); // Load time
-    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.resolution')}: ${window.screen.width}x${window.screen.height}`); // Screen resolution
-    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.colordepth')}: ${window.screen.colorDepth}-bit`); // Color depth
-    addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.onlinestatus')}: ${navigator.onLine ? 'Online' : 'Offline'}`); // Online status
+    // Initialize all debug entries
+    initializeAllDebugEntries();
 
     // Dev Console
     panel.devconbutton.classList.remove('d-none');
@@ -51,18 +157,23 @@ function initializeDebugUI(): void {
         showToast(i18next.t('toasts.debugui.title'), i18next.t('toasts.debugui.clearls'), undefined, 'warning');
     });
 
-    // Reinitialize if language changed
-    i18next.on('languageChanged', (lng) => {
-        debug.info.innerHTML = '';
-        // Add debug info
-        addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.useragent')}: ${navigator.userAgent}`); // User agent
-        addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.locale')}: ${navigator.language}`); // Locale
-        addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.timezone')}: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`); // Timezone
-        addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.loadtime')}: ${loadTime}`); // Load time
-        addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.resolution')}: ${window.screen.width}x${window.screen.height}`); // Screen resolution
-        addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.colordepth')}: ${window.screen.colorDepth}-bit`); // Color depth
-        addDbgInfo(`${i18next.t('menu.section.debugging.setting.debuginfo.option.onlinestatus')}: ${navigator.onLine ? 'Online' : 'Offline'}`); // Online status
+    debug.clearlsbtn.addEventListener('dblclick', () => {
+        window.location.reload(); // Quick reload option
     });
+
+    // i18n langauage change listener
+    i18next.on('languageChanged', () => {
+        updateAllDebugLabels();
+    });
+
+    // Periodically update non-static values
+    setInterval(() => {
+        updateAllDebugValues();
+    }, refreshPeriod);
+
+    // Listen for online/offline events for immediate updates
+    window.addEventListener('online', () => updateDebugEntryValue('onlineStatus'));
+    window.addEventListener('offline', () => updateDebugEntryValue('onlineStatus'));
 }
 
 on(AppEvents.DEBUG_MODE_ENABLED, (state) => {
