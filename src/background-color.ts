@@ -1,7 +1,6 @@
 import { match } from 'ts-pattern';
 import { menu, debug, dtdisplay, doc } from './utils/dom-elements';
 import { logConsole, setMetaColor } from './utils/dom-utils';
-import i18next from 'i18next';
 
 let fadeIntervalID: NodeJS.Timeout;
 const bodyElement = document.body;

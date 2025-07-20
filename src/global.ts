@@ -1,7 +1,6 @@
 import { match } from 'ts-pattern';
-import { menu, font, dtdisplay, stopwatch, countdown, weather, doc, panel } from './utils/dom-elements';
-import { logConsole, setMenuTheme, setMetaColor, showToast } from './utils/dom-utils';
-import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
+import { menu, font, dtdisplay, stopwatch, countdown, doc, panel } from './utils/dom-elements';
+import { logConsole, setMenuTheme } from './utils/dom-utils';
 import { showUpdateNotification, versionNumberString } from './utils/update-notify';
 import i18next from 'i18next';
 

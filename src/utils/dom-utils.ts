@@ -6,7 +6,7 @@ import { match } from 'ts-pattern';
 import { Modal, Toast } from 'bootstrap';
 import * as luxon from 'ts-luxon';
 import randomstring from 'randomstring';
-import i18next, { t } from 'i18next';
+import i18next from 'i18next';
 import { toastPosition } from './debug';
 
 // Custom console logging function
