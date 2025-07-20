@@ -152,7 +152,6 @@ body {
   height: $progress-bar-height;
   border-radius: $border-radius;
   background-color: #212529;
-  display: none; // Disable display by default
   transition: width 0.75s;
 }
 
