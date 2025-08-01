@@ -62,6 +62,20 @@
                         <!-- Logs tab -->
                         <div class="tab-pane fade" id="logs-tab-pane" role="tabpanel" aria-labelledby="logs-tab" tabindex="0">
                             <div id="dev-console-logs" class="mb-2"></div>
+                            <!-- Log filters -->
+                            <div class="btn-group" role="group" aria-label="Dev console log filters button group">
+                                <input type="checkbox" class="btn-check" id="dev-console-logs-debug" autocomplete="off" checked>
+                                <label class="btn btn-outline-secondary" for="dev-console-logs-debug" data-i18n="devcon.filters.debug"></label>
+
+                                <input type="checkbox" class="btn-check" id="dev-console-logs-info" autocomplete="off" checked>
+                                <label class="btn btn-outline-info" for="dev-console-logs-info" data-i18n="devcon.filters.info"></label>
+
+                                <input type="checkbox" class="btn-check" id="dev-console-logs-warning" autocomplete="off" checked>
+                                <label class="btn btn-outline-warning" for="dev-console-logs-warning" data-i18n="devcon.filters.warning"></label>
+
+                                <input type="checkbox" class="btn-check" id="dev-console-logs-error" autocomplete="off" checked>
+                                <label class="btn btn-outline-danger" for="dev-console-logs-error" data-i18n="devcon.filters.error"></label>
+                            </div>
                         </div>
                     </div>
                 </div>

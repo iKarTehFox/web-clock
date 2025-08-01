@@ -2162,12 +2162,55 @@ function setupDragFunctionality(): void {
     devcon.header.style.cursor = 'grab';
 }
 
-// Update the initDebugConsole function
+const logFilters = {
+    debug: devcon.debugfilterbtn,
+    info: devcon.infofilterbtn,
+    warning: devcon.warningfilterbtn,
+    error: devcon.errorfilterbtn
+};
+
+// Add this function to handle log filtering
+function setupLogFilters(): void {
+    const filterCheckboxes = [
+        { element: logFilters.debug, level: 'debug' },
+        { element: logFilters.info, level: 'info' },
+        { element: logFilters.warning, level: 'warning' },
+        { element: logFilters.error, level: 'error' }
+    ];
+
+    filterCheckboxes.forEach(({ element, level }) => {
+        if (element) {
+            element.addEventListener('change', () => {
+                filterLogsByLevel();
+            });
+        }
+    });
+}
+
+function filterLogsByLevel(): void {
+    const logEntries = devcon.logs.querySelectorAll('[data-logtype]');
+    
+    logEntries.forEach((entry: HTMLElement) => {
+        const logLevel = entry.getAttribute('data-logtype');
+        const filterElement = logFilters[logLevel as keyof typeof logFilters];
+        
+        if (filterElement && filterElement.checked) {
+            entry.style.display = '';
+        } else {
+            entry.style.display = 'none';
+        }
+    });
+}
+
+// Initialize the debug console
 export function initDebugConsole(): void {
     if (!debugMode) return;
     
     // Set up drag functionality
     setupDragFunctionality();
+    
+    // Set up log filters
+    setupLogFilters();
     
     // Set up event listeners
     devcon.submitbtn.addEventListener('click', executeCommand);

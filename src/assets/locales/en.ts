@@ -44,6 +44,12 @@ export default {
             'placeholder': 'Enter command...',
             'execute': 'Execute',
             'tip': 'Press Enter to execute, Esc to close, ↑↓ for history'
+        },
+        'filters': {
+            'debug': 'Debug',
+            'info': 'Info',
+            'warning': 'Warning',
+            'error': 'Error'
         }
     },
     'weather': {

@@ -38,15 +38,19 @@ export function appendToLogs(text: string, type: 'info' | 'warning' | 'error' | 
     // Style based on log type
     match(type)
         .with('debug', () => {
+            entry.dataset.logtype = 'debug';
             entry.style.color = '#6c757d'; // Gray for debug
         })
         .with('info', () => {
+            entry.dataset.logtype = 'info';
             entry.style.color = '#0d6efd'; // Blue for info
         })
         .with('warning', () => {
+            entry.dataset.logtype = 'warning';
             entry.style.color = '#ffc107'; // Yellow for warnings
         })
         .with('error', () => {
+            entry.dataset.logtype = 'error';
             entry.style.color = '#dc3545'; // Red for errors
         })
         .otherwise(() => {});

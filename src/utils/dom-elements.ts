@@ -31,7 +31,11 @@ export const devcon = {
     input: getElement<HTMLInputElement>('dev-console-input'),
     logs: getElement<HTMLDivElement>('dev-console-logs'),
     output: getElement<HTMLDivElement>('dev-console-output'),
-    submitbtn: getElement<HTMLButtonElement>('dev-console-submit')
+    submitbtn: getElement<HTMLButtonElement>('dev-console-submit'),
+    debugfilterbtn: getElement<HTMLInputElement>('dev-console-logs-debug'),
+    infofilterbtn: getElement<HTMLInputElement>('dev-console-logs-info'),
+    warningfilterbtn: getElement<HTMLInputElement>('dev-console-logs-warning'),
+    errorfilterbtn: getElement<HTMLInputElement>('dev-console-logs-error')
 };
 
 export const menu = {
