@@ -261,7 +261,7 @@ updateDate();
 clock.updateFavicon(time.toFormat('h'));
 
 // Sync clock to system time function
-let clockInterval: NodeJS.Timeout | null = null; // Variable to store the interval ID
+let clockInterval: NodeJS.Timeout;
 
 // Function to start the clock based on the selected method
 function startClock() {
@@ -312,7 +312,7 @@ function startOldClock() {
         updateTime();
         updatePageDuration();
         logConsole('Time, date, and page duration updated... (Legacy method)', 'info', false, false);
-    }, timeRefresh) as unknown as NodeJS.Timeout;
+    }, timeRefresh);
 }
 
 // DT listener
