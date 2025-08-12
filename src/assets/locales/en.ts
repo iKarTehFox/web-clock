@@ -267,8 +267,8 @@ export default {
                         'title': 'Background Color Mode',
                         'option': {
                             'colorfade': 'Color Fade',
-                            'solid': 'Solid',
-                            'image': 'Image',
+                            'solid': 'Solid Color Mode',
+                            'image': 'Image Mode',
                             'currentcolor': 'Current color:'
                         }
                     },
@@ -662,7 +662,6 @@ export default {
         'customfontinputform': 'Custom font input form',
         'fontstylebuttongroup': 'Font style button group',
         'fontweightbuttongroup': 'Font weight button group',
-        'colormodebuttongroup': 'Color mode button group',
         'solidcolorbuttongroup': 'Solid color button group',
         'textcoloroverridebuttongroup': 'Text color override button group',
         'weatherunitbuttongroup': 'Weather unit button group',

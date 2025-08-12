@@ -302,14 +302,11 @@
                             <div class="accordion-body" id="panel-section-bt">
                                 <h6 class="mb-1" data-i18n="menu.section.backgroundtheme.setting.backgroundcolormode.title"></h6>
                                 <div class="form-group">
-                                    <div class="btn-group" role="group" data-i18n-aria-label="arialabel.colormodebuttongroup">
-                                        <input type="radio" class="btn-check" name="color-mode-radio" id="fademode" autocomplete="off" checked>
-                                        <label class="btn btn-outline-primary" for="fademode" data-i18n="menu.section.backgroundtheme.setting.backgroundcolormode.option.colorfade"></label>
-                                        <input type="radio" class="btn-check" name="color-mode-radio" id="solidmode" autocomplete="off">
-                                        <label class="btn btn-outline-primary" for="solidmode" data-i18n="menu.section.backgroundtheme.setting.backgroundcolormode.option.solid"></label>
-                                        <input type="radio" class="btn-check" name="color-mode-radio" id="imgmode" autocomplete="off">
-                                        <label class="btn btn-outline-primary" for="imgmode" data-i18n="menu.section.backgroundtheme.setting.backgroundcolormode.option.image"></label>
-                                    </div>
+                                    <select class="form-select" id="colorModeSelect">
+                                        <option value="fademode" data-i18n="menu.section.backgroundtheme.setting.backgroundcolormode.option.colorfade"></option>
+                                        <option value="solidmode" data-i18n="menu.section.backgroundtheme.setting.backgroundcolormode.option.solid"></option>
+                                        <option value="imgmode" data-i18n="menu.section.backgroundtheme.setting.backgroundcolormode.option.image"></option>
+                                    </select>
                                     <div id="currentColorLabel">
                                         <p class="mt-2 mb-0"><span data-i18n="menu.section.backgroundtheme.setting.backgroundcolormode.option.currentcolor"></span> <span class="badge text-bg-secondary" id="currentColorBadge">#000000</span></p>
                                     </div>

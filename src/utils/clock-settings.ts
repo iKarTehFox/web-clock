@@ -144,7 +144,7 @@ export function getColorThemeConfig(): ColorThemeConfig {
 }
 
 export function getColorMode(): string {
-    return getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id;
+    return menu.colormodeselect.value;
 }
 
 export function getSolidColorValue(): string {
@@ -309,9 +309,8 @@ export function setColorThemeConfig(config: ColorThemeConfig, trigger: boolean =
 
 export function setColorMode(mode: string, trigger = false): void {
     stopColorFade();
-    const element = getFirstElement<HTMLInputElement>(`input[name="color-mode-radio"][id="${mode}"]`);
-    element.checked = true;
-    if (trigger) element.dispatchEvent(new Event('change'));
+    menu.colormodeselect.value = mode;
+    if (trigger) menu.colormodeselect.dispatchEvent(new Event('change'));
 }
 
 export function setSolidColor(color: string, trigger = false): void {

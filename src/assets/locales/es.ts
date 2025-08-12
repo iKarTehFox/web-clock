@@ -264,11 +264,11 @@ export default {
                 'header': 'Tema de fondo',
                 'setting': {
                     'backgroundcolormode': {
-                        'title': 'Modo de color de fondo',
+                        'title': 'Modo de Color de Fondo',
                         'option': {
-                            'colorfade': 'Degradado',
-                            'solid': 'Sólido',
-                            'image': 'Imagen',
+                            'colorfade': 'Degradado de Color',
+                            'solid': 'Modo de Color Sólido',
+                            'image': 'Modo de Imagen',
                             'currentcolor': 'Color actual:'
                         }
                     },
@@ -662,7 +662,6 @@ export default {
         'customfontinputform': 'Formulario de entrada de fuente personalizada',
         'fontstylebuttongroup': 'Grupo de botones de estilo de fuente',
         'fontweightbuttongroup': 'Grupo de botones de grosor de fuente',
-        'colormodebuttongroup': 'Grupo de botones de modo de color',
         'solidcolorbuttongroup': 'Grupo de botones de color sólido',
         'textcoloroverridebuttongroup': 'Grupo de botones de anulación de color de texto',
         'weatherunitbuttongroup': 'Grupo de botones de unidad meteorológica',

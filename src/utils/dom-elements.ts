@@ -48,7 +48,7 @@ export const menu = {
     cnoteinput: getElement<HTMLInputElement>('cnote-input'),
     colorbadge: getElement<HTMLParagraphElement>('currentColorBadge'),
     colorbadgelabel: getElement<HTMLDivElement>('currentColorLabel'),
-    colormoderadio: getElements<HTMLInputElement>('input[name="color-mode-radio"]'),
+    colormodeselect: getElement<HTMLSelectElement>('colorModeSelect'),
     container: getElement<HTMLDivElement>('menu-offcanvas'),
     datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
     dateformselect: getElement<HTMLSelectElement>('dateFormatSelect'),

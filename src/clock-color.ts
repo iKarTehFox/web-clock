@@ -11,7 +11,7 @@ menu.textcoloroverrideradio.forEach((radio) => {
             .with('tcovD', () => {
                 isTextColorOverride = 0;
                 menu.textcolorinput.disabled = true;
-                if (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id === 'solidmode') {
+                if (menu.colormodeselect.id === 'solidmode') {
                     try {
                         getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
                     } catch (error) {
