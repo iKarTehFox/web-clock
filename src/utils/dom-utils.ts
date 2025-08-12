@@ -9,6 +9,11 @@ import randomstring from 'randomstring';
 import i18next from 'i18next';
 import { toastPosition } from './debug';
 
+// ID Generation
+export function generateId(prefix: string = 'id'): string {
+    return `${prefix}-${randomstring.generate(8)}`;
+}
+
 // Custom console logging function
 export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' = 'debug', bypass: boolean = false, appendDevCon: boolean = true): void {
     if ((debugMode || bypass) && type === 'debug') {
@@ -159,7 +164,7 @@ export function showToast(title: string, message: string, duration: 'veryshort' 
     }
     
     // Generate unique ID for this toast
-    const toastId = `toast-${randomstring.generate(8)}`;
+    const toastId = generateId('toast');
     
     // Create toast element
     const toastElement = document.createElement('div');
@@ -346,7 +351,7 @@ export function getCurrentTheme(): string {
 export function createBsModal(title: string, content: HTMLElement | string, buttons: ModalButton[] = [], timeoutDelay?: number) {
     return new Promise((resolve) => {
         // Set internal unique id
-        const modalUID = `bs-modal-${randomstring.generate(8)}`;
+        const modalUID = generateId('bs-modal');
 
         const modal = document.createElement('div');
         modal.className = 'modal fade';
@@ -539,7 +544,7 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
 // Function to create an scanner overlay card element
 export function createScannerOverlay() {
     // Set internal unique id
-    const scannerUID = `scanner-overlay-${randomstring.generate(8)}`;
+    const scannerUID = generateId('scanner-overlay');
 
     // Create container
     const container = document.createElement('div');
@@ -630,7 +635,7 @@ export function createScannerOverlay() {
 
 export function createExportModal(defaultFilename: string): Promise<{ filename: string; action: string }> {
     return new Promise((resolve) => {
-        const modalUID = `export-modal-${randomstring.generate(8)}`;
+        const modalUID = generateId('export-modal');
 
         const modal = document.createElement('div');
         modal.className = 'modal fade';
