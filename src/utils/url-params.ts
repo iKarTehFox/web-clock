@@ -10,6 +10,13 @@ import i18next from 'i18next';
 import i18n, { applyFallbackTranslations, updateTranslations } from '../assets/locales/i18n';
 import { emit, AppEvents } from '../system/event-bus';
 
+// Check debug mode early - before any other processing
+const earlyUrlParams = new URLSearchParams(window.location.search);
+const debugValue = earlyUrlParams.get('debug') || earlyUrlParams.get('debugMode');
+if (debugValue === 'true') {
+    setDebug(true);
+}
+
 // Define parameter interface
 interface URLParamConfig {
     // Booleans
@@ -117,12 +124,12 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         if (value !== null) {
             if (value === 'true' || value === 'false') {
                 (params as any)[key] = value === 'true';
-                logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug', true);
+                logConsole(`URL param "${key}" set to "${(params as any)[key]}". Is type ${typeof (params as any)[key]}`, 'debug');
             } else {
                 logConsole(`Invalid boolean value for "${key}": "${value}". Must be "true" or "false".`, 'warning');
             }
         } else {
-            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug', true);
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug');
         }
     });
 
@@ -132,12 +139,12 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const parsed = parseFloat(clockModeValue);
         if (isValidClockMode(parsed)) {
             params.clockMode = parsed;
-            logConsole(`URL param "clockMode" set to "${parsed}". Is type ${typeof parsed}`, 'debug', true);
+            logConsole(`URL param "clockMode" set to "${parsed}". Is type ${typeof parsed}`, 'debug');
         } else {
             logConsole(`Invalid clockMode value: "${clockModeValue}". Must be 12 or 24.`, 'warning');
         }
     } else {
-        logConsole(`URL param "clockMode" not found. Is type ${typeof params.clockMode}`, 'debug', true);
+        logConsole(`URL param "clockMode" not found. Is type ${typeof params.clockMode}`, 'debug');
     }
 
     // Auto restart (special number param with range validation)
@@ -146,12 +153,12 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const parsed = parseFloat(autoRestartValue);
         if (isValidAutoRestart(parsed)) {
             params.autoRestart = parsed;
-            logConsole(`URL param "autoRestart" set to "${parsed}". Is type ${typeof parsed}`, 'debug', true);
+            logConsole(`URL param "autoRestart" set to "${parsed}". Is type ${typeof parsed}`, 'debug');
         } else {
             logConsole(`Invalid autoRestart value: "${autoRestartValue}". Must be a number between 15 and 86400.`, 'warning');
         }
     } else {
-        logConsole(`URL param "autoRestart" not found. Is type ${typeof params.autoRestart}`, 'debug', true);
+        logConsole(`URL param "autoRestart" not found. Is type ${typeof params.autoRestart}`, 'debug');
     }
 
     // Weather coordinates (special number params with coordinate validation)
@@ -160,12 +167,12 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const parsed = parseFloat(weatherLatValue);
         if (isValidCoordinate(parsed, 'lat')) {
             params.weatherLat = parsed;
-            logConsole(`URL param "weatherLat" set to "${parsed}". Is type ${typeof parsed}`, 'debug', true);
+            logConsole(`URL param "weatherLat" set to "${parsed}". Is type ${typeof parsed}`, 'debug');
         } else {
             logConsole(`Invalid weatherLat value: "${weatherLatValue}". Must be a number between -90 and 90.`, 'warning');
         }
     } else {
-        logConsole(`URL param "weatherLat" not found. Is type ${typeof params.weatherLat}`, 'debug', true);
+        logConsole(`URL param "weatherLat" not found. Is type ${typeof params.weatherLat}`, 'debug');
     }
 
     const weatherLonValue = getParamValue('weatherLon');
@@ -173,12 +180,12 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const parsed = parseFloat(weatherLonValue);
         if (isValidCoordinate(parsed, 'lon')) {
             params.weatherLon = parsed;
-            logConsole(`URL param "weatherLon" set to "${parsed}". Is type ${typeof parsed}`, 'debug', true);
+            logConsole(`URL param "weatherLon" set to "${parsed}". Is type ${typeof parsed}`, 'debug');
         } else {
             logConsole(`Invalid weatherLon value: "${weatherLonValue}". Must be a number between -180 and 180.`, 'warning');
         }
     } else {
-        logConsole(`URL param "weatherLon" not found. Is type ${typeof params.weatherLon}`, 'debug', true);
+        logConsole(`URL param "weatherLon" not found. Is type ${typeof params.weatherLon}`, 'debug');
     }
 
     // Weather widget position (regular number params - any number is valid)
@@ -188,12 +195,12 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
             const parsed = parseFloat(value);
             if (!isNaN(parsed)) {
                 (params as any)[key] = parsed;
-                logConsole(`URL param "${key}" set to "${parsed}". Is type ${typeof parsed}`, 'debug', true);
+                logConsole(`URL param "${key}" set to "${parsed}". Is type ${typeof parsed}`, 'debug');
             } else {
                 logConsole(`Invalid number value for "${key}": "${value}".`, 'warning');
             }
         } else {
-            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug', true);
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug');
         }
     });
 
@@ -202,12 +209,12 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
     if (menuThemeValue !== null) {
         if (isValidMenuTheme(menuThemeValue)) {
             params.menuTheme = menuThemeValue;
-            logConsole(`URL param "menuTheme" set to "${menuThemeValue}". Is type ${typeof menuThemeValue}`, 'debug', true);
+            logConsole(`URL param "menuTheme" set to "${menuThemeValue}". Is type ${typeof menuThemeValue}`, 'debug');
         } else {
             logConsole(`Invalid menuTheme value: "${menuThemeValue}". Must be one of: light, dark, midnight, amoled, auto.`, 'warning');
         }
     } else {
-        logConsole(`URL param "menuTheme" not found. Is type ${typeof params.menuTheme}`, 'debug', true);
+        logConsole(`URL param "menuTheme" not found. Is type ${typeof params.menuTheme}`, 'debug');
     }
 
     // Toast position (validated string param)
@@ -215,12 +222,12 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
     if (toastPositionValue !== null) {
         if (isValidToastPosition(toastPositionValue)) {
             params.toastPosition = toastPositionValue;
-            logConsole(`URL param "toastPosition" set to "${toastPositionValue}". Is type ${typeof toastPositionValue}`, 'debug', true);
+            logConsole(`URL param "toastPosition" set to "${toastPositionValue}". Is type ${typeof toastPositionValue}`, 'debug');
         } else {
             logConsole(`Invalid toastPosition value: "${toastPositionValue}". Must be one of: topleft, topmiddle, bottomleft, bottommiddle, bottomright.`, 'warning');
         }
     } else {
-        logConsole(`URL param "toastPosition" not found. Is type ${typeof params.toastPosition}`, 'debug', true);
+        logConsole(`URL param "toastPosition" not found. Is type ${typeof params.toastPosition}`, 'debug');
     }
 
     // Weather units (validated string param)
@@ -228,12 +235,12 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
     if (weatherUnitsValue !== null) {
         if (isValidWeatherUnits(weatherUnitsValue)) {
             params.weatherUnits = weatherUnitsValue;
-            logConsole(`URL param "weatherUnits" set to "${weatherUnitsValue}". Is type ${typeof weatherUnitsValue}`, 'debug', true);
+            logConsole(`URL param "weatherUnits" set to "${weatherUnitsValue}". Is type ${typeof weatherUnitsValue}`, 'debug');
         } else {
             logConsole(`Invalid weatherUnits value: "${weatherUnitsValue}". Must be "imperial" or "metric".`, 'warning');
         }
     } else {
-        logConsole(`URL param "weatherUnits" not found. Is type ${typeof params.weatherUnits}`, 'debug', true);
+        logConsole(`URL param "weatherUnits" not found. Is type ${typeof params.weatherUnits}`, 'debug');
     }
 
     // Regular string params (no specific validation needed)
@@ -241,9 +248,9 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         const value = getParamValue(key);
         if (value !== null) {
             (params as any)[key] = value;
-            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof value}`, 'debug', true);
+            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof value}`, 'debug');
         } else {
-            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug', true);
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug');
         }
     });
 
@@ -278,9 +285,8 @@ export async function applyURLParams() {
         setToastPosition(params.toastPosition);
     }
 
-    // Debug logging mode
+    // Debug logging mode (show toast notification)
     if (params.debugMode) {
-        setDebug(true);
         showToast({
             title: i18next.t('toasts.urlparams.title'),
             message: i18next.t('toasts.urlparams.debugmode'),

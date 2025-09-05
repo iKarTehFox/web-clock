@@ -114,5 +114,5 @@ export function showUpdateNotification(options: UpdateNotificationOptions = {}) 
 
 window.addEventListener('DOMContentLoaded', () => {
     menu.versionlabelclk.textContent = versionNumberString;
-    logConsole(`Updated version label to ${versionNumberString}`, 'debug', true);
+    logConsole(`Updated version label to ${versionNumberString}`, 'debug');
 });
