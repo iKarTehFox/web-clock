@@ -142,10 +142,21 @@ function initializeDebugUI(): void {
             const theme = btn.dataset.dbgtoasttheme;
             const length = btn.dataset.dbgtoastlength as 'veryshort' | 'default' | 'normal' | 'long' | 'verylong' | undefined;
             if (!theme) {
-                showToast(i18next.t('toasts.debugui.title'), i18next.t('toasts.debugui.testtoast2', { 0: length }), length);
+                showToast({
+                    title: i18next.t('toasts.debugui.title'),
+                    message: i18next.t('toasts.debugui.testtoast2', { 0: length }),
+                    duration: length,
+                    icon: 'bi-bug-fill'
+                });
                 return;
             }
-            showToast(i18next.t('toasts.debugui.title'), i18next.t('toasts.debugui.testtoast', { 0: theme }), length, theme);
+            showToast({
+                title: i18next.t('toasts.debugui.title'),
+                message: i18next.t('toasts.debugui.testtoast', { 0: theme }),
+                duration: length,
+                style: theme,
+                icon: 'bi-bug-fill'
+            });
         });
     });
 
@@ -155,7 +166,12 @@ function initializeDebugUI(): void {
 
     debug.clearlsbtn.addEventListener('click', () => {
         localStorage.clear();
-        showToast(i18next.t('toasts.debugui.title'), i18next.t('toasts.debugui.clearls'), undefined, 'warning');
+        showToast({
+            title: i18next.t('toasts.debugui.title'),
+            message: i18next.t('toasts.debugui.clearls'),
+            style: 'warning',
+            icon: 'bi-exclamation-triangle-fill'
+        });
     });
 
     debug.clearlsbtn.addEventListener('dblclick', () => {

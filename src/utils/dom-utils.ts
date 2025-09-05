@@ -125,8 +125,17 @@ function getThemeInfo(colorTheme: string = 'auto') {
     return themes[theme] || themes.light;
 }
 
+interface ToastOptions {
+    title: string;
+    message: string;
+    duration?: 'veryshort' | 'default' | 'normal' | 'long' | 'verylong';
+    style?: string;
+    icon?: string;
+}
+
 // Function to show a toast message using Bootstrap toasts
-export function showToast(title: string, message: string, duration: 'veryshort' | 'default' | 'normal' | 'long' | 'verylong' = 'default', style: string = 'auto'): void {
+export function showToast(options: ToastOptions): void {
+    const { title, message, duration = 'default', style = 'auto', icon } = options;
     const theme = getThemeInfo(style);
     
     // Map duration to proper ms values
@@ -135,7 +144,8 @@ export function showToast(title: string, message: string, duration: 'veryshort' 
         'default': 3000,
         'normal': 5000,
         'long': 10000,
-        'verylong': 30000
+        'verylong': 30000,
+        'manual': -1
     };
 
     const durationMs = durationMap[duration];
@@ -182,8 +192,9 @@ export function showToast(title: string, message: string, duration: 'veryshort' 
     // Create toast content with header and body
     toastElement.innerHTML = `
         <div class="toast-header">
+            ${icon ? `<i class="bi ${icon} me-2"></i>` : ''}
             <strong class="me-auto">${title}</strong>
-            ${durationMs > 5000 ? '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>' : ''}
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
             ${message}
@@ -331,7 +342,10 @@ export function setMenuTheme(theme: 'auto' | 'toggle' | ThemeKey, quiet: boolean
     setMetaColor('theme', themeConfig.metaTheme);
     
     logConsole(`Menu theme set to: ${theme}`, 'debug');
-    if (!quiet) showToast(i18next.t('toasts.global.title'), i18next.t(`toasts.global.theme${theme}`));
+    if (!quiet) showToast({
+        title: i18next.t('toasts.global.title'),
+        message: i18next.t(`toasts.global.theme${theme}`)
+    });
 }
 
 export function getMenuTheme(): string {
@@ -485,7 +499,12 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
                     link.click();
                 } else if (btn.value === 'copy') {
                     navigator.clipboard.writeText(content as string);
-                    showToast(i18next.t('toasts.domutils.title'), i18next.t('toasts.domutils.textcopied'), 'default', 'success');
+                    showToast({
+                        title: i18next.t('toasts.domutils.title'),
+                        message: i18next.t('toasts.domutils.textcopied'),
+                        style: 'success',
+                        icon: 'bi-clipboard-check'
+                    });
                 }
                 
                 // Clear the timeout if a button is clicked
@@ -532,7 +551,13 @@ export function setMetaColor(type: 'color' | 'theme', value: string): void {
 
 export async function requestNotificationPermission(): Promise<NotificationPermission> {
     if (!('Notification' in window)) {
-        showToast(i18next.t('toasts.domutils.title'), i18next.t('toasts.domutils.notificationsunsupported'), 'long', 'danger');
+        showToast({
+            title: i18next.t('toasts.domutils.title'),
+            message: i18next.t('toasts.domutils.notificationsunsupported'),
+            duration: 'long',
+            style: 'danger',
+            icon: 'bi-exclamation-triangle-fill'
+        });
         return Promise.reject('Notifications not supported');
     }
 
@@ -625,7 +650,13 @@ export function createScannerOverlay() {
         cardBody.appendChild(closeButton);
     }).catch((error) => {
         logConsole(error, 'error');
-        showToast(i18next.t('toasts.domutils.title'), i18next.t('toasts.domutils.qrscannerfailed', { 0: error }), 'long', 'danger');
+        showToast({
+            title: i18next.t('toasts.domutils.title'),
+            message: i18next.t('toasts.domutils.qrscannerfailed', { 0: error }),
+            duration: 'long',
+            style: 'danger',
+            icon: 'bi-exclamation-triangle-fill'
+        });
         if (html5QrCode.isScanning) {
             html5QrCode.stop();
         }

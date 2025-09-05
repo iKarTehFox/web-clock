@@ -91,7 +91,13 @@ function getWeatherIcon(iconCode: string): string {
 export function getLocation(): Promise<GeolocationCoordinates> {
     if (!navigator.geolocation) {
         const errorMessage = i18next.t('toasts.weatherutils.gpsunsupported');
-        showToast(i18next.t('toasts.weather.title'), errorMessage, 'long', 'danger');
+        showToast({
+            title: i18next.t('toasts.weather.title'),
+            message: errorMessage,
+            duration: 'long',
+            style: 'danger',
+            icon: 'bi-exclamation-triangle-fill'
+        });
         throw new Error('Geolocation is not supported by this browser.');
     }
 
@@ -105,7 +111,13 @@ export function getLocation(): Promise<GeolocationCoordinates> {
             },
             (error) => {
                 const errorMessage = i18next.t('toasts.weatherutils.gpserror', { 0: error });
-                showToast(i18next.t('toasts.weather.title'), errorMessage, 'default', 'danger');
+                showToast({
+                    title: i18next.t('toasts.weather.title'),
+                    message: errorMessage,
+                    duration: 'default',
+                    style: 'danger',
+                    icon: 'bi-exclamation-triangle-fill'
+                });
                 reject(error);
             },
             { enableHighAccuracy: true }
@@ -214,7 +226,13 @@ async function handleWeatherUpdate(settings: WeatherSettings): Promise<void> {
     } catch (error) {
         stopWeather();
         logConsole(`Failed while handling weather data: ${error}`, 'error');
-        showToast(i18next.t('toasts.weather.title'), i18next.t('toasts.weatherutils.weathererror'), 'normal', 'danger');
+        showToast({
+            title: i18next.t('toasts.weather.title'),
+            message: i18next.t('toasts.weatherutils.weathererror'),
+            duration: 'normal',
+            style: 'danger',
+            icon: 'bi-exclamation-triangle-fill'
+        });
     }
 }
 
