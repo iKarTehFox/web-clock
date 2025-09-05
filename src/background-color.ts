@@ -5,6 +5,33 @@ import { logConsole, setMetaColor } from './utils/dom-utils';
 let fadeIntervalID: NodeJS.Timeout;
 const bodyElement = document.body;
 
+// Check for reduced motion preference
+let prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Function to update transition based on reduced motion preference
+function updateBackgroundTransition(): void {
+    if (prefersReducedMotion) {
+        bodyElement.style.transition = 'none';
+        menu.fadetransrange.disabled = true;
+        menu.faderesetbutton.disabled = true;
+        logConsole('Background transitions disabled due to reduced motion preference', 'debug');
+    } else {
+        const fadetime = menu.fadetransrange.value;
+        bodyElement.style.transition = `background-color ${fadetime}s ease-in-out`;
+        menu.fadetransrange.disabled = false;
+        menu.faderesetbutton.disabled = false;
+        logConsole(`Background transition set to: ${fadetime}s`, 'debug');
+    }
+}
+
+// Listen for changes to reduced motion preference
+const motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+motionMediaQuery.addEventListener('change', (e) => {
+    prefersReducedMotion = e.matches;
+    logConsole(`Reduced motion preference changed: ${prefersReducedMotion ? 'enabled' : 'disabled'}`, 'info');
+    updateBackgroundTransition();
+});
+
 export function startColorFade() {
     logConsole('Color fade started', 'info');
     const colors = {
@@ -27,8 +54,7 @@ export function startColorFade() {
     // Initial color update
     bodyElement.style.backgroundColor = colors[colorNames[currentIndex]];
 
-    const fadetime = menu.fadetransrange.value; // Get fade transition length value when restarted
-    bodyElement.style.transition = `background-color ${fadetime}s ease-in-out`;
+    updateBackgroundTransition();
     menu.colorbadge.textContent = colors[colorNames[currentIndex]]; // Initial color badge update
 
     fadeIntervalID = setInterval(() => {
@@ -138,7 +164,7 @@ menu.colormodeselect.addEventListener('change', () => {
 // Fade transition range listener
 menu.fadetransrange.addEventListener('input', () => {
     const value = menu.fadetransrange.value;
-    bodyElement.style.transition = `background-color ${value}s ease-in-out`;
+    updateBackgroundTransition();
     menu.fadetransrangelabel.textContent = value + 's';
     logConsole(`Fade transition length set to: ${value}s`, 'debug');
 });

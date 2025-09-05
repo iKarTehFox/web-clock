@@ -153,6 +153,10 @@ body {
   border-radius: $border-radius;
   background-color: #212529;
   transition: width 0.75s;
+  
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
 
 // Weather widget
