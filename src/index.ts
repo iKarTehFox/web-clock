@@ -10,6 +10,7 @@ import './countdown';
 import './utils/kbd-shortcuts';
 import './utils/debug-console';
 import './utils/debugUI';
+import './system/FloatingWindow';
 import { applyURLParams } from './utils/url-params';
 import { populateTimeZoneSelect } from './time';
 import { Tooltip } from 'bootstrap';

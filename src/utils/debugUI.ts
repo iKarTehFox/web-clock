@@ -4,6 +4,7 @@ import { debug, dtdisplay, panel } from './dom-elements';
 import { showToast } from './dom-utils';
 import { on, AppEvents } from '../system/event-bus';
 import { getElement } from './dom-selectors';
+import { FloatingWindow } from '../system/FloatingWindow';
 
 // Constants
 const loadTime = new Date().toLocaleString();
@@ -159,6 +160,30 @@ function initializeDebugUI(): void {
 
     debug.clearlsbtn.addEventListener('dblclick', () => {
         window.location.reload(); // Quick reload option
+    });
+
+    debug.floatingwindowbtn.addEventListener('click', () => {
+        const devFloatingWindow = new FloatingWindow({
+            title: 'FloatingWindow Demo',
+            groupName: 'dev',
+            content: '<p>This is a FloatingWindow.</p>',
+            tabs: [
+                {
+                    id: 'tab1',
+                    label: 'Tab 1',
+                    content: '<p>Content for Tab 1</p>'
+                },
+                {
+                    id: 'tab2',
+                    label: 'Tab 2',
+                    content: '<p>Content for Tab 2</p>'
+                }
+            ],
+            position: {x: 100, y: 100},
+            maxWindows: 1,
+            closeAction: 'destroy'
+        });
+        devFloatingWindow.show();
     });
 
     // i18n langauage change listener

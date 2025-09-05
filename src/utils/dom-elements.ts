@@ -159,6 +159,7 @@ export const debug = {
     clearlsbtn: getElement<HTMLButtonElement>('debugClearLS'),
     container: getElement<HTMLDivElement>('debuggingContainer'),
     devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
+    floatingwindowbtn: getElement<HTMLButtonElement>('floatingWindowDev'),
     info:  getElement<HTMLParagraphElement>('debugInfo'),
     rmclockbtn: getElement<HTMLButtonElement>('debugRmClock'),
     toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]')
