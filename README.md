@@ -2,7 +2,7 @@
 [![forthebadge](https://forthebadge.com/images/badges/works-on-my-machine-1.svg)](https://forthebadge.com)
 
 # Online Web Clock
-> **An online, digital clock web app built with Bootstrap 5.3.3, focused on customizability.  
+> **An online, digital clock web app built with Bootstrap 5.3.8 and Webpack, focused on customizability.  
 Inspired by [online-clock](https://github.com/tmasri/online-clock) by [Tareq Al-Masri](https://github.com/tmasri).**
 
 **Website:** [View in your browser!](https://online-clock.pages.dev)
@@ -55,7 +55,7 @@ Firefox and other non-Chromium browsers may experience inconsistent clock update
 - **Webpack** ([Link](https://webpack.js.org/)): Licensed under MIT License
   - Copyright JS Foundation and other contributors  
 
-Each license can be found in the code's respective files or website.
+This is a non-exhaustive list of OSS used in this project. It does not include every single piece of software. Each license can be found in the project's respective path or website.
  
 # Acknowledgements (Fonts)
 - **Dancing Script** ([Link](https://fonts.google.com/specimen/Dancing+Script)): Licensed under SIL Open Font License 1.1
@@ -85,3 +85,7 @@ Each license can be found in the code's respective files or website.
 - **Ubuntu Mono** ([Link](https://fonts.google.com/specimen/Ubuntu+Mono)): Licensed under Ubuntu Font License 1.0
  
  Each license can be found in their respective folders in /src/fonts
+
+<hr>
+
+#### Copyright (c) 2023-2025 Diego Perez (iKarTehFox)
