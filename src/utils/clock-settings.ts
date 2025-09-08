@@ -61,7 +61,7 @@ export function getSecondsVis(): string {
 }
 
 export function getDateFormat(): string {
-    return menu.dateformselect.value;
+    return menu.dateformselect.options[menu.dateformselect.selectedIndex].id;
 }
 
 export function getDateAlign(): string {
@@ -203,7 +203,7 @@ export function setSecondsVis(mode: string, trigger = false): void {
 }
 
 export function setDateFormat(format: string, trigger = false): void {
-    menu.dateformselect.value = format;
+    menu.dateformselect.selectedIndex = Array.from(menu.dateformselect.options).findIndex(option => option.id === format);
     if (trigger) menu.dateformselect.dispatchEvent(new Event('change', {bubbles: true}));
 }
 

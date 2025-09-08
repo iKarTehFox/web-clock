@@ -2,7 +2,7 @@
 	"clockConfig": {
 		"clockDisplay": "words",
 		"secondsVis": "sviN",
-		"dateFormat": "DDDD",
+		"dateFormat": "dfLocFullDate",
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",
@@ -28,5 +28,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "This is my favorite way to theme the clock, especially when testing and debugging! It's become a habit. -iKarTehFox",
-	"version": 10
+	"version": "v1.8.0"
 }

@@ -151,13 +151,16 @@ export default {
                         }
                     },
                     'datedisplay': {
-                        'title': 'Date Display',
+                        'title': 'Mostrar Fecha',
                         'option': {
                             'localized': {
                                 'title': 'Localizado',
                             },
                             'standard': {
                                 'title': 'Estándar',
+                                'quarteryear': 'q\'T\', yyyy',
+                                'dayofyear': '\'Día\' o \'de\' yyyy',
+                                'weekday': '\'Semana\' W, \'Día\' o'
                             },
                             'off': 'Apagar'
                         }

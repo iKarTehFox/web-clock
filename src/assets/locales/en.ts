@@ -157,7 +157,10 @@ export default {
                                 'title': 'Localized'
                             },
                             'standard': {
-                                'title': 'Standard'
+                                'title': 'Standard',
+                                'quarteryear': '\'Q\'q, yyyy',
+                                'dayofyear': '\'Day\' o \'of\' yyyy',
+                                'weekday': '\'Week\' W, \'Day\' o'
                             },
                             'off': 'Off'
                         }

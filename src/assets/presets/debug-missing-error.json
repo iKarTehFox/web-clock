@@ -18,5 +18,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "This file has no clockConfig subkey.",
-	"version": 10
+	"version": "v1.8.0"
 }

@@ -2,7 +2,7 @@
 	"clockConfig": {
 		"clockDisplay": "words",
 		"secondsVis": "sviN",
-		"dateFormat": "DDD",
+		"dateFormat": "dfLocFullMon",
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",
@@ -28,5 +28,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "Enjoy keeping your AMOLED screens safe with this preset!",
-	"version": 10
+	"version": "v1.8.0"
 }

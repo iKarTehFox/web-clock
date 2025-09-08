@@ -6,6 +6,7 @@ import * as clock from './time-help';
 import { timeRefresh } from './utils/debug';
 import { match, P } from 'ts-pattern';
 import i18next from 'i18next';
+import { once } from './system/event-bus';
 
 // Default modes
 export let cMode = '0';
@@ -164,7 +165,7 @@ function updateTime(): void {
     }
 
     setClockDisplay([displayHour, displayMinute, displaySecond, displayIndicator]);
-    updateDate();
+    updateDate(time);
 }
 
 // Clock DOM update
@@ -240,25 +241,42 @@ export function populateTimeZoneSelect() {
     });
 }
 
-export function updateDate() {
-    const time = getLuxNow('obj') as luxon.DateTime;
-    const newDate = time.toFormat(dateFormat);
+export function refreshDateFormatOptions(timeObj: luxon.DateTime = getLuxNow('obj') as luxon.DateTime) {
+    Array.from(menu.dateformselect.querySelectorAll('option')).forEach((option: HTMLOptionElement) => {
+        if (option.value !== '') {
+            option.textContent = timeObj.toFormat(option.value);
+        }
+    });
+}
+
+export function updateDate(timeObj: luxon.DateTime = getLuxNow('obj') as luxon.DateTime): void {
+    const newDate = timeObj.toFormat(dateFormat);
     if (lastDate === newDate) return;
 
     dtdisplay.date.textContent = newDate;
     lastDate = newDate;
-
-    Array.from(menu.dateformselect.querySelectorAll('option')).forEach((option: HTMLOptionElement) => {
-        if (option.value !== '') {
-            option.textContent = time.toFormat(option.value);
-        }
-    });    
+    refreshDateFormatOptions(timeObj);   
 }
+
 // Initial update, then start intervals
-const time = getLuxNow('obj') as luxon.DateTime;
+const initTime = getLuxNow('obj') as luxon.DateTime;
+clock.updateFavicon(initTime.toFormat('h'));
 updateTime();
-updateDate();
-clock.updateFavicon(time.toFormat('h'));
+
+// i18n listener
+i18next.on('languageChanged', () => {
+    // Wait for DOM updates from i18n first
+    once('i18nFinishedUpdate', () => {
+        // Update dateFormat to match the newly translated value of the selected option
+        const selectedOption = menu.dateformselect.options[menu.dateformselect.selectedIndex];
+        if (selectedOption && selectedOption.value !== '') {
+            dateFormat = selectedOption.value;
+            logConsole(`Updated dateFormat to translated value: ${dateFormat}`, 'debug');
+        }
+        
+        refreshDateFormatOptions();
+    });
+});
 
 // Sync clock to system time function
 let clockInterval: NodeJS.Timeout;

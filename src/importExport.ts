@@ -8,6 +8,7 @@ import axios from 'axios';
 import QRCode from 'qrcode';
 import { match } from 'ts-pattern';
 import i18next from 'i18next';
+import { versionNumberString } from './utils/update-notify';
 
 function getSettings() {
     return {
@@ -15,7 +16,7 @@ function getSettings() {
         fontConfig: getFontConfig(),
         colorTheme: getColorThemeConfig(),
         exportTimestamp: luxon.DateTime.now().toFormat('FFFF'),
-        version: 11
+        version: versionNumberString
     };
 }
 

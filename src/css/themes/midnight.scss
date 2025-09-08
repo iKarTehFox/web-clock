@@ -501,3 +501,74 @@ $midnight-text-muted: #6c7793;
     }
   }
 }
+
+/* Alert customization for midnight theme */
+[data-bs-theme="midnight"] {
+  .alert {
+    --bs-alert-border-radius: 0.375rem;
+    --bs-alert-margin-bottom: 1rem;
+    --bs-alert-padding-x: 1rem;
+    --bs-alert-padding-y: 0.75rem;
+    
+    border: 1px solid transparent;
+    border-radius: var(--bs-alert-border-radius);
+    margin-bottom: var(--bs-alert-margin-bottom);
+    padding: var(--bs-alert-padding-y) var(--bs-alert-padding-x);
+  }
+
+  .alert-primary {
+    --bs-alert-color: #b6a3e8;
+    --bs-alert-bg: rgba(111, 66, 193, 0.1);
+    --bs-alert-border-color: rgba(111, 66, 193, 0.2);
+    --bs-alert-link-color: #cfb3ff;
+  }
+
+  .alert-secondary {
+    --bs-alert-color: #9ca3af;
+    --bs-alert-bg: rgba(73, 80, 87, 0.1);
+    --bs-alert-border-color: rgba(73, 80, 87, 0.2);
+    --bs-alert-link-color: #b8bcc8;
+  }
+
+  .alert-success {
+    --bs-alert-color: #75d9a4;
+    --bs-alert-bg: rgba(25, 135, 84, 0.1);
+    --bs-alert-border-color: rgba(25, 135, 84, 0.2);
+    --bs-alert-link-color: #8de4b8;
+  }
+
+  .alert-danger {
+    --bs-alert-color: #ea868f;
+    --bs-alert-bg: rgba(220, 53, 69, 0.1);
+    --bs-alert-border-color: rgba(220, 53, 69, 0.2);
+    --bs-alert-link-color: #ef9ca4;
+  }
+
+  .alert-warning {
+    --bs-alert-color: #ffda6a;
+    --bs-alert-bg: rgba(255, 193, 7, 0.1);
+    --bs-alert-border-color: rgba(255, 193, 7, 0.2);
+    --bs-alert-link-color: #ffe087;
+  }
+
+  .alert-info {
+    --bs-alert-color: #6ed7f5;
+    --bs-alert-bg: rgba(13, 202, 240, 0.1);
+    --bs-alert-border-color: rgba(13, 202, 240, 0.2);
+    --bs-alert-link-color: #87def7;
+  }
+
+  .alert-light {
+    --bs-alert-color: var(--midnight-text-color);
+    --bs-alert-bg: var(--midnight-bg-medium);
+    --bs-alert-border-color: var(--midnight-border);
+    --bs-alert-link-color: #ffffff;
+  }
+
+  .alert-dark {
+    --bs-alert-color: var(--midnight-text-muted);
+    --bs-alert-bg: var(--midnight-bg-darker);
+    --bs-alert-border-color: rgba(44, 62, 103, 0.5);
+    --bs-alert-link-color: #adb5bd;
+  }
+}

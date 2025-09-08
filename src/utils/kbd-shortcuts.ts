@@ -11,6 +11,7 @@ function generateShortcutsHelp(): HTMLDivElement {
     const shortcuts = {
         '1-9': 'Load built-in presets 1-9',
         'c': 'Show/hide countdown',
+        'd': 'Show/hide debug console',
         'f': 'Toggle fullscreen',
         'h': 'Show this help',
         'm': 'Toggle menu',
@@ -23,13 +24,17 @@ function generateShortcutsHelp(): HTMLDivElement {
     const div = document.createElement('div');
     
     for (const [key, description] of Object.entries(shortcuts)) {
+        // Skip debug console shortcut if not in debug mode
+        if (key === 'd' && !debugMode) continue;
+
         const line = document.createElement('div');
         line.className = 'mb-1 d-flex justify-content-center';
         line.innerHTML = `<kbd>${key}</kbd>: ${description}`;
         div.appendChild(line);
     }
 
-    const note = document.createElement('p');
+    const note = document.createElement('div');
+    note.className = 'alert alert-info mt-3';
     note.textContent = 'Keyboard shortcuts are ignored while help is open.';
     div.appendChild(note);
     

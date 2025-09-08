@@ -155,24 +155,23 @@
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.datetime.setting.datedisplay.title"></h6>
                                 <select class="form-select" id="dateFormatSelect">
                                     <optgroup data-i18n-label="menu.section.datetime.setting.datedisplay.option.localized.title">
-                                        <option value="D"></option>
-                                        <option value="DD"></option>
-                                        <option value="DDD"></option>
-                                        <option value="DDDD"></option>
+                                        <option id="dfLocNumDate" value="D"></option>
+                                        <option id="dfLocAbbMon" value="DD"></option>
+                                        <option id="dfLocFullMon" value="DDD"></option>
+                                        <option id="dfLocFullDate" value="DDDD"></option>
                                     </optgroup>
                                     <optgroup data-i18n-label="menu.section.datetime.setting.datedisplay.option.standard.title">
-                                        <option value="MMMM d"></option>
-                                        <option value="MMM d"></option>
-                                        <option value="d MMMM"></option>
-                                        <option value="d MMM"></option>
-                                        <option value="MMMM yyyy"></option>
-                                        <option value="yyyy"></option>
-                                        <!-- May or may not localize these -->
-                                        <option value="'Q'q, yyyy"></option>
-                                        <option value="'Day' o 'of' yyyy"></option>
-                                        <option value="'Week' W, 'Day' o"></option>
+                                        <option id="dfStaFullMonthDay" value="MMMM d"></option>
+                                        <option id="dfStaAbbMonthDay" value="MMM d"></option>
+                                        <option id="dfStaDayFullMonth" value="d MMMM"></option>
+                                        <option id="dfStaDayAbbMonth" value="d MMM"></option>
+                                        <option id="dfStaFullMonthYear" value="MMMM yyyy"></option>
+                                        <option id="dfStaYear" value="yyyy"></option>
+                                        <option id="dfStaQuarterYear" data-i18n-value="menu.section.datetime.setting.datedisplay.option.standard.quarteryear"></option>
+                                        <option id="dfStaDayOfYear" data-i18n-value="menu.section.datetime.setting.datedisplay.option.standard.dayofyear"></option>
+                                        <option id="dfStaWeekDay" data-i18n-value="menu.section.datetime.setting.datedisplay.option.standard.weekday"></option>
                                     </optgroup>
-                                    <option value="" data-i18n="menu.section.datetime.setting.datedisplay.option.off"></option>
+                                    <option id="dfOff" value="" data-i18n="menu.section.datetime.setting.datedisplay.option.off"></option>
                                 </select>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.datetime.setting.datealignment.title"></h6>
                                 <div class="btn-group" role="group" data-i18n-aria-label="arialabel.datepositionbuttongroup">

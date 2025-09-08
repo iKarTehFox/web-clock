@@ -5,6 +5,7 @@ export const AppEvents = {
     SETTINGS_LOCKED: 'settingsLocked',
     API_WIDGET_REMOVED: 'apiWidgetRemoved',
     TOAST_POSITION_CHANGED: 'toastPositionChanged',
+    I18N_FINISHED_UPDATE: 'i18nFinishedUpdate',
 } as const;
 
 // Type-safe event data interface
@@ -14,6 +15,7 @@ interface EventDataMap {
     [AppEvents.SETTINGS_LOCKED]: { state: boolean };
     [AppEvents.API_WIDGET_REMOVED]: { widgetId: string };
     [AppEvents.TOAST_POSITION_CHANGED]: { position: 'topleft' | 'topmiddle' | 'bottomleft' | 'bottommiddle' | 'bottomright' };
+    [AppEvents.I18N_FINISHED_UPDATE]: { language: string };
 }
 
 // Dispatch event function

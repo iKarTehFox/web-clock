@@ -2,7 +2,7 @@
 	"clockConfig": {
 		"clockDisplay": "decimal",
 		"secondsVis": "sviN",
-		"dateFormat": "DD",
+		"dateFormat": "dfLocAbbMon",
 		"dateAlign": "dpoC",
 		"borderMode": "btyB",
 		"borderStyle": "solid",
@@ -28,5 +28,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "Minimalism or maximalism? I choose optimism!",
-	"version": 10
+	"version": "v1.8.0"
 }

@@ -2,7 +2,7 @@
 	"clockConfig": {
 		"clockDisplay": "decimal",
 		"secondsVis": "sviD",
-		"dateFormat": "D",
+		"dateFormat": "dfLocNumDate",
 		"dateAlign": "dpoL",
 		"borderMode": "btyB",
 		"borderStyle": "solid",
@@ -28,5 +28,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "This file has borderMode set to btyB and timeBar set to tbarSec, which are incompatible with eachother.",
-	"version": 10
+	"version": "v1.8.0"
 }

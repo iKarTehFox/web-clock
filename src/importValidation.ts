@@ -1,12 +1,13 @@
 import { match } from 'ts-pattern';
 import { createBsModal, logConsole } from './utils/dom-utils';
 import i18next from 'i18next';
+import { versionNumberString } from './utils/update-notify';
 
 // Value constraints
 export const valid = {
     CD: ['binary', 'octal', 'decimal', 'hexa', 'emoji', 'roman', 'words', 'unixmillis', 'unixsec', 'unixcountdown', 'se_valentines', 'se_christmas', 'se_newyears', 'ii_christmas', 'ii_weekend', 'ii_leapyear'],
     SV: ['sviD', 'sviN'],
-    DF: ['D', 'DD', 'DDD', 'DDDD', 'MMMM d', 'MMM d', 'd MMMM', 'd MMM', 'MMMM yyyy', 'yyyy', '\'Q\'q, yyyy', '\'Day\' o \'of\' yyyy', '\'Week\' W, \'Day\' o', ''],
+    DF: ['dfLocNumDate', 'dfLocAbbMon', 'dfLocFullMon', 'dfLocFullDate', 'dfStaFullMonthDay', 'dfStaAbbMonthDay', 'dfStaDayFullMonth', 'dfStaDayAbbMonth', 'dfStaFullMonthYear', 'dfStaYear', 'dfStaQuarterYear', 'dfStaDayOfYear', 'dfStaWeekDay', 'dfOff'],
     DA: ['dpoL', 'dpoC', 'dpoR'],
     BM: ['btyD', 'btyR', 'btyB'],
     BS: ['solid', 'dashed', 'dotted', 'double'],
@@ -23,7 +24,7 @@ export const valid = {
     TCM: ['tcovD', 'tcovO'],
     BIS: ['', 'auto', 'cover', 'stretch'],
     BIB: ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    Ver: [10, 11]
+    Ver: [versionNumberString]
 };
 
 // Error handling
