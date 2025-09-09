@@ -15,12 +15,15 @@ import { applyURLParams } from './utils/url-params';
 import { populateTimeZoneSelect } from './time';
 import { Tooltip } from 'bootstrap';
 import { initDebugConsole } from './utils/debug-console';
+import { on } from './system/event-bus';
+import { initializeTimezoneWindows } from './timezone-windows';
 
 // Functions to run when DOM has loaded
-window.addEventListener('DOMContentLoaded', () => {
+on('domLoaded', () => {
     applyURLParams();
     populateTimeZoneSelect(); // This might be performance hungry...
     initDebugConsole();
+    initializeTimezoneWindows();
 
     // Initialize Bootstrap tooltips
     const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));

@@ -1,6 +1,7 @@
 import { match } from 'ts-pattern';
 import { devcon, menu, panel, stopwatch } from './utils/dom-elements';
 import { logConsole } from './utils/dom-utils';
+import { once } from './system/event-bus';
 
 let timeInterval: NodeJS.Timeout;
 let running: boolean = false;
@@ -184,7 +185,7 @@ stopwatch.obutton.addEventListener('click', () => {
 });
 
 // Click outside to close stopwatch
-document.addEventListener('DOMContentLoaded', function() {
+once('domLoaded', () => {
     document.addEventListener('click', function(e) {
         const target = e.target as HTMLElement;
         const isMenuRelated = menu.container.contains(target) || 

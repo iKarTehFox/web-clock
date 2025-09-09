@@ -56,7 +56,7 @@
                                 <input type="text" id="dev-console-input" class="form-control" maxlength="150" data-i18n-placeholder="devcon.input.placeholder">
                                 <button class="btn btn-outline-secondary" type="button" id="dev-console-submit" data-i18n="devcon.input.execute"></button>
                             </div>
-                            <span class="mt-1" id="subtext-light" data-i18n="devcon.input.tip"></span>
+                            <span class="mt-1 subtext-light" data-i18n="devcon.input.tip"></span>
                         </div>
                         
                         <!-- Logs tab -->
@@ -105,6 +105,9 @@
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.datetime.setting.timezone.title"></h6>
                                 <select class="form-select" id="timeZoneSelect">
                                 </select>
+                                <h6 class="mb-1 mt-2" data-i18n="menu.section.datetime.setting.timezonewindows.title"></h6>
+                                <button class="btn btn-outline-primary mb-1" id="openTimezoneWindowBtn"></button>
+                                <p class="subtext-light" data-i18n="menu.section.datetime.setting.timezonewindows.subtext"></p>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.datetime.setting.displaysystem.title"></h6>
                                 <select class="form-select" id="timeMethodSelect">
                                     <optgroup label="Radix Systems" data-i18n-label="menu.section.datetime.setting.displaysystem.option.radix.title">
@@ -217,7 +220,7 @@
                                     <input class="form-check-input" type="checkbox" name="legacy-refresh-checkbox" id="legacyRefreshMethod">
                                     <label class="form-check-label" for="legacyRefreshMethod" data-i18n="menu.section.datetime.setting.timerefreshmethod.label"></label>
                                 </div>
-                                <p id="subtext-light" data-i18n="menu.section.datetime.setting.timerefreshmethod.description"></p>
+                                <p class="subtext-light" data-i18n="menu.section.datetime.setting.timerefreshmethod.description"></p>
                             </div>
                         </div>
                     </div>
@@ -485,7 +488,7 @@
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.weather.setting.widgetpos.title"></h6>
                                 <button type="button" class="btn btn-outline-primary mb-1" data-bs-toggle="button" id="weatherMoveToggle" data-i18n="menu.section.weather.setting.widgetpos.option.toggle" disabled></button>
                                 <button type="button" class="btn btn-outline-warning mb-1" id="weatherMoveReset" data-i18n="menu.section.weather.setting.widgetpos.option.reset" disabled></button>
-                                <p id="subtext-light" data-i18n="menu.section.weather.setting.widgetpos.option.description"></p>
+                                <p class="subtext-light" data-i18n="menu.section.weather.setting.widgetpos.option.description"></p>
                                 <p id="weatherPosLabel" class="d-none"></p>
                                 <p class="mb-1 mt-2"><a href="/privacy.html" data-i18n="menu.section.weather.setting.privacy"></a></p>
                             </div>
@@ -518,7 +521,7 @@
                                     <input class="form-check-input" type="checkbox" id="panelVisible" checked>
                                     <label class="form-check-label" for="panelVisible" data-i18n="menu.section.displayoptions.setting.panelvisibility.option.label"></label>
                                 </div>
-                                <p class="mb-2" id="subtext-light" data-i18n="menu.section.displayoptions.setting.panelvisibility.option.description"></p>
+                                <p class="mb-2 subtext-light" data-i18n="menu.section.displayoptions.setting.panelvisibility.option.description"></p>
                                 <hr>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.displayoptions.setting.tabtitle.title"></h6>
                                 <div class="form-check">
@@ -565,7 +568,7 @@
                                         <input type="radio" class="btn-check preset-color" name="preset-color-radio" id="bootstrapdark2" autocomplete="off" data-color="#313539">
                                         <label class="btn btn-outline-primary" for="bootstrapdark2" data-bs-toggle="tooltip" data-i18n-data-bs-title="menu.section.debugging.setting.devcolors.option.bootstrapdark2"><div class="color-block" style="background-color: #313539;"></div></label>
                                     </div>
-                                    <p class="mb-1 mt-2" id="subtext-light" data-i18n="menu.section.debugging.setting.devcolors.option.description"></p>
+                                    <p class="mb-1 mt-2 subtext-light" data-i18n="menu.section.debugging.setting.devcolors.option.description"></p>
                                 </div>
                                 <hr>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.debugging.setting.settings.title"></h6>
@@ -613,7 +616,7 @@
                                 <hr>
                                 <h6 class="mb-1" data-i18n="menu.section.importexport.setting.presets.title">Built-in presets</h6>
                                 <div id="jsonPresetsContainer"></div>
-                                <p class="mb-1 mt-2" id="subtext-light" data-i18n-html="menu.section.importexport.setting.presets.description"></p>
+                                <p class="mb-1 mt-2 subtext-light" data-i18n-html="menu.section.importexport.setting.presets.description"></p>
                                 <hr>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.importexport.setting.exportsettings.title"></h6>
                                 <div class="btn-group">
@@ -626,7 +629,7 @@
                                         <li><button class="dropdown-item btn" id="jsonExportQrBtn" data-i18n="menu.section.importexport.setting.exportsettings.option.genqrcode"></button></li>
                                     </ul>
                                 </div>
-                                <p class="mb-1 mt-2" id="subtext-light" data-i18n="menu.section.importexport.setting.exportsettings.option.description"></p>
+                                <p class="mb-1 mt-2 subtext-light" data-i18n="menu.section.importexport.setting.exportsettings.option.description"></p>
                             </div>
                         </div>
                     </div>

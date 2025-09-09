@@ -80,6 +80,7 @@ export const menu = {
     timebarselect: getElement<HTMLInputElement>('timeBarSelect'),
     timemethodselect: getElement<HTMLSelectElement>('timeMethodSelect'),
     timezoneselect: getElement<HTMLSelectElement>('timeZoneSelect'),
+    timezonewindowbtn: getElement<HTMLButtonElement>('openTimezoneWindowBtn'),
     titlevischeckbox: getElement<HTMLInputElement>('menuTabTitleVisible'),
     versionlabelclk: getElement<HTMLDivElement>('versionLabelClk'),
     weatherapiinput: getElement<HTMLInputElement>('weatherAppIDTextArea'),

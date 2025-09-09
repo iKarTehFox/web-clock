@@ -332,6 +332,13 @@ export function setMenuTheme(theme: 'auto' | 'toggle' | ThemeKey, quiet: boolean
         }
     });
     
+    // Apply theme to all existing floating windows
+    const floatingWindows = document.querySelectorAll('[id^="floating-window"]');
+    floatingWindows.forEach((window) => {
+        const windowElement = window as HTMLElement;
+        windowElement.dataset.bsTheme = theme;
+    });
+    
     // Browser meta
     setMetaColor('theme', themeConfig.metaTheme);
     

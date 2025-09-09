@@ -3,6 +3,7 @@ import { countdown, devcon, menu, panel } from './utils/dom-elements';
 import { logConsole, requestNotificationPermission, showToast } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import i18next from 'i18next';
+import { once } from './system/event-bus';
 
 
 let countdownInterval: NodeJS.Timeout;
@@ -203,7 +204,7 @@ countdown.obutton.addEventListener('click', () => {
 });
 
 // Click outside to close countdown
-document.addEventListener('DOMContentLoaded', function() {
+once('domLoaded', () => {
     document.addEventListener('click', function(e) {
         const target = e.target as HTMLElement;
         const isMenuRelated = menu.container.contains(target) || 

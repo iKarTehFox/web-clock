@@ -2,6 +2,7 @@ import { match } from 'ts-pattern';
 import { createBsModal, logConsole } from '../utils/dom-utils';
 import i18next from 'i18next';
 import { menu } from './dom-elements';
+import { once } from '../system/event-bus';
 
 // Hardcoded values. Change as needed.
 export const versionNumber = '1.8.0';
@@ -112,7 +113,7 @@ export function showUpdateNotification(options: UpdateNotificationOptions = {}) 
     });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+once('domLoaded', () => {
     menu.versionlabelclk.textContent = versionNumberString;
     logConsole(`Updated version label to ${versionNumberString}`, 'debug');
 });

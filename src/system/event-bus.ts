@@ -6,6 +6,7 @@ export const AppEvents = {
     API_WIDGET_REMOVED: 'apiWidgetRemoved',
     TOAST_POSITION_CHANGED: 'toastPositionChanged',
     I18N_FINISHED_UPDATE: 'i18nFinishedUpdate',
+    DOM_LOADED: 'domLoaded'
 } as const;
 
 // Type-safe event data interface
@@ -16,6 +17,7 @@ interface EventDataMap {
     [AppEvents.API_WIDGET_REMOVED]: { widgetId: string };
     [AppEvents.TOAST_POSITION_CHANGED]: { position: 'topleft' | 'topmiddle' | 'bottomleft' | 'bottommiddle' | 'bottomright' };
     [AppEvents.I18N_FINISHED_UPDATE]: { language: string };
+    [AppEvents.DOM_LOADED]: { timestamp: number };
 }
 
 // Dispatch event function
@@ -54,3 +56,8 @@ export function once<T extends keyof EventDataMap>(
 export function off(eventType: string, handler: EventListener): void {
     window.removeEventListener(eventType, handler);
 }
+
+// DOM has now loaded :)
+document.addEventListener('DOMContentLoaded', () => {
+    emit(AppEvents.DOM_LOADED, { timestamp: Date.now() });
+});

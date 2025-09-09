@@ -95,6 +95,13 @@ export default {
                     'timezone': {
                         'title': 'Zona horaria'
                     },
+                    'timezonewindows': {
+                        'title': 'Ventanas de zona horaria',
+                        'openbutton': 'Abrir nuevo reloj ({{0}}/{{1}})',
+                        'subtext': 'Abre una nueva ventana flotante con un reloj en la zona horaria seleccionada. Cambia la configuración de zona horaria arriba para obtener un desfase horario diferente.',
+                        'tooltip': '¡Haz clic derecho para copiar los parámetros de la URL!',
+                        'tooltipcopied': '¡Copiado!'
+                    },
                     'displaysystem': {
                         'title': 'Sistema de visualización',
                         'option': {
@@ -607,7 +614,8 @@ export default {
         'urlparams': {
             'title': 'Parámetros de URL',
             'debugmode': 'Modo de depuración habilitado. La memoria de DevTools aumentará con el tiempo.',
-            'autorestart': 'Reinicio automático configurado a {{0}} segundos.'
+            'autorestart': 'Reinicio automático configurado a {{0}} segundos.',
+            'incompatible': 'Los Ajustes de Bloqueo (lockSettings) y el Modo de Depuración (debugMode) son incompatibles y no se pueden usar juntos. Los Ajustes de Bloqueo han sido desactivados.',
         },
         'weatherutils': {
             'title': 'Clima',

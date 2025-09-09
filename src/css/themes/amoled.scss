@@ -397,6 +397,23 @@ $amoled-text-muted: #888888;
     --bs-btn-close-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
     --bs-btn-close-opacity: 0.5;
   }
+
+  /* Custom minimize and restore buttons for amoled theme */
+  .btn-minimize {
+    --bs-btn-minimize-color: #{$amoled-text-color};
+    --bs-btn-minimize-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'><rect x='2' y='14' width='12' height='2' rx='1'/></svg>");
+    --bs-btn-minimize-opacity: 0.5;
+    --bs-btn-minimize-hover-opacity: 0.75;
+    --bs-btn-minimize-focus-opacity: 1;
+    
+    &:focus {
+      box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+    }
+  }
+  
+  .btn-restore {
+    --bs-btn-restore-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'><rect x='2' y='2' width='12' height='12' rx='2' stroke='%23ffffff' stroke-width='2' fill='none'/></svg>");
+  }
 }
   
 /* Modal customization for amoled theme */

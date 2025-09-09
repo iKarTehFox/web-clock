@@ -9,6 +9,7 @@ import { showUpdateNotification } from './update-notify';
 import i18next from 'i18next';
 import i18n, { applyFallbackTranslations, updateTranslations } from '../assets/locales/i18n';
 import { emit, AppEvents } from '../system/event-bus';
+import { createTimezoneWindowFromURL, type TimezoneWindowURLParams } from '../timezone-windows';
 
 // Check debug mode early - before any other processing
 const earlyUrlParams = new URLSearchParams(window.location.search);
@@ -40,6 +41,28 @@ interface URLParamConfig {
     toastPosition?: 'topleft' | 'topmiddle' | 'bottomleft' | 'bottommiddle' | 'bottomright';
     weatherApi?: string;
     weatherUnits?: 'imperial' | 'metric';
+    // Timezone Windows (up to 2 windows)
+    tz1?: string;
+    tz1ClockMode?: 12 | 24;
+    tz1DateFormat?: string;
+    tz1FontFamily?: string;
+    tz1FontStyle?: 'italic' | 'normal';
+    tz1FontWeight?: 'lighter' | 'normal' | 'bold';
+    tz1PosX?: number;
+    tz1PosY?: number;
+    tz1Width?: number;
+    tz1Height?: number;
+
+    tz2?: string;
+    tz2ClockMode?: 12 | 24;
+    tz2DateFormat?: string;
+    tz2FontFamily?: string;
+    tz2FontStyle?: 'italic' | 'normal';
+    tz2FontWeight?: 'lighter' | 'normal' | 'bold';
+    tz2PosX?: number;
+    tz2PosY?: number;
+    tz2Width?: number;
+    tz2Height?: number;
 }
 
 // Define aliases
@@ -66,7 +89,28 @@ const paramAliases: Record<string, keyof URLParamConfig> = {
     'pre': 'preset',
     'toastPos': 'toastPosition',
     'wApi': 'weatherApi',
-    'wUnit': 'weatherUnits'
+    'wUnit': 'weatherUnits',
+    
+    // Timezone window aliases
+    'tz1CM': 'tz1ClockMode',
+    'tz1DF': 'tz1DateFormat',
+    'tz1FF': 'tz1FontFamily',
+    'tz1FS': 'tz1FontStyle',
+    'tz1FW': 'tz1FontWeight',
+    'tz1X': 'tz1PosX',
+    'tz1Y': 'tz1PosY',
+    'tz1W': 'tz1Width',
+    'tz1H': 'tz1Height',
+
+    'tz2CM': 'tz2ClockMode',
+    'tz2DF': 'tz2DateFormat',
+    'tz2FF': 'tz2FontFamily',
+    'tz2FS': 'tz2FontStyle',
+    'tz2FW': 'tz2FontWeight',
+    'tz2X': 'tz2PosX',
+    'tz2Y': 'tz2PosY',
+    'tz2W': 'tz2Width',
+    'tz2H': 'tz2Height'
 };  
 
 function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfig> {
@@ -118,6 +162,14 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         return false;
     };
 
+    const isValidFontStyle = (value: string): value is 'italic' | 'normal' => {
+        return ['italic', 'normal'].includes(value);
+    };
+
+    const isValidFontWeight = (value: string): value is 'lighter' | 'normal' | 'bold' => {
+        return ['lighter', 'normal', 'bold'].includes(value);
+    };
+
     // Boolean params
     ['debugMode', 'fastRefresh', 'lockSettings', 'noUpdateNoti', 'panelVis', 'tabTitle'].forEach(key => {
         const value = getParamValue(key);
@@ -133,7 +185,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         }
     });
 
-    // Clock mode (special number param with specific validation)
+    // Clock mode
     const clockModeValue = getParamValue('clockMode');
     if (clockModeValue !== null) {
         const parsed = parseFloat(clockModeValue);
@@ -147,7 +199,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         logConsole(`URL param "clockMode" not found. Is type ${typeof params.clockMode}`, 'debug');
     }
 
-    // Auto restart (special number param with range validation)
+    // Auto restart
     const autoRestartValue = getParamValue('autoRestart');
     if (autoRestartValue !== null) {
         const parsed = parseFloat(autoRestartValue);
@@ -161,7 +213,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         logConsole(`URL param "autoRestart" not found. Is type ${typeof params.autoRestart}`, 'debug');
     }
 
-    // Weather coordinates (special number params with coordinate validation)
+    // Weather coordinates
     const weatherLatValue = getParamValue('weatherLat');
     if (weatherLatValue !== null) {
         const parsed = parseFloat(weatherLatValue);
@@ -249,6 +301,79 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         if (value !== null) {
             (params as any)[key] = value;
             logConsole(`URL param "${key}" set to "${value}". Is type ${typeof value}`, 'debug');
+        } else {
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug');
+        }
+    });
+
+    // Timezone window string params (timezone and dateFormat)
+    ['tz1', 'tz1DateFormat', 'tz1Font', 'tz2', 'tz2DateFormat', 'tz2Font'].forEach(key => {
+        const value = getParamValue(key);
+        if (value !== null) {
+            (params as any)[key] = value;
+            logConsole(`URL param "${key}" set to "${value}". Is type ${typeof value}`, 'debug');
+        } else {
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug');
+        }
+    });
+
+    // Timezone window clock modes (12/24)
+    ['tz1ClockMode', 'tz2ClockMode'].forEach(key => {
+        const value = getParamValue(key);
+        if (value !== null) {
+            const parsed = parseFloat(value);
+            if (isValidClockMode(parsed)) {
+                (params as any)[key] = parsed;
+                logConsole(`URL param "${key}" set to "${parsed}". Is type ${typeof parsed}`, 'debug');
+            } else {
+                logConsole(`Invalid ${key} value: "${value}". Must be 12 or 24.`, 'warning');
+            }
+        } else {
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug');
+        }
+    });
+
+    // Timezone window font styles
+    ['tz1FontStyle', 'tz2FontStyle'].forEach(key => {
+        const value = getParamValue(key);
+        if (value !== null) {
+            if (isValidFontStyle(value)) {
+                (params as any)[key] = value;
+                logConsole(`URL param "${key}" set to "${value}". Is type ${typeof value}`, 'debug');
+            } else {
+                logConsole(`Invalid ${key} value: "${value}". Must be "italic" or "normal".`, 'warning');
+            }
+        } else {
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug');
+        }
+    });
+
+    // Timezone window font weights
+    ['tz1FontWeight', 'tz2FontWeight'].forEach(key => {
+        const value = getParamValue(key);
+        if (value !== null) {
+            if (isValidFontWeight(value)) {
+                (params as any)[key] = value;
+                logConsole(`URL param "${key}" set to "${value}". Is type ${typeof value}`, 'debug');
+            } else {
+                logConsole(`Invalid ${key} value: "${value}". Must be "lighter", "normal", or "bold".`, 'warning');
+            }
+        } else {
+            logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug');
+        }
+    });
+
+    // Timezone window positioning (regular number params - any number is valid)
+    ['tz1PosX', 'tz1PosY', 'tz1Width', 'tz1Height', 'tz2PosX', 'tz2PosY', 'tz2Width', 'tz2Height'].forEach(key => {
+        const value = getParamValue(key);
+        if (value !== null) {
+            const parsed = parseFloat(value);
+            if (!isNaN(parsed)) {
+                (params as any)[key] = parsed;
+                logConsole(`URL param "${key}" set to "${parsed}". Is type ${typeof parsed}`, 'debug');
+            } else {
+                logConsole(`Invalid number value for "${key}": "${value}".`, 'warning');
+            }
         } else {
             logConsole(`URL param "${key}" not found. Is type ${typeof (params as any)[key]}`, 'debug');
         }
@@ -381,13 +506,54 @@ export async function applyURLParams() {
     }
     
     // Prevent end-user options modification by removing menu container entirely
-    if (params.lockSettings) {
+    if (params.lockSettings && params.debugMode) {
+        logConsole('lockSettings and debugMode are incompatible. Settings will not be locked.', 'error');
+        showToast({
+            message: i18next.t('toasts.urlparams.incompatible'),
+            title: i18next.t('toasts.urlparams.title'),
+            style: 'danger',
+            icon: 'bi-exclamation-triangle-fill'
+        });
+    } else if (params.lockSettings && !params.debugMode) {
         setLockSettings(true);
         menu.container.remove();
         panel.container.remove();
         emit(AppEvents.SETTINGS_LOCKED, { state: true });
         logConsole('Settings locked - Menu container removed...', 'info');
     }
+
+    // Timezone Windows
+    // Helper function to create timezone window from params
+    const createTimezoneWindowFromParams = (windowNum: 1 | 2) => {
+        const prefix = `tz${windowNum}` as const;
+        const timezone = (params as any)[prefix];
+        
+        if (timezone) {
+            const tzParams: TimezoneWindowURLParams = {
+                timezone,
+                clockMode: (params as any)[`${prefix}ClockMode`],
+                dateFormat: (params as any)[`${prefix}DateFormat`],
+                fontFamily: (params as any)[`${prefix}FontFamily`],
+                fontStyle: (params as any)[`${prefix}FontStyle`],
+                fontWeight: (params as any)[`${prefix}FontWeight`],
+                x: (params as any)[`${prefix}PosX`],
+                y: (params as any)[`${prefix}PosY`],
+                width: (params as any)[`${prefix}Width`],
+                height: (params as any)[`${prefix}Height`]
+            };
+            
+            const windowId = createTimezoneWindowFromURL(tzParams);
+            if (windowId) {
+                logConsole(`Created timezone window ${windowNum} for ${timezone} (ID: ${windowId})`, 'info');
+            } else {
+                logConsole(`Failed to create timezone window ${windowNum} for ${timezone}`, 'warning');
+            }
+        }
+    };
+
+    // Create timezone windows (lockSettings has already been processed above)
+    createTimezoneWindowFromParams(1);
+    createTimezoneWindowFromParams(2);
 
     // Finalize
     emit(AppEvents.URL_PARAMS_LOADED, {timestamp: Date.now()});

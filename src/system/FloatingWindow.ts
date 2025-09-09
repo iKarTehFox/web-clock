@@ -1,5 +1,7 @@
 import { generateId, logConsole } from '../utils/dom-utils';
 import { menu } from '../utils/dom-elements';
+import { lockSettings } from '../utils/debug';
+import i18next from 'i18next';
 
 interface FloatingWindowTab {
     id: string;
@@ -50,9 +52,18 @@ export class FloatingWindow {
     private tabs: Map<string, FloatingWindowTab> = new Map();
     private activeTabId: string | null = null;
     private isValid: boolean = true;
+    private resizeHandle: HTMLDivElement | null = null;
+    private urlParamsGenerator: (() => string) | null = null;
 
     constructor(options: FloatingWindowOptions) {
         this.windowId = generateId('floating-window');
+        
+        // Override options if settings are locked - disable all user interactions
+        if (lockSettings) {
+            options.closable = false;    // Prevent closing windows
+            options.minimizable = false; // Prevent minimizing windows
+            options.resizable = false;   // Prevent resizing windows
+        }
         
         // Handle group management
         if (options.groupName) {
@@ -232,11 +243,16 @@ export class FloatingWindow {
         this.card = document.createElement('div');
         this.card.className = 'card h-100';
 
-        // Create card header (draggable)
+        // Create card header (draggable if settings aren't locked)
         this.header = document.createElement('div');
         this.header.className = 'card-header d-flex justify-content-between align-items-center';
-        this.header.style.cursor = 'grab';
+        this.header.style.cursor = lockSettings ? 'default' : 'grab';
         this.header.style.userSelect = 'none';
+        
+        // Add tooltip for copy functionality
+        if (!lockSettings) {
+            this.header.title = i18next.t('menu.section.datetime.setting.timezonewindows.tooltip');
+        }
 
         // Create title
         this.titleElement = document.createElement('span');
@@ -250,14 +266,13 @@ export class FloatingWindow {
         if (options.minimizable !== false) {
             this.minimizeButton = document.createElement('button');
             this.minimizeButton.type = 'button';
-            this.minimizeButton.className = 'btn btn-sm btn-outline-secondary';
-            this.minimizeButton.innerHTML = '−';
-            this.minimizeButton.style.lineHeight = '1';
+            this.minimizeButton.className = 'btn-minimize';
+            this.minimizeButton.setAttribute('aria-label', 'Minimize');
             this.minimizeButton.addEventListener('click', () => this.toggleMinimize());
             buttonContainer.appendChild(this.minimizeButton);
         }
 
-        // Create close button (Bootstrap style)
+        // Create close button
         if (options.closable !== false) {
             this.closeButton = document.createElement('button');
             this.closeButton.type = 'button';
@@ -277,6 +292,14 @@ export class FloatingWindow {
         // Assemble header
         this.header.appendChild(this.titleElement);
         this.header.appendChild(buttonContainer);
+
+        // Add URL parameter copy functionality (always available, checks lockSettings internally)
+        this.header.addEventListener('contextmenu', (e) => {
+            if (!lockSettings) {
+                e.preventDefault();
+                this.copyURLParamsToClipboard();
+            }
+        });
 
         // Create card body
         this.cardBody = document.createElement('div');
@@ -325,6 +348,11 @@ export class FloatingWindow {
     }
 
     private setupDragFunctionality(position?: { x?: number; y?: number }): void {
+        // Don't set up any drag functionality if settings are locked
+        if (lockSettings) {
+            return;
+        }
+        
         this.header.addEventListener('mousedown', (e) => {
             if (e.target === this.closeButton || e.target === this.minimizeButton) return;
             
@@ -478,9 +506,9 @@ export class FloatingWindow {
     }
 
     private makeResizable(): void {
-        const resizeHandle = document.createElement('div');
-        resizeHandle.className = 'floating-window-resize-handle';
-        Object.assign(resizeHandle.style, {
+        this.resizeHandle = document.createElement('div');
+        this.resizeHandle.className = 'floating-window-resize-handle';
+        Object.assign(this.resizeHandle.style, {
             position: 'absolute',
             bottom: '0',
             right: '0',
@@ -491,7 +519,12 @@ export class FloatingWindow {
             zIndex: '1'
         });
 
-        resizeHandle.addEventListener('mousedown', (e) => {
+        this.resizeHandle.addEventListener('mousedown', (e) => {
+            // Prevent resizing when minimized or settings are locked
+            if (this.isMinimized || lockSettings) {
+                return;
+            }
+            
             e.preventDefault();
             const startX = e.clientX;
             const startY = e.clientY;
@@ -515,7 +548,7 @@ export class FloatingWindow {
             document.addEventListener('mouseup', onMouseUp);
         });
 
-        this.container.appendChild(resizeHandle);
+        this.container.appendChild(this.resizeHandle);
     }
 
     public switchTab(tabId: string): void {
@@ -586,6 +619,13 @@ export class FloatingWindow {
     public hide(): void {
         if (!this.isValid) return;
         this.hideElement(this.container);
+        
+        // Dispatch custom event for window hide
+        const hideEvent = new CustomEvent('windowHidden', { 
+            detail: { windowId: this.windowId, groupName: this.groupName } 
+        });
+        this.container.dispatchEvent(hideEvent);
+        
         logConsole(`Floating window ${this.windowId} hidden`, 'debug');
     }
 
@@ -606,6 +646,11 @@ export class FloatingWindow {
             this.container.style.height = this.originalHeight;
             this.showElementFlex(this.cardBody);
             
+            // Show resize handle if window is resizable and settings aren't locked
+            if (this.resizeHandle && !lockSettings) {
+                this.resizeHandle.style.display = 'block';
+            }
+            
             // Restore tabs visibility based on whether we have tabs
             if (this.tabs.size > 0) {
                 this.showElementFlex(this.tabsNav);
@@ -617,7 +662,8 @@ export class FloatingWindow {
                 this.showElementBlock(this.contentContainer);
             }
             
-            this.minimizeButton.innerHTML = '−';
+            this.minimizeButton.className = 'btn-minimize';
+            this.minimizeButton.setAttribute('aria-label', 'Minimize');
             this.isMinimized = false;
             logConsole(`Floating window ${this.windowId} restored`, 'debug');
         } else {
@@ -626,7 +672,13 @@ export class FloatingWindow {
             this.container.style.height = 'auto';
             this.hideElement(this.cardBody);
             
-            this.minimizeButton.innerHTML = '□';
+            // Hide resize handle when minimized to prevent resize bugs
+            if (this.resizeHandle) {
+                this.resizeHandle.style.display = 'none';
+            }
+            
+            this.minimizeButton.className = 'btn-restore';
+            this.minimizeButton.setAttribute('aria-label', 'Restore');
             this.isMinimized = true;
             logConsole(`Floating window ${this.windowId} minimized`, 'debug');
         }
@@ -653,6 +705,13 @@ export class FloatingWindow {
 
     public destroy(): void {
         if (!this.isValid) return;
+        
+        // Dispatch custom event for window destroy before actually destroying
+        const destroyEvent = new CustomEvent('windowDestroyed', { 
+            detail: { windowId: this.windowId, groupName: this.groupName } 
+        });
+        this.container.dispatchEvent(destroyEvent);
+        
         this.unregisterWindow();
         this.container.remove();
         logConsole(`Floating window ${this.windowId} destroyed${this.groupName ? ` (group: ${this.groupName})` : ''}`, 'debug');
@@ -668,6 +727,43 @@ export class FloatingWindow {
 
     public getGroupName(): string | null {
         return this.groupName;
+    }
+
+    public setURLParamsGenerator(generator: () => string): void {
+        this.urlParamsGenerator = generator;
+    }
+
+    private generateURLParams(): string {
+        if (this.urlParamsGenerator) {
+            return this.urlParamsGenerator();
+        }
+        return '';
+    }
+
+    private async copyURLParamsToClipboard(): Promise<void> {
+        if (lockSettings) {
+            return; // Don't allow copying when locked
+        }
+
+        const urlParams = this.generateURLParams();
+        if (!urlParams) {
+            logConsole('No URL parameters available for this window', 'warning');
+            return;
+        }
+
+        try {
+            await navigator.clipboard.writeText(urlParams);
+            logConsole(`URL parameters copied to clipboard: ${urlParams}`, 'info');
+            
+            // Show a brief visual feedback
+            const originalTitle = this.titleElement.textContent;
+            this.titleElement.textContent = i18next.t('menu.section.datetime.setting.timezonewindows.tooltipcopied');
+            setTimeout(() => {
+                this.titleElement.textContent = originalTitle;
+            }, 1000);
+        } catch (error) {
+            logConsole(`Failed to copy URL parameters to clipboard: ${error}`, 'error');
+        }
     }
 }
 

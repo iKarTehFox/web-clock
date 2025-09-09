@@ -128,7 +128,7 @@ body {
   font-weight: bold;
 }
 
-#subtext-light {
+.subtext-light {
   font-size: smaller;
   font-weight: lighter;
 }
@@ -206,6 +206,68 @@ body {
   @extend %popup-container;
   min-width: 55vw;
   max-height: fit-content;
+}
+
+// Custom minimize button (matches Bootstrap's btn-close styling)
+.btn-minimize {
+  --bs-btn-minimize-width: 1em;
+  --bs-btn-minimize-height: 1em;
+  --bs-btn-minimize-padding-x: 0.25em;
+  --bs-btn-minimize-padding-y: 0.25em;
+  --bs-btn-minimize-color: var(--bs-body-color);
+  --bs-btn-minimize-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'><rect x='2' y='14' width='12' height='2' rx='1'/></svg>");
+  --bs-btn-minimize-opacity: 0.5;
+  --bs-btn-minimize-hover-opacity: 0.75;
+  --bs-btn-minimize-focus-opacity: 1;
+  --bs-btn-minimize-disabled-opacity: 0.25;
+  
+  box-sizing: content-box;
+  width: var(--bs-btn-minimize-width);
+  height: var(--bs-btn-minimize-height);
+  padding: var(--bs-btn-minimize-padding-y) var(--bs-btn-minimize-padding-x);
+  color: var(--bs-btn-minimize-color);
+  background: transparent var(--bs-btn-minimize-bg) center/1em auto no-repeat;
+  border: 0;
+  border-radius: 0.375rem;
+  opacity: var(--bs-btn-minimize-opacity);
+  
+  &:hover {
+    color: var(--bs-btn-minimize-color);
+    text-decoration: none;
+    opacity: var(--bs-btn-minimize-hover-opacity);
+  }
+  
+  &:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    opacity: var(--bs-btn-minimize-focus-opacity);
+  }
+  
+  &:disabled,
+  &.disabled {
+    pointer-events: none;
+    user-select: none;
+    opacity: var(--bs-btn-minimize-disabled-opacity);
+  }
+}
+
+// Restore button variant (for when window is minimized)
+.btn-restore {
+  --bs-btn-restore-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'><rect x='2' y='2' width='12' height='12' rx='2' stroke='%23000' stroke-width='2' fill='none'/></svg>");
+  
+  @extend .btn-minimize;
+  background: transparent var(--bs-btn-restore-bg) center/1em auto no-repeat;
+}
+
+// Dark theme variants
+[data-bs-theme="dark"] {
+  .btn-minimize {
+    --bs-btn-minimize-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'><rect x='2' y='14' width='12' height='2' rx='1'/></svg>");
+  }
+  
+  .btn-restore {
+    --bs-btn-restore-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'><rect x='2' y='2' width='12' height='12' rx='2' stroke='%23fff' stroke-width='2' fill='none'/></svg>");
+  }
 }
 
 // Dark theme support

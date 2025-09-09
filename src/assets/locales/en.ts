@@ -95,6 +95,13 @@ export default {
                     'timezone': {
                         'title': 'Time Zone'
                     },
+                    'timezonewindows': {
+                        'title': 'Timezone Windows',
+                        'openbutton': 'Open new clock ({{0}}/{{1}})',
+                        'subtext': 'Opens a new floating window with a clock in the selected timezone. Change the timezone setting above to get a different timezone offset.',
+                        'tooltip': 'Right click me to copy URL parameters!',
+                        'tooltipcopied': 'Copied!'
+                    },
                     'displaysystem': {
                         'title': 'Display System',
                         'option': {
@@ -607,7 +614,8 @@ export default {
         'urlparams': {
             'title': 'URL Parameters',
             'debugmode': 'Debug mode enabled. DevTools memory will increase over time.',
-            'autorestart': 'Auto restart set to {{0}} seconds.'
+            'autorestart': 'Auto restart set to {{0}} seconds.',
+            'incompatible': 'lockSettings and debugMode are incompatible and cannot be used together. lockSettings has been ignored.'
         },
         'weatherutils': {
             'title': 'Weather',

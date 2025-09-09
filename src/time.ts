@@ -7,6 +7,7 @@ import { timeRefresh } from './utils/debug';
 import { match, P } from 'ts-pattern';
 import i18next from 'i18next';
 import { once } from './system/event-bus';
+import { updateAllTimezoneWindows } from './timezone-windows';
 
 // Default modes
 export let cMode = '0';
@@ -166,6 +167,7 @@ function updateTime(): void {
 
     setClockDisplay([displayHour, displayMinute, displaySecond, displayIndicator]);
     updateDate(time);
+    updateAllTimezoneWindows();
 }
 
 // Clock DOM update
