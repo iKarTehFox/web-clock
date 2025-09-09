@@ -84,7 +84,10 @@ document.addEventListener('keydown', (e) => {
             toggleFullscreen();
         })
         .with('h', () => { // Show help
-            createBsModal('Keyboard shortcuts', generateShortcutsHelp());
+            createBsModal({
+                title: 'Keyboard shortcuts',
+                content: generateShortcutsHelp()
+            });
         })
         .with('m', () => { // Toggle menu
             panel.menubutton.click();

@@ -29,16 +29,16 @@ function showWelcomeModal() {
     logConsole('Showing welcome modal for new user', 'debug', true);
     
     // Show the welcome modal
-    createBsModal(
-        welcomeTitle,
-        descriptionElement,
-        [
+    createBsModal({
+        title: welcomeTitle,
+        content: descriptionElement,
+        buttons: [
             {label: i18next.t('bsmodal.button.gethelp'), className: 'btn btn-info', value: 'help'},
             {label: 'GitHub', className: 'btn btn-secondary', value: 'github'},
             {label: i18next.t('bsmodal.button.getstarted'), className: 'btn btn-primary', value: 'get-started'}
         ],
-        60
-    ).then((result) => {
+        timeoutDelay: 60
+    }).then((result) => {
         match(result)
             .with('help', () => {
                 // Open OWC docs
@@ -89,19 +89,19 @@ export function showUpdateNotification(options: UpdateNotificationOptions = {}) 
     logConsole(`Showing update notification for version ${versionNumber}`, 'debug', true);
   
     // Show the modal
-    createBsModal(
-        customTitle, 
-        descriptionElement, 
-        bypassCheck ? 
+    createBsModal({
+        title: customTitle,
+        content: descriptionElement,
+        buttons: bypassCheck ? 
             [
                 {label: i18next.t('bsmodal.button.releasenotes'), className: 'btn btn-primary', value: 'release-note'}
             ] : 
             [
                 {label: i18next.t('bsmodal.button.dontshowagain'), className: 'btn btn-secondary', value: 'never-show'}, 
                 {label: i18next.t('bsmodal.button.releasenotes'), className: 'btn btn-primary', value: 'release-note'}
-            ], 
-        modalTimeout
-    ).then((result) => {
+            ],
+        timeoutDelay: modalTimeout
+    }).then((result) => {
         match(result)
             .with('release-note', () => {
                 window.open(customReleaseUrl, '_blank');

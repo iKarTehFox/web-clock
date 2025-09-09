@@ -70,7 +70,10 @@ function handleExport(settings: any, type: ExportType, exportTime: luxon.DateTim
         },
         log: () => logConsole(`Settings JSON: ${settingsJSON}`, 'debug'),
         card: () => {
-            createBsModal(i18next.t('bsmodal.importexport.rawsettingsjson'), settingsJSON);
+            createBsModal({
+                title: i18next.t('bsmodal.importexport.rawsettingsjson'),
+                content: settingsJSON
+            });
             showToast({
                 title: i18next.t('toasts.importexport.title'),
                 message: i18next.t('toasts.importexport.exportrawsuccess', { 0: getElapsedTime(exportTime) }),
@@ -97,7 +100,10 @@ function handleExport(settings: any, type: ExportType, exportTime: luxon.DateTim
                 margin: 2,
                 scale: 4,
                 width: 400
-            }).then(canvas => createBsModal('QR Code', canvas));
+            }).then(canvas => createBsModal({
+                title: 'QR Code',
+                content: canvas
+            }));
             showToast({
                 title: i18next.t('toasts.importexport.title'),
                 message: i18next.t('toasts.importexport.exportqrsuccess', { 0: getElapsedTime(exportTime) }),
@@ -355,7 +361,10 @@ panel.section.dbg.addEventListener('click', (e) => {
                 }
                 const imgElement = document.createElement('img');
                 imgElement.src = bgImageUrl;
-                createBsModal(i18next.t('bsmodal.importexport.backgroundimage'), imgElement);
+                createBsModal({
+                    title: i18next.t('bsmodal.importexport.backgroundimage'),
+                    content: imgElement
+                });
             })
             .otherwise(() => {});
     }

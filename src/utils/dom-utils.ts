@@ -240,12 +240,6 @@ export function showToast(options: ToastOptions): void {
     logConsole(`Bootstrap toast shown: ${title} - ${message} (${duration}, ${style})`, 'debug');
 }
 
-interface ModalButton {
-    label: string;
-    className?: string;
-    value?: any;
-}
-
 // Theme config interface
 interface ThemeConfig {
     textColor: string;
@@ -362,8 +356,24 @@ export function getCurrentTheme(): string {
     return menu.container.dataset.bsTheme || 'light';
 }
 
-export function createBsModal(title: string, content: HTMLElement | string, buttons: ModalButton[] = [], timeoutDelay?: number) {
+export interface ModalButton {
+    label: string;
+    className?: string;
+    value?: any;
+}
+
+export interface ModalOptions {
+    title: string;
+    content: HTMLElement | string;
+    buttons?: ModalButton[];
+    timeoutDelay?: number;
+}
+
+export function createBsModal(options: ModalOptions) {
     return new Promise((resolve) => {
+        const { title, content, timeoutDelay } = options;
+        let buttons = options.buttons || [];
+        
         // Set internal unique id
         const modalUID = generateId('bs-modal');
 
