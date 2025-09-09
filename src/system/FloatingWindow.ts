@@ -71,7 +71,7 @@ export class FloatingWindow {
         }
         
         this.createWindow(options);
-        this.setupDragFunctionality();
+        this.setupDragFunctionality(options.position);
         this.setupTabs(options.tabs);
         this.setContent(options.content);
         
@@ -324,7 +324,7 @@ export class FloatingWindow {
         }
     }
 
-    private setupDragFunctionality(): void {
+    private setupDragFunctionality(position?: { x?: number; y?: number }): void {
         this.header.addEventListener('mousedown', (e) => {
             if (e.target === this.closeButton || e.target === this.minimizeButton) return;
             
@@ -365,7 +365,7 @@ export class FloatingWindow {
 
         // Double click to reset position
         this.header.addEventListener('dblclick', () => {
-            this.resetPosition();
+            this.resetPosition(position);
         });
     }
 
@@ -632,11 +632,22 @@ export class FloatingWindow {
         }
     }
 
-    public resetPosition(): void {
+    public resetPosition(position?: { x?: number; y?: number }): void {
         if (!this.isValid) return;
-        this.container.style.left = '50%';
-        this.container.style.top = '50%';
-        this.container.style.transform = 'translate(-50%, -50%)';
+        if (position) {
+            if (position.x !== undefined) {
+                this.container.style.left = `${position.x}px`;
+            }
+            if (position.y !== undefined) {
+                this.container.style.top = `${position.y}px`;
+            }
+        } else {
+            // Center the window
+            this.container.style.left = '50%';
+            this.container.style.top = '50%';
+            this.container.style.transform = 'translate(-50%, -50%)';
+        }
+        
         logConsole(`Floating window ${this.windowId} position reset`, 'debug');
     }
 
