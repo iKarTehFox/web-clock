@@ -512,6 +512,7 @@ export async function applyURLParams() {
             message: i18next.t('toasts.urlparams.incompatible'),
             title: i18next.t('toasts.urlparams.title'),
             style: 'danger',
+            duration: 'long',
             icon: 'bi-exclamation-triangle-fill'
         });
     } else if (params.lockSettings && !params.debugMode) {
