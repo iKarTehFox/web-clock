@@ -58,7 +58,7 @@
   "dependencies": {
     "@types/body-parser": "^1.19.6",
     "@types/intl": "^1.2.2",
-    "axios": "^1.11.0",
+    "axios": "^1.12.1",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
     "bowser": "^2.12.1",
