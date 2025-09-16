@@ -3,7 +3,6 @@ import * as numberToWords from 'number-to-words';
 import * as luxon from 'ts-luxon';
 import { logConsole } from './utils/dom-utils';
 import * as clock from './time-help';
-import { timeRefresh } from './utils/debug';
 import { match, P } from 'ts-pattern';
 import i18next from 'i18next';
 import { on, once } from './system/event-bus';

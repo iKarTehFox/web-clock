@@ -1,7 +1,7 @@
 import { menu, panel, weather } from './dom-elements';
 import { presetLocalJSON } from '../importExport';
 import { logConsole, setMenuTheme, showToast } from './dom-utils';
-import { setDebug, setLockSettings, setTimeRefresh, setToastPosition } from './debug';
+import { setDebug, setLockSettings, setToastPosition } from './debug';
 import { submitWeatherSettings } from './weather-utils';
 import { match, P } from 'ts-pattern';
 import { setClockMode } from '../time-help';
@@ -22,7 +22,6 @@ if (debugValue === 'true') {
 interface URLParamConfig {
     // Booleans
     debugMode?: boolean;
-    fastRefresh?: boolean;
     lockSettings?: boolean;
     noUpdateNoti?: boolean;
     panelVis?: boolean;
@@ -69,7 +68,6 @@ interface URLParamConfig {
 const paramAliases: Record<string, keyof URLParamConfig> = {
     // Boolean aliases
     'debug': 'debugMode',
-    'fRef': 'fastRefresh',
     'lock': 'lockSettings',
     'noNoti': 'noUpdateNoti',
     'panel': 'panelVis',
@@ -171,7 +169,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
     };
 
     // Boolean params
-    ['debugMode', 'fastRefresh', 'lockSettings', 'noUpdateNoti', 'panelVis', 'tabTitle'].forEach(key => {
+    ['debugMode', 'lockSettings', 'noUpdateNoti', 'panelVis', 'tabTitle'].forEach(key => {
         const value = getParamValue(key);
         if (value !== null) {
             if (value === 'true' || value === 'false') {
@@ -418,11 +416,6 @@ export async function applyURLParams() {
             style: 'warning',
             icon: 'bi-exclamation-triangle-fill'
         });
-    }
-
-    // Fast time refresh
-    if (params.fastRefresh) {
-        setTimeRefresh(1);
     }
 
     // Menu theme
