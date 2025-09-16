@@ -61,7 +61,6 @@
     "axios": "^1.12.1",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
-    "bowser": "^2.12.1",
     "html5-qrcode": "^2.3.8",
     "i18next": "^25.5.2",
     "number-to-words": "^1.2.4",
