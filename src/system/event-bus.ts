@@ -6,7 +6,9 @@ export const AppEvents = {
     API_WIDGET_REMOVED: 'apiWidgetRemoved',
     TOAST_POSITION_CHANGED: 'toastPositionChanged',
     I18N_FINISHED_UPDATE: 'i18nFinishedUpdate',
-    DOM_LOADED: 'domLoaded'
+    DOM_LOADED: 'domLoaded',
+    STOP_CLOCK: 'stopClock',
+    START_CLOCK: 'startClock'
 } as const;
 
 // Type-safe event data interface
@@ -18,6 +20,8 @@ interface EventDataMap {
     [AppEvents.TOAST_POSITION_CHANGED]: { position: 'topleft' | 'topmiddle' | 'bottomleft' | 'bottommiddle' | 'bottomright' };
     [AppEvents.I18N_FINISHED_UPDATE]: { language: string };
     [AppEvents.DOM_LOADED]: { timestamp: number };
+    [AppEvents.STOP_CLOCK]: { sourcereason: string };
+    [AppEvents.START_CLOCK]: { sourcereason: string };
 }
 
 // Dispatch event function

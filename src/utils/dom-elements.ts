@@ -66,7 +66,6 @@ export const menu = {
     imageuploadbutton: getElement<HTMLButtonElement>('bgImageUploadBtn'),
     jsonpresetsgroup: getElement<HTMLDivElement>('jsonPresetsContainer'),
     languageradio: getElements<HTMLInputElement>('input[name="language-radio"]'),
-    legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
     manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
     panelvischeckbox: getElement<HTMLInputElement>('panelVisible'),
     presetcolors: getElements<HTMLInputElement>('input[name="preset-color-radio"]'),

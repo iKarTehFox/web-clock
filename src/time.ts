@@ -6,7 +6,7 @@ import * as clock from './time-help';
 import { timeRefresh } from './utils/debug';
 import { match, P } from 'ts-pattern';
 import i18next from 'i18next';
-import { once } from './system/event-bus';
+import { on, once } from './system/event-bus';
 import { updateAllTimezoneWindows } from './timezone-windows';
 
 // Default modes
@@ -280,29 +280,30 @@ i18next.on('languageChanged', () => {
     });
 });
 
-// Sync clock to system time function
+// Clock interval management
 let clockInterval: NodeJS.Timeout;
 
-// Function to start the clock based on the selected method
-function startClock() {
-    // Clear any existing interval
+on('startClock', (data) => {
+    if (!clockInterval) {
+        startClock();
+        logConsole(`Clock interval started. Source: ${data?.sourcereason}`, 'info');
+    }
+});
+
+on('stopClock', (data) => {
     if (clockInterval) {
-        clearInterval(clockInterval);
+        clearTimeout(clockInterval);
+        clockInterval = undefined;
+        logConsole(`Clock interval stopped. Source: ${data?.sourcereason}`, 'info');
     }
+});
 
-    if (menu.legacyrefreshcheckbox.checked) {
-        startOldClock();
-    } else {
-        startExperimentalClock();
-    }
-}
-
-// Function to start experimental clock
-function startExperimentalClock() {
+// Function to start clock interval
+function startClock() {
     // Initial update
     updateTime();
     updatePageDuration();
-    logConsole('Experimental clock started...', 'info');
+    logConsole('Clock interval started...', 'info');
     
     // Function to schedule the next update
     function scheduleNextUpdate() {
@@ -315,7 +316,7 @@ function startExperimentalClock() {
             updateTime();
             updatePageDuration();
 
-            logConsole('Time, date, and page duration updated... (Experimental method)', 'debug', false, false);
+            logConsole('Time, date, and page duration updated...', 'debug', false, false);
             
             // Schedule the next update
             scheduleNextUpdate();
@@ -324,15 +325,6 @@ function startExperimentalClock() {
     
     // Start the scheduling loop
     scheduleNextUpdate();
-}
-
-// Function to start the old clock method
-function startOldClock() {
-    clockInterval = setInterval(() => {
-        updateTime();
-        updatePageDuration();
-        logConsole('Time, date, and page duration updated... (Legacy method)', 'info', false, false);
-    }, timeRefresh);
 }
 
 // DT listener
@@ -369,9 +361,6 @@ panel.section.dt.addEventListener('change', (e) => {
                     cMode = String(inputelement.dataset.value);
                     logConsole(`Clock mode set to: ${inputelement.dataset.value}`, 'debug');
                     updateTime();
-                })
-                .with(['checkbox', 'legacy-refresh-checkbox'], () => {
-                    startClock();
                 })
                 .otherwise(() => {});
         })
