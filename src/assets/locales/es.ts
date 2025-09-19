@@ -526,6 +526,7 @@ export default {
                         'option': {
                             'uploadjson': 'Subir desde JSON',
                             'scanqrcode': 'Escanear código QR',
+                            'loadls': 'Cargar ajustes locales',
                             'manualtext': 'O pegar manualmente los ajustes en formato JSON aquí:',
                             'placeholder': 'Pega el JSON aquí',
                             'load': 'Cargar ajustes'
@@ -541,6 +542,7 @@ export default {
                             'downloadjson': 'Descargar JSON',
                             'copyjson': 'Copiar JSON',
                             'genqrcode': 'Generar código QR',
+                            'saveLS': 'Guardar localmente en el navegador',
                             'description': 'Nota: Las opciones de visualización y los ajustes personalizados de fuente no serán exportados.'
                         }
                     }
@@ -592,12 +594,17 @@ export default {
             'exportrawsuccess': 'JSON exportado. Tomó {{0}}ms',
             'exportqrtoolarge': '¡Ajustes demasiado grandes para el código QR! Consulta la consola para más detalles.',
             'exportqrsuccess': '¡Ajustes exportados a código QR! Tomó {{0}}ms',
+            'exportlssuccess': '¡Ajustes guardados localmente! Tomó {{0}}ms',
             'exporting': 'Exportando ajustes...',
             'exporterror': '¡Error al exportar ajustes! Consulta la consola para más detalles.',
             'importsuccess': '¡Ajustes importados con éxito!<br><br><b>Fecha del archivo:</b> {{0}}',
+            'importlocalstorage': '¡Ajustes cargados desde el almacenamiento local!',
             'importerror': 'Archivo de ajustes no válido. Asegúrate de que el archivo contenga JSON válido.',
             'fetcherror': 'No se pudo obtener el archivo de ajustes local. Verifica el nombre del archivo y asegúrate de que exista.',
             'nobgimg': 'No hay imagen de fondo para extraer.',
+            'nolocalstoragebackup': 'No se encontró respaldo local en el almacenamiento del navegador.',
+            'backupclear': 'Los ajustes locales han sido borrados.',
+            'autoloadenabled': '¡Carga automática activada! Los ajustes se cargarán automáticamente en futuras visitas.',
         },
         'debugui': {
             'title': 'Depuración',
@@ -635,7 +642,12 @@ export default {
             'export': 'Exportar',
             'gethelp': 'Obtener ayuda',
             'getstarted': 'Iniciar',
-            'releasenotes': 'Notas de la versión'
+            'releasenotes': 'Notas de la versión',
+            'continue': 'Continuar',
+            'clear': 'Borrar',
+            'ignore': 'Ignorar',
+            'load': 'Cargar',
+            'alwaysload': 'Cargar siempre'
         },
         'export': {
             'title': 'Exportar ajustes',
@@ -645,7 +657,19 @@ export default {
         'importexport': {
             'backgroundimage': 'Imagen de fondo',
             'importerror': '¡Error al importar ajustes!',
-            'rawsettingsjson': 'JSON de ajustes sin procesar'
+            'rawsettingsjson': 'JSON de ajustes sin procesar',
+            'overwritebackup': {
+                'title': '¿Sobrescribir ajustes locales?',
+                'message': 'Ya tienes ajustes diferentes guardados localmente. ¿Quieres sobrescribirlos con tus ajustes actuales?'
+            },
+            'invalidbackup': {
+                'title': '¡Ajustes locales inválidos!',
+                'message': 'Los ajustes guardados en el almacenamiento de tu navegador son inválidos o están corruptos. Puedes restablecerlos para limpiar los datos corruptos, o ignorar esta advertencia.'
+            },
+            'autoload': {
+                'title': 'Ajustes guardados localmente',
+                'message': 'Tienes ajustes guardados localmente en tu navegador. ¿Aplicarlos ahora? Los ajustes se aplicarán después de 30 segundos.'
+            }
         },
         'updatenoti': {
             'newversion': '¡Nueva versión! ({{0}})',

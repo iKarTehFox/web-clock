@@ -599,8 +599,18 @@
                         <div id="collapseIE" class="accordion-collapse collapse" data-bs-parent="#menuAccordion">
                             <div class="accordion-body" id="panel-section-ie">
                                 <h6 class="mb-1" data-i18n="menu.section.importexport.setting.importsettings.title"></h6>
-                                <button type="button" class="btn btn-outline-primary mb-1" id="jsonImportUlBtn" data-i18n="menu.section.importexport.setting.importsettings.option.uploadjson"></button>
-                                <button type="button" class="btn btn-outline-primary mb-1" id="jsonImportQrBtn" data-i18n="menu.section.importexport.setting.importsettings.option.scanqrcode"></button>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-primary" id="jsonImportUlBtn" data-i18n="menu.section.importexport.setting.importsettings.option.uploadjson"></button>
+                                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden" data-i18n="arialabel.toggledropdown"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><button class="dropdown-item btn" id="jsonImportQrBtn" data-i18n="menu.section.importexport.setting.importsettings.option.scanqrcode"></button></li>
+                                    </ul>
+                                </div>
+                                <button type="button" class="btn btn-outline-primary" id="jsonImportLSBtn" data-bs-toggle="tooltip" data-bs-placement="top" data-i18n-data-bs-title="menu.section.importexport.setting.importsettings.option.loadls">
+                                    <i class="bi bi-database-fill-down"></i>
+                                </button>
                                 <p class="mb-1 mt-2" data-i18n="menu.section.importexport.setting.importsettings.option.manualtext"></p>
                                 <input class="form-control mb-1" type="text" placeholder="Paste in JSON here" data-bs-toggle="tooltip" data-i18n-aria-label="arialabel.manualjsonsettingsentryform" id="jsonImportTextarea">
                                 <div class="d-flex justify-content-end">
@@ -622,6 +632,9 @@
                                         <li><button class="dropdown-item btn" id="jsonExportQrBtn" data-i18n="menu.section.importexport.setting.exportsettings.option.genqrcode"></button></li>
                                     </ul>
                                 </div>
+                                <button type="button" class="btn btn-outline-warning" id="jsonExportSaveLS" data-i18n-data-bs-title="menu.section.importexport.setting.exportsettings.option.saveLS" data-bs-toggle="tooltip" data-bs-placement="top">
+                                    <i class="bi bi-database-fill-add"></i>
+                                </button>
                                 <p class="mb-1 mt-2 subtext-light" data-i18n="menu.section.importexport.setting.exportsettings.option.description"></p>
                             </div>
                         </div>

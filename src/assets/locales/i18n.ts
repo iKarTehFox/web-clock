@@ -112,6 +112,9 @@ i18next.init({
         applyFallbackTranslations();
         return;
     }
+    
+    // Update translations on successful initialization
+    updateTranslations();
 });
 
 function updateContent() {

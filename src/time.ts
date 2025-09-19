@@ -264,6 +264,12 @@ const initTime = getLuxNow('obj') as luxon.DateTime;
 clock.updateFavicon(initTime.toFormat('h'));
 updateTime();
 
+// Initial i18n listener for the first load
+once('i18nFinishedUpdate', () => {
+    refreshDateFormatOptions();
+    logConsole('Initial date format options refreshed after i18n setup', 'debug');
+});
+
 // i18n listener
 i18next.on('languageChanged', () => {
     // Wait for DOM updates from i18n first

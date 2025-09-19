@@ -526,6 +526,7 @@ export default {
                         'option': {
                             'uploadjson': 'Upload from JSON',
                             'scanqrcode': 'Scan QR Code',
+                            'loadls': 'Load local settings',
                             'manualtext': 'Or manually paste JSON settings instead:',
                             'placeholder': 'Paste JSON in here',
                             'load': 'Load settings'
@@ -541,6 +542,7 @@ export default {
                             'downloadjson': 'Download JSON file',
                             'copyjson': 'Copy to clipboard',
                             'genqrcode': 'Generate QR Code',
+                            'saveLS': 'Save locally to browser',
                             'description': 'Note: Display Options and custom font settings will not be exported.'
                         }
                     }
@@ -592,12 +594,17 @@ export default {
             'exportrawsuccess': 'Exported raw JSON. Took {{0}}ms',
             'exportqrtoolarge': 'Settings too large for QR code. See console for details.',
             'exportqrsuccess': 'Exported settings to QR code! Took {{0}}ms',
+            'exportlssuccess': 'Settings saved locally! Took {{0}}ms',
             'exporting': 'Exporting settings...',
             'exporterror': 'Error exporting settings! Check console for details.',
             'importsuccess': 'Settings successfully imported!<br><br><b>File timestamp:</b> {{0}}',
+            'importlocalstorage': 'Settings loaded from local storage!',
             'importerror': 'Invalid settings file. Please make sure the file contains valid JSON.',
             'fetcherror': 'Could not fetch local settings file. Please check the filename and ensure the file exists.',
             'nobgimg': 'No background image to extract.',
+            'nolocalstoragebackup': 'No local settings found in browser storage.',
+            'backupclear': 'Local settings have been cleared.',
+            'autoloadenabled': 'Auto-load enabled! Settings will load automatically on future visits.',
         },
         'debugui': {
             'title': 'Debugging',
@@ -635,7 +642,12 @@ export default {
             'export': 'Export',
             'gethelp': 'Get help',
             'getstarted': 'Get Started',
-            'releasenotes': 'Release Notes'
+            'releasenotes': 'Release Notes',
+            'continue': 'Continue',
+            'clear': 'Clear',
+            'ignore': 'Ignore',
+            'load': 'Load',
+            'alwaysload': 'Always Load'
         },
         'export': {
             'title': 'Export Settings',
@@ -645,7 +657,19 @@ export default {
         'importexport': {
             'backgroundimage': 'Background Image',
             'importerror': 'Error importing settings!',
-            'rawsettingsjson': 'Raw Settings JSON'
+            'rawsettingsjson': 'Raw Settings JSON',
+            'overwritebackup': {
+                'title': 'Overwrite local settings?',
+                'message': 'You already have different settings saved locally. Do you want to overwrite them with your current settings?'
+            },
+            'invalidbackup': {
+                'title': 'Invalid local settings!',
+                'message': 'The settings saved in your browser storage are invalid or corrupted. You can reset them to clear the corrupted data, or ignore this warning.'
+            },
+            'autoload': {
+                'title': 'Locally saved settings',
+                'message': 'You have settings saved locally in your browser. Apply them now? Settings will be applied after 30 seconds.'
+            }
         },
         'updatenoti': {
             'newversion': 'New Version! ({{0}})',

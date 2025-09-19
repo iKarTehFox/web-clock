@@ -17,6 +17,7 @@ import { Tooltip } from 'bootstrap';
 import { initDebugConsole } from './utils/debug-console';
 import { on } from './system/event-bus';
 import { initializeTimezoneWindows } from './timezone-windows';
+import { handleAutoImportLocalSettings } from './importExport';
 
 // Functions to run when DOM has loaded
 on('domLoaded', () => {
@@ -24,6 +25,10 @@ on('domLoaded', () => {
     populateTimeZoneSelect(); // This might be performance hungry...
     initDebugConsole();
     initializeTimezoneWindows();
+
+    // Handle auto-import of localStorage settings
+    const urlParams = new URLSearchParams(window.location.search);
+    handleAutoImportLocalSettings(urlParams);
 
     // Initialize Bootstrap tooltips
     const tooltipTriggerList = (document.querySelectorAll('[data-bs-toggle="tooltip"]'));

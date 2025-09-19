@@ -9,6 +9,7 @@ import QRCode from 'qrcode';
 import { match } from 'ts-pattern';
 import i18next from 'i18next';
 import { versionNumberString } from './utils/update-notify';
+import { lockSettings } from './utils/debug';
 
 function getSettings() {
     return {
@@ -48,7 +49,7 @@ function downloadSettingsFile(blob: Blob, exportTime: luxon.DateTime, customFile
     });
 }
 
-export type ExportType = 'clipboard' | 'download' | 'log' | 'qr' | 'card';
+export type ExportType = 'clipboard' | 'download' | 'log' | 'qr' | 'card' | 'localStorage';
 
 function getElapsedTime(startTime: luxon.DateTime): number {
     return luxon.DateTime.now().toMillis() - startTime.toMillis();
@@ -119,6 +120,79 @@ function handleExport(settings: any, type: ExportType, exportTime: luxon.DateTim
             if (result.action === 'confirm') {
                 const blob = new Blob([settingsJSON], { type: 'application/json' });
                 downloadSettingsFile(blob, exportTime, result.filename);
+            }
+        },
+        localStorage: () => {
+            const savedSettings = localStorage.getItem('onlinewebclock-settings-backup');
+            let startExecTime: luxon.DateTime;
+            
+            if (savedSettings) {
+                try {
+                    const currentSettings = getSettings();
+                    const parsedSavedSettings = JSON.parse(savedSettings);
+                    
+                    // Compare settings excluding exportTimestamp
+                    const { exportTimestamp: currentTimestamp, ...currentSettingsWithoutTimestamp } = currentSettings;
+                    const { exportTimestamp: savedTimestamp, ...savedSettingsWithoutTimestamp } = parsedSavedSettings;
+                    
+                    const settingsAreDifferent = JSON.stringify(currentSettingsWithoutTimestamp) !== JSON.stringify(savedSettingsWithoutTimestamp);
+                    
+                    if (settingsAreDifferent) {
+                        createBsModal({
+                            title: i18next.t('bsmodal.importexport.overwritebackup.title'),
+                            content: i18next.t('bsmodal.importexport.overwritebackup.message'),
+                            buttons: [
+                                { label: i18next.t('bsmodal.button.continue'), className: 'btn btn-warning', value: 'continue' },
+                                { label: i18next.t('bsmodal.button.cancel'), className: 'btn btn-secondary', value: 'cancel' }
+                            ]
+                        }).then((result) => {
+                            if (result === 'continue') {
+                                startExecTime = luxon.DateTime.now();
+                                localStorage.setItem('onlinewebclock-settings-backup', settingsJSON);
+                                showToast({
+                                    title: i18next.t('toasts.importexport.title'),
+                                    message: i18next.t('toasts.importexport.exportlssuccess', { 0: luxon.DateTime.now().toMillis() - startExecTime.toMillis() }),
+                                    duration: 'normal',
+                                    style: 'success',
+                                    icon: 'bi-database-fill'
+                                });
+                            }
+                        });
+                    } else {
+                        // Settings are the same, just update timestamp
+                        startExecTime = luxon.DateTime.now();
+                        localStorage.setItem('onlinewebclock-settings-backup', settingsJSON);
+                        showToast({
+                            title: i18next.t('toasts.importexport.title'),
+                            message: i18next.t('toasts.importexport.exportlssuccess', { 0: luxon.DateTime.now().toMillis() - startExecTime.toMillis() }),
+                            duration: 'normal',
+                            style: 'success',
+                            icon: 'bi-database-fill'
+                        });
+                    }
+                } catch (error) {
+                    // Overwrite anyways if parsing fails
+                    startExecTime = luxon.DateTime.now();
+                    localStorage.setItem('onlinewebclock-settings-backup', settingsJSON);
+                    showToast({
+                        title: i18next.t('toasts.importexport.title'),
+                        message: i18next.t('toasts.importexport.exportlssuccess', { 0: luxon.DateTime.now().toMillis() - startExecTime.toMillis() }),
+                        duration: 'normal',
+                        style: 'success',
+                        icon: 'bi-database-fill'
+                    });
+                }
+            } else {
+                // No existing backup, save directly
+                startExecTime = luxon.DateTime.now();
+                localStorage.setItem('onlinewebclock-settings-backup', settingsJSON);
+                showToast({
+                    title: i18next.t('toasts.importexport.title'),
+                    message: i18next.t('toasts.importexport.exportlssuccess', { 0: luxon.DateTime.now().toMillis() - startExecTime.toMillis() }),
+                    duration: 'normal',
+                    style: 'success',
+                    icon: 'bi-database-fill'
+                });
             }
         }
     };
@@ -228,6 +302,72 @@ function manualJSONImport() {
     }
 }
 
+// Function to import from localStorage
+function importFromLS() {
+    const savedSettings = localStorage.getItem('onlinewebclock-settings-backup');
+    
+    if (savedSettings) {
+        try {
+            const parsedSettings = JSON.parse(savedSettings);
+            
+            // Pre-validate the settings before processing
+            const validation = verifySettingsJSON(parsedSettings);
+            
+            if (validation === true) {
+                processJSONSettings(savedSettings);
+            } else {
+                createBsModal({
+                    title: i18next.t('bsmodal.importexport.invalidbackup.title'),
+                    content: i18next.t('bsmodal.importexport.invalidbackup.message'),
+                    buttons: [
+                        { label: i18next.t('bsmodal.button.reset'), className: 'btn btn-danger', value: 'reset' },
+                        { label: i18next.t('bsmodal.button.ignore'), className: 'btn btn-secondary', value: 'ignore' }
+                    ]
+                }).then((result) => {
+                    if (result === 'reset') {
+                        localStorage.removeItem('onlinewebclock-settings-backup');
+                        showToast({
+                            title: i18next.t('toasts.importexport.title'),
+                            message: i18next.t('toasts.importexport.backupreset'),
+                            duration: 'normal',
+                            style: 'success',
+                            icon: 'bi-trash'
+                        });
+                    }
+                });
+            }
+        } catch (parseError) {
+            createBsModal({
+                title: i18next.t('bsmodal.importexport.invalidbackup.title'),
+                content: i18next.t('bsmodal.importexport.invalidbackup.message'),
+                buttons: [
+                    { label: i18next.t('bsmodal.button.reset'), className: 'btn btn-danger', value: 'reset' },
+                    { label: i18next.t('bsmodal.button.ignore'), className: 'btn btn-secondary', value: 'ignore' }
+                ]
+            }).then((result) => {
+                if (result === 'reset') {
+                    localStorage.removeItem('onlinewebclock-settings-backup');
+                    showToast({
+                        title: i18next.t('toasts.importexport.title'),
+                        message: i18next.t('toasts.importexport.backupreset'),
+                        duration: 'normal',
+                        style: 'success',
+                        icon: 'bi-trash'
+                    });
+                }
+            });
+        }
+    } else {
+        showToast({
+            title: i18next.t('toasts.importexport.title'),
+            message: i18next.t('toasts.importexport.nolocalstoragebackup'),
+            duration: 'normal',
+            style: 'warning',
+            icon: 'bi-exclamation-triangle'
+        });
+    }
+}
+
 // Import settings from a local JSON file
 export function presetLocalJSON(filename: string, alertConfirmation: boolean = true): Promise<void> {
     // Sanitize the filename
@@ -327,17 +467,107 @@ export function resetSettings(): Promise<string> {
     });
 }
 
+// Function to handle automatic localStorage import on page load
+export function handleAutoImportLocalSettings(urlParams?: URLSearchParams): Promise<void> {
+    return new Promise((resolve) => {
+        // Check if lockSettings is enabled
+        if (lockSettings) {
+            logConsole('Settings are locked, skipping auto-import from localStorage', 'debug');
+            resolve();
+            return;
+        }
+
+        // Check if a preset is passed in URL params
+        const presetParam = urlParams?.get('preset') || urlParams?.get('pre');
+        if (presetParam) {
+            logConsole('Preset specified in URL params, skipping auto-import from localStorage', 'debug');
+            resolve();
+            return;
+        }
+
+        // Check if localStorage backup exists
+        const savedSettings = localStorage.getItem('onlinewebclock-settings-backup');
+        if (!savedSettings) {
+            logConsole('No localStorage backup found, skipping auto-import', 'debug');
+            resolve();
+            return;
+        }
+
+        // Check if user has set auto-load preference
+        const autoLoadPreference = localStorage.getItem('onlinewebclock-autoload-preference');
+        if (autoLoadPreference === 'always') {
+            logConsole('Auto-load preference set to always, importing localStorage settings immediately', 'debug');
+            importFromLS();
+            resolve();
+            return;
+        }
+
+        // Show confirmation modal with timeout
+        createBsModal({
+            title: i18next.t('bsmodal.importexport.autoload.title'),
+            content: i18next.t('bsmodal.importexport.autoload.message'),
+            timeoutDelay: 30,
+            buttons: [
+                { label: i18next.t('bsmodal.button.load'), className: 'btn btn-success', value: 'load' },
+                { label: i18next.t('bsmodal.button.clear'), className: 'btn btn-danger', value: 'clear' },
+                { label: i18next.t('bsmodal.button.alwaysload'), className: 'btn btn-primary', value: 'always' }
+            ]
+        }).then((result) => {
+            match(result)
+                .with('load', () => {
+                    logConsole('User confirmed loading localStorage settings', 'debug');
+                    importFromLS();
+                })
+                .with('clear', () => {
+                    logConsole('User chose to clear localStorage settings', 'debug');
+                    localStorage.removeItem('onlinewebclock-settings-backup');
+                    showToast({
+                        title: i18next.t('toasts.importexport.title'),
+                        message: i18next.t('toasts.importexport.backupclear'),
+                        duration: 'normal',
+                        style: 'warning',
+                        icon: 'bi-trash'
+                    });
+                })
+                .with('always', () => {
+                    logConsole('User chose to always auto-load localStorage settings', 'debug');
+                    localStorage.setItem('onlinewebclock-autoload-preference', 'always');
+                    importFromLS();
+                    showToast({
+                        title: i18next.t('toasts.importexport.title'),
+                        message: i18next.t('toasts.importexport.autoloadenabled'),
+                        duration: 'normal',
+                        icon: 'bi-info-circle'
+                    });
+                })
+                .with('timeout', () => {
+                    logConsole('Auto-load modal timed out, proceeding with import', 'debug');
+                    importFromLS();
+                })
+                .otherwise(() => {
+                    logConsole('Auto-load modal dismissed, skipping import', 'debug');
+                });
+            
+            resolve();
+        });
+    });
+}
+
 // IE listener
 panel.section.ie.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
-    if (target.tagName === 'BUTTON') {
-        match(target.id)
+    const buttonElement = target.tagName === 'BUTTON' ? target : target.closest('button');
+    
+    if (buttonElement) {
+        match(buttonElement.id)
             .with('jsonExportClipBtn', () => exportSettings('clipboard'))
             .with('jsonExportDlBtn', () => exportSettings())
             .with('jsonExportQrBtn', () => exportSettings('qr'))
+            .with('jsonExportSaveLS', () => exportSettings('localStorage'))
             .with('jsonImportQrBtn', () => createScannerOverlay())
             .with('jsonImportTxtBtn', () => manualJSONImport())
             .with('jsonImportUlBtn', () => importSettingsFromJSON())
+            .with('jsonImportLSBtn', () => importFromLS())
             .otherwise(() => {});
     }
 });
@@ -345,8 +575,10 @@ panel.section.ie.addEventListener('click', (e) => {
 // Dbg listener
 panel.section.dbg.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
-    if (target.tagName === 'BUTTON') {
-        match(target.id)
+    const buttonElement = target.tagName === 'BUTTON' ? target : target.closest('button');
+    
+    if (buttonElement) {
+        match(buttonElement.id)
             .with('jsonExportConsoleBtn', () => exportSettings('log'))
             .with('jsonExportCardBtn', () => exportSettings('card'))
             .with('debugGetBGBtn', () => {
