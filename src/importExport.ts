@@ -563,7 +563,34 @@ panel.section.ie.addEventListener('click', (e) => {
             .with('jsonExportClipBtn', () => exportSettings('clipboard'))
             .with('jsonExportDlBtn', () => exportSettings())
             .with('jsonExportQrBtn', () => exportSettings('qr'))
-            .with('jsonExportSaveLS', () => exportSettings('localStorage'))
+            .with('jsonExportSaveLS', () => {
+                // Check if Ctrl key is held down
+                if (e.ctrlKey) {
+                    // Clear localStorage backup instead of saving
+                    const savedSettings = localStorage.getItem('onlinewebclock-settings-backup');
+                    if (savedSettings) {
+                        localStorage.removeItem('onlinewebclock-settings-backup');
+                        showToast({
+                            title: i18next.t('toasts.importexport.title'),
+                            message: i18next.t('toasts.importexport.backupclear'),
+                            duration: 'normal',
+                            style: 'warning',
+                            icon: 'bi-trash'
+                        });
+                        logConsole('localStorage backup cleared via Ctrl+click', 'debug');
+                    } else {
+                        showToast({
+                            title: i18next.t('toasts.importexport.title'),
+                            message: i18next.t('toasts.importexport.nolocalstoragebackup'),
+                            duration: 'normal',
+                            icon: 'bi-info-circle'
+                        });
+                    }
+                } else {
+                    // Normal save operation
+                    exportSettings('localStorage');
+                }
+            })
             .with('jsonImportQrBtn', () => createScannerOverlay())
             .with('jsonImportTxtBtn', () => manualJSONImport())
             .with('jsonImportUlBtn', () => importSettingsFromJSON())

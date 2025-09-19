@@ -542,7 +542,7 @@ export default {
                             'downloadjson': 'Download JSON file',
                             'copyjson': 'Copy to clipboard',
                             'genqrcode': 'Generate QR Code',
-                            'saveLS': 'Save locally to browser',
+                            'saveLS': 'Save locally to browser<br>(Hold Ctrl to clear)',
                             'description': 'Note: Display Options and custom font settings will not be exported.'
                         }
                     }

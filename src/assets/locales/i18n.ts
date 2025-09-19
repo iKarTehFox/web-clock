@@ -208,7 +208,6 @@ export const i18n = {
         return i18next.changeLanguage(langCode).then(() => {
         // Update translations
             updateTranslations();
-        
             logConsole(`Language changed to ${langCode}`, 'info');
         });
     },
