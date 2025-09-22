@@ -16,7 +16,7 @@
   "author": "iKarTehFox",
   "license": "MPL-2.0",
   "devDependencies": {
-    "@eslint/js": "^9.34.0",
+    "@eslint/js": "^9.36.0",
     "@types/bootstrap": "^5.2.10",
     "@types/luxon": "^3.7.1",
     "@types/number-to-words": "^1.2.3",
