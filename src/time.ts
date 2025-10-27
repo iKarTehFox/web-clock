@@ -372,4 +372,21 @@ panel.section.dt.addEventListener('change', (e) => {
         .otherwise(() => {});
 });
 
+panel.section.dt.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const buttonElement = target.tagName === 'BUTTON' ? target : target.closest('button');
+
+    if (buttonElement) {
+        match(buttonElement.id)
+            .with('resetTZBtn', () => {
+                luxon.Settings.defaultZoneLike = 'system';
+                menu.timezoneselect.value = luxon.DateTime.local().zoneName;
+                logConsole('Time zone reset to system default', 'info');
+                updateTime();
+                updateDate();
+            })
+            .otherwise(() => {});
+    }
+});
+
 startClock();

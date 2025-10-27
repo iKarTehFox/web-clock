@@ -103,8 +103,12 @@
                                     <label class="btn btn-outline-primary" for="cmo24" data-i18n="menu.section.datetime.setting.clockmode.option.24"></label>
                                 </div>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.datetime.setting.timezone.title"></h6>
-                                <select class="form-select" id="timeZoneSelect">
-                                </select>
+                                <div class="d-flex">
+                                    <select class="form-select" id="timeZoneSelect"></select>
+                                    <button class="btn btn-outline-primary ms-1" data-bs-toggle="tooltip" data-i18n-data-bs-title="menu.section.datetime.setting.timezone.option.reset.tooltip" id="resetTZBtn">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </button>
+                                </div>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.datetime.setting.timezonewindows.title"></h6>
                                 <button class="btn btn-outline-primary mb-1" id="openTimezoneWindowBtn"></button>
                                 <p class="subtext-light" data-i18n="menu.section.datetime.setting.timezonewindows.subtext"></p>

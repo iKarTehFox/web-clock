@@ -93,7 +93,12 @@ export default {
                         }
                     },
                     'timezone': {
-                        'title': 'Time Zone'
+                        'title': 'Time Zone',
+                        'option': {
+                            'reset': {
+                                'tooltip': 'Reset to system timezone'
+                            }
+                        }
                     },
                     'timezonewindows': {
                         'title': 'Timezone Windows',

@@ -93,7 +93,12 @@ export default {
                         }
                     },
                     'timezone': {
-                        'title': 'Zona horaria'
+                        'title': 'Zona horaria',
+                        'option': {
+                            'reset': {
+                                'tooltip': 'Restablecer a la zona horaria del sistema'
+                            }
+                        }
                     },
                     'timezonewindows': {
                         'title': 'Ventanas de zona horaria',
