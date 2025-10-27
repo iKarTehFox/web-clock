@@ -3,7 +3,7 @@ import { debugMode, isDevConInit } from './debug';
 import { Html5Qrcode } from 'html5-qrcode';
 import { processJSONSettings } from '../importExport';
 import { match } from 'ts-pattern';
-import { Modal, Toast } from 'bootstrap';
+import { Modal, Toast, Tooltip } from 'bootstrap';
 import * as luxon from 'ts-luxon';
 import randomstring from 'randomstring';
 import i18next from 'i18next';
@@ -467,6 +467,12 @@ export function createBsModal(options: ModalOptions) {
             countdownEl.className = 'midnight-text-muted me-auto';
             countdownEl.textContent = i18next.t('bsmodal.button.countdownel', { 0: Math.round(constrainedDelay/1000) });
             countdownEl.style.cursor = 'pointer';
+
+            // Tooltip setup
+            countdownEl.dataset.bsToggle = 'tooltip';
+            countdownEl.dataset.bsTitle = i18next.t('bsmodal.tooltip.countdowntooltip');
+            new Tooltip(countdownEl);
+
             modal.querySelector('.modal-footer')?.appendChild(countdownEl);
             
             const startTime = Date.now();

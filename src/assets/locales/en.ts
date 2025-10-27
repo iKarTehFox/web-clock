@@ -649,6 +649,9 @@ export default {
             'load': 'Load',
             'alwaysload': 'Always Load'
         },
+        'tooltip': {
+            'countdowntooltip': 'Click to cancel timeout'
+        },
         'export': {
             'title': 'Export Settings',
             'filename': 'Filename',

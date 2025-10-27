@@ -21,6 +21,7 @@ if (debugValue === 'true') {
 // Define parameter interface
 interface URLParamConfig {
     // Booleans
+    clearLS?: boolean;
     debugMode?: boolean;
     lockSettings?: boolean;
     noUpdateNoti?: boolean;
@@ -67,6 +68,7 @@ interface URLParamConfig {
 // Define aliases
 const paramAliases: Record<string, keyof URLParamConfig> = {
     // Boolean aliases
+    'noLS': 'clearLS',
     'debug': 'debugMode',
     'lock': 'lockSettings',
     'noNoti': 'noUpdateNoti',
@@ -169,7 +171,7 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
     };
 
     // Boolean params
-    ['debugMode', 'lockSettings', 'noUpdateNoti', 'panelVis', 'tabTitle'].forEach(key => {
+    ['clearLS', 'debugMode', 'lockSettings', 'noUpdateNoti', 'panelVis', 'tabTitle'].forEach(key => {
         const value = getParamValue(key);
         if (value !== null) {
             if (value === 'true' || value === 'false') {
@@ -384,6 +386,12 @@ export async function applyURLParams() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const params = parseURLParams(urlParams);
+
+    // Clear local storage
+    if (params.clearLS) {
+        localStorage.clear();
+        logConsole('Automatically cleared local storage.', 'info');
+    }
 
     // Language
     if (params.language !== undefined) {

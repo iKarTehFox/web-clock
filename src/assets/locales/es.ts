@@ -649,6 +649,9 @@ export default {
             'load': 'Cargar',
             'alwaysload': 'Cargar siempre'
         },
+        'tooltip': {
+            'countdowntooltip': 'Haz clic para cancelar el tiempo de espera'
+        },
         'export': {
             'title': 'Exportar ajustes',
             'filename': 'Nombre del archivo',
