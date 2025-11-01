@@ -547,7 +547,7 @@ export default {
                             'downloadjson': 'Descargar JSON',
                             'copyjson': 'Copiar JSON',
                             'genqrcode': 'Generar código QR',
-                            'saveLS': 'Guardar localmente en el navegador<br>(Mantén Ctrl para borrar)',
+                            'saveLS': 'Guardar localmente en el navegador<br>(Ctrl+Clic para borrar)',
                             'description': 'Nota: Las opciones de visualización y los ajustes personalizados de fuente no serán exportados.'
                         }
                     }

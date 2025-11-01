@@ -1,7 +1,7 @@
 {
 	"clockConfig": {
-		"clockDisplay": "words",
-		"secondsVis": "sviN",
+		"clockDisplay": "decimal",
+		"secondsVis": "sviD",
 		"dateFormat": "dfLocFullMon",
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
@@ -10,7 +10,7 @@
 		"customNoteAlign": "nalB"
 },
 	"fontConfig": {
-		"fontFamily": "Montserrat",
+		"fontFamily": "Ubuntu",
 		"fontStyle": "fstR",
 		"fontWeight": "fweB",
 		"fontSize": "10vw",

@@ -370,28 +370,43 @@ function importFromLS() {
 
 // Import settings from a local JSON file
 export function presetLocalJSON(filename: string, alertConfirmation: boolean = true): Promise<void> {
-    // Sanitize the filename
-    const sanitizedFilename = filename.replace(/[^a-zA-Z0-9-]/g, '');
+    // Pre-validation: Check if filename exists in presetList or matches an alias
+    const matchedPreset = presetList.find(preset => 
+        preset.filename === filename || preset.alias?.includes(filename)
+    );
 
-    // Reject sanitized filename if it doesn't match the original filename
-    if (sanitizedFilename !== filename) {
-        showToast({
-            title: i18next.t('toasts.importexport.title'),
-            message: i18next.t('toasts.importexport.fetcherror'),
-            duration: 'normal',
-            style: 'danger',
-            icon: 'bi-exclamation-triangle-fill'
-        });
-        return Promise.reject(new Error('Illegal characters in preset filename. Only alphanumeric characters are allowed.'));
+    let validatedFilename: string;
+
+    if (matchedPreset) {
+        // Use the canonical filename from presetList
+        validatedFilename = matchedPreset.filename;
+        logConsole(`Preset matched: '${filename}' -> '${validatedFilename}'`, 'debug');
+    } else {
+        // Not in presetList, apply sanitization for custom/legacy presets
+        validatedFilename = filename.replace(/[^a-zA-Z0-9-]/g, '');
+
+        // Reject if sanitization changed the filename
+        if (validatedFilename !== filename) {
+            showToast({
+                title: i18next.t('toasts.importexport.title'),
+                message: i18next.t('toasts.importexport.fetcherror'),
+                duration: 'normal',
+                style: 'danger',
+                icon: 'bi-exclamation-triangle-fill'
+            });
+            return Promise.reject(new Error('Illegal characters in preset filename. Only alphanumeric characters and hyphens are allowed.'));
+        }
+        
+        logConsole(`Loading custom preset: '${validatedFilename}' (not in presetList)`, 'debug');
     }
 
     // Make URL
-    const url = `./assets/${sanitizedFilename}.json`;
+    const url = `./assets/${validatedFilename}.json`;
 
     // Fetch file using Axios and return Promise
     return axios.get(url)
         .then(response => {
-            logConsole(`Attempting to load settings from preset: '${sanitizedFilename}'...`, 'debug');
+            logConsole(`Attempting to load settings from preset: '${validatedFilename}'...`, 'debug');
             processJSONSettings(JSON.stringify(response.data), alertConfirmation);
         })
         .catch(error => {
