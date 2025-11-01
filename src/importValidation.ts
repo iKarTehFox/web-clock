@@ -374,7 +374,7 @@ export function validateTimezoneWindows(timezoneWindows: any, valid: any) {
             };
         }
 
-        // Validate fontStyle (CSS values)
+        // Validate fontStyle
         if (!containsValue(valid.TZFS, window.fontStyle)) {
             return {
                 type: 'invalid',
@@ -384,7 +384,7 @@ export function validateTimezoneWindows(timezoneWindows: any, valid: any) {
             };
         }
 
-        // Validate fontWeight (CSS values)
+        // Validate fontWeight
         if (!containsValue(valid.TZFW, window.fontWeight)) {
             return {
                 type: 'invalid',
@@ -394,7 +394,7 @@ export function validateTimezoneWindows(timezoneWindows: any, valid: any) {
             };
         }
 
-        // Validate position and size (should be numbers)
+        // Validate position and size types
         const numericFields = ['x', 'y', 'width', 'height'];
         for (const field of numericFields) {
             if (typeof window[field] !== 'number' || isNaN(window[field])) {
@@ -407,13 +407,22 @@ export function validateTimezoneWindows(timezoneWindows: any, valid: any) {
             }
         }
 
-        // Validate width and height are positive
-        if (window.width <= 0 || window.height <= 0) {
+        // Validate width and height min sizes
+        if (window.width < 200) {
             return {
                 type: 'invalid',
-                subkey: `timezoneWindows.${windowKey}.width/height`,
-                value: `${window.width}/${window.height}`,
-                expected: 'Positive numbers'
+                subkey: `timezoneWindows.${windowKey}.width`,
+                value: window.width,
+                expected: 'Minimum 200px'
+            };
+        }
+
+        if (window.height < 150) {
+            return {
+                type: 'invalid',
+                subkey: `timezoneWindows.${windowKey}.height`,
+                value: window.height,
+                expected: 'Minimum 150px'
             };
         }
     }
