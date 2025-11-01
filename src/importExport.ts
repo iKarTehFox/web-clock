@@ -30,7 +30,7 @@ function downloadSettingsFile(blob: Blob, exportTime: luxon.DateTime, customFile
     // Use custom filename if provided, otherwise use default template
     const filename = customFilename 
         ? `${customFilename}.json`
-        : `onlinewebclock-settings_${exportTime.toFormat('X')}.json`;
+        : `owc-settings_${exportTime.toFormat('X')}.json`;
     
     downloadLink.download = filename;
     
@@ -114,7 +114,7 @@ function handleExport(settings: any, type: ExportType, exportTime: luxon.DateTim
             });
         },
         download: async () => {
-            const defaultFilename = `onlinewebclock-settings_${exportTime.toFormat('X')}`;
+            const defaultFilename = `owc-settings_${exportTime.toFormat('X')}`;
             const result = await createExportModal(defaultFilename);
             
             if (result.action === 'confirm') {
@@ -459,7 +459,7 @@ export function resetSettings(): Promise<string> {
     return new Promise((resolve) => {
         if (window.confirm('Reset all clock settings to defaults?')) {
             // Perform the reset
-            presetLocalJSON('onlinewebclock-defaults', false) // Clock settings
+            presetLocalJSON('owc-defaults', false) // Clock settings
                 .then(() => {
                     // Apply other resets
                     setMenuTheme('light', true);
