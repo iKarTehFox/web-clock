@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-
+import WebpackLicensePlugin from 'webpack-license-plugin';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -46,7 +46,8 @@ const config = {
             excludeChunks: ['main', 'presets'],
             inject: 'body',
             publicPath: '/'
-        })
+        }),
+        new WebpackLicensePlugin()
     ],
     devServer: {
         static: {
