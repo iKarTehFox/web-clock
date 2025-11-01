@@ -24,7 +24,13 @@ export const valid = {
     TCM: ['tcovD', 'tcovO'],
     BIS: ['', 'auto', 'cover', 'stretch'],
     BIB: ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    Ver: [versionNumberString]
+    Ver: [versionNumberString],
+    // Timezone window clock modes
+    TZCM: ['0', '1'],
+    // Timezone window font styles (CSS values, not internal IDs)
+    TZFS: ['normal', 'italic'],
+    // Timezone window font weights (CSS values, not internal IDs)
+    TZFW: ['normal', 'lighter', 'bold']
 };
 
 // Error handling
@@ -63,7 +69,7 @@ export function handleValidationFailure(errorDetails: ErrorDetails) {
 }
 
 // Main validation function
-export function verifySettingsJSON(jsonData: { version: any; clockConfig: any; fontConfig: any; colorTheme: any; }) {
+export function verifySettingsJSON(jsonData: { version: any; clockConfig: any; fontConfig: any; colorTheme: any; timezoneWindows?: any; }) {
     const requiredKeys = ['clockConfig', 'fontConfig', 'colorTheme', 'version'];
 
     const requiredKeysValidation = validateRequiredKeys(jsonData, requiredKeys);
@@ -89,6 +95,14 @@ export function verifySettingsJSON(jsonData: { version: any; clockConfig: any; f
     const colorThemeValidation = validateColorTheme(jsonData.colorTheme, valid);
     if (colorThemeValidation) {
         return colorThemeValidation;
+    }
+
+    // Validate timezone windows if present (optional)
+    if (jsonData.timezoneWindows) {
+        const timezoneWindowsValidation = validateTimezoneWindows(jsonData.timezoneWindows, valid);
+        if (timezoneWindowsValidation) {
+            return timezoneWindowsValidation;
+        }
     }
 
     return true;
@@ -123,7 +137,7 @@ export function validateRequiredKeys(jsonData: { [key: string]: any }, requiredK
     }
 
     const keysInJson = Object.keys(jsonData);
-    const unexpectedKeys = keysInJson.filter(key => !requiredKeys.includes(key) && key !== 'exportTimestamp');
+    const unexpectedKeys = keysInJson.filter(key => !requiredKeys.includes(key) && key !== 'exportTimestamp' && key !== 'timezoneWindows');
 
     if (unexpectedKeys.length > 0) {
         return {
@@ -286,6 +300,121 @@ export function validateColorTheme(colorTheme: any, valid: any) {
         const bgImageValidationError = validateBgImageType(colorTheme.bgImage);
         if (bgImageValidationError) {
             return bgImageValidationError;
+        }
+    }
+
+    return null;
+}
+
+export function validateTimezoneWindows(timezoneWindows: any, valid: any) {
+    // Validate that only tz1 and/or tz2 exist
+    const allowedKeys = ['tz1', 'tz2'];
+    const timezoneWindowKeys = Object.keys(timezoneWindows);
+    const invalidKeys = timezoneWindowKeys.filter(key => !allowedKeys.includes(key));
+    
+    if (invalidKeys.length > 0) {
+        return {
+            type: 'unexpected',
+            subkey: `timezoneWindows.${invalidKeys.join(', timezoneWindows.')}`
+        };
+    }
+
+    // Validate each timezone window
+    for (const windowKey of timezoneWindowKeys) {
+        const window = timezoneWindows[windowKey];
+        
+        // Required fields
+        const requiredFields = ['timezone', 'clockMode', 'dateFormat', 'fontFamily', 'fontStyle', 'fontWeight', 'x', 'y', 'width', 'height'];
+        const missingFields = requiredFields.filter(field => !(field in window));
+        
+        if (missingFields.length > 0) {
+            return {
+                type: 'missing',
+                subkey: `timezoneWindows.${windowKey}.${missingFields.join(`, timezoneWindows.${windowKey}.`)}`
+            };
+        }
+
+        // Validate timezone (should be a non-empty string)
+        if (typeof window.timezone !== 'string' || window.timezone.trim() === '') {
+            return {
+                type: 'invalid',
+                subkey: `timezoneWindows.${windowKey}.timezone`,
+                value: window.timezone,
+                expected: 'Non-empty string (valid IANA timezone identifier)'
+            };
+        }
+
+        // Validate clockMode
+        if (!containsValue(valid.TZCM, window.clockMode)) {
+            return {
+                type: 'invalid',
+                subkey: `timezoneWindows.${windowKey}.clockMode`,
+                value: window.clockMode,
+                expected: valid.TZCM
+            };
+        }
+
+        // Validate dateFormat (should be a string, can be empty)
+        if (typeof window.dateFormat !== 'string') {
+            return {
+                type: 'invalid',
+                subkey: `timezoneWindows.${windowKey}.dateFormat`,
+                value: window.dateFormat,
+                expected: 'String (Luxon date format or empty string)'
+            };
+        }
+
+        // Validate fontFamily
+        if (!containsValue(valid.FF, window.fontFamily)) {
+            return {
+                type: 'invalid',
+                subkey: `timezoneWindows.${windowKey}.fontFamily`,
+                value: window.fontFamily,
+                expected: valid.FF
+            };
+        }
+
+        // Validate fontStyle (CSS values)
+        if (!containsValue(valid.TZFS, window.fontStyle)) {
+            return {
+                type: 'invalid',
+                subkey: `timezoneWindows.${windowKey}.fontStyle`,
+                value: window.fontStyle,
+                expected: valid.TZFS
+            };
+        }
+
+        // Validate fontWeight (CSS values)
+        if (!containsValue(valid.TZFW, window.fontWeight)) {
+            return {
+                type: 'invalid',
+                subkey: `timezoneWindows.${windowKey}.fontWeight`,
+                value: window.fontWeight,
+                expected: valid.TZFW
+            };
+        }
+
+        // Validate position and size (should be numbers)
+        const numericFields = ['x', 'y', 'width', 'height'];
+        for (const field of numericFields) {
+            if (typeof window[field] !== 'number' || isNaN(window[field])) {
+                return {
+                    type: 'invalid',
+                    subkey: `timezoneWindows.${windowKey}.${field}`,
+                    value: window[field],
+                    expected: 'Number'
+                };
+            }
+        }
+
+        // Validate width and height are positive
+        if (window.width <= 0 || window.height <= 0) {
+            return {
+                type: 'invalid',
+                subkey: `timezoneWindows.${windowKey}.width/height`,
+                value: `${window.width}/${window.height}`,
+                expected: 'Positive numbers'
+            };
         }
     }
 

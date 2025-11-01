@@ -248,11 +248,6 @@ export class FloatingWindow {
         this.header.className = 'card-header d-flex justify-content-between align-items-center';
         this.header.style.cursor = lockSettings ? 'default' : 'grab';
         this.header.style.userSelect = 'none';
-        
-        // Add tooltip for copy functionality
-        if (!lockSettings) {
-            this.header.title = i18next.t('menu.section.datetime.setting.timezonewindows.tooltip');
-        }
 
         // Create title
         this.titleElement = document.createElement('span');
@@ -292,14 +287,6 @@ export class FloatingWindow {
         // Assemble header
         this.header.appendChild(this.titleElement);
         this.header.appendChild(buttonContainer);
-
-        // Add URL parameter copy functionality (always available, checks lockSettings internally)
-        this.header.addEventListener('contextmenu', (e) => {
-            if (!lockSettings) {
-                e.preventDefault();
-                this.copyURLParamsToClipboard();
-            }
-        });
 
         // Create card body
         this.cardBody = document.createElement('div');
@@ -738,32 +725,6 @@ export class FloatingWindow {
             return this.urlParamsGenerator();
         }
         return '';
-    }
-
-    private async copyURLParamsToClipboard(): Promise<void> {
-        if (lockSettings) {
-            return; // Don't allow copying when locked
-        }
-
-        const urlParams = this.generateURLParams();
-        if (!urlParams) {
-            logConsole('No URL parameters available for this window', 'warning');
-            return;
-        }
-
-        try {
-            await navigator.clipboard.writeText(urlParams);
-            logConsole(`URL parameters copied to clipboard: ${urlParams}`, 'info');
-            
-            // Show a brief visual feedback
-            const originalTitle = this.titleElement.textContent;
-            this.titleElement.textContent = i18next.t('menu.section.datetime.setting.timezonewindows.tooltipcopied');
-            setTimeout(() => {
-                this.titleElement.textContent = originalTitle;
-            }, 1000);
-        } catch (error) {
-            logConsole(`Failed to copy URL parameters to clipboard: ${error}`, 'error');
-        }
     }
 }
 

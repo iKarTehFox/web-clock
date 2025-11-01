@@ -8,6 +8,7 @@ import axios from 'axios';
 import QRCode from 'qrcode';
 import { match } from 'ts-pattern';
 import i18next from 'i18next';
+import { getTimezoneWindowsConfig, setTimezoneWindowsConfig } from './timezone-windows';
 import { versionNumberString } from './utils/update-notify';
 import { lockSettings } from './utils/debug';
 
@@ -16,6 +17,7 @@ function getSettings() {
         clockConfig: getClockConfig(),
         fontConfig: getFontConfig(),
         colorTheme: getColorThemeConfig(),
+        timezoneWindows: getTimezoneWindowsConfig() || undefined,
         exportTimestamp: luxon.DateTime.now().toFormat('FFFF'),
         version: versionNumberString
     };
@@ -422,7 +424,7 @@ export function presetLocalJSON(filename: string, alertConfirmation: boolean = t
         });
 }
 
-function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: any; colorTheme: any; }) {
+function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: any; colorTheme: any; timezoneWindows?: any; }) {
     // Set clockConfig settings
     const clockConfig = importedSettings.clockConfig;
     setClockConfig(clockConfig, true);
@@ -434,6 +436,11 @@ function updateClockSettings(importedSettings: { clockConfig: any; fontConfig: a
     // Set colorTheme settings
     const colorTheme = importedSettings.colorTheme;
     setColorThemeConfig(colorTheme, true);
+
+    // Set timezone windows if they exist
+    if (importedSettings.timezoneWindows) {
+        setTimezoneWindowsConfig(importedSettings.timezoneWindows);
+    }
 }
 
 // Preset buttons

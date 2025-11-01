@@ -223,73 +223,6 @@ export function createTimezoneWindow(
 
     timezoneWindows.set(windowId, windowData);
 
-    // Set up URL parameter generator for copying functionality
-    floatingWindow.setURLParamsGenerator(() => {
-        const windowElement = floatingWindow.getElement();
-        if (!windowElement) return '';
-
-        const position = {
-            x: parseInt(windowElement.style.left) || 0,
-            y: parseInt(windowElement.style.top) || 0,
-            width: parseInt(windowElement.style.width) || 350,
-            height: parseInt(windowElement.style.height) || 200
-        };
-
-        // Determine window number (1 or 2) based on creation order
-        const windowIds = Array.from(timezoneWindows.keys());
-        const windowIndex = windowIds.indexOf(windowId);
-        const windowNumber = windowIndex + 1;
-
-        if (windowNumber > 2) return ''; // Only support 2 windows
-
-        const prefix = `tz${windowNumber}`;
-        const params = new URLSearchParams();
-
-        // Add timezone
-        params.set(prefix, windowData.timezone);
-
-        // Add clock mode (convert internal format back to URL format)
-        if (windowData.settings.clockMode === '0') {
-            params.set(`${prefix}Mode`, '12');
-        } else {
-            params.set(`${prefix}Mode`, '24');
-        }
-
-        // Add date format if not empty
-        if (windowData.settings.dateFormat) {
-            params.set(`${prefix}DateFormat`, windowData.settings.dateFormat);
-        }
-
-        // Add font family
-        params.set(`${prefix}Font`, windowData.settings.fontFamily);
-
-        // Add font style (convert internal format back to URL format)
-        if (windowData.settings.fontStyle === 'fstI') {
-            params.set(`${prefix}Style`, 'italic');
-        } else {
-            params.set(`${prefix}Style`, 'normal');
-        }
-
-        // Add font weight (convert internal format back to URL format)
-        if (windowData.settings.fontWeight === 'fweL') {
-            params.set(`${prefix}Weight`, 'lighter');
-        } else if (windowData.settings.fontWeight === 'fweB') {
-            params.set(`${prefix}Weight`, 'bold');
-        } else {
-            params.set(`${prefix}Weight`, 'normal');
-        }
-
-        // Add positioning
-        params.set(`${prefix}X`, position.x.toString());
-        params.set(`${prefix}Y`, position.y.toString());
-        params.set(`${prefix}Width`, position.width.toString());
-        params.set(`${prefix}Height`, position.height.toString());
-
-        // Return the full URL with current page as base
-        const baseUrl = window.location.origin + window.location.pathname;
-        return `${baseUrl}?${params.toString()}`;
-    });
-
     // Set up window close events to update button state
     const windowElement = floatingWindow.getElement();
     if (windowElement) {
@@ -319,7 +252,7 @@ export function createTimezoneWindow(
     }
 }
 
-function updateTimezoneWindow(windowId: string): void {
+export function updateTimezoneWindow(windowId: string): void {
     const windowData = timezoneWindows.get(windowId);
     if (!windowData) return;
 
@@ -361,74 +294,94 @@ export function updateAllTimezoneWindows(): void {
     });
 }
 
-// URL parameter interface for timezone windows
-export interface TimezoneWindowURLParams {
-    timezone?: string;
-    clockMode?: 12 | 24;
-    dateFormat?: string;
-    fontFamily?: string;
-    fontStyle?: 'italic' | 'normal';
-    fontWeight?: 'lighter' | 'normal' | 'bold';
-    // Positioning
-    x?: number;
-    y?: number;
-    width?: number;
-    height?: number;
-}
-
-// Create timezone window from URL parameters
-export function createTimezoneWindowFromURL(params: TimezoneWindowURLParams): string | null {
-    // Convert URL param format to internal format
-    const settings: TimezoneWindowSettings = {
-        timezone: params.timezone,
-        clockMode: params.clockMode !== undefined ? (params.clockMode === 12 ? '0' : '1') : undefined, // Convert 12/24 to 0/1, or undefined for default
-        dateFormat: params.dateFormat !== undefined ? params.dateFormat : undefined, // Explicitly pass through empty strings to hide date, or undefined for default
-        fontFamily: params.fontFamily,
-        fontStyle: params.fontStyle !== undefined ? (params.fontStyle === 'italic' ? 'fstI' : 'fstR') : undefined, // Convert to internal IDs, or undefined for default
-        fontWeight: params.fontWeight !== undefined ? match(params.fontWeight)
-            .with('lighter', () => 'fweL')
-            .with('bold', () => 'fweB')
-            .otherwise(() => 'fweN') : undefined, // normal or undefined -> fweN, or undefined for default
-        // Positioning
-        x: params.x,
-        y: params.y,
-        width: params.width ? `${params.width}px` : undefined,
-        height: params.height ? `${params.height}px` : undefined
-    };
-
-    let createdWindowId: string | null = null;
-    
-    createTimezoneWindow(settings, (windowId) => {
-        createdWindowId = windowId;
-        updateTimezoneWindow(windowId);
-    });
-
-    return createdWindowId;
-}
-
-// Get all active timezone windows info (useful for URL generation)
-export function getActiveTimezoneWindows(): Array<{
-    id: string;
+// Export timezone windows configuration for JSON settings
+export interface TimezoneWindowExport {
     timezone: string;
-    settings: TimezoneWindowData['settings'];
-    position: { x: number; y: number; width: string; height: string };
-}> {
-    return Array.from(timezoneWindows.entries()).map(([id, data]) => {
+    clockMode: string;
+    dateFormat: string;
+    fontFamily: string;
+    fontStyle: string;
+    fontWeight: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
+export function getTimezoneWindowsConfig(): { tz1?: TimezoneWindowExport; tz2?: TimezoneWindowExport } | null {
+    const windows = Array.from(timezoneWindows.entries());
+    
+    if (windows.length === 0) {
+        return null;
+    }
+
+    const config: { tz1?: TimezoneWindowExport; tz2?: TimezoneWindowExport } = {};
+
+    windows.forEach(([_, data], index) => {
         const windowElement = data.window.getElement();
-        const position = {
+        const windowKey = index === 0 ? 'tz1' : 'tz2';
+        
+        config[windowKey] = {
+            timezone: data.timezone,
+            clockMode: data.settings.clockMode,
+            dateFormat: data.settings.dateFormat,
+            fontFamily: data.settings.fontFamily,
+            fontStyle: data.settings.fontStyle,
+            fontWeight: data.settings.fontWeight,
             x: windowElement ? parseInt(windowElement.style.left) || 0 : 0,
             y: windowElement ? parseInt(windowElement.style.top) || 0 : 0,
-            width: windowElement ? windowElement.style.width || '350px' : '350px',
-            height: windowElement ? windowElement.style.height || '200px' : '200px'
-        };
-        
-        return {
-            id,
-            timezone: data.timezone,
-            settings: data.settings,
-            position
+            width: windowElement ? parseInt(windowElement.style.width) || 350 : 350,
+            height: windowElement ? parseInt(windowElement.style.height) || 200 : 200
         };
     });
+
+    return config;
+}
+
+// Import timezone windows from JSON config
+export function setTimezoneWindowsConfig(config: { tz1?: TimezoneWindowExport; tz2?: TimezoneWindowExport }): void {
+    // Close any existing windows first
+    closeAllTimezoneWindows();
+
+    // Create tz1 if exists
+    if (config.tz1) {
+        const tz1Settings: TimezoneWindowSettings = {
+            timezone: config.tz1.timezone,
+            clockMode: config.tz1.clockMode,
+            dateFormat: config.tz1.dateFormat,
+            fontFamily: config.tz1.fontFamily,
+            fontStyle: config.tz1.fontStyle,
+            fontWeight: config.tz1.fontWeight,
+            x: config.tz1.x,
+            y: config.tz1.y,
+            width: `${config.tz1.width}px`,
+            height: `${config.tz1.height}px`
+        };
+
+        createTimezoneWindow(tz1Settings, (windowId) => {
+            updateTimezoneWindow(windowId);
+        });
+    }
+
+    // Create tz2 if exists
+    if (config.tz2) {
+        const tz2Settings: TimezoneWindowSettings = {
+            timezone: config.tz2.timezone,
+            clockMode: config.tz2.clockMode,
+            dateFormat: config.tz2.dateFormat,
+            fontFamily: config.tz2.fontFamily,
+            fontStyle: config.tz2.fontStyle,
+            fontWeight: config.tz2.fontWeight,
+            x: config.tz2.x,
+            y: config.tz2.y,
+            width: `${config.tz2.width}px`,
+            height: `${config.tz2.height}px`
+        };
+
+        createTimezoneWindow(tz2Settings, (windowId) => {
+            updateTimezoneWindow(windowId);
+        });
+    }
 }
 
 // Close all timezone windows
