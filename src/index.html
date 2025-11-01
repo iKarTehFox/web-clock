@@ -604,12 +604,16 @@
                             <div class="accordion-body" id="panel-section-ie">
                                 <h6 class="mb-1" data-i18n="menu.section.importexport.setting.importsettings.title"></h6>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-primary" id="jsonImportUlBtn" data-i18n="menu.section.importexport.setting.importsettings.option.uploadjson"></button>
+                                    <button type="button" class="btn btn-outline-primary" id="jsonImportUlBtn">
+                                        <i class="bi bi-upload"></i> <span data-i18n="menu.section.importexport.setting.importsettings.option.uploadjson"></span>
+                                    </button>
                                     <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="visually-hidden" data-i18n="arialabel.toggledropdown"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><button class="dropdown-item btn" id="jsonImportQrBtn" data-i18n="menu.section.importexport.setting.importsettings.option.scanqrcode"></button></li>
+                                        <li><button class="dropdown-item btn" id="jsonImportQrBtn">
+                                            <i class="bi bi-qr-code"></i> <span data-i18n="menu.section.importexport.setting.importsettings.option.scanqrcode"></span>
+                                        </button></li>
                                     </ul>
                                 </div>
                                 <button type="button" class="btn btn-outline-primary" id="jsonImportLSBtn" data-bs-toggle="tooltip" data-bs-placement="top" data-i18n-data-bs-title="menu.section.importexport.setting.importsettings.option.loadls">
@@ -627,13 +631,19 @@
                                 <hr>
                                 <h6 class="mb-1 mt-2" data-i18n="menu.section.importexport.setting.exportsettings.title"></h6>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-warning" id="jsonExportDlBtn" data-i18n="menu.section.importexport.setting.exportsettings.option.downloadjson"></button>
+                                    <button type="button" class="btn btn-outline-warning" id="jsonExportDlBtn">
+                                        <i class="bi bi-download"></i> <span data-i18n="menu.section.importexport.setting.exportsettings.option.downloadjson"></span>
+                                    </button>
                                     <button type="button" class="btn btn-outline-warning dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="visually-hidden" data-i18n="arialabel.toggledropdown"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><button class="dropdown-item btn" id="jsonExportClipBtn" data-i18n="menu.section.importexport.setting.exportsettings.option.copyjson"></button></li>
-                                        <li><button class="dropdown-item btn" id="jsonExportQrBtn" data-i18n="menu.section.importexport.setting.exportsettings.option.genqrcode"></button></li>
+                                        <li><button class="dropdown-item btn" id="jsonExportClipBtn">
+                                            <i class="bi bi-clipboard"></i> <span data-i18n="menu.section.importexport.setting.exportsettings.option.copyjson"></span>
+                                        </button></li>
+                                        <li><button class="dropdown-item btn" id="jsonExportQrBtn">
+                                            <i class="bi bi-qr-code"></i> <span data-i18n="menu.section.importexport.setting.exportsettings.option.genqrcode"></span>
+                                        </button></li>
                                     </ul>
                                 </div>
                                 <button type="button" class="btn btn-outline-warning" id="jsonExportSaveLS" data-i18n-data-bs-title="menu.section.importexport.setting.exportsettings.option.saveLS" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true">
