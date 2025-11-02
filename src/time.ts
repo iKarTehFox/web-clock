@@ -5,7 +5,7 @@ import { logConsole } from './utils/dom-utils';
 import * as clock from './time-help';
 import { match, P } from 'ts-pattern';
 import i18next from 'i18next';
-import { on, once } from './system/event-bus';
+import { on, once, emit, AppEvents } from './system/event-bus';
 
 // Default modes
 export let cMode = '0';
@@ -166,10 +166,8 @@ function updateTime(): void {
     setClockDisplay([displayHour, displayMinute, displaySecond, displayIndicator]);
     updateDate(time);
     
-    // Avoiding circular dependency by dynamic import :/
-    import('./timezone-windows').then(({ updateAllTimezoneWindows }) => {
-        updateAllTimezoneWindows();
-    });
+    // Notify timezone windows to update
+    emit(AppEvents.CLOCK_UPDATED, { time });
 }
 
 // Clock DOM update
@@ -222,26 +220,43 @@ function getTimeZonesByRegion() {
 
 // Function to populate the existing select element with time zones
 export function populateTimeZoneSelect() {
-    const timeZoneGroups = getTimeZonesByRegion();
-  
-    // Populate the select element with optgroups and options
-    Object.keys(timeZoneGroups).forEach((region) => {
-        const optGroupElement = document.createElement('optgroup');
-        optGroupElement.label = region;
-  
-        timeZoneGroups[region].forEach((timeZone) => {
-            const optionElement = document.createElement('option');
-            optionElement.value = timeZone;
-            const timeZoneName = timeZone.replace(/_/g,' ');
-            optionElement.textContent = timeZoneName;
-            // Select current time zone
-            if (luxon.DateTime.local().zoneName === timeZone) {
-                optionElement.selected = true;
-            }
-            optGroupElement.appendChild(optionElement);
+    // Use requestIdleCallback for better performance, fallback to setTimeout
+    const scheduleWork = (callback: () => void) => {
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(callback, { timeout: 2000 });
+        } else {
+            setTimeout(callback, 0);
+        }
+    };
+    
+    scheduleWork(() => {
+        const timeZoneGroups = getTimeZonesByRegion();
+        const currentZone = luxon.DateTime.local().zoneName;
+        const fragment = document.createDocumentFragment();
+      
+        // Populate the select element with optgroups and options
+        Object.keys(timeZoneGroups).forEach((region) => {
+            const optGroupElement = document.createElement('optgroup');
+            optGroupElement.label = region;
+      
+            timeZoneGroups[region].forEach((timeZone) => {
+                const optionElement = document.createElement('option');
+                optionElement.value = timeZone;
+                const timeZoneName = timeZone.replace(/_/g,' ');
+                optionElement.textContent = timeZoneName;
+                // Select current time zone
+                if (currentZone === timeZone) {
+                    optionElement.selected = true;
+                }
+                optGroupElement.appendChild(optionElement);
+            });
+      
+            fragment.appendChild(optGroupElement);
         });
-  
-        menu.timezoneselect.appendChild(optGroupElement);
+        
+        // Single DOM update
+        menu.timezoneselect.appendChild(fragment);
+        logConsole('Timezone select populated', 'debug');
     });
 }
 
@@ -259,7 +274,8 @@ export function updateDate(timeObj: luxon.DateTime = getLuxNow('obj') as luxon.D
 
     dtdisplay.date.textContent = newDate;
     lastDate = newDate;
-    refreshDateFormatOptions(timeObj);   
+    // Note: refreshDateFormatOptions is only called on language change or explicit updates
+    // Removed from here to avoid unnecessary recalculations on every date change
 }
 
 // Initial update, then start intervals

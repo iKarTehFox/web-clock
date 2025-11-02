@@ -5,6 +5,7 @@ import { FloatingWindow } from './system/FloatingWindow';
 import { match } from 'ts-pattern';
 import i18next from 'i18next';
 import { cMode } from './time';
+import { on, AppEvents } from './system/event-bus';
 
 // Floating timezone windows
 interface TimezoneWindowData {
@@ -405,4 +406,9 @@ export function initializeTimezoneWindows(): void {
 
     // Initialize button state
     updateTimezoneButton();
+    
+    // Listen for clock updates to update all timezone windows
+    on(AppEvents.CLOCK_UPDATED, () => {
+        updateAllTimezoneWindows();
+    });
 }
