@@ -31,37 +31,29 @@ export function logConsole(message: string, type: 'debug' | 'error' | 'warning' 
     }
 }
 
+// Color mapping for log types (cached for performance)
+const LOG_TYPE_COLORS = {
+    'debug': '#6c757d',
+    'info': '#0d6efd',
+    'warning': '#ffc107',
+    'error': '#dc3545'
+} as const;
+
+// Throttle scroll updates to improve performance
+let scrollUpdateScheduled = false;
+
 export function appendToLogs(text: string, type: 'info' | 'warning' | 'error' | 'debug' = 'info', timestamp: boolean = true): void {
     if (!isDevConInit) return;
 
     // Create a new log entry
     const entry = document.createElement('div');
+    entry.dataset.logtype = type;
+    entry.style.color = LOG_TYPE_COLORS[type];
     
     // Add timestamp if requested
     const timeString = timestamp ? `[${new Date().toLocaleTimeString()}] ` : '';
-    
-    // Style based on log type
-    match(type)
-        .with('debug', () => {
-            entry.dataset.logtype = 'debug';
-            entry.style.color = '#6c757d'; // Gray for debug
-        })
-        .with('info', () => {
-            entry.dataset.logtype = 'info';
-            entry.style.color = '#0d6efd'; // Blue for info
-        })
-        .with('warning', () => {
-            entry.dataset.logtype = 'warning';
-            entry.style.color = '#ffc107'; // Yellow for warnings
-        })
-        .with('error', () => {
-            entry.dataset.logtype = 'error';
-            entry.style.color = '#dc3545'; // Red for errors
-        })
-        .otherwise(() => {});
-    
-    // Set the content with timestamp if enabled
     entry.textContent = `${timeString}${type.toUpperCase()}: ${text}`;
+    
     devcon.logs.appendChild(entry);
     
     // Remove oldest entries if exceeding 500
@@ -69,8 +61,14 @@ export function appendToLogs(text: string, type: 'info' | 'warning' | 'error' | 
         devcon.logs.removeChild(devcon.logs.firstChild);
     }
     
-    // Auto-scroll to bottom
-    devcon.logs.scrollTop = devcon.logs.scrollHeight;
+    // Throttle scroll updates using requestAnimationFrame
+    if (!scrollUpdateScheduled) {
+        scrollUpdateScheduled = true;
+        requestAnimationFrame(() => {
+            devcon.logs.scrollTop = devcon.logs.scrollHeight;
+            scrollUpdateScheduled = false;
+        });
+    }
 }
 
 // Function to set toast theme
@@ -133,6 +131,10 @@ interface ToastOptions {
     icon?: string;
 }
 
+// Cache for toast container to avoid repeated DOM queries
+let cachedToastContainer: HTMLElement | null = null;
+let toastContainerRemoved = false;
+
 // Function to show a toast message using Bootstrap toasts
 export function showToast(options: ToastOptions): void {
     const { title, message, duration = 'default', style = 'auto', icon } = options;
@@ -161,15 +163,22 @@ export function showToast(options: ToastOptions): void {
     
     const toastPos = positionMap[toastPosition];
     
-    // Create toast container if it doesn't exist
-    let toastContainer: HTMLElement = document.querySelector('.toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.className = `toast-container ${toastPos}`;
-        toastContainer.style.zIndex = '1090';
-        document.body.appendChild(toastContainer);
-    } else {
-        // Update existing container position
+    // Use cached container or create new one
+    let toastContainer: HTMLElement;
+    if (!cachedToastContainer || toastContainerRemoved) {
+        cachedToastContainer = document.querySelector('.toast-container');
+        if (!cachedToastContainer) {
+            cachedToastContainer = document.createElement('div');
+            cachedToastContainer.className = `toast-container ${toastPos}`;
+            cachedToastContainer.style.zIndex = '1090';
+            document.body.appendChild(cachedToastContainer);
+        }
+        toastContainerRemoved = false;
+    }
+    toastContainer = cachedToastContainer;
+    
+    // Update container position if changed
+    if (!toastContainer.className.includes(toastPos)) {
         toastContainer.className = `toast-container ${toastPos}`;
     }
     
@@ -234,6 +243,8 @@ export function showToast(options: ToastOptions): void {
         // Remove container if no more toasts
         if (toastContainer && toastContainer.children.length === 0) {
             toastContainer.remove();
+            cachedToastContainer = null;
+            toastContainerRemoved = true; // Mark as removed for next check
         }
     });
     
