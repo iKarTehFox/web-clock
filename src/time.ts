@@ -296,8 +296,7 @@ export function updateDate(timeObj: luxon.DateTime = getLuxNow('obj') as luxon.D
 
     dtdisplay.date.textContent = newDate;
     lastDate = newDate;
-    // Note: refreshDateFormatOptions is only called on language change or explicit updates
-    // Removed from here to avoid unnecessary recalculations on every date change
+    refreshDateFormatOptions(timeObj);
 }
 
 // Initial update, then start intervals
