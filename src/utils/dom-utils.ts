@@ -133,6 +133,7 @@ interface ToastOptions {
 
 // Cache for toast container to avoid repeated DOM queries
 let cachedToastContainer: HTMLElement | null = null;
+let toastContainerRemoved = false;
 
 // Function to show a toast message using Bootstrap toasts
 export function showToast(options: ToastOptions): void {
@@ -164,7 +165,7 @@ export function showToast(options: ToastOptions): void {
     
     // Use cached container or create new one
     let toastContainer: HTMLElement;
-    if (!cachedToastContainer || !document.body.contains(cachedToastContainer)) {
+    if (!cachedToastContainer || toastContainerRemoved) {
         cachedToastContainer = document.querySelector('.toast-container');
         if (!cachedToastContainer) {
             cachedToastContainer = document.createElement('div');
@@ -172,6 +173,7 @@ export function showToast(options: ToastOptions): void {
             cachedToastContainer.style.zIndex = '1090';
             document.body.appendChild(cachedToastContainer);
         }
+        toastContainerRemoved = false;
     }
     toastContainer = cachedToastContainer;
     
@@ -241,7 +243,8 @@ export function showToast(options: ToastOptions): void {
         // Remove container if no more toasts
         if (toastContainer && toastContainer.children.length === 0) {
             toastContainer.remove();
-            cachedToastContainer = null; // Clear cache when container is removed
+            cachedToastContainer = null;
+            toastContainerRemoved = true; // Mark as removed for next check
         }
     });
     

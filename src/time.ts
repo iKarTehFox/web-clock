@@ -7,6 +7,10 @@ import { match, P } from 'ts-pattern';
 import i18next from 'i18next';
 import { on, once, emit, AppEvents } from './system/event-bus';
 
+// Constants
+const DEFAULT_FAVICON_HOUR = '3';
+const IDLE_CALLBACK_TIMEOUT_MS = 2000;
+
 // Default modes
 export let cMode = '0';
 export let dateFormat = 'D';
@@ -70,7 +74,7 @@ function updateTime(): void {
         document.title = `Time: ${hrs}:${min}:${sec} ${ind}`;
     } else if (lastTitleVisState !== isTitleVisChecked) {
         // Only reset once when unchecked
-        clock.updateFavicon('3');
+        clock.updateFavicon(DEFAULT_FAVICON_HOUR);
         document.title = 'Online Web Clock';
         logConsole('Title and favicon reset...', 'info');
     }
@@ -242,7 +246,7 @@ export function populateTimeZoneSelect() {
     // Use requestIdleCallback for better performance, fallback to setTimeout
     const scheduleWork = (callback: () => void) => {
         if ('requestIdleCallback' in window) {
-            requestIdleCallback(callback, { timeout: 2000 });
+            requestIdleCallback(callback, { timeout: IDLE_CALLBACK_TIMEOUT_MS });
         } else {
             setTimeout(callback, 0);
         }
