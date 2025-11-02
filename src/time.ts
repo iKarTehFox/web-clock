@@ -13,6 +13,7 @@ export let dateFormat = 'D';
 export let timeDisplayMethod: string;
 let lastTime: Array<string>;
 let lastDate: string;
+let lastTimeDisplayMethod: string;
 const pageLoadTime = getLuxNow('sec');
 type TimeFormat = 'sec' | 'millis' | 'obj';
 
@@ -51,6 +52,9 @@ function updatePageDuration(): void {
     menu.durationdisplay.textContent = durationText;
 }
 
+// Cache for title/favicon state
+let lastTitleVisState = false;
+
 // Main update time
 function updateTime(): void {
     const time = getLuxNow('obj') as luxon.DateTime;
@@ -60,18 +64,22 @@ function updateTime(): void {
     const ind = cMode === '0' ? time.toFormat('a') : '';
 
     // Handle title and favicon updates
-    if (menu.titlevischeckbox.checked) {
+    const isTitleVisChecked = menu.titlevischeckbox.checked;
+    if (isTitleVisChecked) {
         clock.updateFavicon(time.toFormat('h'));
         document.title = `Time: ${hrs}:${min}:${sec} ${ind}`;
-    } else if (document.title !== 'Online Web Clock' || !doc.favicon.href.endsWith('/icons/clock-time-3.svg')) {
+    } else if (lastTitleVisState !== isTitleVisChecked) {
+        // Only reset once when unchecked
         clock.updateFavicon('3');
         document.title = 'Online Web Clock';
         logConsole('Title and favicon reset...', 'info');
     }
+    lastTitleVisState = isTitleVisChecked;
 
-    // Handle time bar
-    if (menu.timebarselect.value !== 'tbarNone') {
-        clock.timeBarUtil(menu.timebarselect.value, time);
+    // Handle time bar (cache value to avoid repeated property access)
+    const timeBarValue = menu.timebarselect.value;
+    if (timeBarValue !== 'tbarNone') {
+        clock.timeBarUtil(timeBarValue, time);
     } else {
         dtdisplay.timeBar.style.width = '0%';
     }
@@ -84,17 +92,20 @@ function updateTime(): void {
     if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
         const unixTime = timeDisplayMethod === 'unixmillis' ? clock.toUnixMillis() : clock.toUnixSec();
         displayHour = String(unixTime);
-        // Set colon visibility
-        clock.colonVisibility([false, undefined]);
-        menu.secondsvisradio.forEach((radio) => {
-            if (radio.id === 'sviN') {
-                radio.checked = true;
-            } else {
-                radio.checked = false;
-            }
-            radio.dispatchEvent(new Event('change', { bubbles: true }));
-            radio.disabled = true;
-        });
+        
+        // Only update UI state when time display method changes
+        if (lastTimeDisplayMethod !== timeDisplayMethod) {
+            clock.colonVisibility([false, undefined]);
+            menu.secondsvisradio.forEach((radio) => {
+                if (radio.id === 'sviN') {
+                    radio.checked = true;
+                } else {
+                    radio.checked = false;
+                }
+                radio.dispatchEvent(new Event('change', { bubbles: true }));
+                radio.disabled = true;
+            });
+        }
     } else {
         const timeFunction = {
             binary: (value: string) => clock.toRadix(value, 2),
@@ -123,24 +134,26 @@ function updateTime(): void {
             ii_leapyear: () => clock.isItDate('leapyear'),
         }[timeDisplayMethod];
 
-        // Handle colon visibility
-        const tdmNoColon: boolean = ['ii_christmas','ii_weekend','ii_leapyear'].includes(timeDisplayMethod);
-        if (tdmNoColon) {
-            clock.colonVisibility([false, undefined]);
-            menu.secondsvisradio.forEach((radio) => {
-                if (radio.id === 'sviN') {
-                    radio.checked = true;
-                } else {
-                    radio.checked = false;
-                }
-                radio.dispatchEvent(new Event('change'));
-                radio.disabled = true;
-            });
-        } else {
-            clock.colonVisibility([true, undefined]);
-            menu.secondsvisradio.forEach((radio) => {
-                radio.disabled = false;
-            });
+        // Only update UI state when time display method changes
+        if (lastTimeDisplayMethod !== timeDisplayMethod) {
+            const tdmNoColon: boolean = ['ii_christmas','ii_weekend','ii_leapyear'].includes(timeDisplayMethod);
+            if (tdmNoColon) {
+                clock.colonVisibility([false, undefined]);
+                menu.secondsvisradio.forEach((radio) => {
+                    if (radio.id === 'sviN') {
+                        radio.checked = true;
+                    } else {
+                        radio.checked = false;
+                    }
+                    radio.dispatchEvent(new Event('change'));
+                    radio.disabled = true;
+                });
+            } else {
+                clock.colonVisibility([true, undefined]);
+                menu.secondsvisradio.forEach((radio) => {
+                    radio.disabled = false;
+                });
+            }
         }
 
         if (timeFunction) {
@@ -165,6 +178,9 @@ function updateTime(): void {
 
     setClockDisplay([displayHour, displayMinute, displaySecond, displayIndicator]);
     updateDate(time);
+    
+    // Track last display method to avoid redundant UI updates
+    lastTimeDisplayMethod = timeDisplayMethod;
     
     // Notify timezone windows to update
     emit(AppEvents.CLOCK_UPDATED, { time });
