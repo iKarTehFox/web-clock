@@ -236,6 +236,9 @@ function getTimeZonesByRegion() {
 
 // Function to populate the existing select element with time zones
 export function populateTimeZoneSelect() {
+    // Get current zone before scheduling async work to avoid overhead
+    const currentZone = luxon.DateTime.local().zoneName;
+    
     // Use requestIdleCallback for better performance, fallback to setTimeout
     const scheduleWork = (callback: () => void) => {
         if ('requestIdleCallback' in window) {
@@ -247,7 +250,6 @@ export function populateTimeZoneSelect() {
     
     scheduleWork(() => {
         const timeZoneGroups = getTimeZonesByRegion();
-        const currentZone = luxon.DateTime.local().zoneName;
         const fragment = document.createDocumentFragment();
       
         // Populate the select element with optgroups and options

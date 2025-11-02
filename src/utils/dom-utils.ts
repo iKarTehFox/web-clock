@@ -57,7 +57,7 @@ export function appendToLogs(text: string, type: 'info' | 'warning' | 'error' | 
     devcon.logs.appendChild(entry);
     
     // Remove oldest entries if exceeding 500
-    if (devcon.logs.children.length > 500) {
+    while (devcon.logs.children.length > 500) {
         devcon.logs.removeChild(devcon.logs.firstChild);
     }
     

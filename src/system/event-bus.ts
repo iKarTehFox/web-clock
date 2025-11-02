@@ -1,3 +1,5 @@
+import * as luxon from 'ts-luxon';
+
 // List of App Events
 export const AppEvents = {
     URL_PARAMS_LOADED: 'urlParamsLoaded',
@@ -23,7 +25,7 @@ interface EventDataMap {
     [AppEvents.DOM_LOADED]: { timestamp: number };
     [AppEvents.STOP_CLOCK]: { sourcereason: string };
     [AppEvents.START_CLOCK]: { sourcereason: string };
-    [AppEvents.CLOCK_UPDATED]: { time: any };
+    [AppEvents.CLOCK_UPDATED]: { time: luxon.DateTime };
 }
 
 // Dispatch event function
