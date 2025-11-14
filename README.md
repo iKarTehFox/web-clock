@@ -1,5 +1,5 @@
-[![forthebadge](https://forthebadge.com//badges/built-with-love.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com//badges/works-on-my-machine.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/badges/built-with-love.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/badges/works-on-my-machine.svg)](https://forthebadge.com)
 
 # Online Web Clock
 > **An online, digital clock web app built with Bootstrap 5.3.8 and Webpack, focused on customizability.  
