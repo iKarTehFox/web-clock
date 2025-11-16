@@ -2314,11 +2314,11 @@ export const debugConsole = {
     toggle: () => {
         if (debugMode) {
             const isVisible = devcon.container.classList.contains('show');
+            devcon.container.classList.toggle('show', !isVisible);
+
             if (isVisible) {
-                devcon.container.classList.remove('show');
                 panel.devconbutton.className = 'btn btn-secondary';
             } else {
-                devcon.container.classList.add('show');
                 devcon.input.focus();
                 panel.devconbutton.className = 'btn btn-danger';
             }

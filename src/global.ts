@@ -270,11 +270,7 @@ menu.cnotealignradio.forEach(radio => {
 });
 
 menu.panelvischeckbox.addEventListener('change', () => {
-    if (menu.panelvischeckbox.checked) {
-        panel.container.classList.remove('d-none');
-    } else {
-        panel.container.classList.add('d-none');
-    }
+    panel.container.classList.toggle('d-none', !menu.panelvischeckbox.checked);
 });
 
 menu.versionlabelclk.addEventListener('click', () => {
