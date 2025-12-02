@@ -1,4 +1,4 @@
-import { doc, menu, dtdisplay, panel } from './utils/dom-elements';
+import { menu, dtdisplay, panel } from './utils/dom-elements';
 import * as numberToWords from 'number-to-words';
 import * as luxon from 'ts-luxon';
 import { logConsole } from './utils/dom-utils';

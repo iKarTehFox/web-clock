@@ -4,6 +4,7 @@ import { logConsole, requestNotificationPermission, showToast } from './utils/do
 import * as luxon from 'ts-luxon';
 import i18next from 'i18next';
 import { once } from './system/event-bus';
+import { shouldCloseOnClick, shouldCloseOnEscape } from './utils/visibility-check';
 
 
 let countdownInterval: NodeJS.Timeout;
@@ -207,19 +208,8 @@ countdown.obutton.addEventListener('click', () => {
 once('domLoaded', () => {
     document.addEventListener('click', function(e) {
         const target = e.target as HTMLElement;
-        const isMenuRelated = menu.container.contains(target) || 
-                                   panel.menubutton.contains(target) || 
-                                   countdown.container.contains(target) || 
-                                   countdown.obutton.contains(target) ||
-                                   devcon.container.contains(target);
-        const isCountdownVisible = !countdown.container.classList.contains('d-none');
-        const isTooltip = target.closest('.tooltip') !== null;
-        const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
-        const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
-        const isExportOverlay = target.closest('[data-overlay="export-modal-overlay"]') !== null;
-        const isOffcanvasBackdrop = target.closest('.offcanvas-backdrop') !== null;
-
-        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && !isExportOverlay && isCountdownVisible && !isOffcanvasBackdrop) {
+        const related = [menu.container, panel.menubutton, countdown.container, countdown.obutton, devcon.container];
+        if (shouldCloseOnClick(target, countdown.container, related, { includeInputFocusBlock: false })) {
             countdown.container.classList.add('d-none');
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');
@@ -229,14 +219,7 @@ once('domLoaded', () => {
 
 // Esc down to close countdown
 document.addEventListener('keydown', function(e) {
-    const isCountdownVisible = !countdown.container.classList.contains('d-none');
-    const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
-    const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
-    const isExportOverlayVisible = document.querySelector('[data-overlay="export-modal-overlay"]') !== null;
-    const isOffcanvasVisible = document.querySelector('.offcanvas.show, .offcanvas.showing') !== null;
-    const isInputFocused = document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement;
-
-    if (e.key === 'Escape' && isCountdownVisible && !isBsModalVisible && !isScannerOverlayVisible && !isExportOverlayVisible && !isOffcanvasVisible && !isInputFocused) {
+    if (e.key === 'Escape' && shouldCloseOnEscape(countdown.container, { includeInputFocusBlock: true })) {
         countdown.container.classList.add('d-none');
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');

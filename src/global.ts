@@ -1,6 +1,6 @@
 import { match } from 'ts-pattern';
 import { menu, font, dtdisplay, stopwatch, countdown, doc, panel } from './utils/dom-elements';
-import { logConsole, setMenuTheme } from './utils/dom-utils';
+import { logConsole, setMenuTheme, showToast } from './utils/dom-utils';
 import { showUpdateNotification, versionNumberString } from './utils/update-notify';
 import i18next from 'i18next';
 
@@ -238,13 +238,19 @@ export function toggleFullscreen() {
         }
     }
     logConsole('Toggled fullscreen mode', 'info');
-    i18next.t('toasts.global.title'), (i18next.t('toasts.global.fullscreen'));
+    showToast({
+        title: i18next.t('toasts.global.title'),
+        icon: 'bi-fullscreen',
+        message: i18next.t('toasts.global.fullscreen')
+    });
 }
 
+// FS button listener
 menu.fullscreenbtn.addEventListener('click', function() {
     toggleFullscreen();
 });
 
+// Custom note stuff
 menu.cnoteinput.oninput = () => {
     const text = menu.cnoteinput.value;
     doc.cnote.textContent = text;
@@ -269,10 +275,44 @@ menu.cnotealignradio.forEach(radio => {
     });
 });
 
+// Auto-hide mouse functionality
+const idleTimeout = 10000;
+let idleTimer: NodeJS.Timeout;
+let isDebouncing: boolean = false;
+
+menu.mousehidecheckbox.addEventListener('change', () => {
+    if (!menu.mousehidecheckbox.checked) {
+        clearTimeout(idleTimer);
+        doc.blurpanel.classList.remove('hide-cursor');
+        dtdisplay.ccontainer.classList.remove('hide-cursor');
+        logConsole('Mouse auto-hide disabled', 'info');
+    }
+});
+
+doc.self.addEventListener('mousemove', () => {
+    if (!menu.mousehidecheckbox.checked || isDebouncing) return;
+
+    clearTimeout(idleTimer);
+
+    doc.blurpanel.classList.remove('hide-cursor');
+    dtdisplay.ccontainer.classList.remove('hide-cursor');
+    idleTimer = setTimeout(() => {
+        doc.blurpanel.classList.add('hide-cursor');
+        dtdisplay.ccontainer.classList.add('hide-cursor');
+        isDebouncing = true;
+
+        setTimeout(() => {
+            isDebouncing = false;
+        }, 300); // Don't immediately show cursor again
+    }, idleTimeout);
+});
+
+// Panel vis toggle
 menu.panelvischeckbox.addEventListener('change', () => {
     panel.container.classList.toggle('d-none', !menu.panelvischeckbox.checked);
 });
 
+// Version label listener
 menu.versionlabelclk.addEventListener('click', () => {
     showUpdateNotification({'bypassCheck': true, 'customTitle': `Online Web Clock - ${versionNumberString}`, 'customDescription': i18next.t('bsmodal.updatenoti.releasenotebypass', {0: versionNumberString}), 'modalTimeout': 0});
 });

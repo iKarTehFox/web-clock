@@ -356,6 +356,7 @@ export function setMenuTheme(theme: 'auto' | 'toggle' | ThemeKey, quiet: boolean
     logConsole(`Menu theme set to: ${theme}`, 'debug');
     if (!quiet) showToast({
         title: i18next.t('toasts.global.title'),
+        icon: 'bi-palette2',
         message: i18next.t(`toasts.global.theme${theme}`)
     });
 }
@@ -467,7 +468,7 @@ export function createBsModal(options: ModalOptions) {
         const bootstrapModal = new Modal(modal);
         
         // Timeout handling
-        let bsModTimeout: number | undefined;
+        let bsModTimeout: NodeJS.Timeout;
         
         // Basically, timeout can be disabled if 0, negative, or undefined
         if (timeoutDelay !== undefined && timeoutDelay > 0) {
@@ -497,7 +498,7 @@ export function createBsModal(options: ModalOptions) {
             }, 1000);
             
             // Set the timeout to auto-close the modal
-            bsModTimeout = window.setTimeout(() => {
+            bsModTimeout = setTimeout(() => {
                 clearInterval(updateInterval);
                 bootstrapModal.hide();
                 resolve('timeout');
@@ -773,14 +774,14 @@ export function createExportModal(defaultFilename: string): Promise<{ filename: 
         });
 
         document.body.appendChild(modal);
-        bootstrapModal.show();
-        
-        // Focus and select the filename input
-        setTimeout(() => {
+
+        // Focus and select the filename input when modal is shown
+        modal.addEventListener('shown.bs.modal', () => {
             filenameInput.focus();
             filenameInput.select();
-        }, 150);
-        
+        });
+
+        bootstrapModal.show();
         logConsole(`Export modal ID ${modalUID} created.`, 'debug');
     });
 }

@@ -1,6 +1,8 @@
 import { getElement, getElements } from './dom-selectors';
 
 export const doc = {
+    self: document,
+    body: document.body,
     blurpanel: getElement<HTMLDivElement>('blur-panel'),
     cnote: getElement<HTMLParagraphElement>('custom-note'),
     favicon: getElement<HTMLLinkElement>('favicon'),
@@ -67,6 +69,7 @@ export const menu = {
     jsonpresetsgroup: getElement<HTMLDivElement>('jsonPresetsContainer'),
     languageradio: getElements<HTMLInputElement>('input[name="language-radio"]'),
     manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
+    mousehidecheckbox: getElement<HTMLInputElement>('mouseAutoHide'),
     panelvischeckbox: getElement<HTMLInputElement>('panelVisible'),
     presetcolors: getElements<HTMLInputElement>('input[name="preset-color-radio"]'),
     presetgroup: getElement<HTMLDivElement>('presetColorGroup'),

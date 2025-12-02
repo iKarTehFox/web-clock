@@ -438,6 +438,12 @@ export default {
                             'label': 'Display current time in tab title'
                         }
                     },
+                    'interaction': {
+                        'title': 'Interactions',
+                        'option': {
+                            'label': 'Auto-hide mouse cursor',
+                        }
+                    },
                     'fullscreen': {
                         'title': 'Fullscreen mode',
                         'option': {

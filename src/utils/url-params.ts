@@ -26,6 +26,7 @@ interface URLParamConfig {
     noUpdateNoti?: boolean;
     panelVis?: boolean;
     tabTitle?: boolean;
+    mouseAutoHide?: boolean;
     // Numbers
     autoRestart?: number;
     clockMode? : 12 | 24;
@@ -51,6 +52,7 @@ const paramAliases: Record<string, keyof URLParamConfig> = {
     'noNoti': 'noUpdateNoti',
     'panel': 'panelVis',
     'tab': 'tabTitle',
+    'mouseHide': 'mouseAutoHide',
     
     // Number aliases
     'auto': 'autoRestart',
@@ -118,16 +120,8 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
         return false;
     };
 
-    const isValidFontStyle = (value: string): value is 'italic' | 'normal' => {
-        return ['italic', 'normal'].includes(value);
-    };
-
-    const isValidFontWeight = (value: string): value is 'lighter' | 'normal' | 'bold' => {
-        return ['lighter', 'normal', 'bold'].includes(value);
-    };
-
     // Boolean params
-    ['clearLS', 'debugMode', 'lockSettings', 'noUpdateNoti', 'panelVis', 'tabTitle'].forEach(key => {
+    ['clearLS', 'debugMode', 'lockSettings', 'noUpdateNoti', 'panelVis', 'tabTitle', 'mouseAutoHide'].forEach(key => {
         const value = getParamValue(key);
         if (value !== null) {
             if (value === 'true' || value === 'false') {
@@ -354,6 +348,12 @@ export async function applyURLParams() {
     if (params.tabTitle === false) {
         menu.titlevischeckbox.checked = false;
         menu.titlevischeckbox.dispatchEvent(new Event('change'));
+    }
+
+    // Mouse auto-hide
+    if (params.mouseAutoHide === false) {
+        menu.mousehidecheckbox.checked = false;
+        menu.mousehidecheckbox.dispatchEvent(new Event('change'));
     }
 
     // Presets
