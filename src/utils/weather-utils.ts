@@ -92,7 +92,7 @@ export function getLocation(): Promise<GeolocationCoordinates> {
     if (!navigator.geolocation) {
         const errorMessage = i18next.t('toasts.weatherutils.gpsunsupported');
         showToast({
-            title: i18next.t('toasts.weather.title'),
+            title: i18next.t('toasts.weatherutils.title'),
             message: errorMessage,
             duration: 'long',
             style: 'danger',
@@ -110,15 +110,15 @@ export function getLocation(): Promise<GeolocationCoordinates> {
                 });
             },
             (error) => {
-                const errorMessage = i18next.t('toasts.weatherutils.gpserror', { 0: error });
+                const errorMessage = i18next.t('toasts.weatherutils.gpserror', { 0: error.message });
                 showToast({
-                    title: i18next.t('toasts.weather.title'),
+                    title: i18next.t('toasts.weatherutils.title'),
                     message: errorMessage,
-                    duration: 'default',
+                    duration: 'long',
                     style: 'danger',
                     icon: 'bi-exclamation-triangle-fill'
                 });
-                reject(error);
+                reject(error.message);
             },
             { enableHighAccuracy: true }
         );
@@ -227,9 +227,9 @@ async function handleWeatherUpdate(settings: WeatherSettings): Promise<void> {
         stopWeather();
         logConsole(`Failed while handling weather data: ${error}`, 'error');
         showToast({
-            title: i18next.t('toasts.weather.title'),
-            message: i18next.t('toasts.weatherutils.weathererror'),
-            duration: 'normal',
+            title: i18next.t('toasts.weatherutils.title'),
+            message: i18next.t('toasts.weatherutils.weathererror', { 0: error }),
+            duration: 'long',
             style: 'danger',
             icon: 'bi-exclamation-triangle-fill'
         });
@@ -368,10 +368,10 @@ function handleMoveToggle(button: HTMLButtonElement): void {
 function setupEventListeners(): void {
     panel.section.we.addEventListener('click', (e) => {
         const target = e.target as HTMLElement;
+        const buttonElement = target.tagName === 'BUTTON' ? target : target.closest('button');
         
-        if (target.tagName === 'BUTTON') {
-            const button = target as HTMLButtonElement;
-            
+        if (buttonElement) {
+            const button = buttonElement as HTMLButtonElement;
             match(button.id)
                 .with('weatherGeoBtn', () => handleGeolocationButton())
                 .with('weatherSubmitBtn', () => submitWeatherSettings())
