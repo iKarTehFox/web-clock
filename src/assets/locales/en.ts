@@ -573,7 +573,7 @@ export default {
                 'label': 'Auto restart'
             },
             'docs': {
-                'label': 'Read the Docs',
+                'label': 'Documentation',
                 'tooltip': 'View the Online Web Clock documentation'
             },
             'github': {

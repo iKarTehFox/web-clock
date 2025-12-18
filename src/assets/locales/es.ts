@@ -567,7 +567,7 @@ export default {
                 'label': 'Reinicio automático'
             },
             'docs': {
-                'label': 'Leer la documentación',
+                'label': 'Documentación',
                 'tooltip': 'Ver la documentación de Online Web Clock'
             },
             'github': {
