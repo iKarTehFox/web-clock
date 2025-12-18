@@ -213,12 +213,6 @@ export function exportSettings(toType: ExportType = 'download'): void {
 
     try {
         const settings = getSettings();
-
-        // Soft warning for exporting invalid settings
-        if (!(verifySettingsJSON(settings) === true)) {
-            logConsole('Settings JSON may be invalid and import verification will fail. If you have modified the settings manually, ignore this message.', 'warning');
-        }
-
         handleExport(settings, toType, exportTime);
     } catch (error) {
         logConsole(`Export failed: ${error}`, 'error');
