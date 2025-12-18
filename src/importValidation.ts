@@ -1,3 +1,4 @@
+// TODO: Implement newer, more modular validation system for better maintainability and backward compatibility
 import { match } from 'ts-pattern';
 import { createBsModal, logConsole } from './utils/dom-utils';
 import i18next from 'i18next';
