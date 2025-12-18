@@ -241,7 +241,8 @@ export function toggleFullscreen() {
     showToast({
         title: i18next.t('toasts.global.title'),
         icon: 'bi-fullscreen',
-        message: i18next.t('toasts.global.fullscreen')
+        message: i18next.t('toasts.global.fullscreen'),
+        duration: 'veryshort'
     });
 }
 
