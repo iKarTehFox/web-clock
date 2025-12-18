@@ -1,6 +1,8 @@
 import { getElement, getElements } from './dom-selectors';
 
 export const doc = {
+    self: document,
+    body: document.body,
     blurpanel: getElement<HTMLDivElement>('blur-panel'),
     cnote: getElement<HTMLParagraphElement>('custom-note'),
     favicon: getElement<HTMLLinkElement>('favicon'),
@@ -9,6 +11,7 @@ export const doc = {
 
 export const panel = {
     container: getElement<HTMLDivElement>('panel-container'),
+    devconbutton: getElement<HTMLDivElement>('devcon-button'),
     menubody: getElement<HTMLDivElement>('menu-body'),
     menubutton: getElement<HTMLButtonElement>('menu-button'),
     // Settings sections
@@ -23,7 +26,22 @@ export const panel = {
     }
 };
 
+export const devcon = {
+    closebtn: getElement<HTMLButtonElement>('dev-console-close'),
+    container: getElement<HTMLDivElement>('dev-console-container'),
+    header: getElement<HTMLDivElement>('dev-console-header'),
+    input: getElement<HTMLInputElement>('dev-console-input'),
+    logs: getElement<HTMLDivElement>('dev-console-logs'),
+    output: getElement<HTMLDivElement>('dev-console-output'),
+    submitbtn: getElement<HTMLButtonElement>('dev-console-submit'),
+    debugfilterbtn: getElement<HTMLInputElement>('dev-console-logs-debug'),
+    infofilterbtn: getElement<HTMLInputElement>('dev-console-logs-info'),
+    warningfilterbtn: getElement<HTMLInputElement>('dev-console-logs-warning'),
+    errorfilterbtn: getElement<HTMLInputElement>('dev-console-logs-error')
+};
+
 export const menu = {
+    autorestartgroup: getElement<HTMLDivElement>('autorestart-group'),
     autorestarttime: getElement<HTMLSpanElement>('autorestart-time'),
     borderstyleselect: getElement<HTMLSelectElement>('borderStyleSelect'),
     bordertyperadio: getElements<HTMLInputElement>('input[name="border-type-radio"]'),
@@ -32,7 +50,7 @@ export const menu = {
     cnoteinput: getElement<HTMLInputElement>('cnote-input'),
     colorbadge: getElement<HTMLParagraphElement>('currentColorBadge'),
     colorbadgelabel: getElement<HTMLDivElement>('currentColorLabel'),
-    colormoderadio: getElements<HTMLInputElement>('input[name="color-mode-radio"]'),
+    colormodeselect: getElement<HTMLSelectElement>('colorModeSelect'),
     container: getElement<HTMLDivElement>('menu-offcanvas'),
     datealignradio: getElements<HTMLInputElement>('input[name="date-position-radio"]'),
     dateformselect: getElement<HTMLSelectElement>('dateFormatSelect'),
@@ -50,8 +68,8 @@ export const menu = {
     imageuploadbutton: getElement<HTMLButtonElement>('bgImageUploadBtn'),
     jsonpresetsgroup: getElement<HTMLDivElement>('jsonPresetsContainer'),
     languageradio: getElements<HTMLInputElement>('input[name="language-radio"]'),
-    legacyrefreshcheckbox: getElement<HTMLInputElement>('legacyRefreshMethod'),
     manualjsontextinput: getElement<HTMLInputElement>('jsonImportTextarea'),
+    mousehidecheckbox: getElement<HTMLInputElement>('mouseAutoHide'),
     panelvischeckbox: getElement<HTMLInputElement>('panelVisible'),
     presetcolors: getElements<HTMLInputElement>('input[name="preset-color-radio"]'),
     presetgroup: getElement<HTMLDivElement>('presetColorGroup'),
@@ -60,10 +78,11 @@ export const menu = {
     textcolorinput: getElement<HTMLInputElement>('textColorInput'),
     textcolorlabel: getElement<HTMLLabelElement>('textColorLabel'),
     textcoloroverrideradio: getElements<HTMLInputElement>('input[name="text-color-override-radio"]'),
-    themeradio: getElements<HTMLInputElement>('input[name="menu-theme-radio"]'),
+    themeselect: getElement<HTMLSelectElement>('menuThemeSelect'),
     timebarselect: getElement<HTMLInputElement>('timeBarSelect'),
     timemethodselect: getElement<HTMLSelectElement>('timeMethodSelect'),
     timezoneselect: getElement<HTMLSelectElement>('timeZoneSelect'),
+    timezonewindowbtn: getElement<HTMLButtonElement>('openTimezoneWindowBtn'),
     titlevischeckbox: getElement<HTMLInputElement>('menuTabTitleVisible'),
     versionlabelclk: getElement<HTMLDivElement>('versionLabelClk'),
     weatherapiinput: getElement<HTMLInputElement>('weatherAppIDTextArea'),
@@ -72,13 +91,13 @@ export const menu = {
     weatherloninput: getElement<HTMLInputElement>('weatherLonTextArea'),
     weathermovereset: getElement<HTMLButtonElement>('weatherMoveReset'),
     weathermovetoggle: getElement<HTMLInputElement>('weatherMoveToggle'),
+    weatherposlabel: getElement<HTMLParagraphElement>('weatherPosLabel'),
     weatherstopbtn: getElement<HTMLButtonElement>('weatherStopBtn'),
     weathersubmitbtn: getElement<HTMLButtonElement>('weatherSubmitBtn'),
     weatherunitradio: getElements<HTMLInputElement>('input[name="weather-unit-radio"]')
 };
 
 export const font = {
-    applyfontinput: getElement<HTMLButtonElement>('applyCustomFontButton'),
     customfontinput: getElement<HTMLInputElement>('customFontInputForm'),
     familysel: getElement<HTMLSelectElement>('fontFamilySelect'),
     shadowlabel: getElement<HTMLLabelElement>('dropShadowRangeLabel'),
@@ -87,9 +106,7 @@ export const font = {
     strokecolor: getElement<HTMLInputElement>('textStrokeColor'),
     strokecolorlabel: getElement<HTMLLabelElement>('textStrokeColorLabel'),
     strokerange: getElement<HTMLInputElement>('textStrokeRange'),
-    strokerangelabel: getElement<HTMLLabelElement>('textStrokeRangeLabel'),
-    styleradio: getElements<HTMLInputElement>('input[name="font-style-radio"]'),
-    weightradio: getElements<HTMLInputElement>('input[name="font-weight-radio"]')
+    strokerangelabel: getElement<HTMLLabelElement>('textStrokeRangeLabel')
 };
 
 export const dtdisplay = {
@@ -109,7 +126,7 @@ export const weather = {
     condition: getElement<HTMLParagraphElement>('weather-condition'),
     container: getElement<HTMLDivElement>('weather-widget'),
     feelslike: getElement<HTMLParagraphElement>('weather-feelslike'),
-    icon: document.getElementById('weather-icon'),
+    icon: getElement<HTMLElement>('weather-icon'),
     maxtemp: getElement<HTMLParagraphElement>('weather-max'),
     mintemp: getElement<HTMLParagraphElement>('weather-min'),
     name: getElement<HTMLParagraphElement>('weather-name'),
@@ -145,6 +162,7 @@ export const debug = {
     clearlsbtn: getElement<HTMLButtonElement>('debugClearLS'),
     container: getElement<HTMLDivElement>('debuggingContainer'),
     devcolorscontainer: getElement<HTMLDivElement>('devColorsContainer'),
+    floatingwindowbtn: getElement<HTMLButtonElement>('floatingWindowDev'),
     info:  getElement<HTMLParagraphElement>('debugInfo'),
     rmclockbtn: getElement<HTMLButtonElement>('debugRmClock'),
     toastbtns: getElements<HTMLButtonElement>('button[name="debugToast"]')

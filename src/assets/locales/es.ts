@@ -1,5 +1,8 @@
 export default {
     'panel': {
+        'devcon': {
+            'tooltip': 'Consola de desarrollo'
+        },
         'countdown': {
             'tooltip': 'Temporizador'
         },
@@ -29,6 +32,24 @@ export default {
             'pause': 'Pausar',
             'reset': 'Reiniciar',
             'lap': 'Vuelta',
+        }
+    },
+    'devcon': {
+        'title': 'Consola de Desarrollador',
+        'tabs': {
+            'console': 'Consola',
+            'logs': 'Registros'
+        },
+        'input': {
+            'placeholder': 'Ingrese comando...',
+            'execute': 'Ejecutar',
+            'tip': 'Presione Enter para ejecutar, Esc para cerrar, ↑↓ para historial'
+        },
+        'filters': {
+            'debug': 'Depurar',
+            'info': 'Info',
+            'warning': 'Advertencia',
+            'error': 'Error'
         }
     },
     'weather': {
@@ -72,7 +93,19 @@ export default {
                         }
                     },
                     'timezone': {
-                        'title': 'Zona horaria'
+                        'title': 'Zona horaria',
+                        'option': {
+                            'reset': {
+                                'tooltip': 'Restablecer a la zona horaria del sistema'
+                            }
+                        }
+                    },
+                    'timezonewindows': {
+                        'title': 'Ventanas de zona horaria',
+                        'openbutton': 'Abrir nuevo reloj ({{0}}/{{1}})',
+                        'subtext': 'Abre una nueva ventana flotante con un reloj en la zona horaria seleccionada. Cambia la configuración de zona horaria arriba para obtener un desfase horario diferente.',
+                        'tooltip': '¡Haz clic derecho para copiar los parámetros de la URL!',
+                        'tooltipcopied': '¡Copiado!'
                     },
                     'displaysystem': {
                         'title': 'Sistema de visualización',
@@ -130,13 +163,16 @@ export default {
                         }
                     },
                     'datedisplay': {
-                        'title': 'Date Display',
+                        'title': 'Mostrar Fecha',
                         'option': {
                             'localized': {
                                 'title': 'Localizado',
                             },
                             'standard': {
                                 'title': 'Estándar',
+                                'quarteryear': 'q\'T\', yyyy',
+                                'dayofyear': '\'Día\' o \'de\' yyyy',
+                                'weekday': '\'Semana\' W, \'Día\' o'
                             },
                             'off': 'Apagar'
                         }
@@ -243,11 +279,11 @@ export default {
                 'header': 'Tema de fondo',
                 'setting': {
                     'backgroundcolormode': {
-                        'title': 'Modo de color de fondo',
+                        'title': 'Modo de Color de Fondo',
                         'option': {
-                            'colorfade': 'Degradado',
-                            'solid': 'Sólido',
-                            'image': 'Imagen',
+                            'colorfade': 'Degradado de Color',
+                            'solid': 'Modo de Color Sólido',
+                            'image': 'Modo de Imagen',
                             'currentcolor': 'Color actual:'
                         }
                     },
@@ -383,9 +419,10 @@ export default {
                     'menutheme': {
                         'title': 'Tema del menú',
                         'option': {
-                            'light': 'Claro',
-                            'dark': 'Oscuro',
-                            'midnight': 'Medianoche',
+                            'light': 'Claro ☀️',
+                            'dark': 'Oscuro 🌙',
+                            'midnight': 'Medianoche 🌃',
+                            'amoled': 'AMOLED 🌑',
                         }
                     },
                     'panelvisibility': {
@@ -458,11 +495,18 @@ export default {
                     'toasts': {
                         'title': 'Mensajes emergentes (Toasts)',
                         'option': {
-                            'dark': 'Oscuro',
                             'light': 'Claro',
+                            'dark': 'Oscuro',
+                            'midnight': 'Medianoche',
+                            'amoled': 'AMOLED',
                             'danger': 'Peligro',
                             'success': 'Éxito',
-                            'warning': 'Advertencia'
+                            'warning': 'Advertencia',
+                            'veryshort': 'Muy corto',
+                            'default': 'Predeterminado',
+                            'normal': 'Normal',
+                            'long': 'Largo',
+                            'verylong': 'Muy largo'
                         }
                     },
                     'ui': {
@@ -487,6 +531,7 @@ export default {
                         'option': {
                             'uploadjson': 'Subir desde JSON',
                             'scanqrcode': 'Escanear código QR',
+                            'loadls': 'Cargar ajustes locales',
                             'manualtext': 'O pegar manualmente los ajustes en formato JSON aquí:',
                             'placeholder': 'Pega el JSON aquí',
                             'load': 'Cargar ajustes'
@@ -502,6 +547,7 @@ export default {
                             'downloadjson': 'Descargar JSON',
                             'copyjson': 'Copiar JSON',
                             'genqrcode': 'Generar código QR',
+                            'saveLS': 'Guardar localmente en el navegador<br>(Ctrl+Clic para borrar)',
                             'description': 'Nota: Las opciones de visualización y los ajustes personalizados de fuente no serán exportados.'
                         }
                     }
@@ -521,7 +567,7 @@ export default {
                 'label': 'Reinicio automático'
             },
             'docs': {
-                'label': 'Leer la documentación',
+                'label': 'Documentación',
                 'tooltip': 'Ver la documentación de Online Web Clock'
             },
             'github': {
@@ -532,44 +578,59 @@ export default {
     },
     'toasts': {
         'countdown': {
+            'title': 'Temporizador',
             'finished': '¡Temporizador terminado!',
             'finishednotification': 'Tu temporizador ha finalizado. Ahora es {{0}}',
             'toolong': '¡El tiempo establecido es demasiado largo! Asegúrate de que sea menos de 100 horas.',
             'notificationdenied': 'Permiso de notificación denegado.',
         },
         'global': {
+            'title': 'Online Web Clock',
             'themelight': 'Tema establecido en modo claro ☀️',
             'themedark': 'Tema establecido en modo oscuro 🌙',
             'thememidnight': 'Tema establecido en modo medianoche 🌃',
+            'themeamoled': 'Tema establecido en modo AMOLED 🌑',
             'fullscreen': 'Modo de pantalla completa activado',
         },
         'importexport': {
+            'title': 'Ajustes de Importación/Exportación',
             'exportsuccess': '¡Ajustes exportados! Tomó {{0}}ms',
             'exportcopysuccess': '¡Ajustes copiados! Tomó {{0}}ms',
             'exportrawsuccess': 'JSON exportado. Tomó {{0}}ms',
             'exportqrtoolarge': '¡Ajustes demasiado grandes para el código QR! Consulta la consola para más detalles.',
             'exportqrsuccess': '¡Ajustes exportados a código QR! Tomó {{0}}ms',
+            'exportlssuccess': '¡Ajustes guardados localmente! Tomó {{0}}ms',
             'exporting': 'Exportando ajustes...',
             'exporterror': '¡Error al exportar ajustes! Consulta la consola para más detalles.',
-            'importsuccess': '¡Ajustes importados con éxito!<hr><b>Fecha del archivo:</b> {{0}}',
+            'importsuccess': '¡Ajustes importados con éxito!<br><br><b>Fecha del archivo:</b> {{0}}',
+            'importlocalstorage': '¡Ajustes cargados desde el almacenamiento local!',
             'importerror': 'Archivo de ajustes no válido. Asegúrate de que el archivo contenga JSON válido.',
             'fetcherror': 'No se pudo obtener el archivo de ajustes local. Verifica el nombre del archivo y asegúrate de que exista.',
             'nobgimg': 'No hay imagen de fondo para extraer.',
+            'nolocalstoragebackup': 'No se encontró respaldo local en el almacenamiento del navegador.',
+            'backupclear': 'Los ajustes locales han sido borrados.',
+            'autoloadenabled': '¡Carga automática activada! Los ajustes se cargarán automáticamente en futuras visitas.',
         },
         'debugui': {
+            'title': 'Depuración',
             'testtoast': 'Prueba de mensaje emergente. Tema "{{0}}"',
+            'testtoast2': 'Prueba de mensaje emergente. Duracion "{{0}}"',
             'clearls': 'Almacenamiento local borrado.',
         },
         'domutils': {
+            'title': 'Utilidades',
             'textcopied': '¡Texto copiado al portapapeles!',
             'notificationunsupported': 'Las notificaciones no son compatibles con este navegador.',
             'qrscannerfailed': 'Error en el escáner QR: {{0}}',
         },
         'urlparams': {
+            'title': 'Parámetros de URL',
             'debugmode': 'Modo de depuración habilitado. La memoria de DevTools aumentará con el tiempo.',
-            'autorestart': 'Reinicio automático configurado a {{0}} segundos.'
+            'autorestart': 'Reinicio automático configurado a {{0}} segundos.',
+            'incompatible': 'Los Ajustes de Bloqueo (lockSettings) y el Modo de Depuración (debugMode) son incompatibles y no se pueden usar juntos. Los Ajustes de Bloqueo han sido desactivados.',
         },
         'weatherutils': {
+            'title': 'Clima',
             'gpserror': 'Error al obtener la ubicación: {{0}}',
             'gpsunsupported': 'La geolocalización no es compatible con este navegador.',
             'weathererror': 'Error al obtener los datos meteorológicos: {{0}}',
@@ -577,23 +638,56 @@ export default {
     },
     'bsmodal': {
         'button': {
+            'cancel': 'Cancelar',
             'close': 'Cerrar',
             'copy': 'Copiar',
-            'download': 'Descargar',
             'countdownel': 'Cerrando en {{0}}s',
+            'dontshowagain': 'No mostrar de nuevo',
+            'download': 'Descargar',
+            'export': 'Exportar',
             'gethelp': 'Obtener ayuda',
+            'getstarted': 'Iniciar',
             'releasenotes': 'Notas de la versión',
-            'dontshowagain': 'No mostrar de nuevo'
+            'continue': 'Continuar',
+            'clear': 'Borrar',
+            'ignore': 'Ignorar',
+            'load': 'Cargar',
+            'alwaysload': 'Cargar siempre'
+        },
+        'tooltip': {
+            'countdowntooltip': 'Haz clic para cancelar el tiempo de espera'
+        },
+        'export': {
+            'title': 'Exportar ajustes',
+            'filename': 'Nombre del archivo',
+            'namehelp': 'Dejar en blanco para usar el nombre de archivo predeterminado.',
         },
         'importexport': {
             'backgroundimage': 'Imagen de fondo',
             'importerror': '¡Error al importar ajustes!',
-            'rawsettingsjson': 'JSON de ajustes sin procesar'
+            'rawsettingsjson': 'JSON de ajustes sin procesar',
+            'overwritebackup': {
+                'title': '¿Sobrescribir ajustes locales?',
+                'message': 'Ya tienes ajustes diferentes guardados localmente. ¿Quieres sobrescribirlos con tus ajustes actuales?'
+            },
+            'invalidbackup': {
+                'title': '¡Ajustes locales inválidos!',
+                'message': 'Los ajustes guardados en el almacenamiento de tu navegador son inválidos o están corruptos. Puedes restablecerlos para limpiar los datos corruptos, o ignorar esta advertencia.'
+            },
+            'autoload': {
+                'title': 'Ajustes guardados localmente',
+                'message': 'Tienes ajustes guardados localmente en tu navegador. ¿Aplicarlos ahora? Los ajustes se aplicarán después de 30 segundos.'
+            }
         },
         'updatenoti': {
             'newversion': '¡Nueva versión! ({{0}})',
             'releasenote': '¡Online Web Clock se actualizó a {{0}}! Consulta las notas de la versión para más información.',
             'releasenotebypass': '¡Haz clic en el botón de abajo para revisar las notas de la versión {{0}}!'
+        },
+        'welcome': {
+            'title': '¡Bienvenido a Online Web Clock!',
+            'description': 'Online Web Clock es una aplicación de reloj personalizable basada en web con varios temas, integración del clima y opciones de personalización.',
+            'help': '¿Necesitas ayuda para comenzar? Consulta nuestra documentación o visita nuestro repositorio de GitHub.'
         }
     },
     'scanneroverlay': {
@@ -611,7 +705,6 @@ export default {
         'customfontinputform': 'Formulario de entrada de fuente personalizada',
         'fontstylebuttongroup': 'Grupo de botones de estilo de fuente',
         'fontweightbuttongroup': 'Grupo de botones de grosor de fuente',
-        'colormodebuttongroup': 'Grupo de botones de modo de color',
         'solidcolorbuttongroup': 'Grupo de botones de color sólido',
         'textcoloroverridebuttongroup': 'Grupo de botones de anulación de color de texto',
         'weatherunitbuttongroup': 'Grupo de botones de unidad meteorológica',

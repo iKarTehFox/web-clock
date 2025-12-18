@@ -2,7 +2,7 @@
 	"clockConfig": {
 		"clockDisplay": "decimal",
 		"secondsVis": "sviD",
-		"dateFormat": "D",
+		"dateFormat": "dfLocNumDate",
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",

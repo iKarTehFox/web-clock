@@ -1,12 +1,11 @@
 import { match } from 'ts-pattern';
-import { menu, font, dtdisplay, stopwatch, countdown, weather, doc, panel } from './utils/dom-elements';
-import { logConsole, setMenuTheme, setMetaColor, showToast } from './utils/dom-utils';
-import { getLocation, stopWeather, submitWeatherSettings } from './utils/weather-utils';
+import { menu, font, dtdisplay, stopwatch, countdown, doc, panel } from './utils/dom-elements';
+import { logConsole, setMenuTheme, showToast } from './utils/dom-utils';
 import { showUpdateNotification, versionNumberString } from './utils/update-notify';
 import i18next from 'i18next';
 
 // Define font sizes
-type FontSizeKey = '6vw' | '8vw' | '10vw' | '12vw' | '14vw' | '18vw';
+export type FontSizeKey = '6vw' | '8vw' | '10vw' | '12vw' | '14vw' | '18vw';
 
 const fontSizeOptions: Record<FontSizeKey, string> = {
     '6vw': '1.09vw',
@@ -116,7 +115,7 @@ function handleFontEvents(e: Event) {
         .with('BUTTON', () => {
             const buttonElement = target as HTMLButtonElement;
             match(buttonElement.id)
-                .with('applyFontInput', () => {
+                .with('applyCustomFontButton', () => {
                     const customFont = font.customfontinput.value;
                     if (customFont.length > 0) {
                         font.familysel.value = '';
@@ -175,92 +174,24 @@ menu.borderstyleselect.addEventListener('change', () => {
     }
 });
 
-// Weather move toggle listener
-let isMoving: boolean = false;
-
-panel.section.we.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    
-    match(target.tagName)
-        .with('BUTTON', () => {
-            const buttonElement = target as HTMLButtonElement;
-            match(buttonElement.id)
-                .with('weatherGeoBtn', async () => {
-                    try {
-                        const latlonArray = await getLocation();
-                        menu.weatherlatinput.value = latlonArray[0].toString();
-                        menu.weatherloninput.value = latlonArray[1].toString();
-                        logConsole(`Retrieved geolocation: ${latlonArray}`, 'debug');
-                    } catch (error) {
-                        logConsole(`Failed to get location: ${error}`, 'error');
-                    }
-                })
-                .with('weatherSubmitBtn', () => {
-                    submitWeatherSettings();
-                })
-                .with('weatherStopBtn', () => {
-                    stopWeather();
-                })
-                .with('weatherMoveToggle', () => {
-                    isMoving = buttonElement.classList.contains('active');
-                    weather.container.style.cursor = isMoving ? 'grab' : 'default';
-                    logConsole(`Weather moving toggle set to: ${isMoving}`, 'debug');
-                })                
-                .with('weatherMoveReset', () => {
-                    weather.container.style.left = '';
-                    weather.container.style.top = '';
-                    logConsole('Weather widget position reset...', 'info');
-                })
-                .otherwise(() => {});
-        })
-        .otherwise(() => {});
-});
-
-weather.container.addEventListener('mousedown', (e) => {
-    if (!isMoving) return;
-    
-    weather.container.style.cursor = 'grabbing';
-    logConsole('Weather widget mousedown...', 'info');
-    const startX = e.clientX - weather.container.offsetLeft;
-    const startY = e.clientY - weather.container.offsetTop;
-
-    function onMouseMove(e: { clientX: number; clientY: number; }) {
-        const posX = e.clientX - startX;
-        const posY = e.clientY - startY;
-
-        weather.container.style.left = `${posX}px`;
-        weather.container.style.top = `${posY}px`;
-        logConsole(`Weather widget moving. PosX: ${posX}, PosY: ${posY}`, 'debug');
-    }
-
-    function onMouseUp() {
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-        weather.container.style.cursor = 'grab';
-        logConsole('Weather widget mouseup...', 'info');
-    }
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-});
-
 // Menu theme listener
-menu.themeradio.forEach((radio) => {
-    radio.addEventListener('change', () => {
-        match(radio.id)
-            .with('lightthememode', () => {
-                setMenuTheme('light');
-            })
-            .with('darkthememode', () => {
-                setMenuTheme('dark');
-            })
-            .with('midnightthememode', () => {
-                setMenuTheme('midnight');
-            })
-            .otherwise(() => {
-                logConsole(`Invalid theme mode: ${radio.id}`, 'error');
-            });
-    });
+menu.themeselect.addEventListener('change', () => {
+    match(menu.themeselect.value)
+        .with('lightthememode', () => {
+            setMenuTheme('light');
+        })
+        .with('darkthememode', () => {
+            setMenuTheme('dark');
+        })
+        .with('midnightthememode', () => {
+            setMenuTheme('midnight');
+        })
+        .with('amoledthememode', () => {
+            setMenuTheme('amoled');
+        })
+        .otherwise(() => {
+            logConsole(`Invalid theme mode: ${menu.themeselect.value}`, 'error');
+        });
 });
 
 // Menu button visibility on double click
@@ -307,13 +238,20 @@ export function toggleFullscreen() {
         }
     }
     logConsole('Toggled fullscreen mode', 'info');
-    showToast(i18next.t('toasts.global.fullscreen'));
+    showToast({
+        title: i18next.t('toasts.global.title'),
+        icon: 'bi-fullscreen',
+        message: i18next.t('toasts.global.fullscreen'),
+        duration: 'veryshort'
+    });
 }
 
+// FS button listener
 menu.fullscreenbtn.addEventListener('click', function() {
     toggleFullscreen();
 });
 
+// Custom note stuff
 menu.cnoteinput.oninput = () => {
     const text = menu.cnoteinput.value;
     doc.cnote.textContent = text;
@@ -338,14 +276,44 @@ menu.cnotealignradio.forEach(radio => {
     });
 });
 
-menu.panelvischeckbox.addEventListener('change', () => {
-    if (menu.panelvischeckbox.checked) {
-        panel.container.style.display = '';
-    } else {
-        panel.container.style.display = 'none';
+// Auto-hide mouse functionality
+const idleTimeout = 10000;
+let idleTimer: NodeJS.Timeout;
+let isDebouncing: boolean = false;
+
+menu.mousehidecheckbox.addEventListener('change', () => {
+    if (!menu.mousehidecheckbox.checked) {
+        clearTimeout(idleTimer);
+        doc.blurpanel.classList.remove('hide-cursor');
+        dtdisplay.ccontainer.classList.remove('hide-cursor');
+        logConsole('Mouse auto-hide disabled', 'info');
     }
 });
 
+doc.self.addEventListener('mousemove', () => {
+    if (!menu.mousehidecheckbox.checked || isDebouncing) return;
+
+    clearTimeout(idleTimer);
+
+    doc.blurpanel.classList.remove('hide-cursor');
+    dtdisplay.ccontainer.classList.remove('hide-cursor');
+    idleTimer = setTimeout(() => {
+        doc.blurpanel.classList.add('hide-cursor');
+        dtdisplay.ccontainer.classList.add('hide-cursor');
+        isDebouncing = true;
+
+        setTimeout(() => {
+            isDebouncing = false;
+        }, 300); // Don't immediately show cursor again
+    }, idleTimeout);
+});
+
+// Panel vis toggle
+menu.panelvischeckbox.addEventListener('change', () => {
+    panel.container.classList.toggle('d-none', !menu.panelvischeckbox.checked);
+});
+
+// Version label listener
 menu.versionlabelclk.addEventListener('click', () => {
     showUpdateNotification({'bypassCheck': true, 'customTitle': `Online Web Clock - ${versionNumberString}`, 'customDescription': i18next.t('bsmodal.updatenoti.releasenotebypass', {0: versionNumberString}), 'modalTimeout': 0});
 });

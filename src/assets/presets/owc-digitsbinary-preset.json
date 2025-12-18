@@ -1,17 +1,17 @@
 {
 	"clockConfig": {
-		"clockDisplay": "words",
+		"clockDisplay": "binary",
 		"secondsVis": "sviN",
-		"dateFormat": "DDD",
+		"dateFormat": "dfLocNumDate",
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",
-		"timeBar": "tbarNone",
+		"timeBar": "tbarSec",
 		"customNoteAlign": "nalB"
-},
+	},
 	"fontConfig": {
-		"fontFamily": "Montserrat",
-		"fontStyle": "fstR",
+		"fontFamily": "Tektur",
+		"fontStyle": "fstI",
 		"fontWeight": "fweB",
 		"fontSize": "10vw",
 		"dropShadow": "0",
@@ -22,11 +22,11 @@
 		"colorMode": "solidmode",
 		"solidColor": "#000000",
 		"textColorMode": "tcovO",
-		"textColorValue": "#404040",
+		"textColorValue": "#00ff00",
 		"bgImage": "",
 		"bgImageSize": "",
 		"bgImageBlur": ""
 	},
-	"exportTimestamp": "Enjoy keeping your AMOLED screens safe with this preset!",
-	"version": 10
+	"exportTimestamp": "01010100 01001000 01000001 01001110 01001011 00100000 01011001 01001111 01010101 00100001",
+	"version": "v1.8.0"
 }

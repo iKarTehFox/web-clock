@@ -1,0 +1,288 @@
+$bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons";
+
+// Variables
+$clock-font-size-primary: 10vw;
+$clock-font-size-secondary: 1.82vw;
+$custom-note-font-size: 2vw;
+$border-radius: 4px;
+$box-shadow: 6px 8px 4px rgba(0, 0, 0, 0.2);
+$progress-bar-height: 5px;
+
+// Mixins
+@mixin fixed-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin full-viewport {
+  width: 100vw;
+  height: 100vh;
+}
+
+// Base styles
+.prevent-selection {
+  user-select: none;
+}
+
+body {
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+#blur-panel {
+  @include full-viewport;
+}
+
+// Developer console styles
+#dev-console-container {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 80%;
+  max-width: 600px;
+  z-index: 10;
+  
+  .card {
+    box-shadow: $box-shadow;
+  }
+  
+  #dev-console-output, #dev-console-logs {
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    border-radius: $border-radius;
+    white-space: pre-wrap;
+    user-select: text;
+    border: 1px solid var(--bs-border-color);
+  }
+  
+  #dev-console-input {
+    font-family: monospace;
+  }
+  
+  &.show {
+    display: block;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// Clock styles
+#clock-container {
+  font-size: $clock-font-size-primary;
+  font-weight: normal;
+  @include fixed-center;
+  white-space: nowrap;
+  display: inline-block;
+
+  #indicator {
+    font-size: $clock-font-size-secondary;
+  }
+
+  #date {
+    font-size: $clock-font-size-secondary;
+    padding-top: 5px;
+  }
+}
+
+#custom-note {
+  font-size: $custom-note-font-size;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  text-align: center;
+  width: 80vw;
+  word-wrap: break-word;
+}
+
+// Menu styles
+#panel-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  z-index: 10;
+}
+
+.color-block {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: $border-radius;
+}
+
+#time-duration {
+  font-weight: bold;
+}
+
+.subtext-light {
+  font-size: smaller;
+  font-weight: lighter;
+}
+
+#cnote-input {
+  max-height: 150px;
+}
+
+#bgImgBlurDesc {
+  font-weight: bold;
+}
+
+#versionLabelClk {
+  cursor: pointer;
+}
+
+// Seconds progress bar
+#time-progress-bar {
+  position: absolute;
+  bottom: 1;
+  height: $progress-bar-height;
+  border-radius: $border-radius;
+  background-color: #212529;
+  transition: width 0.75s;
+  
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// Weather widget
+#weather-widget {
+  position: absolute;
+  display: block;
+  left: 10px;
+  bottom: 10px;
+  cursor: default;
+  z-index: 2;
+}
+
+#credit {
+  font-size: 15px;
+}
+
+// Popup containers
+%popup-container {
+  @include fixed-center;
+  background-color: white;
+  padding: 20px;
+  box-shadow: $box-shadow;
+  z-index: 3;
+  border-radius: 10px;
+}
+
+// Stopwatch popup
+#stopwatch-container {
+  @extend %popup-container;
+  width: fit-content;
+  max-height: fit-content;
+  
+  #stopwatch-display {
+    font-family: 'Ubuntu Mono';
+  }
+  
+  #stopwatch-lapfield {
+    height: 100%;
+    width: 100%;
+    max-height: 50vh;
+    max-width: 100%;
+  }
+}
+
+// Countdown popup
+#countdown-container {
+  @extend %popup-container;
+  min-width: 55vw;
+  max-height: fit-content;
+}
+
+// Custom minimize button (matches Bootstrap's btn-close styling)
+.btn-minimize {
+  --bs-btn-minimize-width: 1em;
+  --bs-btn-minimize-height: 1em;
+  --bs-btn-minimize-padding-x: 0.25em;
+  --bs-btn-minimize-padding-y: 0.25em;
+  --bs-btn-minimize-color: var(--bs-body-color);
+  --bs-btn-minimize-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'><rect x='2' y='14' width='12' height='2' rx='1'/></svg>");
+  --bs-btn-minimize-opacity: 0.5;
+  --bs-btn-minimize-hover-opacity: 0.75;
+  --bs-btn-minimize-focus-opacity: 1;
+  --bs-btn-minimize-disabled-opacity: 0.25;
+  
+  box-sizing: content-box;
+  width: var(--bs-btn-minimize-width);
+  height: var(--bs-btn-minimize-height);
+  padding: var(--bs-btn-minimize-padding-y) var(--bs-btn-minimize-padding-x);
+  color: var(--bs-btn-minimize-color);
+  background: transparent var(--bs-btn-minimize-bg) center/1em auto no-repeat;
+  border: 0;
+  border-radius: 0.375rem;
+  opacity: var(--bs-btn-minimize-opacity);
+  
+  &:hover {
+    color: var(--bs-btn-minimize-color);
+    text-decoration: none;
+    opacity: var(--bs-btn-minimize-hover-opacity);
+  }
+  
+  &:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    opacity: var(--bs-btn-minimize-focus-opacity);
+  }
+  
+  &:disabled,
+  &.disabled {
+    pointer-events: none;
+    user-select: none;
+    opacity: var(--bs-btn-minimize-disabled-opacity);
+  }
+}
+
+// Restore button variant (for when window is minimized)
+.btn-restore {
+  --bs-btn-restore-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'><rect x='2' y='2' width='12' height='12' rx='2' stroke='%23000' stroke-width='2' fill='none'/></svg>");
+  
+  @extend .btn-minimize;
+  background: transparent var(--bs-btn-restore-bg) center/1em auto no-repeat;
+}
+
+// Dark theme variants
+[data-bs-theme="dark"] {
+  .btn-minimize {
+    --bs-btn-minimize-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'><rect x='2' y='14' width='12' height='2' rx='1'/></svg>");
+  }
+  
+  .btn-restore {
+    --bs-btn-restore-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'><rect x='2' y='2' width='12' height='12' rx='2' stroke='%23fff' stroke-width='2' fill='none'/></svg>");
+  }
+}
+
+// Dark theme support
+[data-bs-theme="dark"] {
+  .modal-content {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+  }
+}
+
+// Miscellaneous
+.offcanvas-backdrop.show {
+  opacity: 0.2 !important;
+}
+
+.hide-cursor {
+  cursor: none !important;
+}

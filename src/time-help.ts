@@ -1,7 +1,7 @@
 import * as luxon from 'ts-luxon';
 import { doc, menu, dtdisplay, panel } from './utils/dom-elements';
 import * as numberToWords from 'number-to-words';
-import { logConsole, showToast } from './utils/dom-utils';
+import { logConsole } from './utils/dom-utils';
 import { match } from 'ts-pattern';
 import i18next from 'i18next';
 
@@ -122,8 +122,12 @@ export function isItDate(dateType: 'christmas' | 'weekend' | 'leapyear'): [strin
 // Element display
 // Colon visibility function
 export function colonVisibility([c1Vis, c2Vis]: (boolean | undefined)[]): void {
-    if (c1Vis !== undefined) dtdisplay.colon1.style.display = c1Vis ? '' : 'none';
-    if (c2Vis !== undefined) dtdisplay.colon2.style.display = c2Vis ? '' : 'none';
+    if (c1Vis !== undefined) {
+        dtdisplay.colon1.classList.toggle('d-none', !c1Vis);
+    }
+    if (c2Vis !== undefined) {
+        dtdisplay.colon2.classList.toggle('d-none', !c2Vis);
+    }
 }
 
 export function timeBarUtil(type: string, time: luxon.DateTime) {
@@ -156,14 +160,15 @@ panel.section.dt.addEventListener('change', (e) => {
             const selectelement = target as HTMLSelectElement;
             match(selectelement.id)
                 .with('timeBarSelect', () => {
-                    if (selectelement.value === 'tbarNone') {
-                        dtdisplay.timeBar.style.display = 'none';
+                    const isHidden = selectelement.value === 'tbarNone';
+                    dtdisplay.timeBar.classList.toggle('d-none', isHidden);
+                    
+                    if (isHidden) {
                         menu.bordertyperadio.forEach((btn) => {
                             btn.disabled = false;
                         });
                         logConsole('Time bar hidden', 'info');
                     } else {
-                        dtdisplay.timeBar.style.display = 'block';
                         menu.bordertyperadio.forEach((btn) => {
                             btn.disabled = true;
                             if (btn.id === 'btyD') {

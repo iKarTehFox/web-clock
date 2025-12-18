@@ -11,21 +11,48 @@ menu.textcoloroverrideradio.forEach((radio) => {
             .with('tcovD', () => {
                 isTextColorOverride = 0;
                 menu.textcolorinput.disabled = true;
-                if (getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id === 'solidmode') {
-                    try {
-                        getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked').dispatchEvent(new Event('change'));
-                    } catch (error) {
-                    // Catch if none are selected (switching from imgmode to solidmode)
-                        if (document.body.style.backgroundColor === 'rgb(0, 0, 0)') {
-                            dtdisplay.ccontainer.style.color = '#FFFFFF';
-                            dtdisplay.timeBar.style.backgroundColor = '#FFFFFF';
-                            doc.cnote.style.color = '#FFFFFF';
-                        } else {
-                            dtdisplay.ccontainer.style.color = '#212529';
-                            dtdisplay.timeBar.style.backgroundColor = '#212529';
-                            doc.cnote.style.color = '#212529';
+                if (menu.colormodeselect.value === 'solidmode') {
+                    // Use setTimeout to ensure preset colors have been updated first
+                    setTimeout(() => {
+                        try {
+                            const checkedPresetColor = getFirstElement<HTMLInputElement>('input[name="preset-color-radio"]:checked');
+                            if (checkedPresetColor && checkedPresetColor.dataset.color) {
+                                // Trigger the preset color change to set appropriate text color
+                                checkedPresetColor.dispatchEvent(new Event('change'));
+                                logConsole(`Text color override disabled, restored to preset color: ${checkedPresetColor.dataset.color}`, 'debug');
+                            } else {
+                                throw new Error('No valid preset color found');
+                            }
+                        } catch (error) {
+                            // Fallback: determine text color based on current background
+                            const currentBgColor = getComputedStyle(document.body).backgroundColor;
+                            logConsole(`No preset color selected, current background: ${currentBgColor}`, 'debug');
+                            
+                            if (currentBgColor === 'rgb(0, 0, 0)' || currentBgColor === '#000000') {
+                                dtdisplay.ccontainer.style.color = '#FFFFFF';
+                                dtdisplay.timeBar.style.backgroundColor = '#FFFFFF';
+                                doc.cnote.style.color = '#FFFFFF';
+                                logConsole('No preset color selected, defaulting to white text for black background', 'warning');
+                            } else {
+                                // For any other background, use smart color detection
+                                const bgColorHex = rgbToHex(currentBgColor);
+                                if (bgColorHex) {
+                                    const luminance = getLuminance(bgColorHex);
+                                    const textColor = luminance > 0.62 ? '#212529' : '#FFFFFF';
+                                    dtdisplay.ccontainer.style.color = textColor;
+                                    dtdisplay.timeBar.style.backgroundColor = textColor;
+                                    doc.cnote.style.color = textColor;
+                                    logConsole(`Smart text color for ${bgColorHex} (luminance: ${luminance}): ${textColor}`, 'debug');
+                                } else {
+                                    // Ultimate fallback
+                                    dtdisplay.ccontainer.style.color = '#212529';
+                                    dtdisplay.timeBar.style.backgroundColor = '#212529';
+                                    doc.cnote.style.color = '#212529';
+                                    logConsole('Could not determine background color, defaulting to black text', 'warning');
+                                }
+                            }
                         }
-                    }
+                    }, 0);
                 }
                 logConsole('Text color override disabled', 'info');
             })
@@ -78,4 +105,16 @@ function getLuminance(color: string): number {
     logConsole(`Luminance for ${color}: ${luminance}`, 'debug');
 
     return luminance;
+}
+
+function rgbToHex(rgb: string): string {
+    // Convert rgb(r, g, b) format to hex
+    const rgbMatch = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    if (rgbMatch) {
+        const r = parseInt(rgbMatch[1]);
+        const g = parseInt(rgbMatch[2]);
+        const b = parseInt(rgbMatch[3]);
+        return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+    return rgb; // Return as-is if not rgb format
 }

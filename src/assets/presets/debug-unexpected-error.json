@@ -2,7 +2,7 @@
 	"clockConfig": {
 		"clockDisplay": "decimal",
 		"secondsVis": "sviD",
-		"dateFormat": "D",
+		"dateFormat": "dfLocNumDate",
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",
@@ -28,6 +28,6 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "This file has an extraneous key: didnt_expect_you_to_see_this.",
-	"version": 10,
+	"version": "v1.8.0",
 	"didnt_expect_you_to_see_this": ""
 }

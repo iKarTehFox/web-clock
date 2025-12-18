@@ -1,8 +1,8 @@
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/works-on-my-machine-1.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/badges/built-with-love.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/badges/works-on-my-machine.svg)](https://forthebadge.com)
 
 # Online Web Clock
-> **An online, digital clock web app built with Bootstrap 5.3.3, focused on customizability.  
+> **An online, digital clock web app built with Bootstrap 5.3.8 and Webpack, focused on customizability.  
 Inspired by [online-clock](https://github.com/tmasri/online-clock) by [Tareq Al-Masri](https://github.com/tmasri).**
 
 **Website:** [View in your browser!](https://online-clock.pages.dev)
@@ -20,7 +20,7 @@ Firefox and other non-Chromium browsers may experience inconsistent clock update
  
 # Gallery
 ### Preview of the clock
-![A screenshot of the main web clock page. The time 12:00 PM and date of August 1st, 2024 is shown against a white background.](/src/assets/images/main.png)  
+![A screenshot of the main web clock page. The time 12:00 PM and date of March 1st, 2025 is displayed against a plain white background.](/src/assets/images/main.png)  
 ### Menu options pane
 ![A screenshot of the menu options panel. The "Date and Time" section is opened.](/src/assets/images/menu.png)  
 ### Customization example
@@ -31,10 +31,12 @@ Firefox and other non-Chromium browsers may experience inconsistent clock update
   - Copyright (c) 2014-present Matt Zabriskie & Collaborators
 - **Bootstrap** ([Link](https://getbootstrap.com/)): Licensed under MIT License
   - Copyright (c) 2011-2025 The Bootstrap Authors
+- **Bootstrap Icons** ([GitHub](https://github.com/twbs/icons)): Licensed under MIT License
+  - Copyright (c) 2019-2024 The Bootstrap Authors
 - **html5-qrcode** ([GitHub](https://github.com/mebjas/html5-qrcode)): Licensed under MIT License
   - Copyright [2020] [MINHAZ <minhazav@gmail.com>]
-- **Iconify** ([Link](https://iconify.design)): Licensed under MIT License
-  - Copyright (c) 2021-PRESENT Vjacheslav Trushkin
+- **i18next** ([GitHub](https://github.com/i18next/i18next)): Licensed under MIT License
+  - Copyright (c) 2025 i18next
 - **Luxon** ([GitHub](https://github.com/moment/luxon)): Licensed under MIT License  
   - Copyright 2019 JS Foundation and other contributors
 - **Material Design Icons by Pictogrammers** ([GitHub](https://github.com/Templarian/MaterialDesign)): Icons licensed under Apache License 2.0
@@ -44,10 +46,6 @@ Firefox and other non-Chromium browsers may experience inconsistent clock update
   - Copyright (c) 2015 Martin Eneqvist
 - **openweathermap-ts** ([GitHub](https://github.com/Endunry/openweathermap-ts)): Licensed under MIT License
   - Copyright (c) 2020 Phillip Shim
-- **Social Buttons for Bootstrap** ([GitHub](https://github.com/lipis/bootstrap-social)): Licensed under MIT License
-  - Copyright (c) 2013-2016 Panayiotis Lipiridis
-- **Toastify**  ([GitHub](https://github.com/apvarun/toastify-js)): Licensed under MIT License
-  - Copyright (c) 2018 apvarun
 - **ts-luxon** ([Link](https://www.npmjs.com/package/ts-luxon)): Licensed under MIT License
   - Copyright (c) 2023 Tony Samperi and other contributors
 - **ts-pattern** ([Link](https://www.npmjs.com/package/ts-pattern)): Licensed under MIT License
@@ -55,7 +53,7 @@ Firefox and other non-Chromium browsers may experience inconsistent clock update
 - **Webpack** ([Link](https://webpack.js.org/)): Licensed under MIT License
   - Copyright JS Foundation and other contributors  
 
-Each license can be found in the code's respective files or website.
+This is a non-exhaustive list of OSS (Open Source Software) used in this project and therefore not every installed package is mentioned here. Each license can be found in the project's respective path or website.
  
 # Acknowledgements (Fonts)
 - **Dancing Script** ([Link](https://fonts.google.com/specimen/Dancing+Script)): Licensed under SIL Open Font License 1.1

@@ -1,16 +1,21 @@
-import Toastify from 'toastify-js';
-import { countdown, doc, menu, stopwatch, weather } from './dom-elements';
-import { debugMode } from './debug';
+import { countdown, devcon, doc, menu, stopwatch, weather } from './dom-elements';
+import { debugMode, isDevConInit } from './debug';
 import { Html5Qrcode } from 'html5-qrcode';
 import { processJSONSettings } from '../importExport';
 import { match } from 'ts-pattern';
-import { Modal } from 'bootstrap';
+import { Modal, Toast, Tooltip } from 'bootstrap';
 import * as luxon from 'ts-luxon';
 import randomstring from 'randomstring';
-import i18next, { t } from 'i18next';
+import i18next from 'i18next';
+import { toastPosition } from './debug';
+
+// ID Generation
+export function generateId(prefix: string = 'id'): string {
+    return `${prefix}-${randomstring.generate(8)}`;
+}
 
 // Custom console logging function
-export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' = 'debug', bypass: boolean = false): void {
+export function logConsole(message: string, type: 'debug' | 'error' | 'warning' | 'info' = 'debug', bypass: boolean = false, appendDevCon: boolean = true): void {
     if ((debugMode || bypass) && type === 'debug') {
         console.log(`DEBUG - ${message}`);
     } else if (type === 'error') {
@@ -20,6 +25,50 @@ export function logConsole(message: string, type: 'debug' | 'error' | 'warning' 
     } else if ((debugMode || bypass) && type === 'info') {
         console.info(`INFO - ${message}`);
     }
+
+    if (appendDevCon) {
+        appendToLogs(message, type, true);
+    }
+}
+
+// Color mapping for log types (cached for performance)
+const LOG_TYPE_COLORS = {
+    'debug': '#6c757d',
+    'info': '#0d6efd',
+    'warning': '#ffc107',
+    'error': '#dc3545'
+} as const;
+
+// Throttle scroll updates to improve performance
+let scrollUpdateScheduled = false;
+
+export function appendToLogs(text: string, type: 'info' | 'warning' | 'error' | 'debug' = 'info', timestamp: boolean = true): void {
+    if (!isDevConInit) return;
+
+    // Create a new log entry
+    const entry = document.createElement('div');
+    entry.dataset.logtype = type;
+    entry.style.color = LOG_TYPE_COLORS[type];
+    
+    // Add timestamp if requested
+    const timeString = timestamp ? `[${new Date().toLocaleTimeString()}] ` : '';
+    entry.textContent = `${timeString}${type.toUpperCase()}: ${text}`;
+    
+    devcon.logs.appendChild(entry);
+    
+    // Remove oldest entries if exceeding 500
+    while (devcon.logs.children.length > 500) {
+        devcon.logs.removeChild(devcon.logs.firstChild);
+    }
+    
+    // Throttle scroll updates using requestAnimationFrame
+    if (!scrollUpdateScheduled) {
+        scrollUpdateScheduled = true;
+        requestAnimationFrame(() => {
+            devcon.logs.scrollTop = devcon.logs.scrollHeight;
+            scrollUpdateScheduled = false;
+        });
+    }
 }
 
 // Function to set toast theme
@@ -27,75 +76,179 @@ function getThemeInfo(colorTheme: string = 'auto') {
     const theme = colorTheme === 'auto' ? menu.container.dataset.bsTheme : colorTheme;
 
     const themes = {
-        dark: {
-            bgColor: '#313539',
-            textColor: '#FFFFFF',
-            outline: 'rgba(49, 43, 57, 0.5) solid 2px'
-        },
         light: {
             bgColor: '#FFFFFF',
             textColor: '#212529',
-            outline: 'rgba(255, 255, 255, 0.5) solid 2px'
+            outline: 'rgba(255, 255, 255, 0.5) solid 2px',
+            colorScheme: 'light'
+        },
+        dark: {
+            bgColor: '#313539',
+            textColor: '#FFFFFF',
+            outline: 'rgba(49, 43, 57, 0.5) solid 2px',
+            colorScheme: 'dark'
         },
         midnight: {
             bgColor: '#0d1525',
             textColor: '#e9ecef',
-            outline: 'rgba(18, 27, 47, 0.5) solid 2px'
+            outline: 'rgba(18, 27, 47, 0.5) solid 2px',
+            colorScheme: 'dark'
+        },
+        amoled: {
+            bgColor: '#000000',
+            textColor: '#FFFFFF',
+            outline: 'rgba(49, 49, 49, 0.5) solid 2px',
+            colorScheme: 'dark'
         },
         danger: {
             bgColor: '#DC3545',
             textColor: '#FFFFFF',
-            outline: 'rgba(220, 53, 69, 0.5) solid 2px'
+            outline: 'rgba(220, 53, 69, 0.5) solid 2px',
+            colorScheme: 'dark'
         },
         success: {
             bgColor: '#198754',
             textColor: '#FFFFFF',
-            outline: 'rgba(25, 135, 84, 0.5) solid 2px'
+            outline: 'rgba(25, 135, 84, 0.5) solid 2px',
+            colorScheme: 'dark'
         },
         warning: {
             bgColor: '#FFC107',
             textColor: '#212529',
-            outline: 'rgba(255, 193, 7, 0.5) solid 2px'
+            outline: 'rgba(255, 193, 7, 0.5) solid 2px',
+            colorScheme: 'light'
         }
     };
 
     return themes[theme] || themes.light;
 }
 
-// Function to show a toast message
-export function showToast(message: string, duration: 'veryshort' | 'default' | 'normal' | 'long' | 'verylong' = 'default', style: string = 'auto'): void {
+interface ToastOptions {
+    title: string;
+    message: string;
+    duration?: 'veryshort' | 'default' | 'normal' | 'long' | 'verylong';
+    style?: string;
+    icon?: string;
+}
+
+// Cache for toast container to avoid repeated DOM queries
+let cachedToastContainer: HTMLElement | null = null;
+let toastContainerRemoved = false;
+
+// Function to show a toast message using Bootstrap toasts
+export function showToast(options: ToastOptions): void {
+    const { title, message, duration = 'default', style = 'auto', icon } = options;
     const theme = getThemeInfo(style);
     
+    // Map duration to proper ms values
     const durationMap = {
         'veryshort': 1000,
         'default': 3000,
         'normal': 5000,
         'long': 10000,
-        'verylong': 30000
+        'verylong': 30000,
+        'manual': -1
     };
 
     const durationMs = durationMap[duration];
-    
-    Toastify({
-        text: message,
-        escapeMarkup: false,
-        duration: durationMs,
-        close: durationMs > 5000 ? true : false,
-        style: {
-            background: theme.bgColor,
-            color: theme.textColor,
-            outline: theme.outline
-        },
-        gravity: 'bottom',
-        position: 'right',
-        stopOnFocus: true
-    }).showToast();
-}
 
-interface ModalButton {
-    label: string;
-    className?: string;
-    value?: any;
+    // Map toast position to CSS classes and positioning
+    const positionMap: Record<string, string> = {
+        'topleft': 'position-fixed top-0 start-0 p-3' ,
+        'topmiddle': 'position-fixed top-0 start-50 translate-middle-x p-3',
+        'bottomleft': 'position-fixed bottom-0 start-0 p-3',
+        'bottommiddle': 'position-fixed bottom-0 start-50 translate-middle-x p-3',
+        'bottomright': 'position-fixed bottom-0 end-0 p-3'
+    };
+    
+    const toastPos = positionMap[toastPosition];
+    
+    // Use cached container or create new one
+    let toastContainer: HTMLElement;
+    if (!cachedToastContainer || toastContainerRemoved) {
+        cachedToastContainer = document.querySelector('.toast-container');
+        if (!cachedToastContainer) {
+            cachedToastContainer = document.createElement('div');
+            cachedToastContainer.className = `toast-container ${toastPos}`;
+            cachedToastContainer.style.zIndex = '1090';
+            document.body.appendChild(cachedToastContainer);
+        }
+        toastContainerRemoved = false;
+    }
+    toastContainer = cachedToastContainer;
+    
+    // Update container position if changed
+    if (!toastContainer.className.includes(toastPos)) {
+        toastContainer.className = `toast-container ${toastPos}`;
+    }
+    
+    // Generate unique ID for this toast
+    const toastId = generateId('toast');
+    
+    // Create toast element
+    const toastElement = document.createElement('div');
+    toastElement.className = 'toast';
+    toastElement.id = toastId;
+    toastElement.setAttribute('role', 'alert');
+    toastElement.setAttribute('aria-live', 'assertive');
+    toastElement.setAttribute('aria-atomic', 'true');
+    
+    // Apply custom theme styles
+    toastElement.style.backgroundColor = theme.bgColor;
+    toastElement.style.color = theme.textColor;
+    toastElement.style.border = theme.outline;
+    
+    // Create toast content with header and body
+    toastElement.innerHTML = `
+        <div class="toast-header">
+            ${icon ? `<i class="bi ${icon} me-2"></i>` : ''}
+            <strong class="me-auto">${title}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            ${message}
+        </div>
+    `;
+    
+    // Apply theme to header and close button
+    const toastHeader = toastElement.querySelector('.toast-header') as HTMLElement;
+    if (toastHeader) {
+        toastHeader.style.backgroundColor = theme.bgColor;
+        toastHeader.style.color = theme.textColor;
+        toastHeader.style.borderBottom = `1px solid ${theme.textColor}20`; // 20 for slight transparency
+    }
+    
+    const closeButton = toastElement.querySelector('.btn-close') as HTMLElement;
+    if (closeButton) {
+        // Set close button theme to opposite of the theme's closeBtn property
+        closeButton.setAttribute('data-bs-theme', theme.colorScheme);
+    }
+
+    // Add to container
+    toastContainer.appendChild(toastElement);
+    
+    // Initialize Bootstrap toast
+    const bsToast = new Toast(toastElement, {
+        autohide: true,
+        delay: durationMs
+    });
+    
+    // Show the toast
+    bsToast.show();
+    
+    // Clean up after toast is hidden
+    toastElement.addEventListener('hidden.bs.toast', () => {
+        toastElement.remove();
+        
+        // Remove container if no more toasts
+        if (toastContainer && toastContainer.children.length === 0) {
+            toastContainer.remove();
+            cachedToastContainer = null;
+            toastContainerRemoved = true; // Mark as removed for next check
+        }
+    });
+    
+    logConsole(`Bootstrap toast shown: ${title} - ${message} (${duration}, ${style})`, 'debug');
 }
 
 // Theme config interface
@@ -105,7 +258,9 @@ interface ThemeConfig {
     backgroundColor?: string;
 }
 
-const themes: Record<string, ThemeConfig> = {
+type ThemeKey = 'light' | 'dark' | 'midnight' | 'amoled';
+
+const themes: Record<ThemeKey, ThemeConfig> = {
     'light': {
         textColor: '#212529',
         metaTheme: 'light'
@@ -118,43 +273,58 @@ const themes: Record<string, ThemeConfig> = {
         textColor: '#e9ecef',
         metaTheme: 'dark',
         backgroundColor: '#121b2f'
+    },
+    'amoled': {
+        textColor: '#ffffff',
+        metaTheme: 'dark',
+        backgroundColor: '#000000'
     }
 };
 
 // Menu theme function
-export function setMenuTheme(theme: string | 'toggle', quiet: boolean = false): void {
+export function setMenuTheme(theme: 'auto' | 'toggle' | ThemeKey, quiet: boolean = false): void {
     // Get current theme
     const currentTheme = menu.container.dataset.bsTheme || 'light';
     
     // Handle auto
     if (theme === 'auto') {
-        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        menu.themeradio[theme === 'light' ? 0 : 1].checked = true;
+        const detectedTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        menu.themeselect.value = detectedTheme === 'light' ? 'lightthememode' : 'darkthememode';
+        theme = detectedTheme as ThemeKey;
     }
 
     // Handle toggle (cycle through themes)
     if (theme === 'toggle') {
-        const themeKeys = Object.keys(themes);
-        const currentIndex = themeKeys.indexOf(currentTheme);
+        const themeKeys = Object.keys(themes) as ThemeKey[];
+        const currentIndex = themeKeys.indexOf(currentTheme as ThemeKey);
         const nextIndex = (currentIndex + 1) % themeKeys.length;
         theme = themeKeys[nextIndex];
-        menu.themeradio[nextIndex].checked = true;
+        
+        // Map theme to select option value
+        const themeToOptionMap: Record<string, string> = {
+            'light': 'lightthememode',
+            'dark': 'darkthememode',
+            'midnight': 'midnightthememode',
+            'amoled': 'amoledthememode'
+        };
+        menu.themeselect.value = themeToOptionMap[theme] || 'lightthememode';
     }
     
     // Validate theme exists
-    if (!themes[theme]) {
+    if (!themes[theme as ThemeKey]) {
         logConsole(`Invalid theme: ${theme}, defaulting to light`, 'error');
         theme = 'light';
     }
 
-    const themeConfig = themes[theme];
+    const themeConfig = themes[theme as ThemeKey];
     
     // Apply theme to all containers
     const containers = [
         menu.container,
         weather.container,
         stopwatch.container,
-        countdown.container
+        countdown.container,
+        devcon.container
     ];
     
     containers.forEach(container => {
@@ -173,11 +343,26 @@ export function setMenuTheme(theme: string | 'toggle', quiet: boolean = false): 
         }
     });
     
+    // Apply theme to all existing floating windows
+    const floatingWindows = document.querySelectorAll('[id^="floating-window"]');
+    floatingWindows.forEach((window) => {
+        const windowElement = window as HTMLElement;
+        windowElement.dataset.bsTheme = theme;
+    });
+    
     // Browser meta
     setMetaColor('theme', themeConfig.metaTheme);
     
     logConsole(`Menu theme set to: ${theme}`, 'debug');
-    if (!quiet) showToast(i18next.t(`toasts.global.theme${theme}`));
+    if (!quiet) showToast({
+        title: i18next.t('toasts.global.title'),
+        icon: 'bi-palette2',
+        message: i18next.t(`toasts.global.theme${theme}`)
+    });
+}
+
+export function getMenuTheme(): string {
+    return menu.container.dataset.bsTheme || 'light';
 }
 
 // Helper function to get available themes
@@ -190,10 +375,26 @@ export function getCurrentTheme(): string {
     return menu.container.dataset.bsTheme || 'light';
 }
 
-export function createBsModal(title: string, content: HTMLElement | string, buttons: ModalButton[] = [], timeoutDelay?: number) {
+export interface ModalButton {
+    label: string;
+    className?: string;
+    value?: any;
+}
+
+export interface ModalOptions {
+    title: string;
+    content: HTMLElement | string;
+    buttons?: ModalButton[];
+    timeoutDelay?: number;
+}
+
+export function createBsModal(options: ModalOptions) {
     return new Promise((resolve) => {
+        const { title, content, timeoutDelay } = options;
+        let buttons = options.buttons || [];
+        
         // Set internal unique id
-        const modalUID = `bs-modal-${randomstring.generate(8)}`;
+        const modalUID = generateId('bs-modal');
 
         const modal = document.createElement('div');
         modal.className = 'modal fade';
@@ -267,7 +468,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
         const bootstrapModal = new Modal(modal);
         
         // Timeout handling
-        let bsModTimeout: number | undefined;
+        let bsModTimeout: NodeJS.Timeout;
         
         // Basically, timeout can be disabled if 0, negative, or undefined
         if (timeoutDelay !== undefined && timeoutDelay > 0) {
@@ -278,6 +479,12 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
             countdownEl.className = 'midnight-text-muted me-auto';
             countdownEl.textContent = i18next.t('bsmodal.button.countdownel', { 0: Math.round(constrainedDelay/1000) });
             countdownEl.style.cursor = 'pointer';
+
+            // Tooltip setup
+            countdownEl.dataset.bsToggle = 'tooltip';
+            countdownEl.dataset.bsTitle = i18next.t('bsmodal.tooltip.countdowntooltip');
+            new Tooltip(countdownEl);
+
             modal.querySelector('.modal-footer')?.appendChild(countdownEl);
             
             const startTime = Date.now();
@@ -291,7 +498,7 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
             }, 1000);
             
             // Set the timeout to auto-close the modal
-            bsModTimeout = window.setTimeout(() => {
+            bsModTimeout = setTimeout(() => {
                 clearInterval(updateInterval);
                 bootstrapModal.hide();
                 resolve('timeout');
@@ -327,7 +534,12 @@ export function createBsModal(title: string, content: HTMLElement | string, butt
                     link.click();
                 } else if (btn.value === 'copy') {
                     navigator.clipboard.writeText(content as string);
-                    showToast(i18next.t('toasts.domutils.textcopied'), 'default', 'success');
+                    showToast({
+                        title: i18next.t('toasts.domutils.title'),
+                        message: i18next.t('toasts.domutils.textcopied'),
+                        style: 'success',
+                        icon: 'bi-clipboard-check'
+                    });
                 }
                 
                 // Clear the timeout if a button is clicked
@@ -374,7 +586,13 @@ export function setMetaColor(type: 'color' | 'theme', value: string): void {
 
 export async function requestNotificationPermission(): Promise<NotificationPermission> {
     if (!('Notification' in window)) {
-        showToast(i18next.t('toasts.domutils.notificationsunsupported'), 'long', 'danger');
+        showToast({
+            title: i18next.t('toasts.domutils.title'),
+            message: i18next.t('toasts.domutils.notificationsunsupported'),
+            duration: 'long',
+            style: 'danger',
+            icon: 'bi-exclamation-triangle-fill'
+        });
         return Promise.reject('Notifications not supported');
     }
 
@@ -386,7 +604,7 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
 // Function to create an scanner overlay card element
 export function createScannerOverlay() {
     // Set internal unique id
-    const scannerUID = `scanner-overlay-${randomstring.generate(8)}`;
+    const scannerUID = generateId('scanner-overlay');
 
     // Create container
     const container = document.createElement('div');
@@ -467,10 +685,103 @@ export function createScannerOverlay() {
         cardBody.appendChild(closeButton);
     }).catch((error) => {
         logConsole(error, 'error');
-        showToast(i18next.t('toasts.domutils.qrscannerfailed', { 0: error }), 'long', 'danger');
+        showToast({
+            title: i18next.t('toasts.domutils.title'),
+            message: i18next.t('toasts.domutils.qrscannerfailed', { 0: error }),
+            duration: 'long',
+            style: 'danger',
+            icon: 'bi-exclamation-triangle-fill'
+        });
         if (html5QrCode.isScanning) {
             html5QrCode.stop();
         }
         container.remove();
+    });
+}
+
+export function createExportModal(defaultFilename: string): Promise<{ filename: string; action: string }> {
+    return new Promise((resolve) => {
+        const modalUID = generateId('export-modal');
+
+        const modal = document.createElement('div');
+        modal.className = 'modal fade';
+        modal.setAttribute('tabindex', '-1');
+        modal.dataset.overlay = 'export-modal-overlay';
+
+        modal.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered" id="${modalUID}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">${i18next.t('bsmodal.export.title')}</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form id="export-form-${modalUID}">
+                            <div class="mb-3">
+                                <label for="filename-input-${modalUID}" class="form-label">${i18next.t('bsmodal.export.filename')}</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="filename-input-${modalUID}" placeholder="${defaultFilename}">
+                                    <div class="input-group-text">.json</div>
+                                </div>
+                                <div class="form-text">${i18next.t('bsmodal.export.namehelp')}</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-action="cancel">${i18next.t('bsmodal.button.cancel')}</button>
+                        <button type="button" class="btn btn-primary" data-action="confirm">${i18next.t('bsmodal.button.export')}</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Apply theme
+        modal.dataset.bsTheme = menu.container.dataset.bsTheme;
+
+        const bootstrapModal = new Modal(modal);
+        const filenameInput = modal.querySelector(`#filename-input-${modalUID}`) as HTMLInputElement;
+        
+        // Handle button clicks
+        modal.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            if (target.tagName === 'BUTTON') {
+                const action = target.dataset.action;
+                if (action === 'confirm') {
+                    const filename = filenameInput.value.trim();
+                    bootstrapModal.hide();
+                    resolve({ filename, action: 'confirm' });
+                } else if (action === 'cancel') {
+                    bootstrapModal.hide();
+                    resolve({ filename: '', action: 'cancel' });
+                }
+            }
+        });
+
+        // Handle Enter key in form
+        filenameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const filename = filenameInput.value.trim();
+                if (filename) {
+                    bootstrapModal.hide();
+                    resolve({ filename, action: 'confirm' });
+                }
+            }
+        });
+
+        modal.addEventListener('hidden.bs.modal', () => {
+            modal.remove();
+            logConsole(`Export modal ID ${modalUID} hidden.`, 'debug');
+        });
+
+        document.body.appendChild(modal);
+
+        // Focus and select the filename input when modal is shown
+        modal.addEventListener('shown.bs.modal', () => {
+            filenameInput.focus();
+            filenameInput.select();
+        });
+
+        bootstrapModal.show();
+        logConsole(`Export modal ID ${modalUID} created.`, 'debug');
     });
 }

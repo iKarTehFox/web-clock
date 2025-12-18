@@ -1,7 +1,6 @@
 import { match } from 'ts-pattern';
 import { doc, menu } from './utils/dom-elements';
 import { logConsole } from './utils/dom-utils';
-import i18next from 'i18next';
 
 export function uploadBGImg() {
     const input = document.createElement('input');

@@ -1,12 +1,15 @@
-import { doc, menu, dtdisplay, panel } from './utils/dom-elements';
+import { menu, dtdisplay, panel } from './utils/dom-elements';
 import * as numberToWords from 'number-to-words';
 import * as luxon from 'ts-luxon';
 import { logConsole } from './utils/dom-utils';
 import * as clock from './time-help';
-import { timeRefresh } from './utils/debug';
 import { match, P } from 'ts-pattern';
 import i18next from 'i18next';
-import Bowser from 'bowser';
+import { on, once, emit, AppEvents } from './system/event-bus';
+
+// Constants
+const DEFAULT_FAVICON_HOUR = '3';
+const IDLE_CALLBACK_TIMEOUT_MS = 2000;
 
 // Default modes
 export let cMode = '0';
@@ -14,9 +17,9 @@ export let dateFormat = 'D';
 export let timeDisplayMethod: string;
 let lastTime: Array<string>;
 let lastDate: string;
+let lastTimeDisplayMethod: string;
 const pageLoadTime = getLuxNow('sec');
 type TimeFormat = 'sec' | 'millis' | 'obj';
-const browserInfo = Bowser.parse(window.navigator.userAgent);
 
 function getLuxNow(format: TimeFormat = 'sec'): number | luxon.DateTime {
     const now = luxon.DateTime.now();
@@ -53,6 +56,9 @@ function updatePageDuration(): void {
     menu.durationdisplay.textContent = durationText;
 }
 
+// Cache for title/favicon state
+let lastTitleVisState = false;
+
 // Main update time
 function updateTime(): void {
     const time = getLuxNow('obj') as luxon.DateTime;
@@ -62,18 +68,22 @@ function updateTime(): void {
     const ind = cMode === '0' ? time.toFormat('a') : '';
 
     // Handle title and favicon updates
-    if (menu.titlevischeckbox.checked) {
+    const isTitleVisChecked = menu.titlevischeckbox.checked;
+    if (isTitleVisChecked) {
         clock.updateFavicon(time.toFormat('h'));
         document.title = `Time: ${hrs}:${min}:${sec} ${ind}`;
-    } else if (document.title !== 'Online Web Clock' || !doc.favicon.href.endsWith('/icons/clock-time-3.svg')) {
-        clock.updateFavicon('3');
+    } else if (lastTitleVisState !== isTitleVisChecked) {
+        // Only reset once when unchecked
+        clock.updateFavicon(DEFAULT_FAVICON_HOUR);
         document.title = 'Online Web Clock';
         logConsole('Title and favicon reset...', 'info');
     }
+    lastTitleVisState = isTitleVisChecked;
 
-    // Handle time bar
-    if (menu.timebarselect.value !== 'tbarNone') {
-        clock.timeBarUtil(menu.timebarselect.value, time);
+    // Handle time bar (cache value to avoid repeated property access)
+    const timeBarValue = menu.timebarselect.value;
+    if (timeBarValue !== 'tbarNone') {
+        clock.timeBarUtil(timeBarValue, time);
     } else {
         dtdisplay.timeBar.style.width = '0%';
     }
@@ -86,17 +96,20 @@ function updateTime(): void {
     if (timeDisplayMethod === 'unixmillis' || timeDisplayMethod === 'unixsec') {
         const unixTime = timeDisplayMethod === 'unixmillis' ? clock.toUnixMillis() : clock.toUnixSec();
         displayHour = String(unixTime);
-        // Set colon visibility
-        clock.colonVisibility([false, undefined]);
-        menu.secondsvisradio.forEach((radio) => {
-            if (radio.id === 'sviN') {
-                radio.checked = true;
-            } else {
-                radio.checked = false;
-            }
-            radio.dispatchEvent(new Event('change', { bubbles: true }));
-            radio.disabled = true;
-        });
+        
+        // Only update UI state when time display method changes
+        if (lastTimeDisplayMethod !== timeDisplayMethod) {
+            clock.colonVisibility([false, undefined]);
+            menu.secondsvisradio.forEach((radio) => {
+                if (radio.id === 'sviN') {
+                    radio.checked = true;
+                } else {
+                    radio.checked = false;
+                }
+                radio.dispatchEvent(new Event('change', { bubbles: true }));
+                radio.disabled = true;
+            });
+        }
     } else {
         const timeFunction = {
             binary: (value: string) => clock.toRadix(value, 2),
@@ -125,24 +138,26 @@ function updateTime(): void {
             ii_leapyear: () => clock.isItDate('leapyear'),
         }[timeDisplayMethod];
 
-        // Handle colon visibility
-        const tdmNoColon: boolean = ['ii_christmas','ii_weekend','ii_leapyear'].includes(timeDisplayMethod);
-        if (tdmNoColon) {
-            clock.colonVisibility([false, undefined]);
-            menu.secondsvisradio.forEach((radio) => {
-                if (radio.id === 'sviN') {
-                    radio.checked = true;
-                } else {
-                    radio.checked = false;
-                }
-                radio.dispatchEvent(new Event('change'));
-                radio.disabled = true;
-            });
-        } else {
-            clock.colonVisibility([true, undefined]);
-            menu.secondsvisradio.forEach((radio) => {
-                radio.disabled = false;
-            });
+        // Only update UI state when time display method changes
+        if (lastTimeDisplayMethod !== timeDisplayMethod) {
+            const tdmNoColon: boolean = ['ii_christmas','ii_weekend','ii_leapyear'].includes(timeDisplayMethod);
+            if (tdmNoColon) {
+                clock.colonVisibility([false, undefined]);
+                menu.secondsvisradio.forEach((radio) => {
+                    if (radio.id === 'sviN') {
+                        radio.checked = true;
+                    } else {
+                        radio.checked = false;
+                    }
+                    radio.dispatchEvent(new Event('change'));
+                    radio.disabled = true;
+                });
+            } else {
+                clock.colonVisibility([true, undefined]);
+                menu.secondsvisradio.forEach((radio) => {
+                    radio.disabled = false;
+                });
+            }
         }
 
         if (timeFunction) {
@@ -166,7 +181,13 @@ function updateTime(): void {
     }
 
     setClockDisplay([displayHour, displayMinute, displaySecond, displayIndicator]);
-    updateDate();
+    updateDate(time);
+    
+    // Track last display method to avoid redundant UI updates
+    lastTimeDisplayMethod = timeDisplayMethod;
+    
+    // Notify timezone windows to update
+    emit(AppEvents.CLOCK_UPDATED, { time });
 }
 
 // Clock DOM update
@@ -219,124 +240,113 @@ function getTimeZonesByRegion() {
 
 // Function to populate the existing select element with time zones
 export function populateTimeZoneSelect() {
-    const timeZoneGroups = getTimeZonesByRegion();
-  
-    // Populate the select element with optgroups and options
-    Object.keys(timeZoneGroups).forEach((region) => {
-        const optGroupElement = document.createElement('optgroup');
-        optGroupElement.label = region;
-  
-        timeZoneGroups[region].forEach((timeZone) => {
-            const optionElement = document.createElement('option');
-            optionElement.value = timeZone;
-            const timeZoneName = timeZone.replace(/_/g,' ');
-            optionElement.textContent = timeZoneName;
-            // Select current time zone
-            if (luxon.DateTime.local().zoneName === timeZone) {
-                optionElement.selected = true;
-            }
-            optGroupElement.appendChild(optionElement);
+    // Use requestIdleCallback for better performance, fallback to setTimeout
+    const scheduleWork = (callback: () => void) => {
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(callback, { timeout: IDLE_CALLBACK_TIMEOUT_MS });
+        } else {
+            setTimeout(callback, 0);
+        }
+    };
+    
+    scheduleWork(() => {
+        const timeZoneGroups = getTimeZonesByRegion();
+        const fragment = document.createDocumentFragment();
+        const currentZone = luxon.DateTime.local().zoneName;
+      
+        // Populate the select element with optgroups and options
+        Object.keys(timeZoneGroups).forEach((region) => {
+            const optGroupElement = document.createElement('optgroup');
+            optGroupElement.label = region;
+      
+            timeZoneGroups[region].forEach((timeZone) => {
+                const optionElement = document.createElement('option');
+                optionElement.value = timeZone;
+                const timeZoneName = timeZone.replace(/_/g,' ');
+                optionElement.textContent = timeZoneName;
+                // Select current time zone
+                if (currentZone === timeZone) {
+                    optionElement.selected = true;
+                }
+                optGroupElement.appendChild(optionElement);
+            });
+      
+            fragment.appendChild(optGroupElement);
         });
-  
-        menu.timezoneselect.appendChild(optGroupElement);
+        
+        // Single DOM update
+        menu.timezoneselect.appendChild(fragment);
+        logConsole('Timezone select populated', 'debug');
     });
 }
 
-export function updateDate() {
-    const time = getLuxNow('obj') as luxon.DateTime;
-    const newDate = time.toFormat(dateFormat);
+export function refreshDateFormatOptions(timeObj: luxon.DateTime = getLuxNow('obj') as luxon.DateTime) {
+    Array.from(menu.dateformselect.querySelectorAll('option')).forEach((option: HTMLOptionElement) => {
+        if (option.value !== '') {
+            option.textContent = timeObj.toFormat(option.value);
+        }
+    });
+}
+
+export function updateDate(timeObj: luxon.DateTime = getLuxNow('obj') as luxon.DateTime): void {
+    const newDate = timeObj.toFormat(dateFormat);
     if (lastDate === newDate) return;
 
     dtdisplay.date.textContent = newDate;
     lastDate = newDate;
-
-    Array.from(menu.dateformselect.querySelectorAll('option')).forEach((option: HTMLOptionElement) => {
-        if (option.value !== '') {
-            option.textContent = time.toFormat(option.value);
-        }
-    });    
+    refreshDateFormatOptions(timeObj);
 }
+
 // Initial update, then start intervals
-const time = getLuxNow('obj') as luxon.DateTime;
+const initTime = getLuxNow('obj') as luxon.DateTime;
+clock.updateFavicon(initTime.toFormat('h'));
 updateTime();
-updateDate();
-clock.updateFavicon(time.toFormat('h'));
 
-// Sync clock to system time function
-let clockInterval: NodeJS.Timeout | null = null; // Variable to store the interval ID
+// Initial i18n listener for the first load
+once('i18nFinishedUpdate', () => {
+    refreshDateFormatOptions();
+    logConsole('Initial date format options refreshed after i18n setup', 'debug');
+});
 
-// Function to start the clock based on the selected method
-function startClock() {
-    // Clear any existing interval
+// i18n listener
+i18next.on('languageChanged', () => {
+    // Wait for DOM updates from i18n first
+    once('i18nFinishedUpdate', () => {
+        // Update dateFormat to match the newly translated value of the selected option
+        const selectedOption = menu.dateformselect.options[menu.dateformselect.selectedIndex];
+        if (selectedOption && selectedOption.value !== '') {
+            dateFormat = selectedOption.value;
+            logConsole(`Updated dateFormat to translated value: ${dateFormat}`, 'debug');
+        }
+        
+        refreshDateFormatOptions();
+    });
+});
+
+// Clock interval management
+let clockInterval: NodeJS.Timeout;
+
+on('startClock', (data) => {
+    if (!clockInterval) {
+        startClock();
+        logConsole(`Clock interval started. Source: ${data?.sourcereason}`, 'info');
+    }
+});
+
+on('stopClock', (data) => {
     if (clockInterval) {
-        clearInterval(clockInterval);
+        clearTimeout(clockInterval);
+        clockInterval = undefined;
+        logConsole(`Clock interval stopped. Source: ${data?.sourcereason}`, 'info');
     }
+});
 
-    if (menu.legacyrefreshcheckbox.checked) {
-        startOldClock();
-    } else {
-        startExperimentalClock();
-    }
-}
-
-// Function to start the new clock method
-function startNewClock() {
-    const timeToNextSecond = 1000 - Number(getLuxNow('millis')) % 1000;
-
-    setTimeout(() => {
-        updateTime();
-        updatePageDuration();
-
-        // Set initial reference point
-        const startTime = performance.now();
-        let expectedTime = startTime + 1000; // Next expected tick
-        let lastExecutionTime = 0; // Track execution time
-
-        clockInterval = setInterval(() => {
-            // Measure drift before any operations
-            const beforeExecution = performance.now();
-            const drift = beforeExecution - expectedTime;
-
-            // Update after calculation
-            updateTime();
-            updatePageDuration();
-            logConsole('Time, date, and page duration updated...', 'info');
-
-            // Calculate execution time
-            const afterExecution = performance.now();
-            const executionTime = afterExecution - beforeExecution;
-            lastExecutionTime = executionTime;
-
-            // Cap drift at ±1000ms
-            const cappedDrift = Math.max(Math.min(drift, 1000), -1000);
-
-            // Set browser-specific threshold
-            const driftThreshold = browserInfo.engine.name?.includes('Blink') 
-                ? 150 
-                : Math.max(200, lastExecutionTime * 1.5);
-
-            if (Math.abs(drift) > driftThreshold) {
-                logConsole(`Time drift detected: ${drift > 0 ? '+':''}${drift}ms.${Math.abs(drift) > 1000 ? ` Capped to ${cappedDrift}ms` : ''} (Execution: ${executionTime.toFixed(2)}ms)`, 'debug');
-                clearInterval(clockInterval!);
-                
-                // Adjust next start time by considering execution time
-                // This helps prevent cascading drift
-                const adjustedDelay = Math.max(0, 1000 - cappedDrift - Math.min(executionTime, 100));
-                setTimeout(startNewClock, adjustedDelay);
-            }
-
-            // Update expected time for next tick
-            expectedTime += 1000;
-        }, 1000);
-    }, timeToNextSecond);
-}
-
-// Function to start experimental clock
-function startExperimentalClock() {
+// Function to start clock interval
+function startClock() {
     // Initial update
     updateTime();
     updatePageDuration();
-    logConsole('Experimental clock started...', 'info');
+    logConsole('Clock interval started...', 'info');
     
     // Function to schedule the next update
     function scheduleNextUpdate() {
@@ -349,7 +359,7 @@ function startExperimentalClock() {
             updateTime();
             updatePageDuration();
 
-            logConsole('Time, date, and page duration updated... (Experimental method)', 'debug');
+            logConsole('Time, date, and page duration updated...', 'debug', false, false);
             
             // Schedule the next update
             scheduleNextUpdate();
@@ -358,15 +368,6 @@ function startExperimentalClock() {
     
     // Start the scheduling loop
     scheduleNextUpdate();
-}
-
-// Function to start the old clock method
-function startOldClock() {
-    clockInterval = setInterval(() => {
-        updateTime();
-        updatePageDuration();
-        logConsole('Time, date, and page duration updated... (Legacy method)', 'info');
-    }, timeRefresh) as unknown as NodeJS.Timeout;
 }
 
 // DT listener
@@ -404,12 +405,26 @@ panel.section.dt.addEventListener('change', (e) => {
                     logConsole(`Clock mode set to: ${inputelement.dataset.value}`, 'debug');
                     updateTime();
                 })
-                .with(['checkbox', 'legacy-refresh-checkbox'], () => {
-                    startClock();
-                })
                 .otherwise(() => {});
         })
         .otherwise(() => {});
+});
+
+panel.section.dt.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const buttonElement = target.tagName === 'BUTTON' ? target : target.closest('button');
+
+    if (buttonElement) {
+        match(buttonElement.id)
+            .with('resetTZBtn', () => {
+                luxon.Settings.defaultZoneLike = 'system';
+                menu.timezoneselect.value = luxon.DateTime.local().zoneName;
+                logConsole('Time zone reset to system default', 'info');
+                updateTime();
+                updateDate();
+            })
+            .otherwise(() => {});
+    }
 });
 
 startClock();

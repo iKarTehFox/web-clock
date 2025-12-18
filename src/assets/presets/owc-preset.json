@@ -2,7 +2,7 @@
 	"clockConfig": {
 		"clockDisplay": "words",
 		"secondsVis": "sviN",
-		"dateFormat": "DDDD",
+		"dateFormat": "dfLocFullDate",
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",
@@ -28,5 +28,5 @@
 		"bgImageBlur": "5"
 	},
 	"exportTimestamp": "Thanks for trying out my personal config! -iKarTehFox",
-	"version": 10
+	"version": "v1.8.0"
 }

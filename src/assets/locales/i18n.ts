@@ -7,6 +7,7 @@ import esResource from './es';
 import { menu } from '../../utils/dom-elements';
 import { Tooltip } from 'bootstrap';
 import { Settings } from 'ts-luxon';
+import { emit } from '../../system/event-bus';
 
 // Get language
 function getBrowserLanguage(): string {
@@ -71,7 +72,7 @@ export function applyFallbackTranslations() {
     });
 
     // Handle other attributes
-    document.querySelectorAll('[data-i18n-label], [data-i18n-placeholder], [data-i18n-bs-title], [data-i18n-aria-label]').forEach((element) => {
+    document.querySelectorAll('[data-i18n-label], [data-i18n-placeholder], [data-i18n-bs-title], [data-i18n-aria-label], [data-i18n-value]').forEach((element) => {
         Array.from(element.attributes)
             // Ensure again that the attribute starts with 'data-i18n-'
             .filter(attr => attr.name.startsWith('data-i18n-'))
@@ -111,6 +112,9 @@ i18next.init({
         applyFallbackTranslations();
         return;
     }
+    
+    // Update translations on successful initialization
+    updateTranslations();
 });
 
 function updateContent() {
@@ -141,7 +145,7 @@ function updateContent() {
     });
 
     // Handle other attributes
-    document.querySelectorAll('[data-i18n-label], [data-i18n-placeholder], [data-i18n-data-bs-title], [data-i18n-aria-label]').forEach((element) => {
+    document.querySelectorAll('[data-i18n-label], [data-i18n-placeholder], [data-i18n-data-bs-title], [data-i18n-aria-label], [data-i18n-value]').forEach((element) => {
         Array.from(element.attributes)
             // Ensure again that the attribute starts with 'data-i18n-'
             .filter(attr => attr.name.startsWith('data-i18n-'))
@@ -161,6 +165,8 @@ function updateContent() {
     const tooltipList = tooltipTriggerElArray.map(tooltipTriggerEl => {
         return new Tooltip(tooltipTriggerEl); 
     });
+
+    emit('i18nFinishedUpdate', { language: i18next.language });
 }
 
 // Export function to manually update translations
@@ -184,7 +190,30 @@ i18next.on('languageChanged', (lng) => {
 menu.languageradio.forEach((radio) => {
     radio.addEventListener('change', () => {
         const selectedLanguage = radio.id;
-        i18next.changeLanguage(selectedLanguage);
-        updateTranslations();
+        i18n.changeLanguage(selectedLanguage).catch(error => {
+            logConsole(`Failed to change language: ${error}`, 'error');
+        });
     });
 });
+
+// Export i18n interface methods
+export const i18n = {
+    getCurrentLanguage: () => i18next.language,
+    getSupportedLanguages: () => supportedLangs,
+    changeLanguage: (langCode: string) => {
+        if (!supportedLangs.includes(langCode)) {
+            throw new Error(`Unsupported language: ${langCode}. Supported languages: ${supportedLangs.join(', ')}`);
+        }
+    
+        return i18next.changeLanguage(langCode).then(() => {
+        // Update translations
+            updateTranslations();
+            logConsole(`Language changed to ${langCode}`, 'info');
+        });
+    },
+    translate: (key: string, options?: any) => i18next.t(key, options),
+    isReady: () => i18next.isInitialized
+};
+
+// Default export
+export default i18n;

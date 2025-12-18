@@ -2,7 +2,7 @@
 	"clockConfig": {
 		"clockDisplay": "not_a_real_value",
 		"secondsVis": "sviD",
-		"dateFormat": "D",
+		"dateFormat": "dfLocNumDate",
 		"dateAlign": "dpoL",
 		"borderMode": "btyD",
 		"borderStyle": "solid",
@@ -28,5 +28,5 @@
 		"bgImageBlur": ""
 	},
 	"exportTimestamp": "This file has clockDisplay set to not_a_real_value, which is invalid.",
-	"version": 10
+	"version": "v1.8.0"
 }

@@ -61,7 +61,7 @@ export function getSecondsVis(): string {
 }
 
 export function getDateFormat(): string {
-    return menu.dateformselect.value;
+    return menu.dateformselect.options[menu.dateformselect.selectedIndex].id;
 }
 
 export function getDateAlign(): string {
@@ -144,7 +144,7 @@ export function getColorThemeConfig(): ColorThemeConfig {
 }
 
 export function getColorMode(): string {
-    return getFirstElement<HTMLInputElement>('input[name="color-mode-radio"]:checked').id;
+    return menu.colormodeselect.value;
 }
 
 export function getSolidColorValue(): string {
@@ -203,7 +203,7 @@ export function setSecondsVis(mode: string, trigger = false): void {
 }
 
 export function setDateFormat(format: string, trigger = false): void {
-    menu.dateformselect.value = format;
+    menu.dateformselect.selectedIndex = Array.from(menu.dateformselect.options).findIndex(option => option.id === format);
     if (trigger) menu.dateformselect.dispatchEvent(new Event('change', {bubbles: true}));
 }
 
@@ -309,9 +309,8 @@ export function setColorThemeConfig(config: ColorThemeConfig, trigger: boolean =
 
 export function setColorMode(mode: string, trigger = false): void {
     stopColorFade();
-    const element = getFirstElement<HTMLInputElement>(`input[name="color-mode-radio"][id="${mode}"]`);
-    element.checked = true;
-    if (trigger) element.dispatchEvent(new Event('change'));
+    menu.colormodeselect.value = mode;
+    if (trigger) menu.colormodeselect.dispatchEvent(new Event('change'));
 }
 
 export function setSolidColor(color: string, trigger = false): void {

@@ -1,8 +1,10 @@
 import { match } from 'ts-pattern';
-import { countdown, menu, panel } from './utils/dom-elements';
+import { countdown, devcon, menu, panel } from './utils/dom-elements';
 import { logConsole, requestNotificationPermission, showToast } from './utils/dom-utils';
 import * as luxon from 'ts-luxon';
 import i18next from 'i18next';
+import { once } from './system/event-bus';
+import { shouldCloseOnClick, shouldCloseOnEscape } from './utils/visibility-check';
 
 
 let countdownInterval: NodeJS.Timeout;
@@ -61,13 +63,23 @@ function startCountdown() {
                     reset: true,
                 });
                 if (countdown.notifcheckbox.checked && Notification.permission === 'granted') {
-                    showToast(i18next.t('toasts.countdown.finished'), 'normal');
+                    showToast({
+                        title: i18next.t('toasts.countdown.title'),
+                        message: i18next.t('toasts.countdown.finished'),
+                        duration: 'normal',
+                        icon: 'bi-bell-fill'
+                    });
                     new Notification(i18next.t('toasts.countdown.finished'), {
                         body:  i18next.t('toasts.countdown.finishednotification', {0: luxon.DateTime.now().toFormat('tt')}),
                         silent: false
                     });
                 } else {
-                    showToast(i18next.t('toasts.countdown.finished'), 'verylong');
+                    showToast({
+                        title: i18next.t('toasts.countdown.title'),
+                        message: i18next.t('toasts.countdown.finished'),
+                        duration: 'verylong',
+                        icon: 'bi-bell-fill'
+                    });
                 }
             }
         }, 1000);
@@ -126,7 +138,13 @@ countdown.startbtn.addEventListener('click', () => {
 
             // Check if totalSeconds is too long (greater than 100 hours)
             if (totalSeconds > 360000) {
-                showToast(i18next.t('toasts.countdown.toolong'), 'normal', 'danger');
+                showToast({
+                    title: i18next.t('toasts.countdown.title'),
+                    message: i18next.t('toasts.countdown.toolong'),
+                    duration: 'normal',
+                    style: 'danger',
+                    icon: 'bi-exclamation-triangle-fill'
+                });
                 totalSeconds = 0;
                 return;
             }
@@ -139,36 +157,60 @@ countdown.startbtn.addEventListener('click', () => {
     }
 });
 
+// External control
+export function startCountdownExternal(length: number): Promise<void> {
+    if (running && totalSeconds > 0) {
+        return Promise.reject(new Error('Countdown is already running.'));
+    }
+
+    if (length > 360000 || length < 1) {
+        return Promise.reject(new Error('Countdown length must be a positive integer less than 360000 seconds.'));
+    }
+
+    totalSeconds = length;
+    startCountdown();
+    return Promise.resolve();
+}
+
+export function pauseCountdownExternal(): Promise<void> {
+    if (!running) {
+        return Promise.reject(new Error('Countdown is not running.'));
+    }
+
+    pauseCountdown();
+    return Promise.resolve();
+}
+
+export function resetCountdownExternal(): Promise<void> {
+    if (!running && totalSeconds === 0) {
+        return Promise.reject(new Error('Countdown is not running and is already reset.'));
+    }
+
+    resetCountdown();
+    return Promise.resolve();
+}
+
 // Countdown button listener
 countdown.obutton.addEventListener('click', () => {
-    if (countdown.container.style.display == 'block') {
-        countdown.container.style.display = 'none';
+    if (!countdown.container.classList.contains('d-none')) {
+        countdown.container.classList.add('d-none');
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');
         return;
-    } else if (!(countdown.container.style.display == 'block')) {
-        countdown.container.style.display = 'block';
+    } else if (countdown.container.classList.contains('d-none')) {
+        countdown.container.classList.remove('d-none');
         countdown.obutton.className = 'btn btn-danger';
         logConsole('Countdown panel opened', 'info');
     }
 });
 
 // Click outside to close countdown
-document.addEventListener('DOMContentLoaded', function() {
+once('domLoaded', () => {
     document.addEventListener('click', function(e) {
         const target = e.target as HTMLElement;
-        const isMenuRelated = menu.container.contains(target) || 
-                                   panel.menubutton.contains(target) || 
-                                   countdown.container.contains(target) || 
-                                   countdown.obutton.contains(target);
-        const isCountdownVisible = countdown.container.style.display !== 'none';
-        const isTooltip = target.closest('.tooltip') !== null;
-        const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
-        const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
-        const isOffcanvasBackdrop = target.closest('.offcanvas-backdrop') !== null;
-
-        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isCountdownVisible && !isOffcanvasBackdrop) {
-            countdown.container.style.display = 'none';
+        const related = [menu.container, panel.menubutton, countdown.container, countdown.obutton, devcon.container];
+        if (shouldCloseOnClick(target, countdown.container, related, { includeInputFocusBlock: false })) {
+            countdown.container.classList.add('d-none');
             countdown.obutton.className = 'btn btn-secondary';
             logConsole('Countdown panel closed', 'info');
         }
@@ -177,13 +219,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Esc down to close countdown
 document.addEventListener('keydown', function(e) {
-    const isCountdownVisible = countdown.container.style.display !== 'none';
-    const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
-    const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
-    const isOffcanvasVisible = document.querySelector('.offcanvas.show, .offcanvas.showing') !== null;
-
-    if (e.key === 'Escape' && isCountdownVisible && !isBsModalVisible && !isScannerOverlayVisible && !isOffcanvasVisible) {
-        countdown.container.style.display = 'none';
+    if (e.key === 'Escape' && shouldCloseOnEscape(countdown.container, { includeInputFocusBlock: true })) {
+        countdown.container.classList.add('d-none');
         countdown.obutton.className = 'btn btn-secondary';
         logConsole('Countdown panel closed', 'info');
     }
@@ -200,7 +237,13 @@ countdown.notifcheckbox.addEventListener('change', async function() {
             .then(permission => {
                 if (permission !== 'granted') {
                     countdown.notifcheckbox.checked = false;
-                    showToast(i18next.t('toasts.countdown.notificationdenied'), 'normal', 'danger');
+                    showToast({
+                        title: i18next.t('toasts.countdown.title'),
+                        message: i18next.t('toasts.countdown.notificationdenied'),
+                        duration: 'normal',
+                        style: 'danger',
+                        icon: 'bi-exclamation-triangle-fill'
+                    });
                 }
             })
             .catch(() => {
@@ -209,8 +252,15 @@ countdown.notifcheckbox.addEventListener('change', async function() {
     }
 });
 
-if (Notification.permission === 'granted') { // Enable if already granted
-    countdown.notifcheckbox.checked = true;
+// Enable countdown notification if already granted
+// Using try/catch to handle errors in browsers without Notification API
+try {
+    if (Notification.permission === 'granted') {
+        countdown.notifcheckbox.checked = true;
+    }
+} catch (e) {
+    countdown.notifcheckbox.checked = false;
+    logConsole(`Error with Notification API: ${e}`, 'error');
 }
 
 // Prevent close if running

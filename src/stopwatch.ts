@@ -1,6 +1,8 @@
 import { match } from 'ts-pattern';
-import { menu, panel, stopwatch } from './utils/dom-elements';
+import { devcon, menu, panel, stopwatch } from './utils/dom-elements';
 import { logConsole } from './utils/dom-utils';
+import { once } from './system/event-bus';
+import { shouldCloseOnClick, shouldCloseOnEscape } from './utils/visibility-check';
 
 let timeInterval: NodeJS.Timeout;
 let running: boolean = false;
@@ -131,37 +133,65 @@ function lapStopwatch() {
     }
 }
 
+// External control
+export function startStopwatchExternal(): Promise<void> {
+    if (running) {
+        return Promise.reject(new Error('Stopwatch is already running'));
+    }
+
+    startStopwatch();
+    return Promise.resolve();
+}
+
+export function pauseStopwatchExternal(): Promise<void> {
+    if (!running) {
+        return Promise.reject(new Error('Stopwatch is not running'));
+    }
+
+    pauseStopwatch();
+    return Promise.resolve();
+}
+
+export function resetStopwatchExternal(): Promise<void> {
+    if (!running && elapsedTime === 0) {
+        return Promise.reject(new Error('Stopwatch is already reset'));
+    }
+
+    resetStopwatch();
+    return Promise.resolve();
+}
+
+export function lapStopwatchExternal(): Promise<void> {
+    if (!running) {
+        return Promise.reject(new Error('Stopwatch is not running'));
+    }
+
+    lapStopwatch();
+    return Promise.resolve();
+}
+
 // Stopwatch button listener
 stopwatch.obutton.addEventListener('click', () => {
-    if (stopwatch.container.style.display == 'block') {
-        stopwatch.container.style.display = 'none';
+    if (!stopwatch.container.classList.contains('d-none')) {
+        stopwatch.container.classList.add('d-none');
         stopwatch.obutton.className = 'btn btn-secondary';
         logConsole('Stopwatch panel closed', 'info');
         pauseStopwatch();
         return;
-    } else if (!(stopwatch.container.style.display == 'block')) {
-        stopwatch.container.style.display = 'block';
+    } else if (stopwatch.container.classList.contains('d-none')) {
+        stopwatch.container.classList.remove('d-none');
         stopwatch.obutton.className = 'btn btn-danger';
         logConsole('Stopwatch panel opened', 'info');
     }
 });
 
 // Click outside to close stopwatch
-document.addEventListener('DOMContentLoaded', function() {
+once('domLoaded', () => {
     document.addEventListener('click', function(e) {
         const target = e.target as HTMLElement;
-        const isMenuRelated = menu.container.contains(target) || 
-                                   panel.menubutton.contains(target) || 
-                                   stopwatch.container.contains(target) || 
-                                   stopwatch.obutton.contains(target);
-        const isStopwatchVisible = stopwatch.container.style.display !== 'none';
-        const isTooltip = target.closest('.tooltip') !== null;
-        const isBsModal = target.closest('[data-overlay="bs-modal-overlay"]') !== null;
-        const isScannerOverlay = target.closest('[data-overlay="scanner-overlay"]') !== null;
-        const isOffcanvasBackdrop = target.closest('.offcanvas-backdrop') !== null;
-
-        if (!isMenuRelated && !isTooltip && !isBsModal && !isScannerOverlay && isStopwatchVisible && !isOffcanvasBackdrop) {
-            stopwatch.container.style.display = 'none';
+        const related = [menu.container, panel.menubutton, stopwatch.container, stopwatch.obutton, devcon.container];
+        if (shouldCloseOnClick(target, stopwatch.container, related, { includeInputFocusBlock: true })) {
+            stopwatch.container.classList.add('d-none');
             stopwatch.obutton.className = 'btn btn-secondary';
             logConsole('Stopwatch panel closed', 'info');
             pauseStopwatch();
@@ -171,13 +201,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Esc down to close stopwatch
 document.addEventListener('keydown', function(e) {
-    const isStopwatchVisible = stopwatch.container.style.display !== 'none';
-    const isBsModalVisible = document.querySelector('[data-overlay="bs-modal-overlay"]') !== null;
-    const isScannerOverlayVisible = document.querySelector('[data-overlay="scanner-overlay"]') !== null;
-    const isOffcanvasVisible = document.querySelector('.offcanvas.show, .offcanvas.showing') !== null;
-
-    if (e.key === 'Escape' && isStopwatchVisible && !isBsModalVisible && !isScannerOverlayVisible && !isOffcanvasVisible) {
-        stopwatch.container.style.display = 'none';
+    if (e.key === 'Escape' && shouldCloseOnEscape(stopwatch.container, { includeInputFocusBlock: false })) {
+        stopwatch.container.classList.add('d-none');
         stopwatch.obutton.className = 'btn btn-secondary';
         logConsole('Stopwatch panel closed', 'info');
         pauseStopwatch();

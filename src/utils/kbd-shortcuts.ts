@@ -1,15 +1,17 @@
 import { match, P } from 'ts-pattern';
 import { toggleFullscreen } from '../global';
 import { menu, countdown, stopwatch, panel } from './dom-elements';
-import { createBsModal, getCurrentTheme, setMenuTheme } from './dom-utils';
-import { presetLocalJSON } from '../importExport';
-import { lockSettings } from './debug';
+import { createBsModal, setMenuTheme } from './dom-utils';
+import { presetLocalJSON, resetSettings } from '../importExport';
+import { debugMode, lockSettings } from './debug';
 import { getPresetByHotkey } from '../assets//presets/presets';
+import { debugConsole } from './debug-console';
 
 function generateShortcutsHelp(): HTMLDivElement {
     const shortcuts = {
         '1-9': 'Load built-in presets 1-9',
         'c': 'Show/hide countdown',
+        'd': 'Show/hide debug console',
         'f': 'Toggle fullscreen',
         'h': 'Show this help',
         'm': 'Toggle menu',
@@ -22,13 +24,17 @@ function generateShortcutsHelp(): HTMLDivElement {
     const div = document.createElement('div');
     
     for (const [key, description] of Object.entries(shortcuts)) {
+        // Skip debug console shortcut if not in debug mode
+        if (key === 'd' && !debugMode) continue;
+
         const line = document.createElement('div');
         line.className = 'mb-1 d-flex justify-content-center';
         line.innerHTML = `<kbd>${key}</kbd>: ${description}`;
         div.appendChild(line);
     }
 
-    const note = document.createElement('p');
+    const note = document.createElement('div');
+    note.className = 'alert alert-info mt-3';
     note.textContent = 'Keyboard shortcuts are ignored while help is open.';
     div.appendChild(note);
     
@@ -42,7 +48,7 @@ document.addEventListener('keydown', (e) => {
     }
 
     // Skip if overlays visible
-    if (document.querySelector('[data-overlay="bs-modal-overlay"]') || document.querySelector('[data-overlay="scanner-overlay"]')) {
+    if (document.querySelector('[data-overlay="bs-modal-overlay"]') || document.querySelector('[data-overlay="scanner-overlay"]') || document.querySelector('[data-overlay="export-modal-overlay"]')) {
         return;
     }
 
@@ -66,24 +72,28 @@ document.addEventListener('keydown', (e) => {
         .with('c', () => { // Show/hide countdown
             countdown.obutton.click();
         })
+        .with('d', () => { // Toggle dev console
+            if (debugMode) {
+                // Prevent the 'd' character from being entered in the input
+                e.preventDefault();
+                // Use the existing toggle method from debug-console.ts
+                debugConsole.toggle();
+            }
+        })
         .with('f', () => { // Toggle fullscreen
             toggleFullscreen();
         })
         .with('h', () => { // Show help
-            createBsModal('Keyboard shortcuts', generateShortcutsHelp());
+            createBsModal({
+                title: 'Keyboard shortcuts',
+                content: generateShortcutsHelp()
+            });
         })
         .with('m', () => { // Toggle menu
             panel.menubutton.click();
         })
         .with('r', () => {
-            if (window.confirm('Reset all clock settings to defaults?')) {
-                presetLocalJSON('onlinewebclock-defaults'); // Clock settings
-                menu.themeradio[0].click(); // Light theme
-                menu.panelvischeckbox.checked = true;
-                menu.panelvischeckbox.dispatchEvent(new Event('change'));
-                if (menu.weatherstopbtn.disabled === false) menu.weatherstopbtn.click();
-                menu.titlevischeckbox.checked = true;
-            }
+            resetSettings();
         })
         .with('s', () => { // Show/hide stopwatch
             stopwatch.obutton.click();

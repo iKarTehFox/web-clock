@@ -1,176 +1,389 @@
 import { match } from 'ts-pattern';
 import OpenWeatherMap from 'openweathermap-ts';
-import { menu, weather } from './dom-elements';
+import { menu, panel, weather } from './dom-elements';
 import { getFirstElement } from './dom-selectors';
 import { logConsole, showToast } from './dom-utils';
 import { CurrentResponse } from 'openweathermap-ts/dist/types';
 import i18next from 'i18next';
 
-let interval: NodeJS.Timeout;
+// Constants
+const WEATHER_UPDATE_INTERVAL = 900000; // 15 minutes in milliseconds
+const DEGREES_PER_DIRECTION = 22.5;
+const DIRECTION_COUNT = 16;
 
-// Geolocation function
-export function getLocation(): Promise<[number, number]> {
-    if (navigator.geolocation) {
-        return new Promise<[number, number]>((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                    resolve([latitude, longitude]);
-                },
-                (error) => {
-                    showToast(i18next.t('toasts.weatherutils.gpserror', { 0: error }), 'default', 'danger');
-                    reject(error);
-                },
-                { enableHighAccuracy: true }
-            );
-        });
-    } else {
-        showToast(i18next.t('toasts.weatherutils.gpsunsupported'), 'long', 'danger');
-        throw new Error('Geolocation is not supported by this browser.');
-    }
+// Types
+type WeatherUnits = 'imperial' | 'metric';
+type WeatherIconCode = '01d' | '01n' | '02d' | '02n' | '03d' | '03n' | '04d' | '04n' | 
+                      '09d' | '09n' | '10d' | '10n' | '11d' | '11n' | '13d' | '13n' | '50d' | '50n';
+
+interface WeatherSettings {
+    key: string;
+    lat: number;
+    lon: number;
+    units: WeatherUnits;
 }
 
-// Utility function to fetch OWM JSON
-async function fetchWeather(appID: string, lat: number, lon: number, units: any) {
+interface GeolocationCoordinates {
+    latitude: number;
+    longitude: number;
+}
+
+// State
+let weatherInterval: NodeJS.Timeout;
+let isWeatherMoving = false;
+
+// Weather icon mapping
+const WEATHER_ICON_MAP: Record<WeatherIconCode, string> = {
+    '01d': 'bi bi-sun fs-4',           // clear sky (day)
+    '01n': 'bi bi-moon fs-4',          // clear sky (night)
+    '02d': 'bi bi-cloud-sun fs-4',     // few clouds (day)
+    '02n': 'bi bi-cloud-moon fs-4',    // few clouds (night)
+    '03d': 'bi bi-cloud fs-4',         // scattered clouds
+    '03n': 'bi bi-cloud fs-4',         // scattered clouds
+    '04d': 'bi bi-clouds fs-4',        // broken clouds
+    '04n': 'bi bi-clouds fs-4',        // broken clouds
+    '09d': 'bi bi-cloud-drizzle fs-4', // shower rain
+    '09n': 'bi bi-cloud-drizzle fs-4', // shower rain
+    '10d': 'bi bi-cloud-rain-heavy fs-4', // rain
+    '10n': 'bi bi-cloud-rain-heavy fs-4', // rain
+    '11d': 'bi bi-cloud-lightning fs-4',  // thunderstorm
+    '11n': 'bi bi-cloud-lightning fs-4',  // thunderstorm
+    '13d': 'bi bi-snow fs-4',          // snow
+    '13n': 'bi bi-snow fs-4',          // snow
+    '50d': 'bi bi-cloud-fog fs-4',     // mist
+    '50n': 'bi bi-cloud-fog fs-4'      // mist
+};
+
+// Wind direction mapping
+const WIND_DIRECTIONS = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'] as const;
+
+// Utility functions
+function isValidLatitude(lat: number): boolean {
+    return lat >= -90 && lat <= 90;
+}
+
+function isValidLongitude(lon: number): boolean {
+    return lon >= -180 && lon <= 180;
+}
+
+function isValidWeatherUnits(units: string): units is WeatherUnits {
+    return units === 'imperial' || units === 'metric';
+}
+
+function getTemperatureUnit(units: WeatherUnits): string {
+    return units === 'imperial' ? i18next.t('weather.fahrenheit') : i18next.t('weather.celsius');
+}
+
+function getWindUnit(units: WeatherUnits): string {
+    return units === 'imperial' ? i18next.t('weather.mph') : i18next.t('weather.ms');
+}
+
+function degreeToDirection(degrees: number): string {
+    const index = Math.round(degrees / DEGREES_PER_DIRECTION) % DIRECTION_COUNT;
+    return i18next.t(`weather.${WIND_DIRECTIONS[index]}`);
+}
+
+function getWeatherIcon(iconCode: string): string {
+    return WEATHER_ICON_MAP[iconCode as WeatherIconCode] || 'bi bi-cloud fs-4';
+}
+
+// Geolocation function
+export function getLocation(): Promise<GeolocationCoordinates> {
+    if (!navigator.geolocation) {
+        const errorMessage = i18next.t('toasts.weatherutils.gpsunsupported');
+        showToast({
+            title: i18next.t('toasts.weatherutils.title'),
+            message: errorMessage,
+            duration: 'long',
+            style: 'danger',
+            icon: 'bi-exclamation-triangle-fill'
+        });
+        throw new Error('Geolocation is not supported by this browser.');
+    }
+
+    return new Promise<GeolocationCoordinates>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                resolve({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                });
+            },
+            (error) => {
+                const errorMessage = i18next.t('toasts.weatherutils.gpserror', { 0: error.message });
+                showToast({
+                    title: i18next.t('toasts.weatherutils.title'),
+                    message: errorMessage,
+                    duration: 'long',
+                    style: 'danger',
+                    icon: 'bi-exclamation-triangle-fill'
+                });
+                reject(error.message);
+            },
+            { enableHighAccuracy: true }
+        );
+    });
+}
+
+// Weather API functions
+async function fetchWeatherData(settings: WeatherSettings): Promise<CurrentResponse> {
     const owm = new OpenWeatherMap({
-        apiKey: appID,
-        units: units,
+        apiKey: settings.key,
+        units: settings.units,
         language: i18next.language
     });
 
     try {
-        const currentWeatherData = await owm.getCurrentWeatherByGeoCoordinates(lat, lon);
-        return currentWeatherData;
+        return await owm.getCurrentWeatherByGeoCoordinates(settings.lat, settings.lon);
     } catch (error) {
         logConsole(`Failed fetching weather data: ${error}`, 'error');
         throw error;
     }
 }
 
-function updateWeatherWidget(data: CurrentResponse, units: string) {
-    const tempunit = units == 'imperial' ? i18next.t('weather.fahrenheit') : i18next.t('weather.celsius');
-    const windunit = units == 'imperial' ? i18next.t('weather.mph') : i18next.t('weather.ms');
+function updateWeatherDisplay(data: CurrentResponse, units: WeatherUnits): void {
+    const tempUnit = getTemperatureUnit(units);
+    const windUnit = getWindUnit(units);
 
-    // Fill weather widget data. Can this be done better? Probably...
+    // Update weather widget elements
     weather.name.innerText = `${data.name}, ${data.sys.country}`;
-    weather.temp.innerText = `${data.main.temp}°${tempunit}`;
-    weather.feelslike.innerText = `${data.main.feels_like}°${tempunit}`;
-    weather.mintemp.innerText = `${data.main.temp_min}°${tempunit}`;
-    weather.maxtemp.innerText = `${data.main.temp_max}°${tempunit}`;
-    weather.wind.innerText = `${data.wind.speed} ${windunit} ${deg2dir(data.wind.deg)}`;
-    weather.condition.innerText = `${data.weather[0].description.charAt(0).toUpperCase() + data.weather[0].description.slice(1)}`;
+    weather.temp.innerText = `${data.main.temp}°${tempUnit}`;
+    weather.feelslike.innerText = `${data.main.feels_like}°${tempUnit}`;
+    weather.mintemp.innerText = `${data.main.temp_min}°${tempUnit}`;
+    weather.maxtemp.innerText = `${data.main.temp_max}°${tempUnit}`;
+    weather.wind.innerText = `${data.wind.speed} ${windUnit} ${degreeToDirection(data.wind.deg)}`;
+    weather.condition.innerText = data.weather[0].description.charAt(0).toUpperCase() + data.weather[0].description.slice(1);
 
-    // Icon logic
-    weather.icon.setAttribute('icon', match(data.weather[0].icon)
-        .with('01d', () => 'mdi:weather-sunny')
-        .with('02d', () => 'mdi:weather-partly-cloudy')
-        .with('03d', () => 'mdi:weather-cloudy')
-        .with('04d', () => 'mdi:weather-cloudy')
-        .with('09d', () => 'mdi:weather-partly-rainy')
-        .with('10d', () => 'mdi:weather-pouring')
-        .with('11d', () => 'mdi:weather-lightning')
-        .with('13d', () => 'mdi:weather-snowy')
-        .with('50d', () => 'mdi:weather-fog')
-        .otherwise(() => 'mdi:weather-cloudy')
-    );
+    // Update weather icon
+    logConsole(`Received weather icon code: ${data.weather[0].icon}`, 'info');
+    weather.icon.className = getWeatherIcon(data.weather[0].icon);
 
-    weather.container.className = 'weather-container';
+    // Show weather widget
+    weather.container.classList.remove('d-none');
 }
 
-export function submitWeatherSettings(_key: string = undefined, _lat: number = undefined, _lon: number = undefined, _units: string = undefined): void {
-    let key: string;
-    let lat: number;
-    let lon: number;
-    let units: string;
+function toggleWeatherMenuState(disabled: boolean): void {
+    const elements = [
+        menu.weatherapiinput,
+        menu.weatherlatinput,
+        menu.weatherloninput,
+        menu.weathergeobtn,
+        menu.weathersubmitbtn
+    ];
 
-    // Check for passed parameters
-    if (_key !== undefined && _lat !== undefined && _lon !== undefined && (_units == 'imperial' || _units == 'metric')) {
-        key = _key;
-        lat = _lat;
-        lon = _lon;
-        units = _units;
-    } else if (menu.weatherapiinput.value !== '' && menu.weatherlatinput.value!== '' && menu.weatherloninput.value!== '') {
-        key = menu.weatherapiinput.value;
-        lat = parseFloat(menu.weatherlatinput.value);
-        lon = parseFloat(menu.weatherloninput.value);
-        units = getFirstElement<HTMLElement>('input[name="weather-unit-radio"]:checked').id;
-    } else {
-        logConsole('Not all weather settings were provided.', 'info');
-        return;
-    }
+    elements.forEach(element => {
+        element.disabled = disabled;
+    });
 
-    // Check for valid lat/lon
-    if (lat < -90 || lat > 90 || lon < -180 || lon > 180) {
-        logConsole('Invalid latitude or longitude.', 'error');
-        return;
-    }
-
-    weatherMenuDisable(true);
-
-    // Initial fetch
-    fetchWeather(key, lat, lon, units)
-        .then(currentWeatherData => {
-            if (currentWeatherData.cod === 200) {
-                updateWeatherWidget(currentWeatherData, units);
-                logConsole('Weather data fetched successfully.', 'info');
-            } else {
-                stopWeather();
-                logConsole(`Failed fetching weather data: ${currentWeatherData.cod}`, 'error');
-                showToast(i18next.t('toasts.weatherutils.weathererror'), 'normal', 'danger');
-            }
-        })
-        .catch(error => {
-            stopWeather();
-            logConsole(`Failed while handling weather data: ${error}`, 'error');
-        });
-
-    // Start 15m interval
-    interval = setInterval(() => {
-        fetchWeather(key, lat, lon, units)
-            .then(currentWeatherData => {
-                if (currentWeatherData.cod === 200) {
-                    updateWeatherWidget(currentWeatherData, units);
-                    logConsole('Updated weather data.', 'info');
-                } else {
-                    stopWeather();
-                    logConsole(`Failed to update weather data: ${currentWeatherData.cod}`, 'error');
-                }
-            })
-            .catch(error => {
-                stopWeather();
-                logConsole(`Failed while handling weather data: ${error}`, 'error');
-            });
-    }, 900000);
-}
-
-function deg2dir(degrees: number): string {
-    const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
-    const index = Math.round(degrees / 22.5) % 16;
-    const translatedDirection = i18next.t(`weather.${directions[index]}`);
-    return translatedDirection;
-}
-
-
-function weatherMenuDisable(disabled: boolean) {
-    menu.weatherapiinput.disabled = disabled;
-    menu.weatherlatinput.disabled = disabled;
-    menu.weatherloninput.disabled = disabled;
-    menu.weathergeobtn.disabled = disabled;
-    menu.weatherunitradio.forEach((radio) => {
+    menu.weatherunitradio.forEach(radio => {
         radio.disabled = disabled;
     });
-    menu.weathersubmitbtn.disabled = disabled;
+
+    // Toggle move controls (opposite state)
     menu.weathermovetoggle.disabled = !disabled;
     menu.weathermovereset.disabled = !disabled;
     menu.weatherstopbtn.disabled = !disabled;
 }
 
-export function stopWeather() {
-    clearInterval(interval);
-    weatherMenuDisable(false);
-    weather.container.className = 'weather-hidden';
-    menu.weathersubmitbtn.disabled = false;
+function parseWeatherSettingsFromForm(): WeatherSettings | null {
+    const key = menu.weatherapiinput.value.trim();
+    const latValue = menu.weatherlatinput.value.trim();
+    const lonValue = menu.weatherloninput.value.trim();
+
+    if (!key || !latValue || !lonValue) {
+        logConsole('Not all weather settings were provided.', 'info');
+        return null;
+    }
+
+    const lat = parseFloat(latValue);
+    const lon = parseFloat(lonValue);
+    const unitsElement = getFirstElement<HTMLInputElement>('input[name="weather-unit-radio"]:checked');
+    const units = unitsElement?.id;
+
+    if (!isValidLatitude(lat) || !isValidLongitude(lon)) {
+        logConsole('Invalid latitude or longitude.', 'error');
+        return null;
+    }
+
+    if (!units || !isValidWeatherUnits(units)) {
+        logConsole('Invalid weather units selected.', 'error');
+        return null;
+    }
+
+    return { key, lat, lon, units };
+}
+
+async function handleWeatherUpdate(settings: WeatherSettings): Promise<void> {
+    try {
+        const weatherData = await fetchWeatherData(settings);
+        
+        if (weatherData.cod === 200) {
+            updateWeatherDisplay(weatherData, settings.units);
+            logConsole('Weather data updated successfully.', 'info');
+        } else {
+            throw new Error(`Weather API returned code: ${weatherData.cod}`);
+        }
+    } catch (error) {
+        stopWeather();
+        logConsole(`Failed while handling weather data: ${error}`, 'error');
+        showToast({
+            title: i18next.t('toasts.weatherutils.title'),
+            message: i18next.t('toasts.weatherutils.weathererror', { 0: error }),
+            duration: 'long',
+            style: 'danger',
+            icon: 'bi-exclamation-triangle-fill'
+        });
+    }
+}
+
+// Main weather functions
+export function submitWeatherSettings(
+    key?: string,
+    lat?: number,
+    lon?: number,
+    units?: WeatherUnits
+): void {
+    let settings: WeatherSettings | null = null;
+
+    // Use provided parameters or parse from form
+    if (key !== undefined && lat !== undefined && lon !== undefined && units !== undefined) {
+        if (!isValidLatitude(lat) || !isValidLongitude(lon)) {
+            logConsole('Invalid latitude or longitude provided.', 'error');
+            return;
+        }
+        settings = { key, lat, lon, units };
+    } else {
+        settings = parseWeatherSettingsFromForm();
+    }
+
+    if (!settings) {
+        return;
+    }
+
+    toggleWeatherMenuState(true);
+
+    // Initial weather fetch
+    handleWeatherUpdate(settings).then(() => {
+        // Start periodic updates
+        weatherInterval = setInterval(() => {
+            handleWeatherUpdate(settings!);
+        }, WEATHER_UPDATE_INTERVAL);
+    });
+}
+
+export function stopWeather(): void {
+    if (weatherInterval) {
+        clearInterval(weatherInterval);
+    }
+    
+    toggleWeatherMenuState(false);
+    weather.container.classList.add('d-none');
     menu.weatherstopbtn.disabled = true;
+    
     logConsole('Weather interval stopped.', 'info');
 }
+
+// Weather widget positioning
+function resetWeatherPosition(): void {
+    // Hide position label, now default
+    menu.weatherposlabel.classList.add('d-none');
+
+    weather.container.style.left = '';
+    weather.container.style.top = '';
+    weather.container.style.bottom = '';
+    logConsole('Weather widget position reset.', 'info');
+}
+
+function setupWeatherDragging(): void {
+    weather.container.addEventListener('mousedown', (e) => {
+        if (!isWeatherMoving) return;
+        
+        weather.container.style.cursor = 'grabbing';
+        
+        // Convert from bottom positioning to top positioning
+        const rect = weather.container.getBoundingClientRect();
+        const topPosition = rect.top;
+        
+        weather.container.style.bottom = 'auto';
+        weather.container.style.top = `${topPosition}px`;
+        
+        const startX = e.clientX - weather.container.offsetLeft;
+        const startY = e.clientY - topPosition;
+        
+        const containerWidth = rect.width;
+        const containerHeight = rect.height;
+
+        function onMouseMove(e: MouseEvent) {
+            const posX = e.clientX - startX;
+            const posY = e.clientY - startY;
+
+            // Constrain to viewport bounds
+            const clampedX = Math.max(0, Math.min(posX, window.innerWidth - containerWidth));
+            const clampedY = Math.max(0, Math.min(posY, window.innerHeight - containerHeight));
+
+            weather.container.style.left = `${clampedX}px`;
+            weather.container.style.top = `${clampedY}px`;
+
+            // Update position label
+            menu.weatherposlabel.classList.remove('d-none');
+            menu.weatherposlabel.innerText = `X: ${Math.round(clampedX)} Y: ${Math.round(clampedY)}`;
+        }
+
+        function onMouseUp() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            weather.container.style.cursor = 'grab';
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
+
+    weather.container.addEventListener('dblclick', () => {
+        if (isWeatherMoving) {
+            resetWeatherPosition();
+        }
+    });
+}
+
+// Event handlers
+async function handleGeolocationButton(): Promise<void> {
+    try {
+        const coordinates = await getLocation();
+        menu.weatherlatinput.value = coordinates.latitude.toString();
+        menu.weatherloninput.value = coordinates.longitude.toString();
+        logConsole(`Retrieved geolocation: ${coordinates.latitude}, ${coordinates.longitude}`, 'debug');
+    } catch (error) {
+        logConsole(`Failed to get location: ${error}`, 'error');
+    }
+}
+
+function handleMoveToggle(button: HTMLButtonElement): void {
+    isWeatherMoving = button.classList.contains('active');
+    weather.container.style.cursor = isWeatherMoving ? 'grab' : 'default';
+    logConsole(`Weather moving toggle set to: ${isWeatherMoving}`, 'debug');
+}
+
+// Event listeners setup
+function setupEventListeners(): void {
+    panel.section.we.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const buttonElement = target.tagName === 'BUTTON' ? target : target.closest('button');
+        
+        if (buttonElement) {
+            const button = buttonElement as HTMLButtonElement;
+            match(button.id)
+                .with('weatherGeoBtn', () => handleGeolocationButton())
+                .with('weatherSubmitBtn', () => submitWeatherSettings())
+                .with('weatherStopBtn', () => stopWeather())
+                .with('weatherMoveToggle', () => handleMoveToggle(button))
+                .with('weatherMoveReset', () => resetWeatherPosition())
+                .otherwise(() => {});
+        }
+    });
+
+    setupWeatherDragging();
+}
+
+// Initialize weather utilities
+setupEventListeners();

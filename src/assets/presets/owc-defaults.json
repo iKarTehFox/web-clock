@@ -1,4 +1,14 @@
 {
+	"clockConfig": {
+		"clockDisplay": "decimal",
+		"secondsVis": "sviD",
+		"dateFormat": "dfLocNumDate",
+		"dateAlign": "dpoL",
+		"borderMode": "btyD",
+		"borderStyle": "solid",
+		"timeBar": "tbarNone",
+		"customNoteAlign": "nalB"
+	},
 	"fontConfig": {
 		"fontFamily": "",
 		"fontStyle": "fstR",
@@ -17,6 +27,5 @@
 		"bgImageSize": "",
 		"bgImageBlur": ""
 	},
-	"exportTimestamp": "This file has no clockConfig subkey.",
 	"version": "v1.8.0"
 }

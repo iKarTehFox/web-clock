@@ -1,5 +1,8 @@
 export default {
     'panel': {
+        'devcon': {
+            'tooltip': 'Dev Console'
+        },
         'countdown': {
             'tooltip': 'Countdown'
         },
@@ -29,6 +32,24 @@ export default {
             'pause': 'Pause',
             'reset': 'Reset',
             'lap': 'Lap',
+        }
+    },
+    'devcon': {
+        'title': 'Developer Console',
+        'tabs': {
+            'console': 'Console',
+            'logs': 'Logs'
+        },
+        'input': {
+            'placeholder': 'Enter command...',
+            'execute': 'Execute',
+            'tip': 'Press Enter to execute, Esc to close, ↑↓ for history'
+        },
+        'filters': {
+            'debug': 'Debug',
+            'info': 'Info',
+            'warning': 'Warning',
+            'error': 'Error'
         }
     },
     'weather': {
@@ -72,7 +93,19 @@ export default {
                         }
                     },
                     'timezone': {
-                        'title': 'Time Zone'
+                        'title': 'Time Zone',
+                        'option': {
+                            'reset': {
+                                'tooltip': 'Reset to system timezone'
+                            }
+                        }
+                    },
+                    'timezonewindows': {
+                        'title': 'Timezone Windows',
+                        'openbutton': 'Open new clock ({{0}}/{{1}})',
+                        'subtext': 'Opens a new floating window with a clock in the selected timezone. Change the timezone setting above to get a different timezone offset.',
+                        'tooltip': 'Right click me to copy URL parameters!',
+                        'tooltipcopied': 'Copied!'
                     },
                     'displaysystem': {
                         'title': 'Display System',
@@ -136,7 +169,10 @@ export default {
                                 'title': 'Localized'
                             },
                             'standard': {
-                                'title': 'Standard'
+                                'title': 'Standard',
+                                'quarteryear': '\'Q\'q, yyyy',
+                                'dayofyear': '\'Day\' o \'of\' yyyy',
+                                'weekday': '\'Week\' W, \'Day\' o'
                             },
                             'off': 'Off'
                         }
@@ -246,8 +282,8 @@ export default {
                         'title': 'Background Color Mode',
                         'option': {
                             'colorfade': 'Color Fade',
-                            'solid': 'Solid',
-                            'image': 'Image',
+                            'solid': 'Solid Color Mode',
+                            'image': 'Image Mode',
                             'currentcolor': 'Current color:'
                         }
                     },
@@ -383,9 +419,10 @@ export default {
                     'menutheme': {
                         'title': 'Menu Theme',
                         'option': {
-                            'light': 'Light',
-                            'dark': 'Dark',
-                            'midnight': 'Midnight'
+                            'light': 'Light ☀️',
+                            'dark': 'Dark 🌙',
+                            'midnight': 'Midnight 🌃',
+                            'amoled': 'AMOLED 🌑'
                         }
                     },
                     'panelvisibility': {
@@ -399,6 +436,12 @@ export default {
                         'title': 'Tab Title',
                         'option': {
                             'label': 'Display current time in tab title'
+                        }
+                    },
+                    'interaction': {
+                        'title': 'Interactions',
+                        'option': {
+                            'label': 'Auto-hide mouse cursor',
                         }
                     },
                     'fullscreen': {
@@ -458,11 +501,18 @@ export default {
                     'toasts': {
                         'title': 'Toasts',
                         'option': {
-                            'dark': 'Dark',
                             'light': 'Light',
+                            'dark': 'Dark',
+                            'midnight': 'Midnight',
+                            'amoled': 'AMOLED',
                             'danger': 'Danger',
                             'success': 'Success',
-                            'warning': 'Warning'
+                            'warning': 'Warning',
+                            'veryshort': 'Very Short',
+                            'default': 'Default',
+                            'normal': 'Normal',
+                            'long': 'Long',
+                            'verylong': 'Very Long'
                         }
                     },
                     'ui': {
@@ -487,6 +537,7 @@ export default {
                         'option': {
                             'uploadjson': 'Upload from JSON',
                             'scanqrcode': 'Scan QR Code',
+                            'loadls': 'Load local settings',
                             'manualtext': 'Or manually paste JSON settings instead:',
                             'placeholder': 'Paste JSON in here',
                             'load': 'Load settings'
@@ -502,6 +553,7 @@ export default {
                             'downloadjson': 'Download JSON file',
                             'copyjson': 'Copy to clipboard',
                             'genqrcode': 'Generate QR Code',
+                            'saveLS': 'Save locally to browser<br>(Ctrl+Click to clear)',
                             'description': 'Note: Display Options and custom font settings will not be exported.'
                         }
                     }
@@ -521,7 +573,7 @@ export default {
                 'label': 'Auto restart'
             },
             'docs': {
-                'label': 'Read the Docs',
+                'label': 'Documentation',
                 'tooltip': 'View the Online Web Clock documentation'
             },
             'github': {
@@ -532,44 +584,59 @@ export default {
     },
     'toasts': {
         'countdown': {
+            'title': 'Countdown',
             'finished': 'Countdown finished!',
             'finishednotification': 'Your timer has elapsed. It is now {{0}}',
             'toolong': 'Time set too long! Make sure it is less than 100 hours.',
             'notificationdenied': 'Notification permission denied.',
         },
         'global': {
+            'title': 'Online Web Clock',
             'themelight': 'Theme set to light mode ☀️',
             'themedark': 'Theme set to dark mode 🌙',
             'thememidnight': 'Theme set to midnight 🌃',
+            'themeamoled': 'Theme set to AMOLED 🌑',
             'fullscreen': 'Toggled fullscreen mode',
         },
         'importexport': {
+            'title': 'Import/Export Settings',
             'exportsuccess': 'Settings exported! Took {{0}}ms',
             'exportcopysuccess': 'Settings copied to clipboard! Took {{0}}ms',
             'exportrawsuccess': 'Exported raw JSON. Took {{0}}ms',
             'exportqrtoolarge': 'Settings too large for QR code. See console for details.',
             'exportqrsuccess': 'Exported settings to QR code! Took {{0}}ms',
+            'exportlssuccess': 'Settings saved locally! Took {{0}}ms',
             'exporting': 'Exporting settings...',
             'exporterror': 'Error exporting settings! Check console for details.',
-            'importsuccess': 'Settings successfully imported!<hr><b>File timestamp:</b> {{0}}',
+            'importsuccess': 'Settings successfully imported!<br><br><b>File timestamp:</b> {{0}}',
+            'importlocalstorage': 'Settings loaded from local storage!',
             'importerror': 'Invalid settings file. Please make sure the file contains valid JSON.',
             'fetcherror': 'Could not fetch local settings file. Please check the filename and ensure the file exists.',
             'nobgimg': 'No background image to extract.',
+            'nolocalstoragebackup': 'No local settings found in browser storage.',
+            'backupclear': 'Local settings have been cleared.',
+            'autoloadenabled': 'Auto-load enabled! Settings will load automatically on future visits.',
         },
         'debugui': {
+            'title': 'Debugging',
             'testtoast': 'Test toast. Theme "{{0}}"',
+            'testtoast2': 'Test toast. Duration "{{0}}"',
             'clearls': 'Cleared local storage.',
         },
         'domutils': {
+            'title': 'Utilities',
             'textcopied': 'Text copied to clipboard!',
             'notificationunsupported': 'Notifications are not supported in this browser.',
             'qrscannerfailed': 'QR scanner failed: {{0}}',
         },
         'urlparams': {
+            'title': 'URL Parameters',
             'debugmode': 'Debug mode enabled. DevTools memory will increase over time.',
-            'autorestart': 'Auto restart set to {{0}} seconds.'
+            'autorestart': 'Auto restart set to {{0}} seconds.',
+            'incompatible': 'lockSettings and debugMode are incompatible and cannot be used together. lockSettings has been ignored.'
         },
         'weatherutils': {
+            'title': 'Weather',
             'gpserror': 'Error getting location: {{0}}',
             'gpsunsupported': 'Geolocation is not supported by this browser.',
             'weathererror': 'Error fetching weather data: {{0}}',
@@ -577,23 +644,56 @@ export default {
     },
     'bsmodal': {
         'button': {
+            'cancel': 'Cancel',
             'close': 'Close',
             'copy': 'Copy',
-            'download': 'Download',
             'countdownel': 'Closing in {{0}}s',
+            'dontshowagain': 'Don\'t show again',
+            'download': 'Download',
+            'export': 'Export',
             'gethelp': 'Get help',
+            'getstarted': 'Get Started',
             'releasenotes': 'Release Notes',
-            'dontshowagain': 'Don\'t show again'
+            'continue': 'Continue',
+            'clear': 'Clear',
+            'ignore': 'Ignore',
+            'load': 'Load',
+            'alwaysload': 'Always Load'
+        },
+        'tooltip': {
+            'countdowntooltip': 'Click to cancel timeout'
+        },
+        'export': {
+            'title': 'Export Settings',
+            'filename': 'Filename',
+            'namehelp': 'Leave empty for default filename',
         },
         'importexport': {
             'backgroundimage': 'Background Image',
             'importerror': 'Error importing settings!',
-            'rawsettingsjson': 'Raw Settings JSON'
+            'rawsettingsjson': 'Raw Settings JSON',
+            'overwritebackup': {
+                'title': 'Overwrite local settings?',
+                'message': 'You already have different settings saved locally. Do you want to overwrite them with your current settings?'
+            },
+            'invalidbackup': {
+                'title': 'Invalid local settings!',
+                'message': 'The settings saved in your browser storage are invalid or corrupted. You can reset them to clear the corrupted data, or ignore this warning.'
+            },
+            'autoload': {
+                'title': 'Locally saved settings',
+                'message': 'You have settings saved locally in your browser. Apply them now? Settings will be applied after 30 seconds.'
+            }
         },
         'updatenoti': {
             'newversion': 'New Version! ({{0}})',
             'releasenote': 'Online Web Clock was just updated to {{0}}! Check the release notes for more information.',
-            'releasenotebypass': 'Click the button below to review the release notes for version {{0}}!'
+            'releasenotebypass': 'Click the button below to review the release notes for version {{0}}!',
+        },
+        'welcome': {
+            'title': 'Welcome to Online Web Clock!',
+            'description': 'Online Web Clock is a customizable web-based clock application with various themes, weather integration, and personalization options.',
+            'help': 'Need help getting started? Check out our documentation or visit our GitHub repository.'
         }
     },
     'scanneroverlay': {
@@ -611,7 +711,6 @@ export default {
         'customfontinputform': 'Custom font input form',
         'fontstylebuttongroup': 'Font style button group',
         'fontweightbuttongroup': 'Font weight button group',
-        'colormodebuttongroup': 'Color mode button group',
         'solidcolorbuttongroup': 'Solid color button group',
         'textcoloroverridebuttongroup': 'Text color override button group',
         'weatherunitbuttongroup': 'Weather unit button group',

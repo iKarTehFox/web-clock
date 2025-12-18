@@ -1,10 +1,36 @@
 import { match } from 'ts-pattern';
 import { menu, debug, dtdisplay, doc } from './utils/dom-elements';
 import { logConsole, setMetaColor } from './utils/dom-utils';
-import i18next from 'i18next';
 
 let fadeIntervalID: NodeJS.Timeout;
 const bodyElement = document.body;
+
+// Check for reduced motion preference
+let prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Function to update transition based on reduced motion preference
+function updateBackgroundTransition(): void {
+    if (prefersReducedMotion) {
+        bodyElement.style.transition = 'none';
+        menu.fadetransrange.disabled = true;
+        menu.faderesetbutton.disabled = true;
+        logConsole('Background transitions disabled due to reduced motion preference', 'debug');
+    } else {
+        const fadetime = menu.fadetransrange.value;
+        bodyElement.style.transition = `background-color ${fadetime}s ease-in-out`;
+        menu.fadetransrange.disabled = false;
+        menu.faderesetbutton.disabled = false;
+        logConsole(`Background transition set to: ${fadetime}s`, 'debug');
+    }
+}
+
+// Listen for changes to reduced motion preference
+const motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+motionMediaQuery.addEventListener('change', (e) => {
+    prefersReducedMotion = e.matches;
+    logConsole(`Reduced motion preference changed: ${prefersReducedMotion ? 'enabled' : 'disabled'}`, 'info');
+    updateBackgroundTransition();
+});
 
 export function startColorFade() {
     logConsole('Color fade started', 'info');
@@ -28,8 +54,7 @@ export function startColorFade() {
     // Initial color update
     bodyElement.style.backgroundColor = colors[colorNames[currentIndex]];
 
-    const fadetime = menu.fadetransrange.value; // Get fade transition length value when restarted
-    bodyElement.style.transition = `background-color ${fadetime}s ease-in-out`;
+    updateBackgroundTransition();
     menu.colorbadge.textContent = colors[colorNames[currentIndex]]; // Initial color badge update
 
     fadeIntervalID = setInterval(() => {
@@ -49,99 +74,97 @@ export function stopColorFade() {
 }
 
 // Color mode listener
-menu.colormoderadio.forEach(radio => {
-    radio.addEventListener('change', () => {
-        // Reset color to "black" first
-        dtdisplay.ccontainer.style.color = '#212529';
-        dtdisplay.timeBar.style.backgroundColor = '#212529';
-        doc.cnote.style.color = '#212529';
-        const colorMode = radio.id;
+menu.colormodeselect.addEventListener('change', () => {
+    // Reset color to "black" first
+    dtdisplay.ccontainer.style.color = '#212529';
+    dtdisplay.timeBar.style.backgroundColor = '#212529';
+    doc.cnote.style.color = '#212529';
+    const colorMode = menu.colormodeselect.value;
         
-        match(colorMode)
-            .with('fademode', () => {
-                startColorFade();
-                logConsole(`Color mode set to: ${colorMode}`, 'debug');
-                menu.presetcolors.forEach((radio) => {
-                    radio.disabled = true;
-                    radio.checked = false;
-                });
-                menu.textcoloroverrideradio.forEach((radio) => {
-                    radio.disabled = true;
-                    if (radio.id === 'tcovD') {
-                        radio.checked = true;
-                        radio.dispatchEvent(new Event('change'));
-                    }
-                });
-                menu.imageuploadbutton.disabled = true;
-                menu.imagesizeselect.disabled = true;
-                bodyElement.style.backgroundImage = '';
-                // Set groups display
-                menu.colorbadgelabel.style.display = 'block';
-                menu.fadegroup.style.display = 'block';
-                menu.presetgroup.style.display = 'none';
-                debug.devcolorscontainer.style.display = 'none';
-                menu.textcolorgroup.style.display = 'none';
-                menu.imagegroup.style.display = 'none';
-            })
-            .with('solidmode', () => {
-                stopColorFade();
-                logConsole(`Color mode set to: ${colorMode}`, 'debug');
-                menu.presetcolors.forEach((radio) => {
-                    radio.disabled = false;
-                });
-                menu.textcoloroverrideradio.forEach((radio) => {
-                    radio.disabled = false;
-                });
-                menu.imageuploadbutton.disabled = true;
-                menu.imagesizeselect.disabled = true;
-                bodyElement.style.backgroundImage = '';
-                // Set groups display
-                menu.colorbadgelabel.style.display = 'block';
-                menu.fadegroup.style.display = 'block';
-                menu.presetgroup.style.display = '';
-                debug.devcolorscontainer.style.display = '';
-                menu.textcolorgroup.style.display = '';
-                menu.imagegroup.style.display = 'none';
-            })
-            .with('imgmode', () => {
-                stopColorFade();
-                logConsole(`Color mode set to: ${colorMode}`, 'debug');
-                menu.presetcolors.forEach((radio) => {
-                    radio.disabled = true;
-                    radio.checked = false;
-                });
-                // Reset background color to black
-                document.body.style.backgroundColor = '#000000';
-                menu.colorbadge.textContent = '#000000'; // Just for looks. Will appear when switching back to solidmode.
-                menu.textcoloroverrideradio.forEach((radio) => {
-                    if (radio.id === 'tcovO') {
-                        radio.disabled = false;
-                        radio.checked = true;
-                        radio.dispatchEvent(new Event('change'));
-                    } else {
-                        radio.disabled = true;
-                    }
-                });
-                menu.imageuploadbutton.disabled = false;
-                menu.imagesizeselect.disabled = false;
-                // Set groups display
-                menu.colorbadgelabel.style.display = 'none';
-                menu.fadegroup.style.display = 'none';
-                menu.presetgroup.style.display = 'none';
-                debug.devcolorscontainer.style.display = 'none';
-                menu.textcolorgroup.style.display = '';
-                menu.imagegroup.style.display = '';
-            })
-            .otherwise(() => {
-                logConsole('Invalid color mode selected', 'error');
+    match(colorMode)
+        .with('fademode', () => {
+            startColorFade();
+            logConsole(`Color mode set to: ${colorMode}`, 'debug');
+            menu.presetcolors.forEach((radio) => {
+                radio.disabled = true;
+                radio.checked = false;
             });
-    });
+            menu.textcoloroverrideradio.forEach((radio) => {
+                radio.disabled = true;
+                if (radio.id === 'tcovD') {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change'));
+                }
+            });
+            menu.imageuploadbutton.disabled = true;
+            menu.imagesizeselect.disabled = true;
+            bodyElement.style.backgroundImage = '';
+            // Set groups display
+            menu.colorbadgelabel.classList.remove('d-none');
+            menu.fadegroup.classList.remove('d-none');
+            menu.presetgroup.classList.add('d-none');
+            debug.devcolorscontainer.classList.add('d-none');
+            menu.textcolorgroup.classList.add('d-none');
+            menu.imagegroup.classList.add('d-none');
+        })
+        .with('solidmode', () => {
+            stopColorFade();
+            logConsole(`Color mode set to: ${colorMode}`, 'debug');
+            menu.presetcolors.forEach((radio) => {
+                radio.disabled = false;
+            });
+            menu.textcoloroverrideradio.forEach((radio) => {
+                radio.disabled = false;
+            });
+            menu.imageuploadbutton.disabled = true;
+            menu.imagesizeselect.disabled = true;
+            bodyElement.style.backgroundImage = '';
+            // Set groups display
+            menu.colorbadgelabel.classList.remove('d-none');
+            menu.fadegroup.classList.remove('d-none');
+            menu.presetgroup.classList.remove('d-none');
+            debug.devcolorscontainer.classList.remove('d-none');
+            menu.textcolorgroup.classList.remove('d-none');
+            menu.imagegroup.classList.add('d-none');
+        })
+        .with('imgmode', () => {
+            stopColorFade();
+            logConsole(`Color mode set to: ${colorMode}`, 'debug');
+            menu.presetcolors.forEach((radio) => {
+                radio.disabled = true;
+                radio.checked = false;
+            });
+            // Reset background color to black
+            document.body.style.backgroundColor = '#000000';
+            menu.colorbadge.textContent = '#000000'; // Just for looks. Will appear when switching back to solidmode.
+            menu.textcoloroverrideradio.forEach((radio) => {
+                if (radio.id === 'tcovO') {
+                    radio.disabled = false;
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change'));
+                } else {
+                    radio.disabled = true;
+                }
+            });
+            menu.imageuploadbutton.disabled = false;
+            menu.imagesizeselect.disabled = false;
+            // Set groups display
+            menu.colorbadgelabel.classList.add('d-none');
+            menu.fadegroup.classList.add('d-none');
+            menu.presetgroup.classList.add('d-none');
+            debug.devcolorscontainer.classList.add('d-none');
+            menu.textcolorgroup.classList.remove('d-none');
+            menu.imagegroup.classList.remove('d-none');
+        })
+        .otherwise(() => {
+            logConsole('Invalid color mode selected', 'error');
+        });
 });
 
 // Fade transition range listener
 menu.fadetransrange.addEventListener('input', () => {
     const value = menu.fadetransrange.value;
-    bodyElement.style.transition = `background-color ${value}s ease-in-out`;
+    updateBackgroundTransition();
     menu.fadetransrangelabel.textContent = value + 's';
     logConsole(`Fade transition length set to: ${value}s`, 'debug');
 });
