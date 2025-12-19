@@ -5,7 +5,7 @@ import { menu } from './dom-elements';
 import { once } from '../system/event-bus';
 
 // Hardcoded values. Change as needed.
-export const versionNumber = '1.8.0';
+export const versionNumber = '1.8.1';
 export const versionNumberString = `v${versionNumber}`;
 const releaseNotes = `https://github.com/iKarTehFox/web-clock/releases/tag/${versionNumber}`;
 

@@ -299,7 +299,7 @@ function manualJSONImport() {
 }
 
 // Function to import from localStorage
-function importFromLS() {
+function importFromLS(passAlertConfirmation: boolean = true) {
     const savedSettings = localStorage.getItem('onlinewebclock-settings-backup');
     
     if (savedSettings) {
@@ -310,7 +310,7 @@ function importFromLS() {
             const validation = verifySettingsJSON(parsedSettings);
             
             if (validation === true) {
-                processJSONSettings(savedSettings);
+                processJSONSettings(savedSettings, passAlertConfirmation);
             } else {
                 createBsModal({
                     title: i18next.t('bsmodal.importexport.invalidbackup.title'),
@@ -322,6 +322,7 @@ function importFromLS() {
                 }).then((result) => {
                     if (result === 'reset') {
                         localStorage.removeItem('onlinewebclock-settings-backup');
+                        localStorage.removeItem('onlinewebclock-autoload-preference'); // Also clear load preference
                         showToast({
                             title: i18next.t('toasts.importexport.title'),
                             message: i18next.t('toasts.importexport.backupreset'),
@@ -343,6 +344,7 @@ function importFromLS() {
             }).then((result) => {
                 if (result === 'reset') {
                     localStorage.removeItem('onlinewebclock-settings-backup');
+                    localStorage.removeItem('onlinewebclock-autoload-preference'); // Also clear load preference
                     showToast({
                         title: i18next.t('toasts.importexport.title'),
                         message: i18next.t('toasts.importexport.backupreset'),
@@ -513,7 +515,7 @@ export function handleAutoImportLocalSettings(urlParams?: URLSearchParams): Prom
         const autoLoadPreference = localStorage.getItem('onlinewebclock-autoload-preference');
         if (autoLoadPreference === 'always') {
             logConsole('Auto-load preference set to always, importing localStorage settings immediately', 'debug');
-            importFromLS();
+            importFromLS(false);
             resolve();
             return;
         }
@@ -537,6 +539,7 @@ export function handleAutoImportLocalSettings(urlParams?: URLSearchParams): Prom
                 .with('clear', () => {
                     logConsole('User chose to clear localStorage settings', 'debug');
                     localStorage.removeItem('onlinewebclock-settings-backup');
+                    localStorage.removeItem('onlinewebclock-autoload-preference'); // Also clear load preference
                     showToast({
                         title: i18next.t('toasts.importexport.title'),
                         message: i18next.t('toasts.importexport.backupclear'),
@@ -586,6 +589,7 @@ panel.section.ie.addEventListener('click', (e) => {
                     const savedSettings = localStorage.getItem('onlinewebclock-settings-backup');
                     if (savedSettings) {
                         localStorage.removeItem('onlinewebclock-settings-backup');
+                        localStorage.removeItem('onlinewebclock-autoload-preference'); // Also clear load preference
                         showToast({
                             title: i18next.t('toasts.importexport.title'),
                             message: i18next.t('toasts.importexport.backupclear'),
@@ -595,6 +599,7 @@ panel.section.ie.addEventListener('click', (e) => {
                         });
                         logConsole('localStorage backup cleared via Ctrl+click', 'debug');
                     } else {
+                        localStorage.removeItem('onlinewebclock-autoload-preference'); // Clear preference anyway
                         showToast({
                             title: i18next.t('toasts.importexport.title'),
                             message: i18next.t('toasts.importexport.nolocalstoragebackup'),

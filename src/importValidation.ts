@@ -25,7 +25,7 @@ export const valid = {
     TCM: ['tcovD', 'tcovO'],
     BIS: ['', 'auto', 'cover', 'stretch'],
     BIB: ['', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    Ver: [versionNumberString],
+    Ver: [versionNumberString, 'v1.8.0'],
     // Timezone window clock modes
     TZCM: ['0', '1'],
     // Timezone window font styles (CSS values, not internal IDs)
