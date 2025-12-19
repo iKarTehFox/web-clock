@@ -609,6 +609,7 @@ export default {
             'nobgimg': 'No hay imagen de fondo para extraer.',
             'nolocalstoragebackup': 'No se encontró respaldo local en el almacenamiento del navegador.',
             'backupclear': 'Los ajustes locales han sido borrados.',
+            'backupreset': 'Los ajustes locales han sido restablecidos.',
             'autoloadenabled': '¡Carga automática activada! Los ajustes se cargarán automáticamente en futuras visitas.',
         },
         'debugui': {
@@ -652,7 +653,8 @@ export default {
             'clear': 'Borrar',
             'ignore': 'Ignorar',
             'load': 'Cargar',
-            'alwaysload': 'Cargar siempre'
+            'alwaysload': 'Cargar siempre',
+            'reset': 'Restablecer'
         },
         'tooltip': {
             'countdowntooltip': 'Haz clic para cancelar el tiempo de espera'

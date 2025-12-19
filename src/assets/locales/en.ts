@@ -615,6 +615,7 @@ export default {
             'nobgimg': 'No background image to extract.',
             'nolocalstoragebackup': 'No local settings found in browser storage.',
             'backupclear': 'Local settings have been cleared.',
+            'backupreset': 'Local settings have been reset.',
             'autoloadenabled': 'Auto-load enabled! Settings will load automatically on future visits.',
         },
         'debugui': {
@@ -658,7 +659,8 @@ export default {
             'clear': 'Clear',
             'ignore': 'Ignore',
             'load': 'Load',
-            'alwaysload': 'Always Load'
+            'alwaysload': 'Always Load',
+            'reset': 'Reset'
         },
         'tooltip': {
             'countdowntooltip': 'Click to cancel timeout'
@@ -682,7 +684,7 @@ export default {
             },
             'autoload': {
                 'title': 'Locally saved settings',
-                'message': 'You have settings saved locally in your browser. Apply them now? Settings will be applied after 30 seconds.'
+                'message': 'You have settings saved locally in your browser. Apply them now? Settings will be automatically loaded after 30 seconds.'
             }
         },
         'updatenoti': {
