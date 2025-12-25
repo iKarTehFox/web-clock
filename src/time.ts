@@ -6,6 +6,7 @@ import * as clock from './time-help';
 import { match, P } from 'ts-pattern';
 import i18next from 'i18next';
 import { on, once, emit, AppEvents } from './system/event-bus';
+import { setSecondsVis } from './utils/clock-settings';
 
 // Constants
 const DEFAULT_FAVICON_HOUR = '3';
@@ -100,13 +101,8 @@ function updateTime(): void {
         // Only update UI state when time display method changes
         if (lastTimeDisplayMethod !== timeDisplayMethod) {
             clock.colonVisibility([false, undefined]);
+            setSecondsVis('sviN', true);
             menu.secondsvisradio.forEach((radio) => {
-                if (radio.id === 'sviN') {
-                    radio.checked = true;
-                } else {
-                    radio.checked = false;
-                }
-                radio.dispatchEvent(new Event('change', { bubbles: true }));
                 radio.disabled = true;
             });
         }
@@ -142,14 +138,9 @@ function updateTime(): void {
         if (lastTimeDisplayMethod !== timeDisplayMethod) {
             const tdmNoColon: boolean = ['ii_christmas','ii_weekend','ii_leapyear'].includes(timeDisplayMethod);
             if (tdmNoColon) {
-                clock.colonVisibility([false, undefined]);
+                clock.colonVisibility([false, false]);
+                setSecondsVis('sviN', true);
                 menu.secondsvisradio.forEach((radio) => {
-                    if (radio.id === 'sviN') {
-                        radio.checked = true;
-                    } else {
-                        radio.checked = false;
-                    }
-                    radio.dispatchEvent(new Event('change'));
                     radio.disabled = true;
                 });
             } else {
