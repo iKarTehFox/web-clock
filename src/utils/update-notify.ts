@@ -7,14 +7,14 @@ import { once } from '../system/event-bus';
 // Hardcoded values. Change as needed.
 export const versionNumber = '1.8.2';
 export const versionNumberString = `v${versionNumber}`;
-const releaseNotes = `https://github.com/iKarTehFox/web-clock/releases/tag/${versionNumber}`;
+const releaseNotes = `https://github.com/iKarTehFox/web-clock/releases/tag/${versionNumberString}`;
 
 interface UpdateNotificationOptions {
-  bypassCheck?: boolean;
-  customTitle?: string;
-  customDescription?: string;
-  customReleaseUrl?: string;
-  modalTimeout?: number;
+    bypassCheck?: boolean;
+    customTitle?: string;
+    customDescription?: string;
+    customReleaseUrl?: string;
+    modalTimeout?: number;
 }
 
 function showWelcomeModal() {

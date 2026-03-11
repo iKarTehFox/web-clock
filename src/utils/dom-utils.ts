@@ -5,13 +5,14 @@ import { processJSONSettings } from '../importExport';
 import { match } from 'ts-pattern';
 import { Modal, Toast, Tooltip } from 'bootstrap';
 import * as luxon from 'ts-luxon';
-import randomstring from 'randomstring';
 import i18next from 'i18next';
 import { toastPosition } from './debug';
 
 // ID Generation
 export function generateId(prefix: string = 'id'): string {
-    return `${prefix}-${randomstring.generate(8)}`;
+    const bytes = crypto.getRandomValues(new Uint8Array(4));
+    const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+    return `${prefix}-${hex}`;
 }
 
 // Custom console logging function

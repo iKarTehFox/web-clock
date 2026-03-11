@@ -1,7 +1,6 @@
 import i18next from 'i18next';
-import randomstring from 'randomstring';
 import { debug, dtdisplay, panel } from './dom-elements';
-import { showToast } from './dom-utils';
+import { generateId, showToast } from './dom-utils';
 import { on, AppEvents } from '../system/event-bus';
 import { getElement } from './dom-selectors';
 import { FloatingWindow } from '../system/FloatingWindow';
@@ -12,13 +11,13 @@ const refreshPeriod = 60000; // 60 seconds
 
 // Debug info entries with unique IDs
 const debugEntries = {
-    userAgent: randomstring.generate(8),
-    locale: randomstring.generate(8),
-    timezone: randomstring.generate(8),
-    loadTime: randomstring.generate(8),
-    resolution: randomstring.generate(8),
-    colorDepth: randomstring.generate(8),
-    onlineStatus: randomstring.generate(8)
+    userAgent: generateId('ua'),
+    locale: generateId('lc'),
+    timezone: generateId('tz'),
+    loadTime: generateId('lt'),
+    resolution: generateId('rs'),
+    colorDepth: generateId('cd'),
+    onlineStatus: generateId('os')
 };
 
 // Debug info configuration
