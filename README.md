@@ -9,8 +9,6 @@ Inspired by [online-clock](https://github.com/tmasri/online-clock) by [Tareq Al-
 
 **Want to test out features early?** [Check out the preview branch!](https://github.com/iKarTehFox/web-clock/tree/preview)
 
-**Need compatibility with older browsers?** [Check out the compatibility repository!](https://github.com/iKarTehFox/web-clock-compatibility)
-
 # Overview
 Here's a couple of the primary features of Online Web Clock:
 - Central time display
