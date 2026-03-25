@@ -11,13 +11,21 @@ Inspired by [online-clock](https://github.com/tmasri/online-clock) by [Tareq Al-
 
 **Need compatibility with older browsers?** [Check out the compatibility repository!](https://github.com/iKarTehFox/web-clock-compatibility)
 
-# Install guide and features
-The documentation for Online Web Clock has moved! You can find it in the [Docs](https://online-clock-docs.pages.dev/)!  
-There, you can find [installation instructions](https://online-clock-docs.pages.dev/docs/installation) and a [list of all features](https://online-clock-docs.pages.dev/docs).
+# Overview
+Here's a couple of the primary features of Online Web Clock:
+- Central time display
+  - Font, style, size, color, misc. effects
+- Multiple floating timezone windows
+- Date display with format presets
+- Customizable background (Color fade, Solid Color, or Image)
+- Floating weather widget
+- Stopwatch/Timer panels
+- Persistent settings exports to JSON, QR code, raw text, and local storage
+- Multi-language support (i18next)
+- and much, much more!
 
-#### Firefox notice
-Firefox and other non-Chromium browsers may experience inconsistent clock update behavior. This is due to inaccuracies with intervals in the browser's JavaScript engine. Read this [section in the docs](https://online-clock-docs.pages.dev/docs/datetime#time-refresh-method) for more info on the workaround.
- 
+For installation instructions, troubleshooting, and comprehensive documentation of **all** the features, check out the [Online Web Clock Docs](https://online-clock-docs.pages.dev/).
+
 # Gallery
 ### Preview of the clock
 ![A screenshot of the main web clock page. The time 12:00 PM and date of March 1st, 2025 is displayed against a plain white background.](/src/assets/images/main.png)  
