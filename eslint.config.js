@@ -16,7 +16,7 @@ export default [
         },
         rules: {
             'indent': ['error', 4],
-            'linebreak-style': ['error', 'windows'],
+            'linebreak-style': ['error', 'linux'],
             'quotes': ['error', 'single'],
             'semi': ['error', 'always'],
             'no-unused-vars': 'off',
