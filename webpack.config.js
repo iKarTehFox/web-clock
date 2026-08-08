@@ -63,7 +63,10 @@ const config = {
         rules: [
             {
                 test: /\.(ts|tsx)$/i,
-                loader: 'ts-loader',
+                loader: 'esbuild-loader',
+                options: {
+                    target: 'es2022'
+                },
                 exclude: ['/node_modules/'],
             },
             {

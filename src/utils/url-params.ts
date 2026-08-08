@@ -93,19 +93,19 @@ function parseURLParams(urlSearchParams: URLSearchParams): Partial<URLParamConfi
     };
 
     // Validation functions
-    const isValidToastPosition = (value: string): value is URLParamConfig['toastPosition'] => {
+    const isValidToastPosition = (value: string): value is NonNullable<URLParamConfig['toastPosition']> => {
         return ['topleft', 'topmiddle', 'bottomleft', 'bottommiddle', 'bottomright'].includes(value);
     };
 
-    const isValidMenuTheme = (value: string): value is URLParamConfig['menuTheme'] => {
+    const isValidMenuTheme = (value: string): value is NonNullable<URLParamConfig['menuTheme']> => {
         return ['light', 'dark', 'midnight', 'amoled', 'auto'].includes(value);
     };
 
-    const isValidWeatherUnits = (value: string): value is URLParamConfig['weatherUnits'] => {
+    const isValidWeatherUnits = (value: string): value is NonNullable<URLParamConfig['weatherUnits']> => {
         return ['imperial', 'metric'].includes(value);
     };
 
-    const isValidClockMode = (value: number): value is URLParamConfig['clockMode'] => {
+    const isValidClockMode = (value: number): value is NonNullable<URLParamConfig['clockMode']> => {
         return value === 12 || value === 24;
     };
 

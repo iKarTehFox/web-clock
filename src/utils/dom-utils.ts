@@ -59,7 +59,10 @@ export function appendToLogs(text: string, type: 'info' | 'warning' | 'error' | 
     
     // Remove oldest entries if exceeding 500
     while (devcon.logs.children.length > 500) {
-        devcon.logs.removeChild(devcon.logs.firstChild);
+        const firstChild = devcon.logs.firstChild;
+        if (firstChild) {
+            devcon.logs.removeChild(firstChild);
+        }
     }
     
     // Throttle scroll updates using requestAnimationFrame
@@ -121,7 +124,7 @@ function getThemeInfo(colorTheme: string = 'auto') {
         }
     };
 
-    return themes[theme] || themes.light;
+    return themes[theme ?? 'light'] || themes.light;
 }
 
 interface ToastOptions {

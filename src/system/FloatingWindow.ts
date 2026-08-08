@@ -35,16 +35,16 @@ interface WindowGroup {
 export class FloatingWindow {
     private static windowGroups: Map<string, WindowGroup> = new Map();
     
-    private container: HTMLDivElement;
-    private card: HTMLDivElement;
-    private header: HTMLDivElement;
-    private titleElement: HTMLSpanElement;
-    private cardBody: HTMLDivElement;
-    private tabsNav: HTMLUListElement;
-    private tabsContent: HTMLDivElement;
-    private contentContainer: HTMLDivElement;
-    private closeButton: HTMLButtonElement;
-    private minimizeButton: HTMLButtonElement;
+    private container!: HTMLDivElement;
+    private card!: HTMLDivElement;
+    private header!: HTMLDivElement;
+    private titleElement!: HTMLSpanElement;
+    private cardBody!: HTMLDivElement;
+    private tabsNav!: HTMLUListElement;
+    private tabsContent!: HTMLDivElement;
+    private contentContainer!: HTMLDivElement;
+    private closeButton!: HTMLButtonElement;
+    private minimizeButton!: HTMLButtonElement;
     private windowId: string;
     private groupName: string | null = null;
     private isMinimized: boolean = false;

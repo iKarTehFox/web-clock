@@ -130,7 +130,7 @@ function handleFontEvents(e: Event) {
 // Border type listener
 menu.bordertyperadio.forEach((radio) => {
     radio.addEventListener('change', () => {
-        const value = radio.dataset.value;
+        const value = radio.dataset.value ?? '';
         menu.borderstyleselect.disabled = value === 'none';
 
         match(value)

@@ -327,9 +327,9 @@ on('startClock', (data) => {
 on('stopClock', (data) => {
     if (clockInterval) {
         clearTimeout(clockInterval);
-        clockInterval = undefined;
+        clockInterval = undefined as unknown as NodeJS.Timeout;
         logConsole(`Clock interval stopped. Source: ${data?.sourcereason}`, 'info');
-    }
+        }
 });
 
 // Function to start clock interval

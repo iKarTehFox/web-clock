@@ -2190,14 +2190,14 @@ function setupLogFilters(): void {
 function filterLogsByLevel(): void {
     const logEntries = devcon.logs.querySelectorAll('[data-logtype]');
     
-    logEntries.forEach((entry: HTMLElement) => {
+    logEntries.forEach((entry) => {
         const logLevel = entry.getAttribute('data-logtype');
         const filterElement = logFilters[logLevel as keyof typeof logFilters];
         
         if (filterElement && filterElement.checked) {
-            entry.style.display = '';
+            (entry as HTMLElement).style.display = '';
         } else {
-            entry.style.display = 'none';
+            (entry as HTMLElement).style.display = 'none';
         }
     });
 }
@@ -2290,8 +2290,11 @@ function appendToConsole(text: string, type: 'normal' | 'command' | 'error' = 'n
 
     // Remove oldest entries if exceeding 100
     while (devcon.output.children.length > 100) {
-        logConsole(`[${logTimestamp}] Developer Console Output - Limit reached (${devcon.output.children.length}/100) Removing ${devcon.output.firstChild.textContent}`, 'debug');
-        devcon.output.removeChild(devcon.output.firstChild);
+        const firstChild = devcon.output.firstChild;
+        if (firstChild) {
+            logConsole(`[${logTimestamp}] Developer Console Output - Limit reached (${devcon.output.children.length}/100) Removing ${firstChild.textContent}`, 'debug');
+            devcon.output.removeChild(firstChild);
+        }
     }
     
     // Auto-scroll to bottom
