@@ -37,7 +37,7 @@
     "typescript": "^5.9.3",
     "webpack": "^5.104.0",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.2",
+    "webpack-dev-server": "^5.2.6",
     "webpack-license-plugin": "^4.5.1"
   },
   "repository": {
@@ -58,11 +58,11 @@
   "dependencies": {
     "@types/body-parser": "^1.19.6",
     "@types/intl": "^1.2.2",
-    "axios": "^1.13.2",
+    "axios": "^1.20.0",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
     "html5-qrcode": "^2.3.8",
-    "i18next": "^25.7.3",
+    "i18next": "^26.3.4",
     "number-to-words": "^1.2.4",
     "openweathermap-ts": "^1.2.10",
     "qrcode": "^1.5.4",
